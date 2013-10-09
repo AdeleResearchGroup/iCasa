@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1375881223334
+Build-Jdk: 1.7.0_17
+Built-By: tfqg0024
+Bundle-ContactAddress: kharrington@neuronrobotics.com
+Bundle-Description: Fork of the RXTX library with a focus on ease of use
+  and the ability to embed in other libraries.
+Bundle-DocURL: http://code.google.com/p/nrjavaserial/
+Bundle-License: http://www.fsf.org/licensing/licenses/lgpl.html
+Bundle-ManifestVersion: 2
+Bundle-Name: nrjavaserial
+Bundle-NativeCode: native/windows/x86_32/libNRJavaSerial.dll;osname=Win3
+ 2;processor=x86,native/windows/x86_64/libNRJavaSerial.dll;osname=Win64;
+ processor=x86_64,native/windows/x86_64/libNRJavaSerial.dll;osname="Wind
+ ows 7";processor=amd64,native/linux/x86_32/libNRJavaSerial.so;osname=li
+ nux;processor=x86,native/linux/x86_32/libNRJavaSerial_legacy.so;osname=
+ linux;processor=x86,native/linux/x86_64/libNRJavaSerial.so;osname=linux
+ ;processor=x86_64,native/linux/x86_64/libNRJavaSerial_legacy.so;osname=
+ linux;processor=x86_64,native/osx/libNRJavaSerial_10.7.jnilib;osname="m
+ ac os x";processor=x86,native/osx/libNRJavaSerial_10.6.jnilib;osname="m
+ ac os x";processor=x86,native/osx/libNRJavaSerial_10.5.jnilib;osname="m
+ ac os x";processor=x86,native/osx/libNRJavaSerial.jnilib;osname="mac os
+  x";processor=x86,native/osx/libNRJavaSerial_legacy.jnilib;osname="mac 
+ os x";processor=x86
+Bundle-SymbolicName: nrjavaserial
+Bundle-Version: 3.8.8
+Created-By: Apache Maven Bundle Plugin
+Export-Package: native.windows.x86_64;version="3.8.8",native.linux.ARM;v
+ ersion="3.8.8",native.osx;version="3.8.8",native.linux.x86_64;version="
+ 3.8.8",gnu.io;version="3.8.8",native.linux.x86_32;version="3.8.8",nativ
+ e.windows.x86_32;version="3.8.8",native.linux.ARM_A8;version="3.8.8"
+Tool: Bnd-1.50.0

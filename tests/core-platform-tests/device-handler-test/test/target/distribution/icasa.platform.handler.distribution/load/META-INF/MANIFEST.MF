@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+DeploymentPackage-Name: iCasa Platform :: icasa.device.hanlder.dp
+Content-Type: application/vnd.osgi.dp
+DeploymentPackage-Vendor: ADELE Research Group
+DeploymentPackage-ContactAddress: http://www-adele.imag.fr/
+DeploymentPackage-SymbolicName: fr.liglab.adele.icasa.device.hanlder.d
+ p
+Tool: de.akquinet.gomobile:maven-dp-plugin - 1.0.1-SNAPSHOT
+Created-At: 1376320030202
+DeploymentPackage-Description: iCasa Platform :: icasa.device.hanlder.
+ dp
+Created-By: 1.7.0_25 (Oracle Corporation)
+DeploymentPackage-Version: 1.1.2.SNAPSHOT
+DeploymentPackage-Copyright: ADELE Research Group
+DeploymentPackage-License: Apache License - Version 2.0
+
+Name: bundles/device.dependency.handler-1.1.2-SNAPSHOT.jar
+Bundle-Version: 1.1.2.SNAPSHOT
+SHA1-Digest: f1eabb062323c004bdc38b37398383c38f063475
+Bundle-SymbolicName: device.dependency.handler
+
+Name: META-INF/NOTICE
+Resource-Processor: null
+SHA1-Digest: 3f1d93f1ce642fb050fa299a0304a22bd052c92c
+
+Name: META-INF/LICENSE
+Resource-Processor: null
+SHA1-Digest: 2023bbc00350047f884b2a703cd78102f9d5103e
+

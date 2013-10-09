@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<maps>
+<map id="paulHouse" name="Paul House" description="Paul House" gatewayURL="http://192.168.2.8:8081" imgFile="paulHouse.png" libs=""/>
+<map id="Gabo_House" name="Gabo House" description="Gabo House" gatewayURL="http://localhost:8080" imgFile="paulHouse.png" libs="default"/>
+<map id="IssacHouse" name="Issac House" description="" gatewayURL="http://192.168.0.10:8080" imgFile="IssacHouse.png" libs="default"/>
+<map id="default" name="House" description="Default house" gatewayURL="http://localhost:8080" imgFile="house.png" libs="default"/>
+<map id="rosemarieHouse" name="Rose Marie House" description="Rose Marie House" gatewayURL="http://localhost:8080" imgFile="rosemarieHouse.png" libs=""/>
+</maps>
