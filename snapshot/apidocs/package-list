@@ -1,3 +1,5 @@
+fr.imag.adele.appstore.gateway.api
+fr.imag.adele.appstore.gateway.util
 fr.liglab.adele.icasa
 fr.liglab.adele.icasa.access
 fr.liglab.adele.icasa.application
@@ -35,7 +37,6 @@ fr.liglab.adele.icasa.exception
 fr.liglab.adele.icasa.listener
 fr.liglab.adele.icasa.location
 fr.liglab.adele.icasa.location.util
-fr.liglab.adele.icasa.rfid.reader
 fr.liglab.adele.icasa.service.preferences
 fr.liglab.adele.icasa.service.scheduler
 fr.liglab.adele.icasa.service.zone.dimension.calculator
@@ -46,17 +47,6 @@ fr.liglab.adele.icasa.simulator.listener.util
 fr.liglab.adele.icasa.simulator.remote.util
 fr.liglab.adele.icasa.simulator.script.executor
 fr.liglab.adele.icasa.simulator.services
-fr.liglab.adele.m2mappbuilder.rfid.reader.importer
-fr.liglab.adele.m2mappbuilder.upnp.binary.light.importer
-fr.liglab.adele.m2mappbuilder.upnp.binary.light.proxy
-fr.liglab.adele.m2mappbuilder.upnp.photometer.importer
-fr.liglab.adele.m2mappbuilder.upnp.photometer.proxy
-fr.liglab.adele.m2mappbuilder.upnp.rose.discovery
-fr.liglab.adele.m2mappbuilder.usb.discovery.rose
 fr.liglab.adele.zigbee.device.discovery
 fr.liglab.adele.zigbee.device.factories
 fr.liglab.adele.zigbee.device.importer
-org.apache.felix.usb.basedriver.bridge.driver
-org.apache.felix.usb.basedriver.descriptor
-org.apache.felix.usb.basedriver.discovery
-org.apache.felix.usb.basedriver.tools
