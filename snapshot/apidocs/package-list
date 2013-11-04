@@ -8,6 +8,7 @@ fr.liglab.adele.icasa.clock.util
 fr.liglab.adele.icasa.command.handler
 fr.liglab.adele.icasa.commands
 fr.liglab.adele.icasa.common
+fr.liglab.adele.icasa.common.xml.utils
 fr.liglab.adele.icasa.context.handler.annotations
 fr.liglab.adele.icasa.dependency.handler.annotations
 fr.liglab.adele.icasa.dependency.manager
