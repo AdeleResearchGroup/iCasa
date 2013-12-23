@@ -1,5 +1,3 @@
-fr.imag.adele.appstore.gateway.api
-fr.imag.adele.appstore.gateway.util
 fr.liglab.adele.icasa
 fr.liglab.adele.icasa.access
 fr.liglab.adele.icasa.application
@@ -45,7 +43,7 @@ fr.liglab.adele.icasa.service.zone.size.calculator
 fr.liglab.adele.icasa.simulator
 fr.liglab.adele.icasa.simulator.listener
 fr.liglab.adele.icasa.simulator.listener.util
-fr.liglab.adele.icasa.simulator.remote.util
+fr.liglab.adele.icasa.simulator.remote.wisdom.util
 fr.liglab.adele.icasa.simulator.script.executor
 fr.liglab.adele.icasa.simulator.services
 fr.liglab.adele.zigbee.device.discovery
