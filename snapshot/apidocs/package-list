@@ -36,6 +36,7 @@ fr.liglab.adele.icasa.exception
 fr.liglab.adele.icasa.listener
 fr.liglab.adele.icasa.location
 fr.liglab.adele.icasa.location.util
+fr.liglab.adele.icasa.service.location
 fr.liglab.adele.icasa.service.preferences
 fr.liglab.adele.icasa.service.scheduler
 fr.liglab.adele.icasa.service.zone.dimension.calculator
@@ -45,7 +46,6 @@ fr.liglab.adele.icasa.simulator.listener
 fr.liglab.adele.icasa.simulator.listener.util
 fr.liglab.adele.icasa.simulator.remote.wisdom.util
 fr.liglab.adele.icasa.simulator.script.executor
-fr.liglab.adele.icasa.simulator.services
 fr.liglab.adele.zigbee.device.discovery
 fr.liglab.adele.zigbee.device.factories
 fr.liglab.adele.zigbee.device.importer
