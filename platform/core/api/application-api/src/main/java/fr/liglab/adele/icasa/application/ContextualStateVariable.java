@@ -19,8 +19,6 @@ import fr.liglab.adele.icasa.common.StateVariable;
 
 /**
  * Represents a variable which either its value or its definition is related to an application.
- * 
- * @author Thomas Leveque
  *
  */
 public interface ContextualStateVariable extends StateVariable {

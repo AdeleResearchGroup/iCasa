@@ -18,7 +18,6 @@ package fr.liglab.adele.icasa.dependency.manager.util;
 
 /**
  * This interface allows a class to be notified of service dependency state changes.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public interface DependencyStateListener {
 

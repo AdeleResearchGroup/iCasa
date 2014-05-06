@@ -18,7 +18,6 @@ package fr.liglab.adele.icasa.device;
 /**
  * This enum represents the type of the event
  *
- * @author Thomas Leveque
  */
 public enum DeviceEventType {
 

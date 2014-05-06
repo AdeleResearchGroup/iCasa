@@ -35,7 +35,6 @@ import fr.liglab.adele.icasa.simulator.SimulatedDevice;
 /**
  * Implementation of a simulated heater device.
  *
- * @author Gabriel Pedraza Ferreira
  */
 @Component(name = "iCasa.Heater")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

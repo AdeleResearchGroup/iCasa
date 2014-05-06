@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.common;
 
 /**
  * A listener which listens to state variable value changes.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface StateVariableListener {

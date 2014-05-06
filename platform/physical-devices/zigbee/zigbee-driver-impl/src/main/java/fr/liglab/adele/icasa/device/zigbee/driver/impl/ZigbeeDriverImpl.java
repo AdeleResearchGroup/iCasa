@@ -47,8 +47,7 @@ import fr.liglab.adele.icasa.device.zigbee.driver.serial.model.ResponseType;
 
 /**
  * Implementation class for the Zigbee Driver interface.
- * 
- * @author tfqg0024
+ *
  */
 @Component(name = "zigbee.driver.impl")
 @Provides(specifications = { ZigbeeDriver.class })

@@ -35,8 +35,7 @@ import fr.liglab.adele.icasa.application.ApplicationTracker;
 
 /**
  * Fake Implementation of a digital service manager for demonstration purposes.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 @Component(name="application-manager-mock-impl")

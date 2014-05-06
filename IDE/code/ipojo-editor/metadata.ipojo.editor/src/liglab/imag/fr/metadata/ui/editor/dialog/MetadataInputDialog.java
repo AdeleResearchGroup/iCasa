@@ -16,8 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * A base class for dialogs use din the editor 
- * @author Gabriel
+ * A base class for dialogs use din the editor
  *
  */
 public abstract class MetadataInputDialog extends TitleAreaDialog {

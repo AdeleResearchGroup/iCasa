@@ -23,7 +23,6 @@ import fr.liglab.adele.icasa.clock.Clock;
 import fr.liglab.adele.icasa.clock.ClockListener;
 
 /**
- * @author Gabriel Pedraza Ferreira
  *
  */
 

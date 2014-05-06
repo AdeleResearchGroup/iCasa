@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * @author Gabriel
  * 
  */
 public class DependencyDialog extends MetadataInputDialog {

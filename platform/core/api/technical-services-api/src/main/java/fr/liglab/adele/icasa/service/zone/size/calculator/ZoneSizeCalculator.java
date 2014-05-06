@@ -18,8 +18,7 @@ package fr.liglab.adele.icasa.service.zone.size.calculator;
 /**
  * The Interface of service ZoneSize provides information on the size of the
  * different Zones of the iCASA simulator
- * 
- * @author yoann.maurel@imag.fr
+ *
  */
 public interface ZoneSizeCalculator {
 

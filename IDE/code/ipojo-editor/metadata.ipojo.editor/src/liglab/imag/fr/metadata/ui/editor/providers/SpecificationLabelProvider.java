@@ -9,8 +9,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 
 /**
  * Label Provider for Specification Table Viewer
- * 
- * @author Gabriel
  *
  */
 public class SpecificationLabelProvider extends LabelProvider {

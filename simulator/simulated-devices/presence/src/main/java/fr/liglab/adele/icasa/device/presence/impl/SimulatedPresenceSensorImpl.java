@@ -38,8 +38,7 @@ import fr.liglab.adele.icasa.simulator.listener.PersonListener;
 
 /**
  * Implementation of a simulated presence sensor device.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 @Component(name = "iCasa.PresenceSensor")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

@@ -27,8 +27,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
  * 
- * @author Gabriel Pedraza Ferreira
- * 
  */
 public class PojoEditorPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 

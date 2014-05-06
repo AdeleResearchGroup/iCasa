@@ -20,7 +20,6 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 /**
  * Service definition of a sprinkler device.
  *
- * @author jeremy Savonet
  */
 public interface Sprinkler extends GenericDevice{
 

@@ -26,8 +26,7 @@ import fr.liglab.adele.icasa.location.Zone;
 
 /**
  * The simulation Mananger deals with operations associated to simulation
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 public interface SimulationManager extends ContextManager {
 

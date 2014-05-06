@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by aygalinc on 19/03/14.
+ *
  */
 @Component(name="temperatureController")
 @Instantiate(name="temperatureControllerImpl-0")

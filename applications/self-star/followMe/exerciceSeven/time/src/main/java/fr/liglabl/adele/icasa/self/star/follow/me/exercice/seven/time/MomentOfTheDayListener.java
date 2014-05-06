@@ -1,7 +1,7 @@
 package fr.liglabl.adele.icasa.self.star.follow.me.exercice.seven.time;
 
 /**
- * Created by aygalinc on 12/03/14.
+ *
  */
 /**
  * The listener interface for receiving momentOfTheDay events.

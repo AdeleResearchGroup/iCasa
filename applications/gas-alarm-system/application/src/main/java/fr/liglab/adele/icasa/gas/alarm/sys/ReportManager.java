@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by aygalinc on 03/04/14.
+ *
  */
 @Component(name = "ReportManager")
 @Instantiate(name = "ReportManager-0")

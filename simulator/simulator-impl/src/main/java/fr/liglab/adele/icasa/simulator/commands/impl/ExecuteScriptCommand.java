@@ -32,8 +32,7 @@ import java.util.List;
 /**
  * 
  * Executes an script
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 @Component(name = "ExecuteScriptCommand")

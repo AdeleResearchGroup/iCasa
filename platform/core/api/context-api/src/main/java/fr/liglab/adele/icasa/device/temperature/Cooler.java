@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition of a simple cooler device.
- * 
- * @author bourretp
+ *
  */
 public interface Cooler extends GenericDevice {
 

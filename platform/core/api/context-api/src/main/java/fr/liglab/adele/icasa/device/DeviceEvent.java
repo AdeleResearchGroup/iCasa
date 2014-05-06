@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.device;
 
 /**
  * Represents an event related to a device.
- * 
- * @author Thomas Leveque
+ *
  */
 public class DeviceEvent {
 

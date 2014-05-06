@@ -18,7 +18,6 @@ package fr.liglab.adele.icasa.simulator.temperature.impl;
 /**
  * Represents a parallelepiped.
  *
- *@author Thomas Leveque
  */
 public class Parallelepiped {
 

@@ -28,7 +28,6 @@ import org.ow2.chameleon.sharedprefs.SharedPreferencesService;
 import java.util.*;
 
 /**
- * @author Gabriel Pedraza Ferreira
  * 
  */
 @Component(name = "iCasaPreferences")

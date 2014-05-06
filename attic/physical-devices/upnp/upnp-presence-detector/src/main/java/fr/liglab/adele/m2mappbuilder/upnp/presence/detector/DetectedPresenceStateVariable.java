@@ -24,8 +24,6 @@ import org.osgi.service.upnp.UPnPLocalStateVariable;
 import fr.liglab.adele.icasa.device.DeviceListener;
 
 /**
- * 
- * @author Thomas Leveque
  *
  */
 public class DetectedPresenceStateVariable implements UPnPLocalStateVariable, DeviceListener {

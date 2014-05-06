@@ -21,8 +21,6 @@ import org.json.JSONObject;
 /**
  * TODO
  *
- * @author Thomas Leveque
- *         Date: 27/11/12
  */
 public class PersonJSON {
 

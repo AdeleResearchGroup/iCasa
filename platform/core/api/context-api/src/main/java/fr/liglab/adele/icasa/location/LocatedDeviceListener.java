@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.listener.IcasaListener;
 
 /**
  * Listener on {@link fr.liglab.adele.icasa.location.LocatedDevice} objects
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  *
  */
 public interface LocatedDeviceListener extends IcasaListener {

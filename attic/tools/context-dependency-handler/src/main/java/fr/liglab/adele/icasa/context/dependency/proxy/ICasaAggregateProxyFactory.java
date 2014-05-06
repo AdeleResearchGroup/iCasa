@@ -22,7 +22,6 @@ import fr.liglab.adele.icasa.context.dependency.ContextDependency;
 
 
 /**
- * @author Gabriel
  *
  */
 public class ICasaAggregateProxyFactory extends ICasaContextProxyFactory {

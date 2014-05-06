@@ -24,8 +24,7 @@ import java.util.Set;
  * 
  * This device interface is used to add properties not specified in the device implementation. The location is also
  * added by this interface. Implementations have to maintain a reference to the Device implementation.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface LocatedDevice extends LocatedObject {

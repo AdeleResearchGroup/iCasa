@@ -31,9 +31,7 @@ import javax.inject.Inject;
 import java.util.UUID;
 
 /**
- * User: garciai@imag.fr
- * Date: 8/12/13
- * Time: 11:13 AM
+ *
  */
 @RunWith(ChameleonRunner.class)
 public class AccessManagerDisableTest {

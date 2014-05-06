@@ -16,9 +16,7 @@ import java.io.*;
 import java.net.URL;
 
 /**
- * User: garciai@imag.fr
- * Date: 10/21/13
- * Time: 6:01 PM
+ *
  */
 
 @Component(name="icasa-dashboard-map-page")

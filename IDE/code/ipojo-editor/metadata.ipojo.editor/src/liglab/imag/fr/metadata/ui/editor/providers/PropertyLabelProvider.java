@@ -7,7 +7,6 @@ import org.apache.felix.PropertyType;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
 /**
- * @author Gabriel
  *
  */
 public class PropertyLabelProvider extends ColumnLabelProvider {

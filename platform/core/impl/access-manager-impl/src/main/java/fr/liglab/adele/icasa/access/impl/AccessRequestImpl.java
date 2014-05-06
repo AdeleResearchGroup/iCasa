@@ -21,9 +21,7 @@ import fr.liglab.adele.icasa.access.AccessRightListener;
 import java.util.Date;
 
 /**
- * User: garciai@imag.fr
- * Date: 7/16/13
- * Time: 4:29 PM
+ *
  */
 public class AccessRequestImpl implements AccessRightListener{
 

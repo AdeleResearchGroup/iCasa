@@ -1,7 +1,7 @@
 package fr.liglab.icasa.self.star.temperature.management.exercice.four.moment.of.the.day;
 
 /**
- * Created by aygalinc on 12/03/14.
+ *
  */
 /**
  * The listener interface for receiving momentOfTheDay events.

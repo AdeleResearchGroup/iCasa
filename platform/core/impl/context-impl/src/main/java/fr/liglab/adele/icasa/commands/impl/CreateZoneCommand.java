@@ -32,8 +32,7 @@ import java.io.PrintStream;
 /**
  * 
  * Command to Create a Zone
- * 
- * @author Gabriel
+ *
  * 
  */
 @Component(name = "CreateZoneCommand")

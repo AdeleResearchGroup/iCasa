@@ -22,8 +22,7 @@ import org.apache.felix.ipojo.metadata.Element;
 /**
  * Filters the given meta data elements to removes iPOJO injected members from
  * the manifest
- * 
- * @author Thomas Calmant
+ *
  */
 public class MetadataIpojoElementFilter implements
 		org.apache.felix.ipojo.manipulator.render.MetadataFilter {

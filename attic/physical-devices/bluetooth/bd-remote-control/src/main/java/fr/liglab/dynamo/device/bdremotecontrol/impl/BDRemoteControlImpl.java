@@ -39,7 +39,6 @@ import com.intel.bluetooth.BlueCoveConfigProperties;
 import fr.liglab.dynamo.device.bdremotecontrol.BDRemoteControl;
 
 /**
- * @author P.A Avouac
  * 
  */
 @Component(name = "bluetooth.playstation.remote", immediate=true)

@@ -30,9 +30,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 /**
- * User: garciai@imag.fr
- * Date: 7/18/13
- * Time: 11:04 AM
+ *
  */
 @Component(name = "AccessManagerPrintCommand")
 @Provides

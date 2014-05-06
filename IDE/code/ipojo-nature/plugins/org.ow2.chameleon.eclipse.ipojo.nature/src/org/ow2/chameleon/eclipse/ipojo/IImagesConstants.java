@@ -16,8 +16,7 @@ package org.ow2.chameleon.eclipse.ipojo;
 
 /**
  * Defines iPOJO Nature images constants
- * 
- * @author Thomas Calmant
+ *
  */
 public interface IImagesConstants {
 

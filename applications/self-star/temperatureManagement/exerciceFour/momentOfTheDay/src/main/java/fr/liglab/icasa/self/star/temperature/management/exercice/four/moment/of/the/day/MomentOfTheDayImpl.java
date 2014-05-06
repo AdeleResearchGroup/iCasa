@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by aygalinc on 11/03/14.
+ *
  */
 //Define this class as an implementation of a component :
 @Component

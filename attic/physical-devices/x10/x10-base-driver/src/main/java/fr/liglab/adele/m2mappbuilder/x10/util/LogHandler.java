@@ -42,9 +42,6 @@ import java.io.InputStream;
 * <br># By not specifying a LogFile, the LogHandler will default to stdout.
 * <br>LogFile=</blockquote></code>
 *
-* @author Wade Wassenberg
-*
-* @version 1.0
 */
 
 public class LogHandler

@@ -32,8 +32,7 @@ import org.ow2.chameleon.eclipse.ipojo.IImagesConstants;
 
 /**
  * Pops up an iPOJO nature configuration dialog
- * 
- * @author Thomas Calmant
+ *
  */
 public class NatureConfigurationDialog extends TitleAreaDialog {
 

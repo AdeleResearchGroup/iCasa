@@ -20,8 +20,7 @@ import fr.liglab.adele.icasa.simulator.listener.PersonListener;
 
 /**
  * This interface represents a person in the icasa simulated Environment
- * 
- * @author Thomas Leveque
+ *
  */
 public interface Person extends LocatedObject {
 

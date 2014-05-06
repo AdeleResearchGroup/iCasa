@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.listener.IcasaListener;
 
 /**
  * Listener of zone variables
- * 
- * @author Thomas Leveque
+ *
  */
 public interface ZonePropListener extends IcasaListener {
 

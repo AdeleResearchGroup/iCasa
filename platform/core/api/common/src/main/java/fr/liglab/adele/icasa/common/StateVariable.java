@@ -20,8 +20,7 @@ import java.util.Map;
 /**
  * Represents a state with a defined type.
  * A state variable explicitly defines if it is able to push notifications of state value changes.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface StateVariable {

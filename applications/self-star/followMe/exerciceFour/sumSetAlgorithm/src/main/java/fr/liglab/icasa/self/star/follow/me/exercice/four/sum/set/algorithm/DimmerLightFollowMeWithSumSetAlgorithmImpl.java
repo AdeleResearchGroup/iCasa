@@ -11,7 +11,7 @@ import org.apache.felix.ipojo.annotations.*;
 import java.util.*;
 
 /**
- * Created by aygalinc on 06/03/14.
+ *
  */
 
 @Component(name="DimmerLightFollowMeWithSumSetAlgorithm")

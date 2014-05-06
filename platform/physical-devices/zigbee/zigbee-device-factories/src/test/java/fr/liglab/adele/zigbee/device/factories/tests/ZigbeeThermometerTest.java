@@ -25,8 +25,7 @@ import fr.liglab.adele.zigbee.device.factories.ZigbeeThermometer;
 
 /**
  * Test class for zigbee temperature sensor.
- * 
- * @author Kettani Mehdi
+ *
  * 
  */
 public class ZigbeeThermometerTest {

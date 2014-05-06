@@ -911,8 +911,6 @@ public class DeviceDependencyHandler extends DependencyHandler implements Applic
     /**
      * This class holds the dependency configuration before of DeviceDependency creation
      * 
-     * @author Gabriel Pedraza Ferreira
-     * 
      */
     private class DependencyConfiguration {
 

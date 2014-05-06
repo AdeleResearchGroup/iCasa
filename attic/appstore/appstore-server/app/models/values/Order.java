@@ -6,11 +6,7 @@ import play.db.ebean.Model;
 import javax.persistence.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 1/15/13
- * Time: 4:43 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 @Entity
 @Table(name="Orders")

@@ -21,11 +21,7 @@ import fr.liglab.adele.icasa.device.manager.DeviceAccessRight;
 import java.lang.reflect.Method;
 
 /**
- * Created with IntelliJ IDEA.
- * User: thomas
- * Date: 21/05/13
- * Time: 16:44
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class DeviceAccessRightImpl implements DeviceAccessRight {
 

@@ -11,8 +11,6 @@ import org.eclipse.pde.internal.ui.wizards.plugin.PluginContentPage;
 /**
  * 
  * This page is created only to disable the button to create an activactor
- * 
- * @author Gabriel
  *
  */
 @SuppressWarnings("restriction")

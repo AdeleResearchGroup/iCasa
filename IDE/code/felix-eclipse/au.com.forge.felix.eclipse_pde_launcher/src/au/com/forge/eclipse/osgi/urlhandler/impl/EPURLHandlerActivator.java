@@ -39,8 +39,7 @@ import org.osgi.service.url.URLStreamHandlerService;
  * This activator MUST be launched from the Felix launcher (or OSGi 
  * framework) launcher in order to start up the framework with
  * Eclipse Project directories as startup bundles.
- * 
- * @author Christopher Armstrong
+ *
  *
  */
 public class EPURLHandlerActivator implements BundleActivator {

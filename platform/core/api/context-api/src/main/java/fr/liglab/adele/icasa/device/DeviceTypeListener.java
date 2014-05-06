@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.listener.IcasaListener;
 
 /**
  * Listener used to be notified about the device types in the platform.
- * 
- * @author Thomas Leveque
+ *
  */
 public interface DeviceTypeListener extends IcasaListener {
 

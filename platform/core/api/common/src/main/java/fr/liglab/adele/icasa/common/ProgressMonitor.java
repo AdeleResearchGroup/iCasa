@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.common;
 
 /**
  * Listener interface to monitor progress of an operation.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface ProgressMonitor {

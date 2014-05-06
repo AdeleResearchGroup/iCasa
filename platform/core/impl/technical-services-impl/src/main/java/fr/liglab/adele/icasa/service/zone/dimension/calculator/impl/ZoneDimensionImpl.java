@@ -40,8 +40,7 @@ import java.util.logging.Logger;
 /**
  * The Class ZoneDimensionImpl implements the Technical Service responsible for
  * providing each zone dimension.
- * 
- * @author : yoann.maurel@imag.fr
+ *
  */
 @Component
 @Instantiate

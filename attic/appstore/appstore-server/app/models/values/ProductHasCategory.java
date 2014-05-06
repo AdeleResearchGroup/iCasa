@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * User: torito
- * Date: 4/30/13
- * Time: 7:43 PM
+ *
  */
 @Entity
 @Table(name="Product_has_Category")

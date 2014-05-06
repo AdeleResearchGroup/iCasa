@@ -18,9 +18,7 @@ import java.io.*;
 import java.util.List;
 
 /**
- * User: torito
- * Date: 4/30/13
- * Time: 5:44 PM
+ *
  */
 public class DeviceController extends Controller {
     static Form<Device> deviceForm = form(Device.class);

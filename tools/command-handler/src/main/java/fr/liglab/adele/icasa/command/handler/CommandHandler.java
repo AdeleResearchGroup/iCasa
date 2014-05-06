@@ -43,8 +43,7 @@ import org.osgi.framework.ServiceRegistration;
  * \@Command before each command to add the command to the command list (be
  * aware that it will also consider each method with the same name as a
  * command).
- * 
- * @author yoann.maurel@imag.fr
+ *
  * 
  */
 

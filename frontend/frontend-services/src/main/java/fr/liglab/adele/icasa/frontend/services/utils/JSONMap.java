@@ -4,9 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * User: garciai@imag.fr
- * Date: 10/22/13
- * Time: 9:31 AM
+ *
  */
 public class JSONMap {
 

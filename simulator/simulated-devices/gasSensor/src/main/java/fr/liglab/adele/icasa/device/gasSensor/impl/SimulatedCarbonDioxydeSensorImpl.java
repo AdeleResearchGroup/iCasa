@@ -32,7 +32,6 @@ import java.util.List;
 /**
  * Implementation of a CO2 sensor device.
  *
- * @author jeremy
  */
 @Component(name = "iCasa.CO2GasSensor")
 @Provides(properties = {@StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION)})

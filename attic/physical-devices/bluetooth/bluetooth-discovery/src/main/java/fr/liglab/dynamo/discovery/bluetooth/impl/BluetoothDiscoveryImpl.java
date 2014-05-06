@@ -40,8 +40,7 @@ import fr.liglab.dynamo.discovery.bluetooth.BluetoothDiscovery;
 /**
  * This class is a discovery service for the Bluetooth protocol.
  * FIXME: service that disappears are not tracked for now
- * 
- * @author P.A
+ *
  * 
  */
 public class BluetoothDiscoveryImpl implements BluetoothDiscovery {
@@ -81,8 +80,7 @@ public class BluetoothDiscoveryImpl implements BluetoothDiscovery {
 	 * This thread enables to start the Bluetooth discovery. If the start fails,
 	 * this thread try again, until the discovery thread is created of the
 	 * <code>end</code> method is called.
-	 * 
-	 * @author P.A
+	 *
 	 * 
 	 */
 	private class StarterThread extends Thread {

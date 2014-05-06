@@ -21,9 +21,7 @@ import fr.liglab.adele.icasa.service.scheduler.PeriodicRunnable;
 import java.util.Date;
 
 /**
- * User: torito
- * Date: 6/17/13
- * Time: 5:00 PM
+ *
  */
 public class PeriodicScheduledTestTask implements PeriodicRunnable {
 

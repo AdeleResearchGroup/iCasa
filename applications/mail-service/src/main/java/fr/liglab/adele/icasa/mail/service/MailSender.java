@@ -20,7 +20,6 @@ import java.io.File;
 /**
  * Simple interface to specify a mail sender service !
  *
- * @author jeremy.savonet@gmail.com
  */
 public interface MailSender {
 

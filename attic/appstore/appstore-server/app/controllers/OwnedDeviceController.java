@@ -10,11 +10,7 @@ import securesocial.core.Identity;
 import securesocial.core.java.SecureSocial;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 1/16/13
- * Time: 5:31 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class OwnedDeviceController extends Controller{
 

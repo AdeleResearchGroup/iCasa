@@ -23,8 +23,7 @@ import java.util.Set;
 /**
  * This interface represents a Zone (a rectangular surface) into the iCasa platform. Zones can be embeded, a zone can
  * have several children zones. Each children zone must fit into its parent zone.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface Zone extends LocatedObject {

@@ -20,8 +20,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Empty implementation of a device listener. This is class is intended to ease implementation of Device Listeners.
- * 
- * @author Thomas Leveque
+ *
  */
 public class EmptyDeviceListener<T extends GenericDevice> implements DeviceListener<T> {
 

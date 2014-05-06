@@ -18,7 +18,6 @@ package fr.liglab.adele.icasa.device;
 /**
  * A specialized device listener which
  *
- * @author Thomas leveque
  */
 public interface FilteredDeviceListener<T extends GenericDevice> extends DeviceListener<T> {
 

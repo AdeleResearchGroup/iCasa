@@ -32,8 +32,6 @@ import org.apache.felix.ipojo.manipulator.store.builder.DefaultManifestBuilder;
  * Avoids a weird behavior of JDT : when Import-Package value order changes, the
  * project is fully-rebuilt, calling iPOJO Builder again, modifying the
  * Import-Package again, etc.
- * 
- * @author Thomas Calmant
  */
 public class SortedManifestBuilder extends DefaultManifestBuilder {
 

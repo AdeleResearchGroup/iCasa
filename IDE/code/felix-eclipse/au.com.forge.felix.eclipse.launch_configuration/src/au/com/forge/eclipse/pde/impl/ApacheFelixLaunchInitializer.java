@@ -28,8 +28,7 @@ import org.eclipse.pde.launching.OSGiLaunchConfigurationInitializer;
  * A launch configuration initialiser that removes all the project arguments
  * stuffed in by {@link OSGiLaunchConfigurationInitializer} which are
  * relevant to Eclipse Equinox but useless for Apache Felix.
- *  
- * @author Christopher Armstrong
+ *
  *
  */
 public class ApacheFelixLaunchInitializer extends OSGiLaunchConfigurationInitializer {

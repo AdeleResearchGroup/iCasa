@@ -26,7 +26,6 @@ import fr.liglab.adele.icasa.device.zigbee.driver.TypeCode;
 
 /**
  * Implementation class for the device info interface.
- * @author Kettani mehdi
  */
 public class DeviceInfoImpl implements DeviceInfo {
 	

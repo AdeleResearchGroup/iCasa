@@ -29,8 +29,7 @@ import fr.liglab.adele.icasa.device.motion.MotionSensor;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 
 /**
- * Created with IntelliJ IDEA. User: Kettani Mehdi Date: 26/04/13 Time: 11:33 To
- * change this template use File | Settings | File Templates.
+ *
  */
 @Component(name = "AutonomicAdapterDeploymentMgr")
 @Instantiate(name = "AutonomicAdapterDeploymentMgr-1")

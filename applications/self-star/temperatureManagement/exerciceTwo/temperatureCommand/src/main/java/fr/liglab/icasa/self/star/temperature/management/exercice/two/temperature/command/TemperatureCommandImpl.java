@@ -10,7 +10,7 @@ import org.apache.felix.ipojo.annotations.Requires;
 
 
 /**
- * Created by aygalinc on 20/03/14.
+ *
  */
 //Define this class as an implementation of a component :
 @Component

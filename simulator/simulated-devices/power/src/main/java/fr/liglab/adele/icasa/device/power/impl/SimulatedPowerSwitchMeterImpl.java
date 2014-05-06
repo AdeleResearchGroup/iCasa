@@ -29,8 +29,7 @@ import fr.liglab.adele.icasa.simulator.SimulatedDevice;
 
 /**
  * Implementation of a simulated Power Switch + Meter
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 

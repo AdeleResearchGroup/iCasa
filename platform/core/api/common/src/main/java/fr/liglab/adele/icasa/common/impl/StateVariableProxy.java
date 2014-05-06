@@ -25,8 +25,7 @@ import fr.liglab.adele.icasa.common.VariableType;
 
 /**
  * Proxy of variable which allows to change dynamically its implementation while keeping the same listeners.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public class StateVariableProxy implements StateVariable, StateVariableListener {

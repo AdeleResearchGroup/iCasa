@@ -31,9 +31,7 @@ import java.io.PrintStream;
 import java.util.Set;
 
 /**
- * User: torito
- * Date: 4/23/13
- * Time: 3:53 PM
+ *
  */
 @Component(name = "ShowZonesVariablesCommand")
 @Provides

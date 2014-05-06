@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.simulator.script.executor;
 
 /**
  * Listener interface for the scrip executor service
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface ScriptExecutorListener {

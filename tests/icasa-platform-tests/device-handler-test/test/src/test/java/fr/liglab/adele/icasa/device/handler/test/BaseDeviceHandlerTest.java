@@ -54,8 +54,6 @@ import org.ow2.chameleon.runner.test.ChameleonRunner;
 import org.ow2.chameleon.testing.helpers.OSGiHelper;
 
 /**
- * 
- * @author Gabriel
  *
  */
 @RunWith(ChameleonRunner.class)

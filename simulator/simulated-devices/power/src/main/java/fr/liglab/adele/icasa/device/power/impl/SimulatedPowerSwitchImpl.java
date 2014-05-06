@@ -26,7 +26,7 @@ import org.osgi.framework.Constants;
 import java.util.List;
 
 /**
- * @author Thomas Leveque
+ *
  */
 @Component(name = "iCasa.ToggleSwitch")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

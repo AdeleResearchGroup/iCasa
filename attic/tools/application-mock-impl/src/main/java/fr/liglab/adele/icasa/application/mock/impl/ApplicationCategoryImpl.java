@@ -18,8 +18,7 @@ package fr.liglab.adele.icasa.application.mock.impl;
 import fr.liglab.adele.icasa.application.ApplicationCategory;
 
 /**
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public class ApplicationCategoryImpl implements ApplicationCategory {

@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import fr.liglab.adele.cilia.Data;
 
 /**
- * @author Gabriel Pedraza Ferreira
  *
  */
 public class MeasureFilter {

@@ -49,8 +49,7 @@ import fr.liglab.adele.icasa.device.zigbee.driver.TypeCode;
 
 /**
  * rose importer for zigbee presence sensor devices.
- * 
- * @author Kettani Mehdi
+ *
  */
 @Component(name = "zigbee.device.importer")
 @Provides(specifications = { ImporterService.class }, properties = { @StaticServiceProperty(type = "java.lang.String", name = "rose.protos.configs", value = "zigbee") })
@@ -171,8 +170,7 @@ public class ZigbeeImporter extends AbstractImporterComponent {
 
 	/**
 	 * A wrapper for ipojo Component instances
-	 * 
-	 * @author Gabriel Pedraza Ferreira
+	 *
 	 * 
 	 */
 	class IpojoServiceRegistration implements ServiceRegistration {

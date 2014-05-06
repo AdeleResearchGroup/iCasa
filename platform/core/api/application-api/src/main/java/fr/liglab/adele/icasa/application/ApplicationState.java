@@ -17,8 +17,6 @@ package fr.liglab.adele.icasa.application;
 
 /**
  * Represents the state of an application.
- * 
- * @author Thomas Leveque
  *
  */
 public enum ApplicationState {

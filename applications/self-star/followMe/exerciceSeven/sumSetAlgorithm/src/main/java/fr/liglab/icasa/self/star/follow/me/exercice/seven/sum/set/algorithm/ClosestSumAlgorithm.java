@@ -1,7 +1,7 @@
 package fr.liglab.icasa.self.star.follow.me.exercice.seven.sum.set.algorithm;
 
 /**
- * Created by aygalinc on 09/03/14.
+ *
  */
 import java.util.BitSet;
 

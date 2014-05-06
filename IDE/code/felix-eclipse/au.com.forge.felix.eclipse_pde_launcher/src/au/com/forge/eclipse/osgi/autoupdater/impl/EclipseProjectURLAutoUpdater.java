@@ -28,8 +28,6 @@ import org.osgi.framework.BundleContext;
  * Automatically updates all the eclipse-project bundles because Felix won't on
  * its own.
  * 
- * @author Christopher Armstrong
- * 
  */
 public class EclipseProjectURLAutoUpdater implements BundleActivator {
 

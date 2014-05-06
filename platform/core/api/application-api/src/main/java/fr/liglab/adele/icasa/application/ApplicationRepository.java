@@ -23,8 +23,7 @@ import java.util.Set;
 
 /**
  * It represents a repository of applications.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface ApplicationRepository {

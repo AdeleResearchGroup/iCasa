@@ -36,7 +36,6 @@ import java.util.Set;
 *  nullable or default-implementation object</li>
 * <li>'empty' returns an empty iterator.</li>
 * </ul>
-* @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
 */
 public class ServiceCollection implements Collection, List, Set {
     

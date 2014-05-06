@@ -23,15 +23,13 @@ import java.util.jar.Attributes;
  * Writable copy of an {@link Attributes} object with sorted entries.
  * 
  * The {@link Attributes#map} field is replaced by a {@link TreeMap}.
- * 
- * @author Thomas Calmant
+ *
  */
 public class SortedAttributes extends Attributes {
 
 	/**
 	 * Compare two objects according to their string representation
-	 * 
-	 * @author Thomas Calmant
+	 *
 	 * 
 	 */
 	protected static class ObjectStringComparator implements Comparator<Object> {

@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Zigbee power switch factory.
- * @author Kettani Mehdi
  */
 @Component(name="zigbeePowerSwitch")
 @Provides

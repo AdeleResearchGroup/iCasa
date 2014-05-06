@@ -45,8 +45,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 
 /**
  * Master Detail Block for components types
- * 
- * @author Gabriel
+ *
  */
 public class ComponentMasterDetailBlock extends PojoMasterDetailBlock {
 
@@ -133,8 +132,7 @@ public class ComponentMasterDetailBlock extends PojoMasterDetailBlock {
 
 	/**
 	 * Action to generate the implementation class for the selected component
-	 * 
-	 * @author Gabriel
+	 *
 	 * 
 	 */
 	class GenerateComponentClassAction extends Action {
@@ -220,8 +218,7 @@ public class ComponentMasterDetailBlock extends PojoMasterDetailBlock {
 
 	/**
 	 * Action to validate the implementation class for the selected component
-	 * 
-	 * @author Gabriel
+	 *
 	 * 
 	 */
 	class ValidateComponentClassAction extends Action {

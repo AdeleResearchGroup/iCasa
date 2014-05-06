@@ -20,16 +20,14 @@ import java.util.List;
 
 /**
  * Interface of service responsible for script execution into the platform
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface ScriptExecutor {
 
 	/**
 	 * Enumeration representing the state of scripts
-	 * 
-	 * @author Gabriel Pedraza Ferreira
+	 *
 	 * 
 	 */
 	public enum State {

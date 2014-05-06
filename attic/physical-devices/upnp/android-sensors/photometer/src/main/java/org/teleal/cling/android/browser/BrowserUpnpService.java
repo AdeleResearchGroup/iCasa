@@ -20,7 +20,7 @@ import org.teleal.cling.android.AndroidUpnpServiceConfiguration;
 import org.teleal.cling.android.AndroidUpnpServiceImpl;
 
 /**
- * @author Christian Bauer
+ *
  */
 public class BrowserUpnpService extends AndroidUpnpServiceImpl {
 

@@ -25,8 +25,7 @@ import fr.liglab.adele.habits.monitoring.autonomic.manager.listeners.DPInfosList
 import org.xml.sax.SAXException;
 
 /**
- * Handler for .db files. 
- * @author Kettani Mehdi
+ * Handler for .db files.
  */
 @Component(name = "DBFileHandler")
 @Instantiate(name = "DBFileHandler-1")

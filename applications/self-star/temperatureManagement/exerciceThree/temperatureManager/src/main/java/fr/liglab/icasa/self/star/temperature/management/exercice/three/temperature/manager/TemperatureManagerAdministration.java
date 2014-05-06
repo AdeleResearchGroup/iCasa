@@ -1,7 +1,7 @@
 package fr.liglab.icasa.self.star.temperature.management.exercice.three.temperature.manager;
 
 /**
- * Created by aygalinc on 20/03/14.
+ *
  */
 /**
  * This interface allows to configure the temperature manager responsible for

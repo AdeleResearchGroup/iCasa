@@ -27,7 +27,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 
 /**
- * @author Gabriel
  * 
  */
 public class InstanceDetailsPage implements IDetailsPage {

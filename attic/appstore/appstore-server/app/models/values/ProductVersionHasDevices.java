@@ -5,9 +5,7 @@ import play.db.ebean.Model;
 import javax.persistence.*;
 
 /**
- * User: torito
- * Date: 5/3/13
- * Time: 11:05 AM
+ *
  */
 @Entity
 @Table(name="ProductVersion_has_Device")

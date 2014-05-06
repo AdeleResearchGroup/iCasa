@@ -23,9 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * User: garciai@imag.fr
- * Date: 7/18/13
- * Time: 2:39 PM
+ *
  */
 @Component(name = "iCasa-access-manager-event-broadcast")
 @Instantiate(name = "iCasa-access-manager-event-broadcast-1")

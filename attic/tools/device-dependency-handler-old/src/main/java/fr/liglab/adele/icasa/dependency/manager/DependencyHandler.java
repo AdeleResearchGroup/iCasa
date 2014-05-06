@@ -43,7 +43,6 @@ import fr.liglab.adele.icasa.dependency.manager.util.DependencyStateListener;
 
 /**
  * The dependency handler manages a list of service dependencies.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public class DependencyHandler extends PrimitiveHandler implements DependencyStateListener {
 

@@ -19,8 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author <a href="mailto:cilia-devel@lists.ligforge.imag.fr">Cilia Project
- *         Team</a>
+ *
  */
 public interface SimulatedDeviceManager {
 

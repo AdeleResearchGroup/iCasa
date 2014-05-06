@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.simulator;
 
 /**
  * This class represents a person type
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public class PersonType {

@@ -32,8 +32,7 @@ import java.io.PrintStream;
 /**
  * 
  * Create a new device instance
- * 
- * @author Gabriel
+ *
  *
  */
 @Component(name = "RemoveDeviceCommand")

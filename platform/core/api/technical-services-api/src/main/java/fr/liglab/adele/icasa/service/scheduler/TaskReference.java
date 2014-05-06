@@ -21,8 +21,6 @@ package fr.liglab.adele.icasa.service.scheduler;
  *
  * {@link TaskReference} allows getting a report after each execution of the
  * attached {@link Task}.
- *
- * @author <a href="mailto:chameleon-dev@ow2.org">Chameleon Project Team</a>
  */
 public interface TaskReference {
 

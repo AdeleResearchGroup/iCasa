@@ -10,9 +10,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * User: garciai@imag.fr
- * Date: 10/21/13
- * Time: 2:32 PM
+ *
  */
 public abstract class AbstractXMLParser {
 

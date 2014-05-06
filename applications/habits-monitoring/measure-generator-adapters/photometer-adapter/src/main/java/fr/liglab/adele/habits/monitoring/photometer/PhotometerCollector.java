@@ -18,8 +18,7 @@ import fr.liglab.adele.icasa.device.light.Photometer;
 /**
  * Collector adapter for the photometer devices events. this adapter is
  * triggered when a photometer device illuminance property change.
- * 
- * @author Kettani Mehdi
+ *
  */
 public class PhotometerCollector extends AbstractCollector implements
 		DeviceListener<Photometer> {

@@ -40,7 +40,7 @@ import org.ow2.chameleon.runner.test.ChameleonRunner;
 import org.ow2.chameleon.testing.helpers.OSGiHelper;
 
 /**
- * User: garciai@imag.fr Date: 8/2/13 Time: 3:14 PM
+ *
  */
 @RunWith(ChameleonRunner.class)
 public class ZoneTrackerTest {

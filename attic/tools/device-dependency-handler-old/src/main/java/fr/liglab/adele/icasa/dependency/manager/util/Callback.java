@@ -28,7 +28,6 @@ import org.apache.felix.ipojo.parser.MethodMetadata;
  * implementation class. This class also supports public method from super class.
  * The {@link Method} object is computed once and this computation is delayed
  * to the first invocation.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public class Callback {
 

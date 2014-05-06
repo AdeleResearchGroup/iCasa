@@ -22,8 +22,6 @@ import fr.liglab.adele.icasa.location.ZoneListener;
 /**
  * This interface is used to implement multiples listener using a unique interface
  * 
- * @author Gabriel Pedraza Ferreira
- * 
  */
 public interface MultiEventListener extends ZoneListener, LocatedDeviceListener, DeviceTypeListener {
 

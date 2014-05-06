@@ -32,7 +32,6 @@ import com.sun.jersey.api.client.WebResource;
 
 
 /**
- * @author Jean-Pierre Poutcheu
  * 
  */
 public class RestProcessEventService implements ProcessEventService {

@@ -37,8 +37,7 @@ import org.ow2.chameleon.rose.RoseMachine;
 
 /**
  * This class implements a ROSE importer for the UPnP Devices providing a PresenceDetector Service
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public class UPnPSetTopBoxImporter extends AbstractImporterComponent {
@@ -159,8 +158,7 @@ public class UPnPSetTopBoxImporter extends AbstractImporterComponent {
 
 /**
  * A wrapper for ipojo Component instances
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 class MedicalServiceregistration implements ServiceRegistration {

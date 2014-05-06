@@ -31,7 +31,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 /**
- * @author Issac Garcia
+ *
  */
 @Component(name = "iCasa.PushButton")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

@@ -21,7 +21,6 @@ import org.ow2.chameleon.runner.test.utils.Condition;
 /**
  * Condition is true only if specified zone has temperature variable.
  *
- * @author Thomas Leveque
  */
 public class TemperatureVarExistsCondition implements Condition {
 

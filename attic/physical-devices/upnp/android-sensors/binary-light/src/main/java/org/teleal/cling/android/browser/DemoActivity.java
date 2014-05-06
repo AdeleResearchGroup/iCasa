@@ -52,7 +52,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
- * @author Christian Bauer
+ *
  */
 public class DemoActivity extends Activity implements PropertyChangeListener {
 

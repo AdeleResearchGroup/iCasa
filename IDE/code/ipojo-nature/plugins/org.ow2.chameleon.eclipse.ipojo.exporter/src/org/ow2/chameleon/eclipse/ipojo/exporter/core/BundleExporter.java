@@ -49,8 +49,7 @@ import org.ow2.chameleon.eclipse.ipojo.exporter.IPojoExporterPlugin;
 
 /**
  * Bundle export logic
- * 
- * @author Thomas Calmant
+ *
  */
 public class BundleExporter {
 

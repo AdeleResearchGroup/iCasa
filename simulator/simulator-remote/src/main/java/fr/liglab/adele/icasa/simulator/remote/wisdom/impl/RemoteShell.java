@@ -38,9 +38,7 @@ import java.io.PrintStream;
 import java.util.*;
 
 /**
- * User: garciai@imag.fr
- * Date: 9/26/13
- * Time: 3:35 PM
+ *
  */
 @Component
 @Provides

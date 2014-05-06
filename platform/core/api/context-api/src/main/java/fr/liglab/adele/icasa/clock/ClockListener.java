@@ -18,8 +18,7 @@ package fr.liglab.adele.icasa.clock;
 /**
  * 
  * This interface must be implemented by Clock listeners.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  *
  */
 public interface ClockListener {

@@ -21,9 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * User: garciai@imag.fr
- * Date: 7/18/13
- * Time: 3:54 PM
+ *
  */
 public class AccessRightJSON  {
 

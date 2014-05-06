@@ -36,8 +36,7 @@ import fr.liglab.adele.icasa.simulator.SimulatedDevice;
 
 /**
  * Implementation of a simulated audio source device.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 @Component(name="iCasa.AudioSource")
 @Provides(properties = {

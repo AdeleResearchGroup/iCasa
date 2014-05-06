@@ -43,7 +43,6 @@ import java.io.IOException;
 //import org.wisdom.api.http.Response;
 
 /**
- * @author Thomas Leveque
  *
  */
 @Component

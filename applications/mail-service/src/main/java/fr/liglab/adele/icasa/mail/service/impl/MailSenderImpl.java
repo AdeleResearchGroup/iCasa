@@ -25,7 +25,6 @@ import java.io.File;
 /**
  * This class provides method to send medical report by mail !
  *
- * @author jeremy.savonet@gmail.com
  */
 @Component(immediate = true)
 @Instantiate (name = "Platform-MailService-0")

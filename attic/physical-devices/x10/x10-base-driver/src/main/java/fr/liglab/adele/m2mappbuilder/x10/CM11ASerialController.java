@@ -34,9 +34,6 @@ import java.io.IOException;
 *
 * This class requires the javax.comm package from Sun Microsystems.
 *
-* @author Wade Wassenberg (rewritten by Thomas Leveque)
-*
-* @version 1.0
 */
 
 public class CM11ASerialController implements Runnable, Controller

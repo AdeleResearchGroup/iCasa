@@ -18,9 +18,7 @@ package fr.liglab.adele.icasa.device.button.simulated;
 import fr.liglab.adele.icasa.device.button.PushButton;
 
 /**
- * User: garciai@imag.fr
- * Date: 9/2/13
- * Time: 2:24 PM
+ *
  */
 public interface SimulatedPushButton extends PushButton{
     /**

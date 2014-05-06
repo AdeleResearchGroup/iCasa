@@ -16,7 +16,6 @@
 package fr.liglab.adele.icasa.actimetrics.event.webservice.api;
 
 /**
- * @author Jean-Pierre Poutcheu
  *
  */
 public class ProcessEventException extends Exception{

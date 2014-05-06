@@ -22,8 +22,7 @@ import java.util.Set;
  * <li>Global Preferences</li>
  * <li>Application Preferences</li>
  * <li>User Preferences</li>
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  *
  */
 public interface Preferences {

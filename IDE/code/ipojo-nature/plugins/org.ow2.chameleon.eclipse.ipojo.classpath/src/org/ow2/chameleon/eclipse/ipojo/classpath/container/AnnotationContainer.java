@@ -33,8 +33,7 @@ import org.ow2.chameleon.eclipse.ipojo.classpath.IPojoClasspathPlugin;
  * Implementation of the annotation class path container.
  * 
  * Uses {@link BundleURLConnection} to find the JAR file.
- * 
- * @author Thomas Calmant
+ *
  */
 @SuppressWarnings("restriction")
 public class AnnotationContainer implements IClasspathContainer {

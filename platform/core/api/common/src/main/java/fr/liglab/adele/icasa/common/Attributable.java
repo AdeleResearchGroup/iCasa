@@ -21,8 +21,7 @@ import java.util.Set;
 /**
  * Allows an object to define attributes with their corresponding values.
  * Property value can be null.
- * 
- * @author Thomas leveque
+ *
  *
  */
 public interface Attributable {

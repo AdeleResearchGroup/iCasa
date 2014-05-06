@@ -20,7 +20,6 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 /**
  * Represents a box such as Livebox.
  *
- * @author Thomas Leveque
  */
 public interface Box extends GenericDevice {
 

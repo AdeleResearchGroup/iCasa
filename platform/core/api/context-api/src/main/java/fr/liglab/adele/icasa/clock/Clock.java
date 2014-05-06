@@ -18,8 +18,7 @@ package fr.liglab.adele.icasa.clock;
 
 /**
  * This class represents the platform clock. It's provided as an OSGi service. 
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface Clock {

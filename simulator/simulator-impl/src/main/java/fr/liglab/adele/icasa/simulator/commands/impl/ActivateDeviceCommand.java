@@ -32,8 +32,7 @@ import java.io.PrintStream;
 /**
  * 
  * Sets the fault state of device to "Yes"
- * 
- * @author Gabriel
+ *
  *
  */
 @Component(name = "ActivateDeviceCommand")

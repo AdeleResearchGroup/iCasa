@@ -19,7 +19,6 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.location.LocatedDevice;
 
 /**
- * @author Thomas Leveque
  */
 public interface LocatedDeviceFilter {
 

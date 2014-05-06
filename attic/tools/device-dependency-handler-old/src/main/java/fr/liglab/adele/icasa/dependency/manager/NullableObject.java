@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 
 /**
  * Default nullable object.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public class NullableObject implements InvocationHandler {
 

@@ -36,8 +36,7 @@ import fr.liglab.adele.icasa.dependency.manager.proxy.ICasaAggregateProxyFactory
  * default-implementation object</li>
  * <li>'empty' returns an empty iterator.</li>
  * </ul>
- * 
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
+ *
  */
 public class ICasaServiceCollection implements Collection, List, Set {
 

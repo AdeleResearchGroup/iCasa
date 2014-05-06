@@ -29,7 +29,6 @@ import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
 @Provides
 /**
  * Zigbee presence sensor factory.
- * @author Kettani Mehdi.
  *
  */
 public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSensor, ZigbeeDevice, ZigbeeDeviceTracker {

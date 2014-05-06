@@ -30,8 +30,7 @@ import fr.liglab.adele.icasa.simulator.SimulatedDevice;
 
 /**
  * Implementation of a simulated presence sensor device.
- * 
- * @author Thomas Leveque
+ *
  */
 @Component(name = "iCasa.Tablet")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

@@ -1,7 +1,7 @@
 package fr.liglab.icasa.self.star.temperature.management.exercice.three.temperature.controller;
 
 /**
- * Created by aygalinc on 20/03/14.
+ *
  */
 /**
  * The TemperatureConfiguration service allows one to configure the temperature

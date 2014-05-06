@@ -37,9 +37,6 @@ import static org.junit.Assert.*;
 /**
  * Tests of gateway reification as a box.
  *
- *
- * @author Thomas Leveque
- *
  */
 @RunWith(ChameleonRunner.class)
 public class GatewayAsBoxTest {

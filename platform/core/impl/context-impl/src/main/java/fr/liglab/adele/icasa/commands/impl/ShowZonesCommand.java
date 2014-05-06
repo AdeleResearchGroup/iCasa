@@ -30,9 +30,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 /**
- * User: torito
- * Date: 4/23/13
- * Time: 3:50 PM
+ *
  */
 @Component(name = "ShowZonesCommand")
 @Provides

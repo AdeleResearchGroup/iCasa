@@ -6,11 +6,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 1/15/13
- * Time: 3:57 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 @Entity
 @Table(name="Product_Price")

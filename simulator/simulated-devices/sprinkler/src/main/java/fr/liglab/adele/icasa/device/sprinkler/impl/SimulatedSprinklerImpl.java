@@ -27,8 +27,7 @@ import fr.liglab.adele.icasa.simulator.SimulatedDevice;
 
 /**
  * Implementation of a simulated binary light device.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 @Component(name = "iCasa.Sprinkler")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

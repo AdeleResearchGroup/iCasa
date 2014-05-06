@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 /**
- * Created by aygalinc on 07/03/14.
+ *
  */
 @Component(name="FollowMeManager")
 @Instantiate

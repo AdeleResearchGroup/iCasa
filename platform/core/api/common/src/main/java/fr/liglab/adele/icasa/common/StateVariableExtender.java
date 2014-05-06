@@ -21,8 +21,7 @@ import java.util.List;
  * Allows a component to manage specific state variables (such as Logic Location).
  * It can add new state variable or define specific variables as derived.
  * In this case, it is responsible of value computation.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface StateVariableExtender {

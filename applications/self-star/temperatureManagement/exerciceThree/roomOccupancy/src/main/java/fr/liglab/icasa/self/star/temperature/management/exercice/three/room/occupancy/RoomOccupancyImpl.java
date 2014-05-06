@@ -16,7 +16,7 @@ import org.joda.time.Period;
 import java.util.*;
 
 /**
- * Created by aygalinc on 20/03/14.
+ *
  */
 @Component(name="RoomOccupancyImpl")
 @Instantiate(name="RoomOccupancyImpl-0")

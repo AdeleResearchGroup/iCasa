@@ -41,8 +41,7 @@ import org.ow2.chameleon.eclipse.ipojo.Activator;
 /**
  * New implementation of the manifest updater, using the new Manipulator
  * interfaces
- * 
- * @author Thomas Calmant
+ *
  */
 public class ManifestUpdater {
 

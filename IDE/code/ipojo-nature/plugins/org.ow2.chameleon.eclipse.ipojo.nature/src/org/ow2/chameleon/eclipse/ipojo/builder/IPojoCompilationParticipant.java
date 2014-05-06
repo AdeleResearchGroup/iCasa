@@ -41,8 +41,7 @@ import org.ow2.chameleon.eclipse.ipojo.core.ManifestUpdater;
  * manipulation after the compilation and before JDT looks for modifications.
  * 
  * This way to work is under testing.
- * 
- * @author Thomas Calmant
+ *
  */
 public class IPojoCompilationParticipant extends CompilationParticipant {
 

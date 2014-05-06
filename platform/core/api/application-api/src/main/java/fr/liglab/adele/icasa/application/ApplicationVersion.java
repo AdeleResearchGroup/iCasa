@@ -17,8 +17,6 @@ package fr.liglab.adele.icasa.application;
 
 /**
  * Represents a specific application version.
- * 
- * @author Thomas Leveque
  *
  */
 public class ApplicationVersion {

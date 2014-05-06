@@ -37,8 +37,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Component implementation capable of creating proxies for presence detector
  * devices of type fr.liglab.adele.icasa.device.impl.SimulatedPresenceSensorImpl
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public class USBFRIDReaderImporter extends AbstractImporterComponent {
@@ -168,8 +167,7 @@ public class USBFRIDReaderImporter extends AbstractImporterComponent {
 
 /**
  * A wrapper for ipojo Component instances
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 class MedicalServiceregistration implements ServiceRegistration {

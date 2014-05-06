@@ -56,9 +56,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of an application manager.
- * 
- * @author Thomas Leveque
- * 
+ *
  */
 @Component(name = "Application-Manager-Impl")
 @Instantiate(name = "Application-Manager-Impl-1")

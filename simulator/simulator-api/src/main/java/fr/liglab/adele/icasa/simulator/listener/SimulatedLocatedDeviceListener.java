@@ -22,8 +22,7 @@ import fr.liglab.adele.icasa.simulator.Person;
 /**
  * Interface extending {@link fr.liglab.adele.icasa.location.LocatedDeviceListener} to add simulated device related
  * methods
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface SimulatedLocatedDeviceListener extends LocatedDeviceListener {

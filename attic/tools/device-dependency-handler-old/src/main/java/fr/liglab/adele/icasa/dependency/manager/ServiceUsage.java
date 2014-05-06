@@ -18,8 +18,7 @@ package fr.liglab.adele.icasa.dependency.manager;
 
 /**
  * Object managing thread local copy of required services.
- * 
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
+ *
  */
 public class ServiceUsage extends ThreadLocal {
     

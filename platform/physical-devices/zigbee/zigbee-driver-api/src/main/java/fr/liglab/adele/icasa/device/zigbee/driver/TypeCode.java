@@ -20,8 +20,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Represents a type of device.
- * 
- * @author Thomas Leveque
+ *
  */
 public enum TypeCode {
 

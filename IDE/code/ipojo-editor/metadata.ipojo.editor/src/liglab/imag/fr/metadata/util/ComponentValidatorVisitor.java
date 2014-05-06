@@ -11,8 +11,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 /**
  * 
  * A validator for component implementation classes 
- * 
- * @author Gabriel
+ *
  *
  */
 public class ComponentValidatorVisitor extends ASTVisitor {

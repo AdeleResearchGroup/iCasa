@@ -35,7 +35,6 @@ import fr.liglab.adele.icasa.device.zigbee.driver.DeviceInfo;
 import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDeviceTracker;
 
 /**
- * @author tfqg0024
  *
  */
 @Component(name = "zigbee.rose.discovery", immediate = true)

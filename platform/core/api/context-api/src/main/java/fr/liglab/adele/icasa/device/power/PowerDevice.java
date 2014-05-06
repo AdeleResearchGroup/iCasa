@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Common interface for Power device service descriptions
- * 
- * @author gunalp
+ *
  *
  */
 public interface PowerDevice extends GenericDevice {

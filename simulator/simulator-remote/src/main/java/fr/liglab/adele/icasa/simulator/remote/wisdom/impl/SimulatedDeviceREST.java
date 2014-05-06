@@ -30,7 +30,6 @@ import org.apache.felix.ipojo.annotations.Requires;
 import fr.liglab.adele.icasa.simulator.SimulationManager;
 
 /**
- * @author Thomas Leveque
  *
  */
 @Component

@@ -30,8 +30,7 @@ import org.ow2.chameleon.eclipse.ipojo.classpath.container.AnnotationContainer;
 
 /**
  * Implementation of the class path container selection page
- * 
- * @author Thomas Calmant
+ *
  */
 public class AnnotationsContainerPage extends WizardPage implements
 		IClasspathContainerPage {

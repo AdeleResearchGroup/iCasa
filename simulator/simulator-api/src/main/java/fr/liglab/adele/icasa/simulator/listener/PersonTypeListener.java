@@ -20,8 +20,7 @@ import fr.liglab.adele.icasa.simulator.PersonType;
 
 /**
  * Listener interface on {@link fr.liglab.adele.icasa.simulator.PersonType}
- * 
- * @author Thomas Leveque
+ *
  */
 public interface PersonTypeListener extends IcasaListener {
 

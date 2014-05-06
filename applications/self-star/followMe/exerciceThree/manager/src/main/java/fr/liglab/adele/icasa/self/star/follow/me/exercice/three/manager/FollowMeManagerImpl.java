@@ -6,7 +6,7 @@ import fr.liglab.adele.icasa.self.star.follow.me.exercice.three.dimmer.light.fol
 import org.apache.felix.ipojo.annotations.*;
 
 /**
- * Created by aygalinc on 07/03/14.
+ *
  */
 @Component(name="FollowMeManager")
 @Instantiate

@@ -29,8 +29,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 /**
  * Class used to create commands to be executed by the editor
- * 
- * @author Gabriel
+ *
  *
  */
 public class CommandFactory {

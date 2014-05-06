@@ -21,8 +21,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 /**
  * A wrapper class to provide properties information to properties view
- * 
- * @author Gabriel
+ *
  * 
  */
 public class InstanceTypeItemProvider implements IPropertySource2 {

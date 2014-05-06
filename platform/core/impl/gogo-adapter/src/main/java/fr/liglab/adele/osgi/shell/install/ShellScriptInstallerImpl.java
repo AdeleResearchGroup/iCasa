@@ -33,7 +33,6 @@ import org.osgi.framework.ServiceRegistration;
 import fr.liglab.adele.osgi.shell.installer.ShellScriptInstaller;
 
 /**
- * @author yo
  * 
  */
 @Component(immediate = true)

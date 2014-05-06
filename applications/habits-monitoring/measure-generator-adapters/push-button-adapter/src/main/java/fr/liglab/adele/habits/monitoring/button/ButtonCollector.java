@@ -31,8 +31,7 @@ import java.util.Map;
 
 /**
  * Measure Collector for presence sensor devices.
- * 
- * @author Gabriel Pedraza Ferreira, Mehdi Kettani
+ *
  * 
  */
 @Collector(name="PushButtonCollector")

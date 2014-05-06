@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.listener;
 
 /**
  * Every listener in iCasa Platform has to implement this interface.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface IcasaListener {

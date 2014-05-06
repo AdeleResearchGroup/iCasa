@@ -43,8 +43,7 @@ import org.ow2.chameleon.eclipse.ipojo.Activator;
 
 /**
  * Utility methods for the iPOJO Builder
- * 
- * @author Thomas Calmant
+ *
  */
 public final class Utilities {
 

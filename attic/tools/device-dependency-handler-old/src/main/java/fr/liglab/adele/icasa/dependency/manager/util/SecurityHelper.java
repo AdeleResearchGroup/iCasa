@@ -23,7 +23,6 @@ import org.osgi.framework.ServicePermission;
 
 /**
  * Methods checking security permissions.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public class SecurityHelper {
     

@@ -16,9 +16,7 @@
 package fr.liglab.adele.icasa.service.scheduler;
 
 /**
- * User: torito
- * Date: 6/14/13
- * Time: 2:54 PM
+ *
  */
 public interface TaskExecutionReport {
 

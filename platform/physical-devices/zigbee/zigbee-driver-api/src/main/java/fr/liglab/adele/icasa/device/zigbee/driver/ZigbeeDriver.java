@@ -20,7 +20,6 @@ import java.util.Set;
 /**
  * Provides this service to implement a Zigbee driver.
  *
- * @author Thomas Leveque
  */
 public interface ZigbeeDriver {
 

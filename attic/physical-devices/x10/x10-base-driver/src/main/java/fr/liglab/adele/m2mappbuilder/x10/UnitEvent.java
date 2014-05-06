@@ -22,9 +22,6 @@ import java.io.Serializable;
 * x10 hardware or software module.
 *
 *
-* @author Wade Wassenberg
-*
-* @version 1.0
 */
 
 public class UnitEvent implements Serializable

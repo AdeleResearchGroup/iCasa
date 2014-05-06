@@ -29,7 +29,6 @@ import org.eclipse.ui.forms.editor.FormPage;
 
 
 /**
- * @author Gabriel
  * 
  */
 public class InstanceMasterDetailBlock extends PojoMasterDetailBlock {
@@ -112,7 +111,6 @@ public class InstanceMasterDetailBlock extends PojoMasterDetailBlock {
 	
 	/**
 	 * An action class used to add a new instance declaration
-	 * @author Gabriel
 	 *
 	 */
 	class CreateInstanceAction extends Action {
@@ -164,7 +162,6 @@ public class InstanceMasterDetailBlock extends PojoMasterDetailBlock {
 	
 	/**
 	 * An action class used to remove an instance declaration
-	 * @author Gabriel
 	 *
 	 */
 	class RemoveInstanceAction extends Action {

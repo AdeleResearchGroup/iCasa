@@ -21,8 +21,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * Activator of the iPOJO annotations class path provider
- * 
- * @author Thomas Calmant
+ *
  */
 public class IPojoClasspathPlugin extends AbstractUIPlugin {
 

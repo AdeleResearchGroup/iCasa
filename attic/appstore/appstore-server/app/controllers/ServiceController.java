@@ -28,8 +28,6 @@ import play.mvc.Result;
 import java.util.List;
 
 /**
- * @author <a href="mailto:cilia-devel@lists.ligforge.imag.fr">Cilia Project
- *         Team</a>
  *
  */
 public class ServiceController extends Controller {

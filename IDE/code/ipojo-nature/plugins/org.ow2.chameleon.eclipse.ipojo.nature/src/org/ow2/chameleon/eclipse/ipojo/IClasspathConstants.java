@@ -19,8 +19,7 @@ import org.eclipse.core.runtime.Path;
 
 /**
  * Defines iPOJO Nature class path constants
- * 
- * @author Thomas Calmant
+ *
  */
 public interface IClasspathConstants {
 

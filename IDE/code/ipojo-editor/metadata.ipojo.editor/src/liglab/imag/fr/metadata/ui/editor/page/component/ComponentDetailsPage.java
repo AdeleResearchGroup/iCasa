@@ -70,8 +70,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
 /**
  * Component details definition page
- * 
- * @author Gabriel
+ *
  * 
  */
 public class ComponentDetailsPage implements IDetailsPage {
@@ -757,8 +756,7 @@ public class ComponentDetailsPage implements IDetailsPage {
 
 	/**
 	 * Handles modifications in text fields
-	 * 
-	 * @author Gabriel
+	 *
 	 * 
 	 */
 	class TextFieldModifyListener implements ModifyListener {
@@ -956,8 +954,7 @@ public class ComponentDetailsPage implements IDetailsPage {
 	/**
 	 * 
 	 * Handles all clicks action in buttons of details Section
-	 * 
-	 * @author Gabriel
+	 *
 	 * 
 	 */
 	class ButtonSelectionListener extends SelectionAdapter {

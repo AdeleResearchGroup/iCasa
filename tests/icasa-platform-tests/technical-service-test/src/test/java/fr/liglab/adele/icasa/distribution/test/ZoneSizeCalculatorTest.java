@@ -35,7 +35,6 @@ import javax.inject.Inject;
 /**
  * Tests of ZoneSizeCalculator service.
  *
- * @author Thomas Leveque
  */
 @RunWith(ChameleonRunner.class)
 public class ZoneSizeCalculatorTest {

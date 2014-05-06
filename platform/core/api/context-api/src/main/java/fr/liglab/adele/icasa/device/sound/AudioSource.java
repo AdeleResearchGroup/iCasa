@@ -22,8 +22,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 /**
  * Service definition of a device that is an audio source, could be iPhone,
  * radio, MP3 player, etc., anything that returns an audio stream.
- * 
- * @author jander
+ *
  */
 public interface AudioSource extends GenericDevice {
 

@@ -29,9 +29,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 /**
- * User: torito
- * Date: 4/23/13
- * Time: 4:19 PM
+ *
  */
 @Component(name = "ShowScriptsCommand")
 @Provides

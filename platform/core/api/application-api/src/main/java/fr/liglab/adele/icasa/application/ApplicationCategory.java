@@ -18,8 +18,7 @@ package fr.liglab.adele.icasa.application;
 /**
  * Describes kind of operation performed by an application.
  * It implicitly defines a criticality level.
- * 
- * @author Thomas leveque
+ *
  *
  */
 public interface ApplicationCategory {

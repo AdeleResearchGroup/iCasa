@@ -10,7 +10,6 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
- * @author Gabriel
  *
  */
 public class PojoEditorPreferenceInitializer extends AbstractPreferenceInitializer {

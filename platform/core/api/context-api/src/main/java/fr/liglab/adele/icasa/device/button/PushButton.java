@@ -18,9 +18,7 @@ package fr.liglab.adele.icasa.device.button;
 import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
- * User: garciai@imag.fr
- * Date: 9/2/13
- * Time: 10:42 AM
+ *
  */
 public interface PushButton extends GenericDevice {
     /**

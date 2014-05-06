@@ -19,9 +19,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition of a simple speaker device.
- * 
- * @author jander
- * @author bourretp
+ *
  */
 public interface Speaker extends GenericDevice {
 

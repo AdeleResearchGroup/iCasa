@@ -21,7 +21,6 @@ package fr.liglab.adele.icasa.dependency.manager.proxy;
 import fr.liglab.adele.icasa.dependency.manager.DeviceDependency;
 
 /**
- * @author Gabriel
  *
  */
 public class ICasaAggregateProxyFactory extends ICasaProxyFactory {

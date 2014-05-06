@@ -23,8 +23,7 @@ import java.util.Map;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 
 /**
- * @author <a href="mailto:cilia-devel@lists.ligforge.imag.fr">Cilia Project
- *         Team</a>
+ *
  */
 public class DPResourceManipulator {
 

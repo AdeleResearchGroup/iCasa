@@ -36,7 +36,6 @@ import java.util.concurrent.Callable;
 
 
 /**
- * @author Aygalinc Colin
  *
  */
 @Component(name = "ActimetryRestServiceClient")

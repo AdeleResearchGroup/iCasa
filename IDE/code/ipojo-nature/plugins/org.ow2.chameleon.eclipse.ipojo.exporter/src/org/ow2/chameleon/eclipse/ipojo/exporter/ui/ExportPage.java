@@ -48,15 +48,13 @@ import org.ow2.chameleon.eclipse.ipojo.exporter.IPojoExporterPlugin;
 
 /**
  * Bundle export configuration page
- * 
- * @author Thomas Calmant
+ *
  */
 public class ExportPage extends WizardPage {
 
     /**
      * Listener that updates the wizard buttons
-     * 
-     * @author Thomas Calmant
+     *
      */
     protected class EventListener implements Listener {
 
@@ -77,8 +75,7 @@ public class ExportPage extends WizardPage {
 
     /**
      * Folder selection button listener
-     * 
-     * @author Thomas Calmant
+     *
      */
     protected class FolderSelectionListener implements SelectionListener {
 
@@ -124,8 +121,7 @@ public class ExportPage extends WizardPage {
 
     /**
      * A selection listener for table check all/uncheck all buttons
-     * 
-     * @author Thomas Calmant
+     *
      */
     protected class TableCheckButtonEvent implements SelectionListener {
 

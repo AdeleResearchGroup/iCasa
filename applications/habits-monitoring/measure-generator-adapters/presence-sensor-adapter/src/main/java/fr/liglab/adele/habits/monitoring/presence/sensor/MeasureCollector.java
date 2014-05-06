@@ -29,8 +29,7 @@ import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 
 /**
  * Measure Collector for presence sensor devices.
- * 
- * @author Gabriel Pedraza Ferreira, Mehdi Kettani
+ *
  * 
  */
 public class MeasureCollector extends AbstractCollector implements

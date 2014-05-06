@@ -20,8 +20,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 /**
  * Service interface which must be provided by simulated devices.
  * It means that all devices implementing this interface can be created and destroyed using the simulator.
- * 
- * @author Thomas Leveque
+ *
  */
 public interface SimulatedDevice extends GenericDevice {
 	

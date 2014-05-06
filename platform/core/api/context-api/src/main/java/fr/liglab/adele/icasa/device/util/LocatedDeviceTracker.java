@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Utility class to track iCasa devices.
  *
- * @author Thomas Leveque
  */
 public class LocatedDeviceTracker implements LocatedDeviceTrackerCustomizer {
 

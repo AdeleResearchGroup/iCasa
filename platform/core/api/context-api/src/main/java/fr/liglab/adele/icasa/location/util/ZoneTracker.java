@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * Utility class to track zones. User: garciai@imag.fr Date: 8/2/13 Time: 11:24 AM
+ *
  */
 public class ZoneTracker implements ZoneTrackerCustomizer {
 

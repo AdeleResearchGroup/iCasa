@@ -42,7 +42,7 @@ import org.wisdom.api.http.Status;
 import java.io.IOException;
 
 /**
- * @author Thomas Leveque
+ *
  */
 @Component
 @Provides

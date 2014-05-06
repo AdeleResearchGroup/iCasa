@@ -21,7 +21,6 @@ import java.util.Map;
 import org.ow2.chameleon.rose.disco.RemoteEntityDescriptionManager;
 
 /**
- * @author P.A
  * 
  */
 class TrackedBluetoothDevice {

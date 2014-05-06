@@ -32,8 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract implementation of the {@link fr.liglab.adele.icasa.device.GenericDevice} interface that manages the
  * listeners addition, removal and notifications.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 public abstract class AbstractDevice implements GenericDevice {
 

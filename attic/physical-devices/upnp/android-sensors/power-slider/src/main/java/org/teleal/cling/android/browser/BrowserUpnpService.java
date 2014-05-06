@@ -21,7 +21,7 @@ import org.teleal.cling.android.AndroidUpnpServiceImpl;
 import android.net.wifi.WifiManager;
 
 /**
- * @author Christian Bauer
+ *
  */
 public class BrowserUpnpService extends AndroidUpnpServiceImpl {
 

@@ -39,7 +39,6 @@ import fr.liglab.adele.m2mappbuilder.x10.UnitEvent;
 import fr.liglab.adele.m2mappbuilder.x10.UnitListener;
 
 /**
- * @author Thomas Leveque
  * 
  */
 @Component(name = "x10.presence.sensor", immediate=true)

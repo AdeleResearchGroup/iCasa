@@ -34,7 +34,7 @@ import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDeviceTracker;
 import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
 
 /**
- * User: Kettani Mehdi Date: 24/10/13 Time: 4:27 PM
+ *
  */
 @Component(name = "zigbeeThermometer")
 @Provides

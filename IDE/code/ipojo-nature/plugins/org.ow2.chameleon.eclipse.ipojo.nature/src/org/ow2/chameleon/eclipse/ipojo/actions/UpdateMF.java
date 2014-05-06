@@ -33,8 +33,7 @@ import org.ow2.chameleon.eclipse.ipojo.core.ManifestUpdater;
 /**
  * "Update Manifest" action in MANIFEST.MF file contextual menu, in the
  * navigator view
- * 
- * @author Thomas Calmant
+ *
  */
 public class UpdateMF extends ActionDelegate implements IObjectActionDelegate {
 

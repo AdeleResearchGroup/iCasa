@@ -24,9 +24,6 @@ package fr.liglab.adele.m2mappbuilder.x10;
 * housecodes and unitcodes if desired.
 *
 *
-* @author Wade Wassenberg
-*
-* @version 1.0
 */
 
 public interface UnitListener

@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition of a simple binary light device.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 public interface BinaryLight extends GenericDevice {
 

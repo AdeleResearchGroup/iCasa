@@ -35,9 +35,7 @@ import javax.inject.Inject;
 
 
 /**
- * User: garciai@imag.fr
- * Date: 8/26/13
- * Time: 5:08 PM
+ *
  */
 @RunWith(ChameleonRunner.class)
 public class SharedPreferenceTest  {

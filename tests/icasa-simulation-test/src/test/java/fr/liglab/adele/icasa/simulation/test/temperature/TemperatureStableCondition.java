@@ -20,7 +20,6 @@ import fr.liglab.adele.icasa.location.Zone;
 /**
  * Condition is true only if specified zone has specified temperature value.
  *
- * @author Thomas Leveque
  */
 public class TemperatureStableCondition extends TemperatureVarExistsCondition {
     

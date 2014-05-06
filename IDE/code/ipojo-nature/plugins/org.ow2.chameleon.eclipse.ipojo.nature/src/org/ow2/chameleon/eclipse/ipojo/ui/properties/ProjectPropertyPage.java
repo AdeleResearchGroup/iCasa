@@ -30,8 +30,7 @@ import org.ow2.chameleon.eclipse.ipojo.core.Utilities;
  * Project property page for iPOJO projects.
  * 
  * Allows to change the metadata.xml file to use for manipulation.
- * 
- * @author Thomas Calmant
+ *
  */
 public class ProjectPropertyPage extends PropertyPage {
 

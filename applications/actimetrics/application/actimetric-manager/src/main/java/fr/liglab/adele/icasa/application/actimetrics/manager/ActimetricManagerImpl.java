@@ -20,7 +20,7 @@ import java.util.Map;
 
 
 /**
- * Created by aygalinc on 03/04/14.
+ *
  */
 @Component(name="ActimetricManager")
 @Instantiate(name="ActimetricManagerImpl-0")

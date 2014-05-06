@@ -49,8 +49,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Represent a service dependency of the component instance.
- * 
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
+ *
  */
 public class Dependency extends DependencyModel implements FieldInterceptor, MethodInterceptor, ConstructorInjector {
 

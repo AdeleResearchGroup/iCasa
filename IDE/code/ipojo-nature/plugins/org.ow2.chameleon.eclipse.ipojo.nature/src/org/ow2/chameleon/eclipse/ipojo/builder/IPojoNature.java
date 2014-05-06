@@ -22,8 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * iPOJO project nature life cycle handler
- * 
- * @author Thomas Calmant
+ *
  */
 public class IPojoNature implements IProjectNature {
 

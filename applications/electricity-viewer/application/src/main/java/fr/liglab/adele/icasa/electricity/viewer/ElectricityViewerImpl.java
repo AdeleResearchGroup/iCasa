@@ -24,7 +24,7 @@ import org.apache.felix.ipojo.annotations.*;
 import java.util.*;
 
 /**
- * Created by aygalinc on 25/03/14.
+ *
  */
 @Component(name = "electricity-viewer")
 @Instantiate(name = "electricity-viewer-1")

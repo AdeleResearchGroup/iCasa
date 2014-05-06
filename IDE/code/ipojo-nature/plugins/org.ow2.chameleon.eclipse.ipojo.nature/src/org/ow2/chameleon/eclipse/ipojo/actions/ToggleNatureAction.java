@@ -43,8 +43,7 @@ import org.ow2.chameleon.eclipse.ipojo.core.ManifestUpdater;
 
 /**
  * Add/Remove iPOJO nature popup menu action handler
- * 
- * @author Thomas Calmant
+ *
  */
 public class ToggleNatureAction implements IObjectActionDelegate {
 

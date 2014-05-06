@@ -18,9 +18,7 @@ package fr.liglab.adele.icasa.location.util;
 import fr.liglab.adele.icasa.location.Zone;
 
 /**
- * User: garciai@imag.fr
- * Date: 8/2/13
- * Time: 11:26 AM
+ *
  */
 public interface ZoneFilter {
 

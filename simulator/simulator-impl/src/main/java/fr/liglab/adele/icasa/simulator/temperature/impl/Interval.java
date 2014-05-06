@@ -19,7 +19,6 @@ package fr.liglab.adele.icasa.simulator.temperature.impl;
  * Represents an integer interval.
  * Min and max numbers must be positive.
  *
- * @author Thomas Leveque
  */
 public class Interval {
 

@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * User: garciai@imag.fr Date: 7/15/13 Time: 4:59 PM
+ * 
  */
 @Component(name = "iCasaAccessManager")
 @Instantiate(name = "iCasaAccessManager-1")

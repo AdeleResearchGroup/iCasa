@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.common;
 
 /**
  * Utility interface to transform an object to an expected format or type.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface Adaptable {

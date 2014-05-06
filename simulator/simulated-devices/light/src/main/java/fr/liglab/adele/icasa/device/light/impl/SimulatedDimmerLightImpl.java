@@ -29,7 +29,6 @@ import fr.liglab.adele.icasa.simulator.SimulatedDevice;
 /**
  * Implementation of a simulated dimmer light device.
  *
- * @author Gabriel Pedraza Ferreira
  */
 @Component(name = "iCasa.DimmerLight")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

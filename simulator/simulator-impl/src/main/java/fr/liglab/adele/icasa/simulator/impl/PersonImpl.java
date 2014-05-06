@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TODO
- * 
- * @author Thomas Leveque Date: 10/11/12
+ *
  */
 public class PersonImpl extends LocatedObjectImpl implements Person {
 

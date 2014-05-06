@@ -18,7 +18,6 @@ package fr.liglab.adele.icasa.service.preferences;
 /**
  * Listener used to listen on preference property value changes.
  *
- * @author Thomas Leveque
  */
 public interface PreferenceChangeListener {
 

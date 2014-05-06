@@ -9,7 +9,6 @@ import fr.liglab.adele.habits.monitoring.autonomic.manager.listeners.DPInfosList
 
 /**
  * Interface for the autonomic manager database adapter.
- * @author Kettani Mehdi.
  *
  */
 public interface IDBAdapter {

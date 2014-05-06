@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.listener.MultiEventListener;
 
 /**
  * Interface grouping several (platform + simulator) listeners 
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  *
  */
 public interface SimulationMultiEventListener extends MultiEventListener, PersonListener,PersonTypeListener{

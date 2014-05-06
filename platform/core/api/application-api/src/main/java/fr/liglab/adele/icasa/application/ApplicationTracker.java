@@ -18,8 +18,6 @@ package fr.liglab.adele.icasa.application;
 /**
  * Tracker of available applications.
  * After addition of a tracker, an event is generated for all existing applications.
- * 
- * @author Thomas Leveque
  *
  */
 public interface ApplicationTracker {

@@ -17,11 +17,6 @@ package fr.liglab.adele.icasa.application.impl;
 
 import fr.liglab.adele.icasa.application.ApplicationCategory;
 
-/**
- * 
- * @author Thomas Leveque
- *
- */
 public class ApplicationCategoryImpl implements ApplicationCategory {
 	
 	private String _name;

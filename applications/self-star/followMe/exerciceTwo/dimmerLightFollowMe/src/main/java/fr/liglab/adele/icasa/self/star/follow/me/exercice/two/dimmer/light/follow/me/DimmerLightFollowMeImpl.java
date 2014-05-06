@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by aygalinc on 06/03/14.
+ *
  */
 
 @Component(name="DimmerLightFollowMe")

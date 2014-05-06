@@ -5,9 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * User: garciai@imag.fr
- * Date: 10/21/13
- * Time: 1:26 PM
+ *
  */
 public class ICasaLibs {
 

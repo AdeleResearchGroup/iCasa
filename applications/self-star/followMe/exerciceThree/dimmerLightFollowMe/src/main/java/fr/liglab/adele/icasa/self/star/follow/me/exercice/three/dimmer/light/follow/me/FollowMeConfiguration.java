@@ -1,7 +1,7 @@
 package fr.liglab.adele.icasa.self.star.follow.me.exercice.three.dimmer.light.follow.me;
 
 /**
- * Created by aygalinc on 07/03/14.
+ *
  */
 
 /**

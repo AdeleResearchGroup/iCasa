@@ -59,7 +59,6 @@ import fr.liglab.adele.icasa.simulator.script.executor.ScriptExecutor;
 import fr.liglab.adele.icasa.simulator.script.executor.ScriptExecutorListener;
 
 /**
- * @author Gabriel Pedraza Ferreira
  * 
  *         Implementation of the ScriptExecutor specification
  */
@@ -502,8 +501,7 @@ public class ScriptExecutorImpl extends AbstractDeployer implements ScriptExecut
 
 	/**
 	 * Command executor Thread (Runnable) class
-	 * 
-	 * @author Gabriel Pedraza Ferreira
+	 *
 	 * 
 	 */
 	private final class CommandExecutorRunnable implements Runnable {

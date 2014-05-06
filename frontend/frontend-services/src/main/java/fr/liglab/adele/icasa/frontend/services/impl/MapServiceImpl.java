@@ -8,9 +8,7 @@ import org.apache.felix.ipojo.annotations.*;
 import java.util.*;
 
 /**
- * User: garciai@imag.fr
- * Date: 10/21/13
- * Time: 1:33 PM
+ *
  */
 @Component(name = "maps-frontend-service")
 @Instantiate(name = "maps-frontend-service-0")

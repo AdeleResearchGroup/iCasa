@@ -43,9 +43,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * User: garciai@imag.fr
- * Date: 9/2/13
- * Time: 11:34 AM
+ *
  */
 @RunWith(ChameleonRunner.class)
 public class PushButtonTest  {

@@ -21,9 +21,6 @@ import java.util.List;
 
 /**
  * Service implementation to retrieve available maps in the frontend service.
- * User: garciai@imag.fr
- * Date: 10/21/13
- * Time: 1:09 PM
  */
 @Component
 @Instantiate

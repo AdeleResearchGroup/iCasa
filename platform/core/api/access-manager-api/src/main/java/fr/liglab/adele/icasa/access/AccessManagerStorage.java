@@ -20,7 +20,6 @@ import java.io.IOException;
 /**
  * The service providing this interface, will be in charge of persist Access Manager configuration,
  * as well as load its configuration.
- * User: garciai@imag.fr
  */
 public interface AccessManagerStorage {
     /**

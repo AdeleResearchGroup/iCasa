@@ -13,8 +13,7 @@ import fr.liglab.adele.habits.monitoring.autonomic.manager.listeners.DPInfos;
 
 /**
  * XML handler for db config files.
- * 
- * @author tfqg0024
+ *
  * 
  */
 public class DPInfosHandler extends DefaultHandler {

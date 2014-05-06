@@ -16,9 +16,7 @@
 package fr.liglab.adele.icasa.access;
 
 /**
- * User: garciai@imag.fr
- * Date: 7/19/13
- * Time: 12:00 PM
+ *
  */
 public enum MemberAccessPolicy {
     HIDDEN("hidden"), READ_ONLY("ro"), WRITE_ONLY("wo"), READ_WRITE("rw");

@@ -6,9 +6,6 @@ import java.util.Map;
 /**
  * This class represent a map information for the frontend.
  * Each maps in the frontend represents an iCasa Platform and an image file of the map.
- * User: garciai@imag.fr
- * Date: 10/21/13
- * Time: 1:19 PM
  */
 public class ICasaMap {
 

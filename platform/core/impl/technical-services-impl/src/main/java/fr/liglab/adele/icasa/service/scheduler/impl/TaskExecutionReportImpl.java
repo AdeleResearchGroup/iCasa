@@ -18,9 +18,7 @@ package fr.liglab.adele.icasa.service.scheduler.impl;
 import fr.liglab.adele.icasa.service.scheduler.TaskExecutionReport;
 
 /**
- * User: torito
- * Date: 6/14/13
- * Time: 2:54 PM
+ *
  */
 public class TaskExecutionReportImpl implements TaskExecutionReport {
 

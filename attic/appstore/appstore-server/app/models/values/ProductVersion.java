@@ -10,11 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 11/8/12
- * Time: 10:59 AM
- * To change this template use File | Settings | File Templates.
+ *
  */
 @Entity
 @Table(name="ProductVersion")

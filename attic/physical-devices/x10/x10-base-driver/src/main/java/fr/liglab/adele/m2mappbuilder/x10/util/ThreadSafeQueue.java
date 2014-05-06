@@ -24,9 +24,6 @@ import java.util.LinkedList;
 * occur when calling any of these methods.
 *
 *
-* @author Wade Wassenberg
-*
-* @version 1.0
 */
 
 public class ThreadSafeQueue

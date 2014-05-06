@@ -23,7 +23,6 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * Service Dependency Description.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public class DependencyDescription {
     /**

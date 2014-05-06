@@ -16,7 +16,6 @@
 package fr.liglab.dynamo.device.bdremotecontrol;
 
 /**
- * @author P.A Avouac
  * 
  */
 public interface BDRemoteControl {

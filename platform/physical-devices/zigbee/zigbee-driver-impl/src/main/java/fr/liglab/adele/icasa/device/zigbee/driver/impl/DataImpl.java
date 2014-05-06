@@ -23,7 +23,7 @@ import java.util.Date;
 import fr.liglab.adele.icasa.device.zigbee.driver.Data;
 
 /**
- * @author tfqg0024
+ *
  */
 public class DataImpl implements Data {
 	

@@ -42,8 +42,7 @@ import fr.liglab.adele.icasa.location.Zone;
 
 /**
  * This interceptor adds context (location) to iCasa devices.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  *
  */
 @Component(name = "ICasaTrackingInterceptor")

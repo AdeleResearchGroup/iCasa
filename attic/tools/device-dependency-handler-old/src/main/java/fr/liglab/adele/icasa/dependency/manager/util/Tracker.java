@@ -35,7 +35,6 @@ import org.osgi.framework.ServiceReference;
 /**
  * Utility class close to the OSGi Service LocatedDeviceTracker.
  * This class is used when tracking dynamic services is required.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public class Tracker implements TrackerCustomizer {
 

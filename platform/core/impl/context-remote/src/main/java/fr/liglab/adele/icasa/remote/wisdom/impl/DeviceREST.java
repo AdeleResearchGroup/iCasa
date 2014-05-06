@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Thomas Leveque
+ *
  *
  */
 @Component

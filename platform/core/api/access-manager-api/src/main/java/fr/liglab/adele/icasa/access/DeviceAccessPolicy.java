@@ -16,9 +16,7 @@
 package fr.liglab.adele.icasa.access;
 
 /**
- * User: garciai@imag.fr
- * Date: 7/19/13
- * Time: 11:08 AM
+ *
  */
 public enum DeviceAccessPolicy {
 

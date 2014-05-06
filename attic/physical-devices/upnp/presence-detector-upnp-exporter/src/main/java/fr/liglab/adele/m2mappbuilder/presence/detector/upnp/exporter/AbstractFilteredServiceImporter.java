@@ -36,7 +36,6 @@ import org.ow2.chameleon.rose.util.ConcurrentMapOfSet;
  * Start must be call before registering the service !
  * Stop must be called while the service is no more available !
  *
- * @author Thomas Leveque
  */
 public abstract class AbstractFilteredServiceImporter implements ImporterService {
 	private final ConcurrentMapOfSet<EndpointDescription, MyImportRegistration> registrations;
@@ -182,8 +181,7 @@ public abstract class AbstractFilteredServiceImporter implements ImporterService
 	
 	/**
 	 * Implementation of an {@link ImportReference}.
-	 * 
-	 * @author barjo
+	 *
 	 */
 	private final class MyImportReference implements ImportReference {
 		private EndpointDescription desc;
@@ -227,8 +225,7 @@ public abstract class AbstractFilteredServiceImporter implements ImporterService
 	
 	/**
 	 * Implementation of an {@link ImportRegistration}.
-	 * 
-	 * @author barjo
+	 *
 	 */
 	private final class MyImportRegistration implements ImportRegistration {
 		private volatile MyImportReference iref;

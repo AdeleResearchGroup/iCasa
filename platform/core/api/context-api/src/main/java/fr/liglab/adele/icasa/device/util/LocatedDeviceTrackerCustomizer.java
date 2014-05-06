@@ -21,8 +21,7 @@ import fr.liglab.adele.icasa.location.Position;
 
 /**
  * Device Tracker Customizer.
- * 
- * @author Thomas Leveque
+ *
  */
 public interface LocatedDeviceTrackerCustomizer {
 

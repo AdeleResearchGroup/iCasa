@@ -51,8 +51,7 @@ import org.ow2.chameleon.runner.test.utils.TestUtils;
 
 /**
  * Tests for temperature physical model.
- * 
- * @author Thomas Leveque
+ *
  */
 @RunWith(ChameleonRunner.class)
 @Ignore

@@ -22,8 +22,7 @@ import fr.liglab.adele.icasa.simulator.Person;
 
 /**
  * The listener interface for receiving person {@link fr.liglab.adele.icasa.simulator.Person} events.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 public interface PersonListener extends IcasaListener {
 	/**

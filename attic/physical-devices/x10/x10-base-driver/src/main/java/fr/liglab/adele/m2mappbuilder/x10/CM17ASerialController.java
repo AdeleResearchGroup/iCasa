@@ -35,9 +35,6 @@ import gnu.io.SerialPort;
 *
 * This class requires the javax.comm package from Sun Microsystems.
 *
-* @author Wade Wassenberg
-*
-* @version 1.0
 */
 
 public class CM17ASerialController implements Runnable, Controller

@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.common;
 
 /**
  * Enable to categoryze variables by their representation goal.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public enum VariableType {

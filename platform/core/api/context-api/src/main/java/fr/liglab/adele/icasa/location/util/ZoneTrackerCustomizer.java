@@ -19,9 +19,7 @@ import fr.liglab.adele.icasa.location.Position;
 import fr.liglab.adele.icasa.location.Zone;
 
 /**
- * User: garciai@imag.fr
- * Date: 8/2/13
- * Time: 11:25 AM
+ *
  */
 public interface ZoneTrackerCustomizer {
     /**

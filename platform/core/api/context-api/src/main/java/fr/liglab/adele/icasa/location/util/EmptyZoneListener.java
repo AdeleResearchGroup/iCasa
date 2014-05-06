@@ -21,9 +21,7 @@ import fr.liglab.adele.icasa.location.Zone;
 import fr.liglab.adele.icasa.location.ZoneListener;
 
 /**
- * User: garciai@imag.fr
- * Date: 8/2/13
- * Time: 2:31 PM
+ *
  */
 public class EmptyZoneListener implements ZoneListener{
     /**

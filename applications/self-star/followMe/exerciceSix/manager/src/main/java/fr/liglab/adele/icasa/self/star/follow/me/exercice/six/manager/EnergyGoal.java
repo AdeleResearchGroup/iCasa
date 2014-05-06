@@ -1,7 +1,7 @@
 package fr.liglab.adele.icasa.self.star.follow.me.exercice.six.manager;
 
 /**
- * Created by aygalinc on 09/03/14.
+ *
  */
 /**
  * This enum describes the different energy goals associated with the

@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition of a simple photometer device.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 public interface Photometer extends GenericDevice {
 

@@ -25,8 +25,7 @@ import java.util.Date;
 
 /**
  * Utuilitary class to format dates in platform specific format. 
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  *
  */
 public class DateTextUtil {

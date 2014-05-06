@@ -18,10 +18,7 @@ package fr.liglab.adele.m2mappbuilder.x10;
 
 /** OperationTimedOutException is an exception to be thrown when an operation times out.
   * 
-  * 
-  * @author Wade Wassenberg
-  * 
-  * @version 1.0
+  *
   */
 
 public class OperationTimedOutException extends Exception

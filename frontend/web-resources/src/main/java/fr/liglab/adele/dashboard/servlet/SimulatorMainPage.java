@@ -18,9 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * User: garciai@imag.fr
- * Date: 10/21/13
- * Time: 4:11 PM
+ *
  */
 
 @Component(name="icasa-simulator-main-page")

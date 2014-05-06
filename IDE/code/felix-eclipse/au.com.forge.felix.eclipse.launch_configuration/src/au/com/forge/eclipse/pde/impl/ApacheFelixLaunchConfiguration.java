@@ -52,8 +52,7 @@ import org.osgi.framework.Bundle;
 /**
  * Apache Felix launch configuration for Eclipse. This plugin depends on the
  * custom launcher specified by {@link #LAUNCHER_PLUGIN_ID}.
- * 
- * @author Christopher Armstrong
+ *
  * 
  */
 public class ApacheFelixLaunchConfiguration extends AbstractPDELaunchConfiguration {

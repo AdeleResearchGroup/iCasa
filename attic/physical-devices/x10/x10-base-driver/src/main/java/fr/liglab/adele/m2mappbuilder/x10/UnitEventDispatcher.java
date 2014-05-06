@@ -32,10 +32,7 @@ import fr.liglab.adele.m2mappbuilder.x10.util.LogHandler;
 * from receiving the event. <BR><BR>
 *
 * This class can be reused by other Controller implementations.
-*
-* @author Wade Wassenberg
-*
-* @version 1.0
+ *
 */
 
 public class UnitEventDispatcher extends Thread

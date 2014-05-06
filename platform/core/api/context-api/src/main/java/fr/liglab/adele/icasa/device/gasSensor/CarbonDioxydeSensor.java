@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition of a CO2 sensor device.
- * 
- * @author jeremy
+ *
  */
 public interface CarbonDioxydeSensor extends GenericDevice {
 

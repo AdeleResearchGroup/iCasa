@@ -18,8 +18,7 @@ package fr.liglab.adele.icasa.remote.wisdom;
 import org.json.JSONObject;
 
 /**
- * @author <a href="mailto:cilia-devel@lists.ligforge.imag.fr">Cilia Project
- *         Team</a>
+ *
  */
 public interface RemoteEventBroadcast {
 	void sendEvent(String eventType, JSONObject event);

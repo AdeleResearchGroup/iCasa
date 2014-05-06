@@ -10,11 +10,7 @@ import securesocial.core.java.SecureSocial;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 4/5/13
- * Time: 11:05 AM
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class CategoryController extends Controller {
     @SecureSocial.SecuredAction

@@ -27,9 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: torito
- * Date: 6/14/13
- * Time: 2:28 PM
+ *
  */
 public abstract class TaskReferenceImpl implements TaskReference, Runnable {
 

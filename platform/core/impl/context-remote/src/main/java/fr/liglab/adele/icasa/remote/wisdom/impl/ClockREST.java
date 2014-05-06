@@ -33,8 +33,7 @@ import java.io.IOException;
 
 
 /**
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 @Component

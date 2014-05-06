@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * User: garciai@imag.fr Date: 7/16/13 Time: 10:12 AM
+ *
  */
 public class AccessRightImpl implements AccessRight {
 

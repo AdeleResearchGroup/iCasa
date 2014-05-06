@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.location;
 
 /**
  * This interface represents a object that can be placed using a point into a coordinate system.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface LocatedObject {

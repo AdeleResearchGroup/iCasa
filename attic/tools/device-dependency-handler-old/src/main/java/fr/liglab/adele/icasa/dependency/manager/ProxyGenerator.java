@@ -28,7 +28,6 @@ import org.objectweb.asm.Type;
 /**
  * Generates proxy class delegating operation invocations thanks to a
  * a dependency.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 public class ProxyGenerator implements Opcodes {
 

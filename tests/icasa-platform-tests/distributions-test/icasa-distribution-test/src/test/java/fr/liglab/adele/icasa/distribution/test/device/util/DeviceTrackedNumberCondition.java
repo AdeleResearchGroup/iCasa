@@ -20,11 +20,7 @@ import org.ow2.chameleon.runner.test.utils.Condition;
 
 
 /**
- * Created with IntelliJ IDEA.
- * User: thomas
- * Date: 26/07/13
- * Time: 10:12
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class DeviceTrackedNumberCondition implements Condition {
 

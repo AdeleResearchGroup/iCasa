@@ -33,8 +33,7 @@ import java.util.HashMap;
 /**
  * 
  * Create a new device instance
- * 
- * @author Gabriel
+ *
  *
  */
 @Component(name = "CreateDeviceCommand")

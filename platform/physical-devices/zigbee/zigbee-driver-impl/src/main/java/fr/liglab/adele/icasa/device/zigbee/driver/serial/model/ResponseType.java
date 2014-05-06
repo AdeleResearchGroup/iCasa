@@ -20,8 +20,7 @@ package fr.liglab.adele.icasa.device.zigbee.driver.serial.model;
 
 /**
  * Enum class for zigbee data response types.
- * 
- * @author Kettani Mehdi
+ *
  */
 public enum ResponseType {
 

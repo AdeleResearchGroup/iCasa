@@ -45,8 +45,7 @@ import gnu.io.NRSerialPort;
 
 /**
  * Class managing the serial port data input/output.
- * 
- * @author Kettani Mehdi.
+ *
  */
 public class SerialPortHandler {
 
@@ -478,8 +477,7 @@ public class SerialPortHandler {
 
 	/**
 	 * Task to extend devices timeouts.
-	 * 
-	 * @author Kettani Mehdi.
+	 *
 	 * 
 	 */
 	private final class ExtendDeviceTimeoutTask implements Runnable {

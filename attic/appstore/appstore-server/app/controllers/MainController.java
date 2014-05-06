@@ -22,8 +22,6 @@ import play.mvc.Result;
 import securesocial.core.java.SecureSocial;
 
 /**
- * @author <a href="mailto:cilia-devel@lists.ligforge.imag.fr">Cilia Project
- *         Team</a>
  *
  */
 public class MainController extends Controller {

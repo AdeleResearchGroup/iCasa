@@ -42,9 +42,7 @@ import java.io.IOException;
 
 
 /**
- * User: garciai@imag.fr
- * Date: 7/15/13
- * Time: 4:59 PM
+ *
  */
 @Component
 @Instantiate

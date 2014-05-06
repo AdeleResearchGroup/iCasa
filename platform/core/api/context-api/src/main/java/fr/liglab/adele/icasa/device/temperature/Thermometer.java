@@ -19,8 +19,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition of a simple thermometer device.
- * 
- * @author bourretp
+ *
  */
 public interface Thermometer extends GenericDevice {
 

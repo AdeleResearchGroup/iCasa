@@ -18,7 +18,7 @@ import java.util.Map;
 
 
 /**
- * Created by aygalinc on 20/03/14.
+ *
  */
 @Component(name="temperatureManager")
 @Instantiate(name="temperatureManagerImpl-0")

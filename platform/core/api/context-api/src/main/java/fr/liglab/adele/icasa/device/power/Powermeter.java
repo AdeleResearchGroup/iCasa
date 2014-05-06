@@ -20,8 +20,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition for a simple powermeter device
- * 
- * @author gunalp
+ *
  *
  */
 public interface Powermeter extends GenericDevice {

@@ -1,7 +1,7 @@
 package fr.liglab.icasa.self.star.temperature.management.exercice.three.room.occupancy;
 
 /**
- * Created by aygalinc on 21/03/14.
+ *
  */
 public interface RoomOccupancyListener {
 

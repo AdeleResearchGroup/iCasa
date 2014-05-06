@@ -21,7 +21,6 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation declares a service requirement.
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
  */
 @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Inherited

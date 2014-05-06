@@ -57,8 +57,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * Don't use this handler during deployment because it builds
  * the pseudo-bundle in memory.
- * 
- * @author Christopher Armstrong
+ *
  * 
  */
 public class EclipseProjectURLHandler extends AbstractURLStreamHandlerService {

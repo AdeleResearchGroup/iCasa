@@ -19,7 +19,6 @@ import fr.liglab.adele.icasa.device.box.Box;
 
 /**
  * SettopBox device
- * @author Gabriel
  *
  */
 public interface SetTopBox extends Box {

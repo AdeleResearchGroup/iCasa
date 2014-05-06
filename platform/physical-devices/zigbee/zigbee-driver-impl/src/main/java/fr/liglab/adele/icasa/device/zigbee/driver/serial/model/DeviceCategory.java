@@ -20,7 +20,6 @@ package fr.liglab.adele.icasa.device.zigbee.driver.serial.model;
 
 /**
  * Enum class for zigbee devices categories.
- * @author medical
  * 
  */
 public enum DeviceCategory {

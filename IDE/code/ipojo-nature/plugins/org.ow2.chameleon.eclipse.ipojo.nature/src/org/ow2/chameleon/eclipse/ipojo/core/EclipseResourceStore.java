@@ -41,8 +41,7 @@ import org.ow2.chameleon.eclipse.ipojo.Activator;
 
 /**
  * Eclipse resource store interface for the iPOJO Manipulator
- * 
- * @author Thomas Calmant
+ *
  */
 public class EclipseResourceStore implements ResourceStore {
 

@@ -34,8 +34,7 @@ import fr.liglab.adele.icasa.simulator.SimulatedDevice;
 
 /**
  * Implementation of a simulated speaker device.
- * 
- * @author bourretp
+ *
  */
 @Component(name="iCasa.Speaker")
 @Provides(properties = {
@@ -154,8 +153,7 @@ public class SimulatedSpeakerImpl extends AbstractDevice implements Speaker, Sim
 
     /**
      * The updater thread that updates the current noise periodically.
-     * 
-     * @author bourretp
+     *
      */
     private class UpdaterThread implements Runnable {
 

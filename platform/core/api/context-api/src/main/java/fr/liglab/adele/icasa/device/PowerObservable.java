@@ -16,7 +16,7 @@
 package fr.liglab.adele.icasa.device;
 
 /**
- * Created by aygalinc on 25/03/14.
+ *
  */
 
 public interface PowerObservable {

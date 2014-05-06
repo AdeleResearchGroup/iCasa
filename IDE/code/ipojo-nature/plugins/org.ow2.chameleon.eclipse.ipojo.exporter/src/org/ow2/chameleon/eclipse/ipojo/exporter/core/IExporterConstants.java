@@ -16,8 +16,7 @@ package org.ow2.chameleon.eclipse.ipojo.exporter.core;
 
 /**
  * iPOJO Export wizard constant
- * 
- * @author Thomas Calmant
+ *
  */
 public interface IExporterConstants {
 

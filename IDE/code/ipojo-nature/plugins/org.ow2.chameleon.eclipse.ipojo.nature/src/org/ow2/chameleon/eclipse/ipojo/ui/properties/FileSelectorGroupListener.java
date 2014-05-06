@@ -29,8 +29,7 @@ import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
 
 /**
  * Handles file selection events
- * 
- * @author Thomas Calmant
+ *
  */
 public class FileSelectorGroupListener implements SelectionListener {
 

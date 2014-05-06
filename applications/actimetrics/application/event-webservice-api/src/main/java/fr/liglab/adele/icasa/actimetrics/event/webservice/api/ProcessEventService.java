@@ -18,7 +18,6 @@ package fr.liglab.adele.icasa.actimetrics.event.webservice.api;
 import java.util.Date;
 
 /**
- * @author Jean-Pierre Poutcheu
  * 
  */
 public interface ProcessEventService {

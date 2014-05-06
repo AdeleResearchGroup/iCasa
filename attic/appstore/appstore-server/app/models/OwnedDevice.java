@@ -9,11 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 1/16/13
- * Time: 4:36 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 @Entity
 @Table(name="OwnedDevice")

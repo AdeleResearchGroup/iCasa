@@ -29,7 +29,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 /**
- * @author Christian Bauer
+ *
  */
 public class MainActivity extends TabActivity {
 

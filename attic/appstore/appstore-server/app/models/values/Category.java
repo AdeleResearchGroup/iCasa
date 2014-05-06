@@ -11,11 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 12/5/12
- * Time: 4:59 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 @Entity
 @Table(name="Category")

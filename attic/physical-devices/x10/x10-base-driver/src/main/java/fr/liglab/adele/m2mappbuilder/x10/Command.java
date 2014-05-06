@@ -27,11 +27,6 @@ import java.io.Serializable;
 *
 * Also, a UnitEvent contains the command that generated the event.
 *
-* @author Wade Wassenberg
-*
-* @version 1.0
-* @see x10.Controller
-* @see x10.UnitEvent
 */
 
 public class Command implements Serializable

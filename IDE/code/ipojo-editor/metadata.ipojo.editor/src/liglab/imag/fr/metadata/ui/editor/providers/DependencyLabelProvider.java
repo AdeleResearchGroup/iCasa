@@ -9,7 +9,6 @@ import org.apache.felix.RequiresType;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
 /**
- * @author Gabriel
  * 
  */
 public class DependencyLabelProvider extends ColumnLabelProvider {

@@ -6,7 +6,6 @@ package fr.liglab.adele.habits.monitoring.autonomic.manager.listeners;
 import java.util.EventListener;
 
 /**
- * @author Kettani Mehdi
  *
  */
 public interface DPInfosListener extends EventListener {

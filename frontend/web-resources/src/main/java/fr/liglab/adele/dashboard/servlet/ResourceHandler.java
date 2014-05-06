@@ -9,9 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * User: garciai@imag.fr
- * Date: 12/18/13
- * Time: 11:04 AM
+ *
  */
 public class ResourceHandler {
     protected static  StringBuilder getTemplate(BundleContext context, String resourcePath) throws IOException {

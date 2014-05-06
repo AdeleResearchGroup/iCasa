@@ -16,9 +16,7 @@
 package fr.liglab.adele.icasa.service.scheduler;
 
 /**
- * User: torito
- * Date: 6/26/13
- * Time: 2:00 PM
+ *
  */
 public interface SchedulingManager {
 }

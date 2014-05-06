@@ -25,8 +25,7 @@ import org.osgi.framework.Bundle;
 
 /**
  * Represents an installed application.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface Application extends Attributable, Identifiable {

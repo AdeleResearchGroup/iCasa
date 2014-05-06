@@ -32,9 +32,7 @@ import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDeviceTracker;
 import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
 
 /**
- * User: garciai@imag.fr
- * Date: 9/5/13
- * Time: 1:47 PM
+ *
  */
 @Component(name="zigbeeMotionSensor")
 @Provides

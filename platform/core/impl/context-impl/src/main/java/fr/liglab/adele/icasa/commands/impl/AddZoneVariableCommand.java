@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 /**
- * @author Thomas Leveque
+ *
  */
 @Component(name = "AddZoneVariableCommand")
 @Provides

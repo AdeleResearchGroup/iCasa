@@ -46,8 +46,7 @@ import au.com.forge.eclipse.osgi.urlhandler.impl.EPURLHandlerActivator;
  * 
  * It is needed to be able to start the Apache Felix framework from an Eclipse
  * launch configuration that specifies startup bundles.
- * 
- * @author Christopher Armstrong
+ *
  * 
  */
 public class EclipsePDEFelixLauncher {

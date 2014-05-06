@@ -35,7 +35,6 @@ import java.awt.*;
 
 /**
  * Philips Hue light implementation that allows to change its state (color, brightness)
- * @author Jander Nascimento
  */
 @Component(name = "philipsHueLight")
 @Provides(specifications={GenericDevice.class, DimmerLight.class, ColorLight.class,PowerObservable.class})

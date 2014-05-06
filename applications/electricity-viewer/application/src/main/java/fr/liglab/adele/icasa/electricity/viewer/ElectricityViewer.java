@@ -3,7 +3,7 @@ package fr.liglab.adele.icasa.electricity.viewer;
 import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
- * Created by aygalinc on 27/03/14.
+ *
  */
 public interface ElectricityViewer {
 

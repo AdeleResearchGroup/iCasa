@@ -29,7 +29,6 @@ import fr.liglab.adele.icasa.clock.Clock;
 import fr.liglab.adele.icasa.clock.ClockListener;
 
 /**
- * @author Gabriel Pedraza Ferreira
  * 
  */
 @Component(name="SimulatedClock")
@@ -259,8 +258,7 @@ public class SimulatedClockImpl implements Clock {
 	
 	/**
 	 * Clock Time mover Thread (Runnable) class
-	 * 
-	 * @author Gabriel
+	 *
 	 *
 	 */
 	private final class ClockTimeMover implements Runnable {

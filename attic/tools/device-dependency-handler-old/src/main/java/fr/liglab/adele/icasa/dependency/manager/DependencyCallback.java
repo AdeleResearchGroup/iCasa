@@ -28,8 +28,7 @@ import org.osgi.framework.ServiceReference;
 /**
  * This class allwos the creation of callback when service dependency arrives or
  * disappear.
- * 
- * @author <a href="mailto:dev@felix.apache.org">Felix Project Team</a>
+ *
  */
 public class DependencyCallback extends Callback {
 

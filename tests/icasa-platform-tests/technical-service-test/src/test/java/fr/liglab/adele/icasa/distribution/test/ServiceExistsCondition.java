@@ -22,7 +22,6 @@ import org.ow2.chameleon.runner.test.utils.Condition;
 /**
  * COndition is true only if specified service exists.
  *
- * @author Thomas Leveque
  */
 public class ServiceExistsCondition implements Condition {
 

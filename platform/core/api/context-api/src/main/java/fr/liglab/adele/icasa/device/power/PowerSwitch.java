@@ -20,8 +20,6 @@ import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition for a simple powerswitch device
- * 
- * @author gunalp
  *
  */
 public interface PowerSwitch extends GenericDevice {

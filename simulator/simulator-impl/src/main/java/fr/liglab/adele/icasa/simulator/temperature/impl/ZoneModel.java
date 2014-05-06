@@ -33,7 +33,6 @@ import static fr.liglab.adele.icasa.simulator.temperature.impl.TemperaturePMImpl
 /**
  * Model of a zone used to compute thermal properties.
  *
- * @author Thomas Leveque
  */
 public class ZoneModel {
 

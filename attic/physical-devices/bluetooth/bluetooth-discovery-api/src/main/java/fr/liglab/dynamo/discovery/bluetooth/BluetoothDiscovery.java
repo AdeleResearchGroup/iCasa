@@ -18,7 +18,6 @@ package fr.liglab.dynamo.discovery.bluetooth;
 import java.util.Map;
 
 /**
- * @author P.A
  * 
  */
 public interface BluetoothDiscovery {

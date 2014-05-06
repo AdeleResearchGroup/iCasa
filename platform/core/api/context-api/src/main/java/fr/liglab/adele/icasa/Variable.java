@@ -18,7 +18,6 @@ package fr.liglab.adele.icasa;
 /**
  * This class allows to describe a zone variable.
  *
- * @author Thomas Leveque
  */
 public class Variable {
 

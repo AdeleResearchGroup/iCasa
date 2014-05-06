@@ -29,9 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * User: garciai@imag.fr
- * Date: 9/6/13
- * Time: 11:49 AM
+ *
  */
 @Component(name="zigbeePushButton")
 @Provides

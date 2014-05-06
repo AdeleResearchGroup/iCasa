@@ -33,8 +33,7 @@ import fr.liglab.adele.icasa.common.VariableType;
 /**
  * Represents generic implementation of Identifiable and Attributable interfaces. 
  * Most concepts in device manager represents entities which can be implemented using this class.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public class EntityImpl implements Identifiable, Attributable {

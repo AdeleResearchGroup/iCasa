@@ -18,8 +18,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 /**
  * This handler is used to clean the applications directory at the execution
  * platform
- * 
- * @author Gabriel
+ *
  * 
  */
 public class CleanApplicationsHandler extends AbstractHandler {

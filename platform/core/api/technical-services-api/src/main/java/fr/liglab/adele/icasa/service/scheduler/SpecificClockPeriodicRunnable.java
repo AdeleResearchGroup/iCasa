@@ -21,7 +21,6 @@ import fr.liglab.adele.icasa.clock.Clock;
  * An OSGi service providing this interface will allow to schedule periodic tasks using the
  * a provided Clock {@link fr.liglab.adele.icasa.clock.Clock}.
  *
- * @author Thomas Leveque
  */
 public interface SpecificClockPeriodicRunnable extends ICasaRunnable {
 

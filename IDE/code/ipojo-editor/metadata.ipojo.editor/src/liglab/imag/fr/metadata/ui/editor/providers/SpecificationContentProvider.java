@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 /**
- * @author Gabriel
  *
  */
 public class SpecificationContentProvider implements ITreeContentProvider {

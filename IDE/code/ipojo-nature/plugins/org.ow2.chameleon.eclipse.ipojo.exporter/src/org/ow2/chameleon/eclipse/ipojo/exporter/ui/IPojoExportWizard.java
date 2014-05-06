@@ -32,8 +32,7 @@ import org.ow2.chameleon.eclipse.ipojo.exporter.core.BundleExporter;
 
 /**
  * iPOJO bundle export wizard
- * 
- * @author Thomas Calmant
+ *
  */
 public class IPojoExportWizard extends Wizard implements IExportWizard {
 

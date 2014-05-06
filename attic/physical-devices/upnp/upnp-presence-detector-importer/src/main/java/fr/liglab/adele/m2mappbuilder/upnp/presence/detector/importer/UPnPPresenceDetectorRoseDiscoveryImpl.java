@@ -35,8 +35,7 @@ import org.ow2.chameleon.rose.RoseMachine;
 /**
  * 
  * This class implements UPnP discovery based in the Felix UPnP Base Driver
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  *
  */
 public class UPnPPresenceDetectorRoseDiscoveryImpl implements ServiceTrackerCustomizer {

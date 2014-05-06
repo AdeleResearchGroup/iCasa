@@ -16,9 +16,7 @@
 package fr.liglab.adele.icasa.access;
 
 /**
- * User: garciai@imag.fr
- * Date: 7/18/13
- * Time: 4:21 PM
+ *
  */
 public interface AccessRightManagerListener extends AccessRightListener {
     /**

@@ -41,8 +41,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 /**
  * Base class for the Master-Details Block using the component list as master
- * 
- * @author Gabriel
+ *
  * 
  */
 public abstract class PojoMasterDetailBlock extends MasterDetailsBlock {

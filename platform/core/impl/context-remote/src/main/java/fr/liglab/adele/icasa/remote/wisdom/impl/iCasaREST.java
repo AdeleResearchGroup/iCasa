@@ -33,11 +33,7 @@ import org.wisdom.api.http.Status;
 
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 4/10/13
- * Time: 2:35 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 @Component
 @Provides

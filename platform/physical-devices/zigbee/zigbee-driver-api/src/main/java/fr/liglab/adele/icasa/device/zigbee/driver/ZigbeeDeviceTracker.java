@@ -23,7 +23,6 @@ import java.util.EventListener;
  * You can specify a filter to define what are the events you are interested in:
  * example : zigbee.listener.filter="(module.address =1234)"
  *
- * @author Thomas Leveque
  */
 public interface ZigbeeDeviceTracker extends EventListener {
 	

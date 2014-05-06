@@ -40,7 +40,6 @@ import org.ow2.chameleon.rose.RoseMachine;
 
 /**
  * Component implementation capable of creating UPNP proxies for presence detector
- * @author Thomas Leveque
  * 
  */
 @Component(name="upnp.presence.sensor.importer")
@@ -176,8 +175,7 @@ public class PresenceDetectorUPNPExporter extends AbstractFilteredServiceImporte
 
 /**
  * A wrapper for ipojo Component instances
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 class MedicalServiceregistration implements ServiceRegistration {

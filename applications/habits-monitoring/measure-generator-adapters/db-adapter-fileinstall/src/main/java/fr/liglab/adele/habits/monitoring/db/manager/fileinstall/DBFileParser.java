@@ -17,8 +17,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Parser for .db xml configuration files. 
- * @author Kettani Mehdi
+ * Parser for .db xml configuration files.
  *
  */
 public class DBFileParser {

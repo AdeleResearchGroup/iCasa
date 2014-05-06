@@ -9,7 +9,6 @@ import fr.liglab.adele.icasa.location.LocatedDevice;
 
 /**
  * Location enricher mediator.
- * @author Kettani Mehdi.
  *
  */
 public class LocationEnricher {

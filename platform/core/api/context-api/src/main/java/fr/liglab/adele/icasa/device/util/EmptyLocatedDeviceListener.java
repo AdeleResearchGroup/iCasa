@@ -22,7 +22,6 @@ import fr.liglab.adele.icasa.location.Position;
 /**
  * Empty implementation of a located device listener.
  *
- * @author Thomas Leveque
  */
 public class EmptyLocatedDeviceListener implements LocatedDeviceListener {
 

@@ -23,7 +23,6 @@ import java.util.Set;
 /**
  *  A service providing this service contract will be used to compute simulated physical properties.
  *
- * @author
  */
 public interface PhysicalModel {
 

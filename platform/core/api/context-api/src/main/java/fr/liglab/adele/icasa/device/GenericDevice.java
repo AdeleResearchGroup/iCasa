@@ -24,7 +24,6 @@ import java.util.Set;
  * Generic interface that is intended to be used as a skeleton for device service interface definitions.
  * 
  * @see AbstractDevice
- * @author Gabriel Pedraza Ferreira
  */
 public interface GenericDevice {
 

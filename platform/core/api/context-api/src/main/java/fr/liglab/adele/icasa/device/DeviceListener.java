@@ -22,8 +22,7 @@ import fr.liglab.adele.icasa.listener.IcasaListener;
  * 
  * Events may be notified more than once per event. The only guaranty is that at least one event will be sent to
  * listeners.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface DeviceListener<T extends GenericDevice> extends IcasaListener {

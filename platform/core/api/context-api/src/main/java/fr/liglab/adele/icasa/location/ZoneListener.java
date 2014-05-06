@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.location;
 
 /**
  * A listener of zones
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 public interface ZoneListener extends ZonePropListener {

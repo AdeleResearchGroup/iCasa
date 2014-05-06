@@ -53,7 +53,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.framework.Constants;
 
 /**
- * @author Gabriel
  * 
  */
 public class DeploymentBundleHandler extends AbstractHandler {

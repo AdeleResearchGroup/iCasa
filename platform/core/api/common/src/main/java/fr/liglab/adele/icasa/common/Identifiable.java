@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.common;
 
 /**
  * Allows to identify an object with a global unique identifier.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public interface Identifiable {

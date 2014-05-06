@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
- * @author Thomas Leveque
  *
  */
 public class ManagedClock implements Clock {

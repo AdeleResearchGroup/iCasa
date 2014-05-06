@@ -16,7 +16,6 @@
 package fr.liglab.adele.habits.monitoring.event.webservice.api;
 
 /**
- * @author Jean-Pierre Poutcheu
  *
  */
 public class ProcessEventException extends Exception{

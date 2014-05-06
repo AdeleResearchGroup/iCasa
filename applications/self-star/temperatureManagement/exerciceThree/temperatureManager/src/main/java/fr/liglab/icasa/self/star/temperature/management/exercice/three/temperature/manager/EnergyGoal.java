@@ -1,7 +1,7 @@
 package fr.liglab.icasa.self.star.temperature.management.exercice.three.temperature.manager;
 
 /**
- * Created by aygalinc on 25/04/14.
+ *
  */
 public enum EnergyGoal {
     LOW(0.1), MEDIUM(0.5), HIGH(1);

@@ -21,8 +21,6 @@ import org.osgi.framework.Bundle;
 
 /**
  * Represents root access to applications and unique way to install and uninstall applications.
- * 
- * @author Thomas Leveque
  *
  */
 public interface ApplicationManager {

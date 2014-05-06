@@ -39,7 +39,7 @@ import java.io.IOException;
 
 
 /**
- * @author Thomas Leveque
+ *
  */
 @Component
 @Provides

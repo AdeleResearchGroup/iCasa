@@ -22,8 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Task fired when a device discovery timer expires. 
- * @author Kettani Mehdi
+ * Task fired when a device discovery timer expires.
  *
  */
 public class DeviceDiscoveryTimeoutTask implements Runnable {

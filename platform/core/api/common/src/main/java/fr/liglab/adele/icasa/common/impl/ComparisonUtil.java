@@ -17,8 +17,7 @@ package fr.liglab.adele.icasa.common.impl;
 
 /**
  * Util methods to compare objects.
- * 
- * @author Thomas Leveque
+ *
  *
  */
 public class ComparisonUtil {

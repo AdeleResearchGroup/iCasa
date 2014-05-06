@@ -9,8 +9,6 @@ import java.util.Set;
 /**
  * Informations related to deployment package.
  * 
- * @author Kettani Mehdi (tfqg0024)
- * 
  */
 public class DPInfos {
 

@@ -20,7 +20,6 @@ import java.util.Date;
 /**
  * Represents a data of a device.
  *
- * @author Thomas Leveque
  */
 public interface Data {
 

@@ -34,8 +34,7 @@ import fr.liglab.adele.icasa.simulator.listener.util.BaseZoneListener;
 
 /**
  * Implementation of a simulated thermometer device.
- * 
- * @author bourretp
+ *
  */
 @Component(name = "iCasa.Thermometer")
 @Provides(properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })

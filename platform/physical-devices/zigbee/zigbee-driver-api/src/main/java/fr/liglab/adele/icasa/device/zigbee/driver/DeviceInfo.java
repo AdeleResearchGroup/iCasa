@@ -20,7 +20,6 @@ import java.util.Date;
 /**
  * Represents general information about a device.
  *
- * @author Thomas Leveque
  */
 public interface DeviceInfo {
 

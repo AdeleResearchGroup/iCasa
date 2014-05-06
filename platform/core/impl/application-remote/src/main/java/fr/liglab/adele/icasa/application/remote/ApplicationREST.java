@@ -37,9 +37,6 @@ import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
 
-/**
- * @author Gabriel Pedraza Ferreira
- */
 @Component
 @Instantiate
 @Provides

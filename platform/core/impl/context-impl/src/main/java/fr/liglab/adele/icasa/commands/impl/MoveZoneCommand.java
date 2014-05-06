@@ -33,8 +33,7 @@ import fr.liglab.adele.icasa.location.Zone;
 /**
  * 
  * Command to Create a Zone
- * 
- * @author Gabriel
+ *
  * 
  */
 @Component(name = "MoveZoneCommand")

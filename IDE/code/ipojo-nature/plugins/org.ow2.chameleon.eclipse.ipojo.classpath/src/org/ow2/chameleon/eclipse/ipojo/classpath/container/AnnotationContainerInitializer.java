@@ -24,8 +24,7 @@ import org.ow2.chameleon.eclipse.ipojo.classpath.IPojoClasspathPlugin;
 
 /**
  * Simple container initializer, setting up a project class path
- * 
- * @author Thomas Calmant
+ *
  */
 public class AnnotationContainerInitializer extends
 		ClasspathContainerInitializer {

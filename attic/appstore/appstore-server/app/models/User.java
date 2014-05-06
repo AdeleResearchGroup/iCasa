@@ -16,11 +16,7 @@ import java.util.List;
 //import securesocial.core.java.PasswordInfo;
 
 /**
- * Created with IntelliJ IDEA.
- * User: torito
- * Date: 11/6/12
- * Time: 4:56 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 @Entity
 @Table(name="User")

@@ -21,8 +21,7 @@ import org.json.JSONObject;
 
 /**
  * TODO
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  */
 public class ZoneJSON {
 

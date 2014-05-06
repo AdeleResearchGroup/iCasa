@@ -44,8 +44,7 @@ import fr.liglab.adele.icasa.simulator.listener.PersonListener;
  * "person.$name.location" will be added to the context when persons are created. By example, if a person having "paul" as
  * name is created and placed in the kitchen location, the property "person.paul.location" is created and its value set
  * to kitchen.
- * 
- * @author Gabriel Pedraza Ferreira
+ *
  * 
  */
 @Component(name = "ICasaContextSourceBuilder")

@@ -23,10 +23,6 @@ package fr.liglab.adele.m2mappbuilder.x10;
 * UnitListeners.
 *
 *
-* @author Wade Wassenberg
-*
-* @version 1.0
-* @see x10.UnitListener
 */
 
 public interface Controller

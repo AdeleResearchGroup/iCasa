@@ -21,9 +21,7 @@ import org.ow2.chameleon.core.services.Watcher;
 import java.io.File;
 
 /**
- * User: garciai@imag.fr
- * Date: 12/10/13
- * Time: 4:13 PM
+ *
  */
 @Component
 @Instantiate

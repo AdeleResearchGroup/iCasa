@@ -89,7 +89,6 @@ import org.osgi.framework.Constants;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * @author Gabriel Pedraza Ferreira
  *
  */
 @SuppressWarnings("restriction")

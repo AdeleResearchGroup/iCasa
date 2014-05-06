@@ -10,8 +10,6 @@ import fr.liglab.adele.icasa.clock.Clock;
 
 /**
  * 
- * @author Mehdi Kettani
- * 
  */
 public class TimeStampEnricher {
 	

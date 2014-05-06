@@ -35,7 +35,6 @@ import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
 @Provides
 /**
  * Zigbee light sensor factory.
- * @author Kettani Mehdi.
  *
  */
 public class ZigbeePhotometer extends AbstractDevice implements Photometer,

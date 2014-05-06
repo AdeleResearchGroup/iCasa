@@ -26,8 +26,7 @@ import org.ow2.chameleon.eclipse.ipojo.Activator;
 
 /**
  * The error reporter used by the manipulator
- * 
- * @author Thomas Calmant
+ *
  */
 public class EclipseReporter implements Reporter {
 

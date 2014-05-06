@@ -38,7 +38,6 @@ import fr.liglab.adele.icasa.device.util.AbstractDevice;
 import fr.liglab.adele.icasa.rfid.reader.RFIDDeviceReader;
 
 /**
- * @author Gabriel
  *
  */
 @Component(name="TikitagRFIDReader")

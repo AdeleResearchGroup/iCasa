@@ -33,8 +33,7 @@ import java.io.PrintStream;
 /**
  * 
  * Moves a person between the simulated environments 
- * 
- * @author Gabriel
+ *
  *
  */
 @Component(name = "AttachPersonZoneCommand")
