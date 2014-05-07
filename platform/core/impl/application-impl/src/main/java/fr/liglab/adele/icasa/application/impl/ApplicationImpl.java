@@ -46,6 +46,8 @@ public class ApplicationImpl  implements Application {
 
     private final Object _lock;
 
+    private static final String UNDEFINED = "undefined";
+
     public ApplicationImpl(ApplicationDescription description, ApplicationManagerImpl appMgr) {
         this(description.getId(),description.getName(),description.getVersion(),description.getVendor(),description.getCategory(), description.getBundles(), ApplicationState.STOPPED, appMgr);
     }
@@ -55,8 +57,19 @@ public class ApplicationImpl  implements Application {
         _id = id;
         _name =name;
         _version = version;
-        _vendor = vendor;
-        _category=category;
+
+        if( (vendor != null) && !(vendor.equals(""))){
+            _vendor = vendor;
+        }else {
+            _vendor =UNDEFINED;
+        }
+
+        if( (category != null) && !(category.equals(""))){
+            _category=category;
+        }else {
+            _category =UNDEFINED;
+        }
+
         _bundles=bundles;
         _state = state;
         _appMgr = appMgr;
@@ -177,8 +190,17 @@ public class ApplicationImpl  implements Application {
         synchronized (_lock){
             _id = description.getId();
             _name = description.getName();
-            _category = description.getCategory();
-            _vendor = description.getVendor();
+            if( (description.getVendor() != null) && !(description.getVendor().equals(""))){
+                _vendor = description.getVendor();
+            }else {
+                _vendor =UNDEFINED;
+            }
+
+            if( (description.getCategory() != null) && !(description.getCategory().equals(""))){
+                _category=description.getCategory();
+            }else {
+                _category =UNDEFINED;
+            }
             _version = description.getVersion();
             _bundles = description.getBundles();
         }
