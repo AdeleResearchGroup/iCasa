@@ -15,18 +15,33 @@
  */
 package fr.liglab.adele.icasa.application;
 
-import fr.liglab.adele.icasa.common.StateVariable;
-
 /**
- * Represents a variable which either its value or its definition is related to an application.
+ * Tracker of available applications.
+ * After addition of a tracker, an event is generated for all existing applications.
  *
  */
-public interface ContextualStateVariable extends StateVariable {
+public interface ApplicationListener {
 
 	/**
-	 * Returns service related to this variable scope.
+	 * Called when an application arrives.
 	 * 
-	 * @return service related to this variable scope.
+	 * @param app an application
 	 */
-	public Application getApplication();
+	public void addApplication(Application app);
+	
+	/**
+	 * Called when an application is removed.
+	 * 
+	 * @param app an application
+	 */
+	public void removeApplication(Application app);
+	
+	public void deploymentPackageAdded(Application app, String symbolicName);
+	
+	public void deploymentPackageRemoved(Application app, String symbolicName);
+	
+	public void bundleAdded(Application app, String symbolicName);
+	
+	public void bundleRemoved(Application app, String symbolicName);
+	
 }

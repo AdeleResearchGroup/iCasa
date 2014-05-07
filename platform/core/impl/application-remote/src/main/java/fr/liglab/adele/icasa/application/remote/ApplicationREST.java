@@ -15,20 +15,15 @@
  */
 package fr.liglab.adele.icasa.application.remote;
 
-import java.util.List;
-
-
-
+import fr.liglab.adele.icasa.application.Application;
+import fr.liglab.adele.icasa.application.ApplicationManager;
+import fr.liglab.adele.icasa.application.remote.util.ApplicationJSONUtil;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import fr.liglab.adele.icasa.application.Application;
-import fr.liglab.adele.icasa.application.ApplicationManager;
-import fr.liglab.adele.icasa.application.remote.util.ApplicationJSONUtil;
 import org.wisdom.api.DefaultController;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
@@ -36,6 +31,8 @@ import org.wisdom.api.annotations.Route;
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
+
+import java.util.Set;
 
 @Component
 @Instantiate
@@ -84,7 +81,7 @@ public class ApplicationREST extends DefaultController {
 	private String getApplications() {
 		JSONArray currentApps = new JSONArray();
 		
-		List<Application>  apps = _applicationMgr.getApplications();
+		Set<Application> apps = _applicationMgr.getApplications();
         currentApps.put(ApplicationJSONUtil.getEmptyApplication());//add at least one application: with NONE
 		for (Application app : apps) {
 			JSONObject appJSON = ApplicationJSONUtil.getApplicationJSON(app);
