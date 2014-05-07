@@ -24,6 +24,7 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.json.JSONObject;
+import org.osgi.framework.Bundle;
 
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -33,9 +34,9 @@ import java.util.Set;
 @Provides
 @Instantiate(name="ShowApplicationsCommand-0")
 public class ShowApplicationsCommand extends AbstractCommand {
-	
-	@Requires
-	ApplicationManager manager;
+
+    @Requires
+    ApplicationManager manager;
 
     public ShowApplicationsCommand(){
         addSignature(EMPTY_SIGNATURE);
@@ -49,6 +50,10 @@ public class ShowApplicationsCommand extends AbstractCommand {
             out.println("App ID :: " + application.getId());
             out.println("App Name :: " + application.getName());
             out.println("App Version :: " + application.getVersion());
+            out.println("App Category :: " + application.getId());
+            out.println("App Vendor :: " + application.getName());
+            out.println("List of bundle :: " );
+            for(Bundle bundle : application.getBundles()) System.out.println("  - Bundle :: " + bundle.getSymbolicName());
             out.println("-----------------------------");
         }
         return null;
