@@ -50,8 +50,8 @@ public class ShowApplicationsCommand extends AbstractCommand {
             out.println("App ID :: " + application.getId());
             out.println("App Name :: " + application.getName());
             out.println("App Version :: " + application.getVersion());
-            out.println("App Category :: " + application.getId());
-            out.println("App Vendor :: " + application.getName());
+            out.println("App Category :: " + application.getCategory());
+            out.println("App Vendor :: " + application.getVendor());
             out.println("List of bundle :: " );
             for(Bundle bundle : application.getBundles()) System.out.println("  - Bundle :: " + bundle.getSymbolicName());
             out.println("-----------------------------");
