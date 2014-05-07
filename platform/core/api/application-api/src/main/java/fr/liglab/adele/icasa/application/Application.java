@@ -22,13 +22,14 @@ import fr.liglab.adele.icasa.common.Identifiable;
 import fr.liglab.adele.icasa.common.ProgressMonitor;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
 /**
  * Represents an installed application.
  *
  *
  */
-public interface Application extends Attributable, Identifiable {
+public interface Application  {
 	
 	public static final String APP_ID_BUNDLE_HEADER = "ICasa-Application-Id";
 	
@@ -39,9 +40,15 @@ public interface Application extends Attributable, Identifiable {
 	
 	public static final String APP_VERSION_BUNDLE_HEADER = "ICasa-Application-Version";
 
+    /**
+     * Return the unique Id of the application
+     *
+     * @return the Id of the application
+     */
+    public String getId();
+
 	/**
 	 * Returns the human readable application name.
-	 * This name should not be more than 80 characters.
 	 * This value must be set as an attribute value.
 	 * 
 	 * @return the human readable application name.
@@ -62,7 +69,7 @@ public interface Application extends Attributable, Identifiable {
 	 * 
 	 * @return installed version of this application.
 	 */
-	public String getVersion();
+	public Version getVersion();
 	
 	/**
 	 * Returns the category of this application.

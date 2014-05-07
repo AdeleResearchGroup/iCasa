@@ -16,6 +16,7 @@
 package fr.liglab.adele.icasa.application;
 
 import java.util.List;
+import java.util.Set;
 
 import org.osgi.framework.Bundle;
 
@@ -31,7 +32,7 @@ public interface ApplicationManager {
 	 * 
 	 * @return ordered list of application categories.
 	 */
-	public List<ApplicationCategory> getCategories();
+	public Set<ApplicationCategory> getCategories();
 	
 	/**
 	 * Returns all installed applications.
@@ -39,7 +40,7 @@ public interface ApplicationManager {
 	 * 
 	 * @return all installed applications.
 	 */
-	public List<Application> getApplications();
+	public Set<Application> getApplications();
 
 	/**
 	 * Returns the specified application.
@@ -54,14 +55,14 @@ public interface ApplicationManager {
 	 * 
 	 * @param listener an application listener
 	 */
-	public void addApplicationListener(ApplicationTracker listener);
+	public void addApplicationListener(ApplicationListener listener);
 	
 	/**
 	 * Removes an application listener.
 	 * 
 	 * @param listener an application listener
 	 */
-	public void removeApplicationListener(ApplicationTracker listener);
+	public void removeApplicationListener(ApplicationListener listener);
 
 	/**
 	 * Returns application which corresponds to specified bundle.
