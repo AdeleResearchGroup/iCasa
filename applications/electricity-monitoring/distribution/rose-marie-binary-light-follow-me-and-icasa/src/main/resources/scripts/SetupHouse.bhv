@@ -1,0 +1,53 @@
+<behavior startdate="27/10/2011-00:00:00" factor="1440">
+
+	<create-zone id="Cuisine"  leftX="236" topY="370" X-Length="194" Y-Length="100" />
+	<add-zone-variable zoneId="Cuisine" variable="Temperature" />
+	<add-zone-variable zoneId="Cuisine" variable="Illuminance" />
+	<add-zone-variable zoneId="Cuisine" variable="Volume" />
+	<modify-zone-variable zoneId="Cuisine" variable="Temperature" value="295.15"/>
+	<modify-zone-variable zoneId="Cuisine" variable="Illuminance" value="5"/>
+	<modify-zone-variable zoneId="Cuisine" variable="Volume" value="10"/>
+
+
+	<create-zone id="Chambre1"  leftX="517" topY="15" X-Length="184" Y-Length="165" />
+	<add-zone-variable zoneId="Chambre1" variable="Temperature" />
+	<add-zone-variable zoneId="Chambre1" variable="Illuminance" />
+	<add-zone-variable zoneId="Chambre1" variable="Volume" />
+	<modify-zone-variable zoneId="Chambre1" variable="Temperature" value="295.15"/>
+	<modify-zone-variable zoneId="Chambre1" variable="Illuminance" value="5"/>
+	<modify-zone-variable zoneId="Chambre1" variable="Volume" value="10"/>
+
+	<create-zone id="Bureau"  leftX="345" topY="80" X-Length="165" Y-Length="210" />
+	<add-zone-variable zoneId="Bureau" variable="Temperature" />
+	<add-zone-variable zoneId="Bureau" variable="Illuminance" />
+	<add-zone-variable zoneId="Bureau" variable="Volume" />
+	<modify-zone-variable zoneId="Bureau" variable="Temperature" value="295.15"/>
+	<modify-zone-variable zoneId="Bureau" variable="Illuminance" value="5"/>
+	<modify-zone-variable zoneId="Bureau" variable="Volume" value="10"/>
+
+	<create-zone id="Chambre2"  leftX="240" topY="520" X-Length="220" Y-Length="155" />
+	<add-zone-variable zoneId="Chambre2" variable="Temperature" />
+	<add-zone-variable zoneId="Chambre2" variable="Illuminance" />
+	<add-zone-variable zoneId="Chambre2" variable="Volume" />
+	<modify-zone-variable zoneId="Chambre2" variable="Temperature" value="295.15"/>
+	<modify-zone-variable zoneId="Chambre2" variable="Illuminance" value="5"/>
+	<modify-zone-variable zoneId="Chambre2" variable="Volume" value="10"/>
+
+	<create-zone id="SDB"  leftX="500" topY="565" X-Length="180" Y-Length="115" />
+	<add-zone-variable zoneId="SDB" variable="Temperature" />
+	<add-zone-variable zoneId="SDB" variable="Illuminance" />
+	<add-zone-variable zoneId="SDB" variable="Volume" />
+	<modify-zone-variable zoneId="SDB" variable="Temperature" value="295.15"/>
+	<modify-zone-variable zoneId="SDB" variable="Illuminance" value="5"/>
+	<modify-zone-variable zoneId="SDB" variable="Volume" value="10"/>
+
+
+	<create-zone id="Sejour"  leftX="90" topY="20" X-Length="220" Y-Length="350" />
+	<add-zone-variable zoneId="Sejour" variable="Temperature" />
+	<add-zone-variable zoneId="Sejour" variable="Illuminance" />
+	<add-zone-variable zoneId="Sejour" variable="Volume" />
+	<modify-zone-variable zoneId="Sejour" variable="Temperature" value="295.15"/>
+	<modify-zone-variable zoneId="Sejour" variable="Illuminance" value="5"/>
+	<modify-zone-variable zoneId="Sejour" variable="Volume" value="10"/>
+
+</behavior>

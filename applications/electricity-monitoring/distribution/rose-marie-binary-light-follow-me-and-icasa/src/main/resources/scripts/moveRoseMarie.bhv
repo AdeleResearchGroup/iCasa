@@ -1,0 +1,38 @@
+<behavior startdate="27/10/2011-00:00:00" factor="1440">
+
+    <create-person id="RoseMarie" type="Grandmother" />
+
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Chambre1"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Sejour"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Cuisine"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Sejour"/>
+    <delay value="100" />
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Chambre1"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Chambre2"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Sejour"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Cuisine"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Sejour"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Chambre2"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Chambre2"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Sejour"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Cuisine"/>
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="SDB"/>
+    <delay value="100" />
+    <delay value="100" />
+    <move-person-zone  personId="RoseMarie" zoneId="Chambre2"/>
+
+</behavior>
