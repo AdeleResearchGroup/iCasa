@@ -20,7 +20,7 @@ import java.awt.*;
 /**
  * Represents a light device in which its color can be changed
  */
-public interface ColorLight extends DimmerLight{
+public interface ColoredLight extends DimmerLight{
 
     /**
      * Changes the colorlight
