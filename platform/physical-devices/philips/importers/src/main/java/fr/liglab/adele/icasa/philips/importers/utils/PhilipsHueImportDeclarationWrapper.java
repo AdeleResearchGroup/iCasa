@@ -35,6 +35,8 @@ package fr.liglab.adele.icasa.philips.importers.utils;
  * #L%
  */
 
+import com.philips.lighting.hue.sdk.bridge.impl.PHBridgeImpl;
+import com.philips.lighting.model.PHBridge;
 import org.osgi.framework.Filter;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
@@ -54,6 +56,7 @@ public class PhilipsHueImportDeclarationWrapper {
     private String name;
     private String type;
     private Object object;
+    private Object bridge;
 
     private PhilipsHueImportDeclarationWrapper() {
 
@@ -84,11 +87,12 @@ public class PhilipsHueImportDeclarationWrapper {
         wrapper.name = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_NAME);
         wrapper.type = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_TYPE);
         wrapper.object = metadata.get(DISCOVERY_PHILIPS_DEVICE_OBJECT);
+        wrapper.bridge = metadata.get(DISCOVERY_PHILIPS_BRIDGE_OBJECT);
 
         return wrapper;
     }
 
-    public String getId() {
+    public String getLightId() {
         return id;
     }
 
@@ -103,4 +107,12 @@ public class PhilipsHueImportDeclarationWrapper {
     public Object getObject() {
         return object;
     }
+
+    public Object getBridge() {
+        return bridge;
+    }
+
+public String getUniqueId(){
+    return (object.toString()+object.hashCode()+bridge.toString()+bridge.hashCode());
+}
 }
