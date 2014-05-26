@@ -1,3 +1,0 @@
-<behavior>
-	<configure-device room="kitchen" deviceID="1234"/>
-</behavior>

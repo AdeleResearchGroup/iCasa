@@ -1,3 +1,0 @@
-<behavior startdate="2011.10.20.00.00.01" factor ="360">
-	<add-device room="kitchen" deviceID="1234" type="org.medical.device.presence.impl.SimulatedPresenceSensorImpl"/>
-</behavior>

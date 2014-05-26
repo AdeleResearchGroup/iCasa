@@ -1,0 +1,334 @@
+10:08:52.249  3702 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Starting watcher service configured for [/home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime, /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications]
+10:08:52.311  3764 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Starting file monitoring for applications
+10:08:52.420  3873 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.BundleDeployer@32e8f3eb for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+10:08:55.676  7129 [main] INFO  o.w.c.ApplicationConfigurationImpl - Enabling the watching of the configuration file
+10:08:55.685  7138 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.BundleDeployer@32e8f3eb for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+10:08:55.693  7146 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@4d220536 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+10:08:55.694  7147 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@4d220536 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+10:08:55.697  7150 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@4d220536 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+10:08:55.699  7152 [main] INFO  o.w.c.ApplicationConfigurationImpl - Wisdom running in DEV
+10:08:56.549  8002 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.BundleDeployer@32e8f3eb for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+10:08:56.549  8002 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@4d220536 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+10:08:56.709  8162 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@22c1c5a4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+10:08:56.826  8279 [main] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+10:08:56.826  8279 [main] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+10:08:56.827  8280 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+10:08:56.847  8300 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+10:08:57.005  8458 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@22c1c5a4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+10:08:57.006  8459 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@22c1c5a4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+10:08:57.006  8459 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@22c1c5a4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+10:08:57.149  8602 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+10:08:57.149  8602 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Unable to connect into port: COM3
+10:08:57.149  8602 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+10:08:57.149  8602 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Unable to connect into port: COM3
+10:08:57.529  8982 [main] INFO  o.wisdom.content.json.JsonSingleton - Starting JSON support service
+10:08:59.766  11219 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@61cd17ac for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+10:08:59.780  11233 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@61cd17ac for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+10:08:59.781  11234 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@61cd17ac for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+10:08:59.786  11239 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@61cd17ac for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+10:09:00.286  11739 [Thread-25] WARN  cilia.core - [photometer-collector] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.306  11759 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+10:09:00.311  11764 [Thread-25] WARN  cilia.core - [presence-collector] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.313  11766 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+10:09:00.320  11773 [Thread-25] WARN  cilia.core - [motion-sensor-collector] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.322  11775 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+10:09:00.327  11780 [Thread-25] WARN  cilia.core - [push-button-adapter] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.329  11782 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+10:09:00.341  11794 [Thread-25] WARN  cilia.core - [filter] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.342  11795 [Thread-25] WARN  cilia.core - [enricher] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.343  11796 [Thread-25] WARN  cilia.core - [ts-enricher] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.344  11797 [Thread-25] WARN  cilia.core - [loc-enricher] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.345  11798 [Thread-25] WARN  cilia.core - [transformer] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.349  11802 [Thread-25] WARN  cilia.core - [event-webservice] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+10:09:00.450  11903 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.application.remote.ApplicationREST@f450037
+10:09:00.514  11967 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.frontend.services.rest.MapRemoteServiceImpl@33264613
+10:09:00.536  11989 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from org.wisdom.resources.ResourceController@17dbf106
+10:09:00.538  11991 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from org.wisdom.resources.WebJarController@1cb08785
+10:09:00.547  12000 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.access.impl.AccessManagerRemote@6a07e6da
+10:09:00.565  12018 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.RemoteShell@483910fd
+10:09:00.567  12020 [main] INFO  org.wisdom.router.RequestRouter - Router starting
+10:09:00.813  12266 [Thread-34] INFO  wisdom-engine - Starting Wisdom server
+10:09:01.646  13099 [Thread-25] WARN  cilia.runtime - PushButtonCollector is invalid
+10:09:01.838  13291 [Thread-25] WARN  cilia.runtime - Services to bind push-button-adapter to loc-enricher are not immediately available. It will wait...
+10:09:02.046  13499 [Thread-25] WARN  cilia.runtime - Services to bind loc-enricher to filter are not immediately available. It will wait...
+10:09:02.231  13684 [Thread-25] WARN  cilia.runtime - Services to bind filter to enricher are not immediately available. It will wait...
+10:09:02.331  13784 [Thread-34] INFO  wisdom-engine - Wisdom is going to serve HTTP requests on port 9000
+10:09:02.413  13866 [Thread-25] WARN  cilia.runtime - Services to bind enricher to ts-enricher are not immediately available. It will wait...
+10:09:02.529  13982 [Thread-25] WARN  cilia.runtime - Services to bind motion-sensor-collector to loc-enricher are not immediately available. It will wait...
+10:09:02.604  14057 [Thread-25] WARN  cilia.runtime - Services to bind presence-collector to loc-enricher are not immediately available. It will wait...
+10:09:02.643  14096 [Thread-25] WARN  cilia.runtime - Services to bind ts-enricher to transformer are not immediately available. It will wait...
+10:09:02.691  14144 [Thread-25] WARN  cilia.runtime - Services to bind transformer to event-webservice are not immediately available. It will wait...
+10:09:02.747  14200 [Thread-25] WARN  cilia.runtime - Services to bind photometer-collector to loc-enricher are not immediately available. It will wait...
+10:09:02.794  14247 [Thread-25] INFO  cilia.runtime - Chain [generator-mesures] started
+10:09:02.914  14367 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.ScriptPlayerREST@647a303a
+10:09:02.929  14382 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@76ca4ae4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+10:09:02.930  14383 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@76ca4ae4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+10:09:02.966  14419 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@76ca4ae4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+10:09:02.967  14420 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@76ca4ae4 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+10:09:03.011  14464 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.PersonREST@269db796
+10:09:03.048  14501 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.SimulationREST@71c19bf7
+10:09:03.529  14982 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.ClockREST@3553696f
+10:09:03.568  15021 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.DeviceREST@59d5017b
+10:09:03.639  15092 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.EventBroadcast@717ece1b
+10:09:03.697  15150 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.ZoneREST@3c2e200e
+10:09:03.733  15186 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.iCasaREST@3eaa564
+10:09:03.897  15350 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@73787cd6 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+10:09:03.898  15351 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@73787cd6 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+10:09:03.898  15351 [main] INFO  o.o.c.c.activators.ConfigDeployer - File creation event received for /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications/ActimetryRestServiceClient-1.cfg
+10:09:03.927  15380 [main] INFO  o.o.c.c.activators.ConfigDeployer - Updating configuration ActimetryRestServiceClient.0663604d-01de-4ce6-b64c-e94ec0678ee5 in the configuration admin, configuration: {}
+10:09:03.931  15384 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@73787cd6 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+10:09:03.942  15395 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@73787cd6 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+10:09:09.993  21446 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer0 to transformer are not immediately available. It will wait...
+10:09:10.040  21493 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer0 are not immediately available. It will wait...
+10:09:10.192  21645 [main] INFO  i.platform.apps.habits-monitoring - A new proxy has been found, id simulatedDevice
+10:09:11.393  22846 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+10:09:11.399  22852 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+10:09:11.400  22853 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+10:09:11.401  22854 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+10:09:11.410  22863 [pool-4-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+10:09:11.415  22868 [pool-4-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+10:09:11.425  22878 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:11.425  22878 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+10:09:11.425  22878 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+10:09:11.425  22878 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T10:08:58
+10:09:11.425  22878 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+10:09:11.425  22878 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:11.434  22887 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:11.434  22887 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+10:09:11.434  22887 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+10:09:11.434  22887 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T10:08:58
+10:09:11.435  22888 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+10:09:11.435  22888 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:11.457  22910 [main] INFO  i.platform.apps.habits-monitoring - A proxy is now outside from the zone, id simulatedDevice
+10:09:11.458  22911 [main] WARN  cilia.runtime - PushButtonCollector is invalid
+10:09:12.876  24329 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer1 to transformer are not immediately available. It will wait...
+10:09:12.933  24386 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer1 are not immediately available. It will wait...
+10:09:13.347  24800 [main] INFO  f.l.a.h.m.p.PhotometerCollector - A new proxy has been found, id simulatedDevice
+10:09:14.526  25979 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+10:09:14.527  25980 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+10:09:14.527  25980 [pool-4-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+10:09:14.528  25981 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:14.528  25981 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+10:09:14.528  25981 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+10:09:14.528  25981 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T10:08:58
+10:09:14.529  25982 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+10:09:14.529  25982 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:14.596  26049 [main] INFO  f.l.a.h.m.p.PhotometerCollector - A proxy is now outside from the zone, id simulatedDevice
+10:09:15.817  27270 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer2 to transformer are not immediately available. It will wait...
+10:09:15.863  27316 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer2 are not immediately available. It will wait...
+10:09:15.993  27446 [main] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id simulatedDevice
+10:09:17.179  28632 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+10:09:17.180  28633 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+10:09:17.180  28633 [pool-4-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+10:09:17.181  28634 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:17.181  28634 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+10:09:17.181  28634 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+10:09:17.182  28635 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T10:08:58
+10:09:17.182  28635 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+10:09:17.182  28635 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:17.233  28686 [main] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A proxy is now outside from the zone, id simulatedDevice
+10:09:18.462  29915 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer3 to transformer are not immediately available. It will wait...
+10:09:18.511  29964 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer3 are not immediately available. It will wait...
+10:09:18.736  30189 [main] INFO  f.l.a.h.m.m.sensor.MeasureCollector - A new proxy has been found, id simulatedDevice
+10:09:19.928  31381 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+10:09:19.929  31382 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+10:09:19.930  31383 [pool-4-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+10:09:19.930  31383 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:19.930  31383 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+10:09:19.930  31383 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+10:09:19.931  31384 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T10:08:58
+10:09:19.931  31384 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->zoneId
+10:09:19.931  31384 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:20.012  31465 [main] INFO  f.l.a.h.m.m.sensor.MeasureCollector - A proxy is now outside from the zone, id simulatedDevice
+10:09:20.676  32129 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer4 to transformer are not immediately available. It will wait...
+10:09:20.731  32184 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer4 are not immediately available. It will wait...
+10:09:20.946  32399 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-84fd30afff
+10:09:21.023  32476 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-77ebda7fff
+10:09:21.087  32540 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-13d06103ff
+10:09:21.152  32605 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-12b28069ff
+10:09:21.183  32636 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+10:09:21.184  32637 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+10:09:21.184  32637 [pool-4-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+10:09:21.185  32638 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:21.185  32638 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+10:09:21.185  32638 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+10:09:21.185  32638 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2013-04-02T00:00:28
+10:09:21.185  32638 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->bathroom
+10:09:21.185  32638 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:22.077  33530 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+10:09:22.078  33531 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+10:09:22.078  33531 [pool-4-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+10:09:22.078  33531 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:22.079  33532 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+10:09:22.079  33532 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+10:09:22.079  33532 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2013-04-02T00:00:00
+10:09:22.079  33532 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->bedroom
+10:09:22.079  33532 [pool-9-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+10:09:27.075  38528 [main] INFO  f.l.a.i.s.s.e.i.ScriptExecutorImpl - Stopping Executor Thread
+15:59:26.301  3656 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Starting watcher service configured for [/home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime, /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications]
+15:59:26.335  3690 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Starting file monitoring for applications
+15:59:26.440  3795 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.BundleDeployer@edebef9 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+15:59:28.878  6233 [main] INFO  o.w.c.ApplicationConfigurationImpl - Enabling the watching of the configuration file
+15:59:28.885  6240 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.BundleDeployer@edebef9 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+15:59:28.890  6245 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@309134f7 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+15:59:28.890  6245 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@309134f7 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+15:59:28.891  6246 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@309134f7 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+15:59:28.893  6248 [main] INFO  o.w.c.ApplicationConfigurationImpl - Wisdom running in DEV
+15:59:29.715  7070 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.BundleDeployer@edebef9 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+15:59:29.715  7070 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.wisdom.configuration.ApplicationConfigurationImpl$ConfigurationDeployer@309134f7 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+15:59:29.941  7296 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@590d902c for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+15:59:30.000  7355 [main] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+15:59:30.001  7356 [main] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+15:59:30.001  7356 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+15:59:30.003  7358 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+15:59:30.070  7425 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@590d902c for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+15:59:30.071  7426 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@590d902c for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+15:59:30.071  7426 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.rose.configurator.Configurator@590d902c for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+15:59:30.171  7526 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+15:59:30.171  7526 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Get port: null from component: zigbee.driver.port
+15:59:30.171  7526 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Unable to connect into port: COM3
+15:59:30.171  7526 [zigbee driver listenning port thread] WARN  icasa.platform.devices.zigbee - Unable to connect into port: COM3
+15:59:30.553  7908 [main] INFO  o.wisdom.content.json.JsonSingleton - Starting JSON support service
+15:59:32.538  9893 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@18e28530 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+15:59:32.600  9955 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@18e28530 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+15:59:32.601  9956 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@18e28530 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+15:59:32.601  9956 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.cilia.chameleon.deployer.CiliaChameleonDeployer@18e28530 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+15:59:33.011  10366 [Thread-25] WARN  cilia.core - [photometer-collector] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.023  10378 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+15:59:33.025  10380 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.RemoteShell@7cc8d976
+15:59:33.033  10388 [Thread-25] WARN  cilia.core - [presence-collector] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.034  10389 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+15:59:33.044  10399 [Thread-25] WARN  cilia.core - [motion-sensor-collector] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.045  10400 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+15:59:33.052  10407 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.access.impl.AccessManagerRemote@68242e51
+15:59:33.055  10410 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.application.remote.ApplicationREST@d587d89
+15:59:33.059  10414 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.frontend.services.rest.MapRemoteServiceImpl@4145c27a
+15:59:33.061  10416 [Thread-25] WARN  cilia.core - [push-button-adapter] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.062  10417 [Thread-25] WARN  cilia.core - Will wait until chain is ready: generator-mesures
+15:59:33.070  10425 [Thread-25] WARN  cilia.core - [filter] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.076  10431 [Thread-25] WARN  cilia.core - [enricher] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.077  10432 [Thread-25] WARN  cilia.core - [ts-enricher] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.077  10432 [Thread-25] WARN  cilia.core - [loc-enricher] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.078  10433 [Thread-25] WARN  cilia.core - [transformer] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.079  10434 [Thread-25] WARN  cilia.core - [event-webservice] does not have a namespace. It will use a default namespace fr.liglab.adele.cilia
+15:59:33.083  10438 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from org.wisdom.resources.ResourceController@2482d2f9
+15:59:33.099  10454 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from org.wisdom.resources.WebJarController@210bfb7e
+15:59:33.101  10456 [main] INFO  org.wisdom.router.RequestRouter - Router starting
+15:59:33.405  10760 [Thread-34] INFO  wisdom-engine - Starting Wisdom server
+15:59:34.287  11642 [Thread-34] INFO  wisdom-engine - Wisdom is going to serve HTTP requests on port 9000
+15:59:34.401  11756 [Thread-25] WARN  cilia.runtime - PushButtonCollector is invalid
+15:59:34.420  11775 [Thread-25] WARN  cilia.runtime - Services to bind filter to enricher are not immediately available. It will wait...
+15:59:34.592  11947 [Thread-25] WARN  cilia.runtime - Services to bind ts-enricher to transformer are not immediately available. It will wait...
+15:59:34.681  12036 [Thread-25] WARN  cilia.runtime - Services to bind motion-sensor-collector to loc-enricher are not immediately available. It will wait...
+15:59:34.763  12118 [Thread-25] WARN  cilia.runtime - Services to bind transformer to event-webservice are not immediately available. It will wait...
+15:59:34.828  12183 [Thread-25] WARN  cilia.runtime - Services to bind loc-enricher to filter are not immediately available. It will wait...
+15:59:34.868  12223 [Thread-25] WARN  cilia.runtime - Services to bind enricher to ts-enricher are not immediately available. It will wait...
+15:59:34.920  12275 [Thread-25] WARN  cilia.runtime - Services to bind presence-collector to loc-enricher are not immediately available. It will wait...
+15:59:34.977  12332 [Thread-25] WARN  cilia.runtime - Services to bind photometer-collector to loc-enricher are not immediately available. It will wait...
+15:59:35.026  12381 [Thread-25] WARN  cilia.runtime - Services to bind push-button-adapter to loc-enricher are not immediately available. It will wait...
+15:59:35.072  12427 [Thread-25] INFO  cilia.runtime - Chain [generator-mesures] started
+15:59:35.157  12512 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.ScriptPlayerREST@4f95e4cf
+15:59:35.184  12539 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@4f9b4c30 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+15:59:35.184  12539 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@4f9b4c30 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+15:59:35.223  12578 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@4f9b4c30 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+15:59:35.223  12578 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer fr.liglab.adele.icasa.simulator.script.executor.impl.ScriptExecutorImpl@4f9b4c30 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+15:59:35.456  12811 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.PersonREST@498b30a3
+15:59:35.491  12846 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.simulator.remote.wisdom.impl.SimulationREST@f894659
+15:59:35.701  13056 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.ClockREST@1f3027a0
+15:59:35.740  13095 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.DeviceREST@2b24895a
+15:59:35.784  13139 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.EventBroadcast@4f9c0948
+15:59:35.842  13197 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.ZoneREST@60a3a46
+15:59:35.877  13232 [main] INFO  org.wisdom.router.RequestRouter - Adding routes from fr.liglab.adele.icasa.remote.wisdom.impl.iCasaREST@1bf8c49e
+15:59:36.034  13389 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@74e50395 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/runtime.
+15:59:36.035  13390 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@74e50395 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications.
+15:59:36.035  13390 [main] INFO  o.o.c.c.activators.ConfigDeployer - File creation event received for /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/applications/ActimetryRestServiceClient-1.cfg
+15:59:36.040  13395 [main] INFO  o.o.c.c.activators.ConfigDeployer - Updating configuration ActimetryRestServiceClient.040d5dce-6661-48b5-b19e-06a3ddcfc766 in the configuration admin, configuration: {}
+15:59:36.050  13405 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@74e50395 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/target/distribution/habits.monitoring.distribution.to.test/conf.
+15:59:36.051  13406 [main] INFO  o.o.c.c.activators.DirectoryMonitor - Opening deployer org.ow2.chameleon.core.activators.ConfigDeployer@74e50395 for directory /home/aygalinc/IntelliJWorkSpace/iCasa/applications/habits-monitoring/tests/adapter-tests/scripts.
+15:59:42.447  19802 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer0 to transformer are not immediately available. It will wait...
+15:59:42.487  19842 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer0 are not immediately available. It will wait...
+15:59:42.572  19927 [main] INFO  i.platform.apps.habits-monitoring - A new proxy has been found, id simulatedDevice
+15:59:43.793  21148 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+15:59:43.794  21149 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+15:59:43.797  21152 [pool-3-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+15:59:43.798  21153 [pool-3-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+15:59:43.802  21157 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+15:59:43.809  21164 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+15:59:43.815  21170 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:43.815  21170 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+15:59:43.815  21170 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+15:59:43.815  21170 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T15:59:30
+15:59:43.815  21170 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+15:59:43.815  21170 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:43.818  21173 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:43.822  21177 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+15:59:43.822  21177 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+15:59:43.823  21178 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T15:59:30
+15:59:43.823  21178 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+15:59:43.823  21178 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:43.858  21213 [main] INFO  i.platform.apps.habits-monitoring - A proxy is now outside from the zone, id simulatedDevice
+15:59:43.859  21214 [main] WARN  cilia.runtime - PushButtonCollector is invalid
+15:59:45.073  22428 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer1 to transformer are not immediately available. It will wait...
+15:59:45.115  22470 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer1 are not immediately available. It will wait...
+15:59:45.177  22532 [main] INFO  f.l.a.h.m.p.PhotometerCollector - A new proxy has been found, id simulatedDevice
+15:59:46.364  23719 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+15:59:46.364  23719 [pool-3-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+15:59:46.365  23720 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+15:59:46.366  23721 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:46.366  23721 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+15:59:46.366  23721 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+15:59:46.367  23722 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T15:59:30
+15:59:46.367  23722 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+15:59:46.367  23722 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:46.423  23778 [main] INFO  f.l.a.h.m.p.PhotometerCollector - A proxy is now outside from the zone, id simulatedDevice
+15:59:47.638  24993 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer2 to transformer are not immediately available. It will wait...
+15:59:47.681  25036 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer2 are not immediately available. It will wait...
+15:59:47.753  25108 [main] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id simulatedDevice
+15:59:48.948  26303 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+15:59:48.950  26305 [pool-3-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+15:59:48.952  26307 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+15:59:48.953  26308 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:48.954  26309 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+15:59:48.955  26310 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+15:59:48.956  26311 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T15:59:30
+15:59:48.961  26316 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->unknown
+15:59:48.963  26318 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:49.027  26382 [main] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A proxy is now outside from the zone, id simulatedDevice
+15:59:50.240  27595 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer3 to transformer are not immediately available. It will wait...
+15:59:50.280  27635 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer3 are not immediately available. It will wait...
+15:59:50.346  27701 [main] INFO  f.l.a.h.m.m.sensor.MeasureCollector - A new proxy has been found, id simulatedDevice
+15:59:51.552  28907 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+15:59:51.553  28908 [pool-3-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+15:59:51.554  28909 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+15:59:51.555  28910 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:51.555  28910 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+15:59:51.555  28910 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+15:59:51.555  28910 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2014-05-07T15:59:30
+15:59:51.555  28910 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->zoneId
+15:59:51.555  28910 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:51.612  28967 [main] INFO  f.l.a.h.m.m.sensor.MeasureCollector - A proxy is now outside from the zone, id simulatedDevice
+15:59:52.292  29647 [main] WARN  cilia.runtime - Services to bind generator-mesures_transformer4 to transformer are not immediately available. It will wait...
+15:59:52.333  29688 [main] WARN  cilia.runtime - Services to bind transformer to generator-mesures_transformer4 are not immediately available. It will wait...
+15:59:52.511  29866 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-84fd30afff
+15:59:52.592  29947 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-77ebda7fff
+15:59:52.661  30016 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-13d06103ff
+15:59:52.725  30080 [Thread-48] INFO  f.l.a.h.m.p.sensor.MeasureCollector - A new proxy has been found, id PresenceSensor-12b28069ff
+15:59:52.777  30132 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+15:59:52.778  30133 [pool-3-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+15:59:52.778  30133 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+15:59:52.779  30134 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:52.779  30134 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+15:59:52.779  30134 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+15:59:52.779  30134 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2013-04-02T00:00:00
+15:59:52.779  30134 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->bathroom
+15:59:52.779  30134 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:53.664  31019 [pool-6-thread-1] INFO  f.l.a.h.m.m.generator.MeasureFilter - reliability superior to 50%
+15:59:53.665  31020 [pool-3-thread-1] INFO  f.l.a.h.m.m.g.MeasureEnricher - The gatewayId was set
+15:59:53.665  31020 [pool-5-thread-1] INFO  f.l.a.h.m.m.g.MeasureTransformer - The patientId was set
+15:59:53.666  31021 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:53.666  31021 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Patient ID --->Paul
+15:59:53.666  31021 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Sensor ID --->shake
+15:59:53.666  31021 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Date  --->2013-04-02T00:00:00
+15:59:53.666  31021 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - Localisation  --->bedroom
+15:59:53.666  31021 [pool-8-thread-1] INFO  f.l.a.h.m.e.w.i.RestProcessEventService - ==================================================
+15:59:58.661  36016 [main] INFO  f.l.a.i.s.s.e.i.ScriptExecutorImpl - Stopping Executor Thread

@@ -98,7 +98,9 @@
                 </div>
             </td>
             <!--<td><input type="checkbox" data-bind="attr:{disabled: $root.disableAccessRight}, checked: hasAccessRight, checkedAccessRight:{root: $root, data: $data}" /></td>-->
-            <td><img class="deviceIcon" data-bind="attr: { src: imgSrc }, click: $root.showDeviceWindow "></img></td>
+            <td><img class="deviceIcon" data-bind="attr: { src: imgSrc }, click: $root.showDeviceWindow "/>
+                <!--<span data-bind="text: type"></span>-->
+            </td>
             <td><a data-bind="text: name, click: $root.showDeviceWindow"/></td>
             <td data-bind="text: location"></td>
         </tr>

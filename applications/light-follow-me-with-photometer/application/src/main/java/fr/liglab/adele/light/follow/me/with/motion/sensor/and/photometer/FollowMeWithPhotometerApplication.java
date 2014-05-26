@@ -46,9 +46,11 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
 
     private final BundleContext bundleContext;
 
-    private final Object m_lock ;
+    private final Object m_devicelock ;
 
     private final Object m_taskLock ;
+
+    private final Object m_taskRunningLock ;
     /**
      * The name of the location for unknown value
      */
@@ -66,13 +68,13 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
     private static final long DEFAULT_TIMEOUT = 5000;
 
 
-    private  static final float MIN_LUX = (float)50.0 ;
+    private  static final float MIN_LUX = (float)20.0 ;
 
-    private Map<String,TurnOffLightTask> turnOffLightTaskMap = new HashMap<String, TurnOffLightTask>();
+    private final Map<String,TurnOffLightTask> turnOffLightTaskMap = new HashMap<String, TurnOffLightTask>();
 
-    private Map<String,ServiceRegistration> serviceRegistrationMap = new HashMap<String, ServiceRegistration>();
+    private final Map<String,ServiceRegistration> serviceRegistrationMap = new HashMap<String, ServiceRegistration>();
 
-    protected static Logger logger = LoggerFactory.getLogger(Constants.ICASA_LOG + "."+APPLICATION_ID);
+    protected final static Logger logger = LoggerFactory.getLogger(Constants.ICASA_LOG + "."+APPLICATION_ID);
 
 
     private long getTimeout() {
@@ -113,15 +115,23 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
     /** Bind Method for null dependency */
     @RequiresDevice(id = "motionSensors", type = "bind")
     public synchronized void bindMotionSensor(MotionSensor motionSensor, Map properties) {
-        logger.trace("Register Listener to MotionSensor" + motionSensor.getSerialNumber());
-        motionSensor.addListener(this);
+        try{
+            logger.info("Add Listener to MotionSensor " + properties.get(MotionSensor.DEVICE_SERIAL_NUMBER));
+            motionSensor.addListener(this);
+        }catch (Exception e ){
+            logger.warn(" Unbind motion ", e);
+        }
     }
 
     /** Unbind Method for null dependency */
     @RequiresDevice(id = "motionSensors", type = "unbind")
     public synchronized void unbindMotionSensor(MotionSensor motionSensor, Map properties) {
-        logger.trace("Remove Listener to MotionSensor" + motionSensor.getSerialNumber());
-        motionSensor.removeListener(this);
+        try{
+            logger.info("Remove Listener to MotionSensor " + properties.get(MotionSensor.DEVICE_SERIAL_NUMBER));
+            motionSensor.removeListener(this);
+        }catch (Exception e ){
+            logger.warn(" Unbind motion ", e);
+        }
     }
 
     /**
@@ -130,7 +140,12 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
      */
     @RequiresDevice(id="binaryLights", type="bind")
     public synchronized void bindBinaryLight(BinaryLight binaryLight, Map<Object, Object> properties) {
-        binaryLight.addListener(this);
+        try{
+            logger.info("Add Listener to BinaryLight " + properties.get(BinaryLight.DEVICE_SERIAL_NUMBER) );
+            binaryLight.addListener(this);
+        }catch (Exception e){
+            logger.warn(" bind binary ", e);
+        }
     }
 
     /**
@@ -139,18 +154,22 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
      */
     @RequiresDevice(id="binaryLights", type="unbind")
     public synchronized void unbindBinaryLight(BinaryLight binaryLight, Map<Object, Object> properties) {
-        binaryLight.removeListener(this);
-        String serialNumber = (String)properties.get(DimmerLight.DEVICE_SERIAL_NUMBER);
-        for (LocatedDevice locatedDevice : _contextMgr.getDevices()){
-            if ( locatedDevice.getSerialNumber().equals(serialNumber)){
-                GenericDevice genericDevice = locatedDevice.getDeviceObject();
-                if (genericDevice instanceof BinaryLight){
-                    BinaryLight light = (BinaryLight) genericDevice;
-                    light.turnOff();
+        try{
+            logger.info("Remove Listener to BinaryLight " + properties.get(BinaryLight.DEVICE_SERIAL_NUMBER) );
+            binaryLight.removeListener(this);
+            String serialNumber = (String)properties.get(DimmerLight.DEVICE_SERIAL_NUMBER);
+            for (LocatedDevice locatedDevice : _contextMgr.getDevices()){
+                if ( locatedDevice.getSerialNumber().equals(serialNumber)){
+                    GenericDevice genericDevice = locatedDevice.getDeviceObject();
+                    if (genericDevice instanceof BinaryLight){
+                        BinaryLight light = (BinaryLight) genericDevice;
+                        light.turnOff();
+                    }
                 }
             }
+        }catch (Exception e){
+            logger.warn(" unbind binary ", e);
         }
-
     }
 
     /**
@@ -159,7 +178,12 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
      */
     @RequiresDevice(id="dimmerLigths", type="bind")
     public synchronized void bindDimmerLight(DimmerLight dimmerLight, Map<Object, Object> properties) {
-        dimmerLight.addListener(this);
+        try{
+            logger.info("Add Listener to BinaryLight " + properties.get(DimmerLight.DEVICE_SERIAL_NUMBER) );
+            dimmerLight.addListener(this);
+        }catch (Exception e){
+            logger.warn(" bind dimmer : ", e);
+        }
     }
 
     /**
@@ -168,16 +192,22 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
      */
     @RequiresDevice(id="dimmerLigths", type="unbind")
     public synchronized void unbindDimmerLight(DimmerLight dimmerLight, Map<Object, Object> properties) {
-        dimmerLight.removeListener(this);
-        String serialNumber = (String)properties.get(DimmerLight.DEVICE_SERIAL_NUMBER);
-        for (LocatedDevice locatedDevice : _contextMgr.getDevices()){
-            if ( locatedDevice.getSerialNumber().equals(serialNumber)){
-                GenericDevice genericDevice = locatedDevice.getDeviceObject();
-                if (genericDevice instanceof DimmerLight){
-                    DimmerLight light = (DimmerLight) genericDevice;
-                    light.setPowerLevel(0.0);
+        try{
+            dimmerLight.removeListener(this);
+
+            logger.info("Remove Listener to BinaryLight " + properties.get(DimmerLight.DEVICE_SERIAL_NUMBER) );
+            String serialNumber = (String)properties.get(DimmerLight.DEVICE_SERIAL_NUMBER);
+            for (LocatedDevice locatedDevice : _contextMgr.getDevices()){
+                if ( locatedDevice.getSerialNumber().equals(serialNumber)){
+                    GenericDevice genericDevice = locatedDevice.getDeviceObject();
+                    if (genericDevice instanceof DimmerLight){
+                        DimmerLight light = (DimmerLight) genericDevice;
+                        light.setPowerLevel(0.0);
+                    }
                 }
             }
+        }catch (Exception e){
+            logger.warn(" Unbind dimmer : ", e);
         }
     }
 
@@ -185,44 +215,52 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
     private Clock clock;
 
     public FollowMeWithPhotometerApplication(BundleContext context) {
-        this.bundleContext = context;
-        m_lock = new Object();
-        m_taskLock= new Object();
+            this.bundleContext = context;
+            m_devicelock = new Object();
+            m_taskLock= new Object();
+            m_taskRunningLock = new Object();
     }
 
     /** Component Lifecycle Method */
     @Invalidate
     public void stop() {
+        try{
+            logger.info(" Light follow Me Stop ...");
+
         /*
          * It is extremely important to unregister the device listener. Otherwise, iCasa will continue to send
          * notifications to the unpredictable and invalid component instance. This will also causes problem when the
          * bundle is stopped as iCasa will still hold a reference on the device listener object. Consequently, it (and
          * its bundle) won't be garbage collected causing a memory issue known as stale reference.
          */
-        for (MotionSensor motionSensorSensor : motionSensors) {
-            motionSensorSensor.removeListener(this);
-        }
-
-        for (BinaryLight binaryLight : binaryLights) {
-            binaryLight.removeListener(this);
-        }
-
-        for (DimmerLight dimmerLight : dimmerLigths) {
-            dimmerLight.removeListener(this);
-        }
-
-        synchronized (m_taskLock){
-            for(String key : serviceRegistrationMap.keySet()){
-                serviceRegistrationMap.get(key).unregister();
+            for (MotionSensor motionSensorSensor : motionSensors) {
+                motionSensorSensor.removeListener(this);
             }
-            turnOffLightTaskMap.clear();
-            serviceRegistrationMap.clear();
+
+            for (BinaryLight binaryLight : binaryLights) {
+                binaryLight.removeListener(this);
+            }
+
+            for (DimmerLight dimmerLight : dimmerLigths) {
+                dimmerLight.removeListener(this);
+            }
+
+            synchronized (m_taskLock){
+                for(String key : serviceRegistrationMap.keySet()){
+                    serviceRegistrationMap.get(key).unregister();
+                }
+                turnOffLightTaskMap.clear();
+                serviceRegistrationMap.clear();
+            }
+        }catch (Exception e){
+            logger.warn(" Stop Light follow Me :  ", e);
         }
     }
 
     /** Component Lifecycle Method */
     @Validate
     public void start() {
+        logger.info(" Light follow Me Start ...");
         _clock.resume();
     }
 
@@ -266,7 +304,7 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
     public void devicePropertyModified(GenericDevice device, String propertyName, Object oldValue, Object newValue) {
 
         if (device instanceof BinaryLight){
-            synchronized (m_lock){
+            synchronized (m_devicelock){
                 BinaryLight changingBinaryLight = (BinaryLight) device;
                 if (propertyName.equals(BinaryLight.LOCATION_PROPERTY_NAME)){
                     changingBinaryLight.turnOff();
@@ -274,7 +312,7 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
             }
         }
         if (device instanceof DimmerLight){
-            synchronized (m_lock){
+            synchronized (m_devicelock){
                 DimmerLight changingDimmerLight = (DimmerLight) device;
                 if (propertyName.equals(DimmerLight.LOCATION_PROPERTY_NAME)){
                     changingDimmerLight.setPowerLevel(0);
@@ -297,20 +335,19 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
     public void deviceEvent(GenericDevice device, Object data) {
         logger.info(" Detection Event ");
         String location = String.valueOf(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME));
-        if (!location.equals(LOCATION_UNKNOWN)){
+        if ((location != null) && (!location.equals(LOCATION_UNKNOWN))){
             if(getMediaIlluminance(location) < getMinLux() ){
-                synchronized (m_lock){
+                synchronized (m_devicelock){
                     setOnAllLightsInLocation(location);
                 }
                 synchronized (m_taskLock){
+
                     if (turnOffLightTaskMap.containsKey(location)){
                         serviceRegistrationMap.get(location).unregister();
                         serviceRegistrationMap.remove(location);
                         turnOffLightTaskMap.remove(location);
                     }
-                    TurnOffLightTask task = new TurnOffLightTask() ;
-                    task.setExecutionDate(clock.currentTimeMillis() + getTimeout());
-                    task.setLocation(location);
+                    TurnOffLightTask task = new TurnOffLightTask(location,clock.currentTimeMillis() + getTimeout()) ;
                     turnOffLightTaskMap.put(location, task);
                     ServiceRegistration computeTempTaskSRef = bundleContext.registerService(ScheduledRunnable.class.getName(), task,new Hashtable());
                     serviceRegistrationMap.put(location,computeTempTaskSRef);
@@ -383,7 +420,7 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
      * @param location : the given location
      * @return the list of matching Photometers
      */
-    private synchronized Set<Photometer> getPhotometerFromLocation(String location) {
+    private  Set<Photometer> getPhotometerFromLocation(String location) {
         Set<Photometer> photometersLocation = new HashSet<Photometer>();
 
         //if zone does nor exist, return an empty list.
@@ -403,7 +440,7 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
     }
 
 
-    private double getMediaIlluminance(String location) {
+    private synchronized double getMediaIlluminance(String location) {
         Set<Photometer> photometers = getPhotometerFromLocation(location);
         double illuminance = 0;
         if(photometers.size()<1){
@@ -421,23 +458,20 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
     /**
      * This task is charged of turn off the light.
      */
-    public class TurnOffLightTask implements ScheduledRunnable {
+    private class TurnOffLightTask implements ScheduledRunnable {
 
 
 
-        private long executionDate ;
+        private final long executionDate ;
 
-        private String location;
+        private final String location;
 
-        private String groupName = "Light-Follow-Me-With-Motion-Sensor-And-Photometer";
+        private final String groupName ;
 
-        public void setExecutionDate(long executionDate) {
-            this.executionDate = executionDate;
-        }
-
-        public void setLocation(String location) {
+        public TurnOffLightTask(String location,long executionDate){
             this.location = location;
-            this.groupName =  "Light-Follow-Me-With-Motion-Sensor-And-Photometer-"+location;
+            groupName = "Light-Follow-Me-With-Motion-Sensor-And-Photometer-"+location;
+            this.executionDate = executionDate;
         }
 
         @Override
@@ -446,13 +480,13 @@ public class FollowMeWithPhotometerApplication implements DeviceListener,ClockLi
         }
 
         @Override
-        public String getGroup() {
+        public synchronized String getGroup() {
             return groupName;
         }
 
         @Override
         public void run() {
-            synchronized (m_lock){
+            synchronized (m_devicelock){
                 setOffAllLightsInLocation(location);
             }
         }

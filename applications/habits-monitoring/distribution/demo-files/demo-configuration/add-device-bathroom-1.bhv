@@ -1,4 +1,0 @@
-<behavior startdate="2011.10.20.00.00.01" factor ="360">
-	<add-device deviceID="SekuSensor-ABC-4254564-C" type="org.medical.device.presence.impl.SimulatedPresenceSensorImpl"/>
-	<configure-device deviceID="SekuSensor-ABC-4254564-C" room="bathroom"/>
-</behavior>
