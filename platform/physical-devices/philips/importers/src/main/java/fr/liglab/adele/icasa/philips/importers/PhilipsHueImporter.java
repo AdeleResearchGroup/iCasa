@@ -68,7 +68,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
 
 
-    @ServiceProperty(name = "target", value = "(&(discovery.philips.device.name=*)(scope=generic))")
+    @ServiceProperty(name = "target", value = "(discovery.philips.device.name=*)")
     private String filter;
 
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
@@ -118,14 +118,17 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
         LOG.debug("Creating proxy for the light " + pojo.getLightId());
 
         Hashtable properties = new Hashtable();
-        //properties.putAll(endpointDescription.getProperties());
         properties.put("philips.device.light", pojo.getObject());
-        properties.put("philips.device.bridge",pojo.getBridge());
+        //properties.put("bridge.filter",pojo.getBridgeID());
+        //properties.put("PHBridge.filter","(bridgeId="+pojo.getBridgeID()+")");
+        Hashtable filters = new Hashtable();
+        filters.put("PHBridge","(bridgeId="+pojo.getBridgeID()+")");
+        properties.put("requires.filters",filters);
         properties.put(GenericDevice.DEVICE_SERIAL_NUMBER,pojo.getLightId());
 
         try {
-            instance = philipsHueLightFactory.createComponentInstance(properties);
-            ServiceRegistration sr = new IpojoServiceRegistration(
+           instance = philipsHueLightFactory.createComponentInstance(properties);
+           ServiceRegistration sr = new IpojoServiceRegistration(
                     instance);
             super.handleImportDeclaration(importDeclaration);
 

@@ -25,13 +25,14 @@ import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.light.ColoredLight;
 import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
+import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.util.Map;
 
 /**
  * Philips Hue light implementation that allows to change its state (color, brightness)
@@ -41,14 +42,14 @@ import java.awt.*;
 public class PhilipsHueLight extends AbstractDevice implements
         ColoredLight,PowerObservable {
 
-    private final Object m_lock;
+
     @ServiceProperty(name = GenericDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
     private String serialNumber;
 
-    @ServiceProperty(name="philips.device.light",mandatory = true)
+    @Property(name="philips.device.light",mandatory = true)
     private PHLight light;
 
-    @ServiceProperty(name="philips.device.bridge",mandatory = true)
+    @Requires(id="PHBridge")
     private PHBridge bridge;
 
     private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueLight.class);
@@ -62,11 +63,6 @@ public class PhilipsHueLight extends AbstractDevice implements
         bridge.updateLightState(light, lightState);
         super.setPropertyValue(DimmerLight.DIMMER_LIGHT_POWER_LEVEL,0.0d);
         super.setPropertyValue(PowerObservable.POWER_OBSERVABLE_CURRENT_POWER_LEVEL,0.0d );
-        float[] xy = PHUtilities.calculateXYFromRGB(Color.RED.getRed(),Color.RED.getGreen(),Color.RED.getBlue(), light.getIdentifier());
-        lightState.setX(xy[0]);
-        lightState.setY(xy[1]);
-        bridge.updateLightState(light, lightState);
-        m_lock = new Object();
     }
 
     @Override

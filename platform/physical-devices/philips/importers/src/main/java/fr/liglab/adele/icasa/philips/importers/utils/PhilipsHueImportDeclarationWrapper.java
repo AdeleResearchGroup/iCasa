@@ -35,8 +35,6 @@ package fr.liglab.adele.icasa.philips.importers.utils;
  * #L%
  */
 
-import com.philips.lighting.hue.sdk.bridge.impl.PHBridgeImpl;
-import com.philips.lighting.model.PHBridge;
 import org.osgi.framework.Filter;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
@@ -45,8 +43,8 @@ import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 
 import java.util.Map;
 
-import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static fr.liglab.adele.icasa.philips.importers.utils.Constants.*;
+import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 
 public class PhilipsHueImportDeclarationWrapper {
 
@@ -55,8 +53,8 @@ public class PhilipsHueImportDeclarationWrapper {
     private String id;
     private String name;
     private String type;
+    private String bridgeID;
     private Object object;
-    private Object bridge;
 
     private PhilipsHueImportDeclarationWrapper() {
 
@@ -87,7 +85,7 @@ public class PhilipsHueImportDeclarationWrapper {
         wrapper.name = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_NAME);
         wrapper.type = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_TYPE);
         wrapper.object = metadata.get(DISCOVERY_PHILIPS_DEVICE_OBJECT);
-        wrapper.bridge = metadata.get(DISCOVERY_PHILIPS_BRIDGE_OBJECT);
+        wrapper.bridgeID = (String) metadata.get(DISCOVERY_PHILIPS_BRIDGE_FILTER);
 
         return wrapper;
     }
@@ -108,11 +106,11 @@ public class PhilipsHueImportDeclarationWrapper {
         return object;
     }
 
-    public Object getBridge() {
-        return bridge;
+    public String getBridgeID() {
+        return bridgeID;
     }
 
-public String getUniqueId(){
-    return (object.toString()+object.hashCode()+bridge.toString()+bridge.hashCode());
-}
+    public String getUniqueId(){
+        return (object.toString()+ bridgeID);
+    }
 }

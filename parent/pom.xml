@@ -48,7 +48,7 @@ See the License for the specific language governing permissions and
         <netty.version>4.0.12.Final</netty.version>
         <wisdom.version>0.5.1</wisdom.version>
         <jackson.version>2.3.2</jackson.version>
-        <fuchsia.version>0.0.3-SNAPSHOT</fuchsia.version>
+        <fuchsia.version>0.0.2</fuchsia.version>
     </properties>
 
     <developers>

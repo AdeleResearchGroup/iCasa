@@ -53,6 +53,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static fr.liglab.adele.icasa.philips.importers.utils.Constants.*;
+
 @Component
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
@@ -68,7 +70,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
     private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
 
-    @ServiceProperty(name = "target", value = "(&(discovery.philips.bridge.type=*)(scope=generic))")
+    @ServiceProperty(name = "target", value = "(discovery.philips.bridge.type=*)")
     private String filter;
 
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
@@ -120,6 +122,8 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
         PhilipsHueBridgeImportDeclarationWrapper pojo= PhilipsHueBridgeImportDeclarationWrapper.create(importDeclaration);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
+
+        props.put("bridgeId",pojo.getId());
 
         ServiceRegistration bridgeService=context.registerService(new String[]{PHBridge.class.getName(),PHBridgeImpl.class.getName()},pojo.getBridgeObject(),props);
 
@@ -178,24 +182,20 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         @Override
         public void run() {
-
-            for(PHLight light:bridge.getResourceCache().getAllLights()){
-
+           for(PHLight light:bridge.getResourceCache().getAllLights()){
                 if(!light.isReachable()){
-
                     ServiceRegistration sr=lamps.remove(light.getIdentifier());
                     if(sr!=null)
                         sr.unregister();
 
                 }else if(!lamps.keySet().contains(light.getIdentifier())){
-
                     Map<String, Object> metadata = new HashMap<String, Object>();
 
                     metadata.put("id", light.getIdentifier());
-                    metadata.put("discovery.philips.device.name", light.getModelNumber());
-                    metadata.put("discovery.philips.device.type", light.getClass().getName());
-                    metadata.put("discovery.philips.device.object", light);
-                    metadata.put("discovery.philips.device.bridge", bridge);
+                    metadata.put(DISCOVERY_PHILIPS_DEVICE_NAME, light.getModelNumber());
+                    metadata.put(DISCOVERY_PHILIPS_DEVICE_TYPE, light.getClass().getName());
+                    metadata.put(DISCOVERY_PHILIPS_DEVICE_OBJECT, light);
+                    metadata.put(DISCOVERY_PHILIPS_BRIDGE_FILTER, bridge.toString());
 
                     Dictionary metatableService=new Hashtable(metadata);
 
