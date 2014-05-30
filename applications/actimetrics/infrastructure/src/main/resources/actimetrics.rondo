@@ -1,6 +1,6 @@
-package fr.liglab.adele.lightFollowMe.rondo
+package fr.liglab.adele.actimetrics.rondo
 
-def infra = infrastructure "icasa-LightFollowMe",false,false, {
+def infra = infrastructure "icasa-actimetrics",false,false, {
 
 
     String userDir = System.getProperty("user.dir")

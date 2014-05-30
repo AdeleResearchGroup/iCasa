@@ -32,6 +32,7 @@
 	<modules>
 		<module>application</module>
         <module>distribution</module>
+        <module>infrastructure</module>
         <module>packages</module>			
 	</modules>
    <build>
