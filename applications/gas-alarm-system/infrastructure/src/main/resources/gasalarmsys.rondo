@@ -1,0 +1,40 @@
+package fr.liglab.adele.gasalarmsys.rondo
+
+def infra = infrastructure "icasa-GasAlarmSys",false,false, {
+
+    resource mailServiceImpl { bundle
+    		state "ACTIVE"
+    		'bundle-version' "1.2.6.SNAPSHOT"
+    		source "mvn:org.ow2.chameleon.mail/mail-service-impl/1.0.0"
+    }
+
+    resource mailServiceApi { bundle
+        		state "ACTIVE"
+        		'bundle-version' "1.2.6.SNAPSHOT"
+        		source "mvn:org.ow2.chameleon.mail/mail-service/1.0.0"
+    }
+
+	resource iCasaMailservice { bundle
+		state "ACTIVE"
+		'bundle-version' "1.2.6.SNAPSHOT"
+		source "mvn:fr.liglab.adele.icasa.apps/mail.service/1.2.6-SNAPSHOT"
+	}dependsOn("mailServiceImpl")
+
+
+	    resource gasAlarm { bundle
+            		state "ACTIVE"
+            		'bundle-version' "1.2.6.SNAPSHOT"
+            		source "mvn:fr.liglab.adele.icasa.apps/gas.alarm.sys.application/1.2.6-SNAPSHOT"
+        }dependsOn("iCasaMailservice")
+
+}
+
+
+application id:"GasAlarmSys", name:"GasAlarmSys", version:"1.2.6-SNAPSHOT", vendor:"LIG - equipe ADELE",{
+	
+	with infra
+
+}
+
+
+println rondo.name
