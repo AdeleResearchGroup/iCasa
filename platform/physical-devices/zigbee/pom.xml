@@ -31,7 +31,6 @@
 	<modules>
 		<module>zigbee-driver-api</module>
 		<module>zigbee-library-install</module>
-        <module>zigbee-library-bundle</module>
 		<module>zigbee-driver-impl</module>
 		<module>zigbee-device-discovery</module>
 		<module>zigbee-device-factories</module>
