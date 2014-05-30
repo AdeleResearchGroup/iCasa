@@ -35,7 +35,7 @@ import java.io.PrintStream;
  */
 @Component(name = "AccessManagerUpdateCommand")
 @Provides
-@Instantiate(name="access-manager-update-command-1")
+@Instantiate(name="access-manager-update-command-0")
 public class AccessManagerUpdateCommand extends AbstractCommand {
 
 

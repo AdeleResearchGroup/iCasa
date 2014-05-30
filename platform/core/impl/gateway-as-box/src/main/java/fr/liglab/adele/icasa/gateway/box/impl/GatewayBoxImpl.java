@@ -28,7 +28,7 @@ import java.util.Hashtable;
 import java.util.UUID;
 
 
-@Instantiate(name = "gateway-box-device-1")
+@Instantiate(name = "gateway-box-device-0")
 @Component(name = "gateway-box-device")
 public class GatewayBoxImpl extends AbstractDevice implements Box {
 

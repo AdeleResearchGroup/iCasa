@@ -1,3 +1,0 @@
-<behavior>
-	<fault-device room="kitchen" delay="50" deviceID="1234"/>
-</behavior>

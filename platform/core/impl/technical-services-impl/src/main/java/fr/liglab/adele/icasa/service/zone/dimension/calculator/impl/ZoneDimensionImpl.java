@@ -29,12 +29,13 @@ import fr.liglab.adele.icasa.service.zone.dimension.calculator.ZoneDimension;
 import fr.liglab.adele.icasa.service.zone.size.calculator.ZoneSizeCalculator;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 
 /**
@@ -47,8 +48,9 @@ import java.util.logging.Logger;
 @Provides(specifications = {TechnicalService.class, ZoneDimension.class})
 class ZoneDimensionImpl implements TechnicalService, ZoneDimension, ZoneTrackerCustomizer, PreferenceChangeListener {
 
-	private final static Logger L = Logger.getLogger(ZoneDimension.class.getName());
 
+    private static final Logger L = LoggerFactory
+            .getLogger(ZoneDimensionImpl.class.getName());
 	/**
 	 * The array of zone variables computed by this technical service.
 	 */
@@ -155,7 +157,7 @@ class ZoneDimensionImpl implements TechnicalService, ZoneDimension, ZoneTrackerC
         final double volume = area * z;
 
 
-        if (L.isLoggable(Level.INFO)) {
+        if (L.isInfoEnabled()) {
             L.info(String.format("Update the zone %s area = %f m2 ; volume = %f m3",
                     zone.getId(), area, volume));
         }

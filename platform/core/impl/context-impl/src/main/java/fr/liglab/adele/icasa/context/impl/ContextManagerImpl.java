@@ -39,7 +39,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component
 @Provides
-@Instantiate(name = "ContextManager-1")
+@Instantiate(name = "ContextManager-0")
 public class ContextManagerImpl implements ContextManager {
 
 	@Requires(optional = true)

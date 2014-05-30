@@ -143,9 +143,10 @@ public class RestProcessEventService implements ProcessEventService {
             }
         };
 
-        Thread exeThread = new Thread(runWSCall);
-        exeThread.start();
-
+    //    Thread exeThread = new Thread(runWSCall);
+  //      exeThread.start();
+        SendTask task = new  SendTask( sensorId,  patientId,  eventType,  dateTime,  reliability,  value);
+        akka.dispatch(task,akka.fromThread());
         return true;
     }
 

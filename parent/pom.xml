@@ -44,10 +44,10 @@ See the License for the specific language governing permissions and
         <!-- ADELE Projects -->
         <AdeleBaseVersion>1.2.4-SNAPSHOT</AdeleBaseVersion>
         <DistributionTestVersion>${AdeleBaseVersion}</DistributionTestVersion>
-        <ciliaVersion>1.7.4</ciliaVersion>
         <mimepullVersion>1.4</mimepullVersion>
         <netty.version>4.0.12.Final</netty.version>
-        <wisdom.version>0.4</wisdom.version>
+        <wisdom.version>0.5.1</wisdom.version>
+        <jackson.version>2.3.2</jackson.version>
     </properties>
 
     <developers>
@@ -148,21 +148,6 @@ See the License for the specific language governing permissions and
                 <enabled>true</enabled>
             </releases>
         </repository>
-        <!-- Cilia -->
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>cilia-release</id>
-            <name>cilia-release</name>
-            <url>http://repository-cilia.forge.cloudbees.com/release</url>
-        </repository>
-        <repository>
-            <snapshots />
-            <id>cilia-snapshot</id>
-            <name>cilia-snapshot</name>
-            <url>http://repository-cilia.forge.cloudbees.com/snapshot</url>
-        </repository>
         <!-- ADELE repositories -->
         <repository>
             <snapshots>
@@ -197,19 +182,6 @@ See the License for the specific language governing permissions and
             <url>http://repository-icasa.forge.cloudbees.com/snapshot</url>
         </pluginRepository>
 
-        <!-- Cilia -->
-        <pluginRepository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>cilia-pl-release</id>
-            <url>http://repository-cilia.forge.cloudbees.com/release</url>
-        </pluginRepository>
-        <pluginRepository>
-            <snapshots />
-            <id>cilia-pl-snapshot</id>
-            <url>http://repository-cilia.forge.cloudbees.com/snapshot</url>
-        </pluginRepository>
     </pluginRepositories>
 
     <scm>
@@ -270,6 +242,20 @@ See the License for the specific language governing permissions and
                 <artifactId>akka-system</artifactId>
                 <version>${wisdom.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.wisdom-framework</groupId>
+                <artifactId>wisdom-monitor</artifactId>
+                <version>${wisdom.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.wisdom-framework</groupId>
+                <artifactId>thymeleaf-template-engine</artifactId>
+                <version>${wisdom.version}</version>
+            </dependency>
+
             <!-- end of wisdom  -->
 
             <!-- Distribution Base-->
@@ -368,22 +354,27 @@ See the License for the specific language governing permissions and
             <dependency>
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-xml</artifactId>
-                <version>2.3.0</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.3.0</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>2.3.0</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>2.3.0</version>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <dependency>

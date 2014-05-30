@@ -21,7 +21,7 @@ import org.apache.felix.ipojo.annotations.*;
 
 
 @Component(name="empty-app")
-@Instantiate(name="empty-app-1")
+@Instantiate(name="empty-app-0")
 public class EmptyApplication {
 
     @Validate
