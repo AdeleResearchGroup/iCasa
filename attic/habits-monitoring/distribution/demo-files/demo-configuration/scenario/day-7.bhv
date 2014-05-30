@@ -1,0 +1,11 @@
+<behavior startdate="2011.10.26.00.00.01" factor ="1440">	
+	<move room="bedroom" person="Aurelie" />
+	<delay value="514" />
+	<move room="livingroom" person="Aurelie" />
+	<delay value="500" />
+	<move room="kitchen" person="Aurelie" />
+	<delay value="330" />	
+	<move room="bathroom" person="Aurelie" />
+	<delay value="90" />	
+	<move room="kitchen" person="Aurelie" />
+</behavior>

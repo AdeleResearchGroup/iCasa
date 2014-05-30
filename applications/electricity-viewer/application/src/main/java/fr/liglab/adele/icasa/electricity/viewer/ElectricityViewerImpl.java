@@ -27,7 +27,7 @@ import java.util.*;
  *
  */
 @Component(name = "electricity-viewer")
-@Instantiate(name = "electricity-viewer-1")
+@Instantiate(name = "electricity-viewer-0")
 @Provides(specifications = ElectricityViewer.class)
 public class ElectricityViewerImpl implements  ZoneListener, LocatedDeviceListener,ElectricityViewer {
 

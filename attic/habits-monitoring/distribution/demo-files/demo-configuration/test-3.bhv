@@ -1,0 +1,8 @@
+<behavior>
+	<move room="bedroom" delay="60" />
+	<move room="livingroom" delay="40" />
+	<move room="kitchen" delay="50" />
+	<move room="bathroom" delay="10" />
+	<move room="bedroom" delay="100" />
+	<move room="kitchen" delay="20" />	
+</behavior>

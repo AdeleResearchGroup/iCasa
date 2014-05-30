@@ -20,7 +20,6 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.felix.ipojo.ConfigurationException;
 import org.apache.felix.ipojo.InstanceManager;
@@ -29,6 +28,8 @@ import org.apache.felix.ipojo.annotations.Handler;
 import org.apache.felix.ipojo.metadata.Element;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -72,7 +73,8 @@ public class CommandHandler extends PrimitiveHandler {
 
 	private final String DEFAULT_NAMESPACE = "default";
 
-	private static final Logger L = Logger.getLogger(CommandHandler.class.getName());
+    private static final Logger L = LoggerFactory
+            .getLogger(CommandHandler.class.getName());
 
 	/**
 	 * the commandNames set contains the name of the command to be

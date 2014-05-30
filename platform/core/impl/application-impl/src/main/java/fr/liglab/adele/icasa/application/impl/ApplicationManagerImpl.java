@@ -236,13 +236,13 @@ public class ApplicationManagerImpl implements ApplicationManager, ServiceTracke
         ApplicationDescription applicationDescription = (ApplicationDescription) o;
         writeLock.lock();
         try{
-                Application application = _appPerId.get(applicationDescription.getId());
-                for(ApplicationListener listener : _listeners){
-                    listener.removeApplication(application);
-                    for(Bundle bundle : application.getBundles()){
-                        listener.bundleRemoved(application, bundle.getSymbolicName());
-                    }
+            Application application = _appPerId.get(applicationDescription.getId());
+            for(ApplicationListener listener : _listeners){
+                listener.removeApplication(application);
+                for(Bundle bundle : application.getBundles()){
+                    listener.bundleRemoved(application, bundle.getSymbolicName());
                 }
+            }
 
             _appPerId.remove(((ApplicationDescription) o).getId());
         }finally {

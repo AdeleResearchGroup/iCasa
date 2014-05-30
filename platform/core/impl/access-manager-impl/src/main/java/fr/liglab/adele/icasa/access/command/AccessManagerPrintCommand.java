@@ -34,7 +34,7 @@ import java.io.PrintStream;
  */
 @Component(name = "AccessManagerPrintCommand")
 @Provides
-@Instantiate(name="access-manager-print-command-1")
+@Instantiate(name="access-manager-print-command-0")
 public class AccessManagerPrintCommand extends AbstractCommand{
 
     private static final Signature SEE_RIGHT = new Signature (new String[]{ScriptLanguage.APPLICATION_ID, ScriptLanguage.DEVICE_ID});

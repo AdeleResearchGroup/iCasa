@@ -26,7 +26,7 @@ import org.json.JSONObject;
  *
  */
 @Component(name = "iCasa-access-manager-event-broadcast")
-@Instantiate(name = "iCasa-access-manager-event-broadcast-1")
+@Instantiate(name = "iCasa-access-manager-event-broadcast-0")
 public class AccessManagerEventBroadcast implements AccessRightManagerListener{
 
     @Requires

@@ -29,7 +29,7 @@ import java.util.*;
  *
  */
 @Component(name = "electricity-model")
-@Instantiate(name = "electricity-model-1")
+@Instantiate(name = "electricity-model-0")
 @Provides(specifications = PhysicalModel.class)
 public class ElectricityPMImpl implements PhysicalModel, ZoneListener, LocatedDeviceListener {
 

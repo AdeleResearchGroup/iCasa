@@ -37,7 +37,7 @@ import fr.liglab.adele.icasa.location.ZoneListener;
 import java.util.*;
 
 @Component(name = "temperature-model")
-@Instantiate(name = "temperature-model-1")
+@Instantiate(name = "temperature-model-0")
 @Provides(specifications = PhysicalModel.class)
 public class TemperaturePMImpl implements PhysicalModel, ZoneListener, LocatedDeviceListener {
 

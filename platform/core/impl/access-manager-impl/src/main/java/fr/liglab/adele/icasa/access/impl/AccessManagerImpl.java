@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 
  */
 @Component(name = "iCasaAccessManager")
-@Instantiate(name = "iCasaAccessManager-1")
+@Instantiate(name = "iCasaAccessManager-0")
 @Provides
 public class AccessManagerImpl implements AccessManager {
 

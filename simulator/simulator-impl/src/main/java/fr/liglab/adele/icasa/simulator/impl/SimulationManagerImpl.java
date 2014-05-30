@@ -36,13 +36,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component
 @Provides
-@Instantiate(name = "SimulationManager-1")
+@Instantiate(name = "SimulationManager-0")
 public class SimulationManagerImpl implements SimulationManager, PersonLocationService {
 
 	/*
 	 * WARNING : UPDATE following filter if you change the component instance name !!!
 	 */
-	@Requires(filter = "(!(instance.name=SimulationManager-1))")
+	@Requires(filter = "(!(instance.name=SimulationManager-0))")
 	private ContextManager manager;
 
 	@Requires(optional = true)

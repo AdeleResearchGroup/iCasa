@@ -45,7 +45,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 @Component(name = "illuminance-model")
-@Instantiate(name = "illuminance-model-1")
+@Instantiate(name = "illuminance-model-0")
 @Provides(specifications = PhysicalModel.class)
 public class IlluminancePMImpl implements PhysicalModel, ZoneListener, LocatedDeviceListener {
 
