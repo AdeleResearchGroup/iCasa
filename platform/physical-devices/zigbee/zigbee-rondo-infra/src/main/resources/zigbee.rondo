@@ -13,7 +13,7 @@ static def zigbee(){
 		resource zigbeedevice("factories")dependsOn("zigbee.driver.impl")
 		resource zigbeedevice("importer")dependsOn("zigbee.driver.impl")
 		resource zigbeedriver("api")
-		resource zigbeedriver("impl")dependsOn("nrjavaserial")
+		resource zigbeedriver("impl")dependsOn("nrjavaserial","filejson")
 
 		resource nrjavaserial { bundle
 					'bundle-symbolic-name' "nrjavaserial"
