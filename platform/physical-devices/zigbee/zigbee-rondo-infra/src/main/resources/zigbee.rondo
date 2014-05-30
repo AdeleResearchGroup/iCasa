@@ -9,9 +9,17 @@ def infra = infrastructure "icasa-zigbee",false,false, {
 static def zigbee(){
 	infrastructure "zigbee",true,true,{
 
-		resource zigbeedevice("discovery")dependsOn("zigbee.driver.impl","filejson")
-		resource zigbeedevice("factories")dependsOn("zigbee.driver.impl")
-		resource zigbeedevice("importer")dependsOn("zigbee.driver.impl")
+         resource rose-core { bundle
+            'bundle-symbolic-name' "rose-core"
+    		state "ACTIVE"
+    		'bundle-version' ""1.2.3"
+    		source "mvn:org.ow2.chameleon.rose/rose-core/1.2.3"
+         }
+
+
+		resource zigbeedevice("discovery")dependsOn("zigbee.driver.impl","filejson","rose-core")
+		resource zigbeedevice("factories")dependsOn("zigbee.driver.impl","rose-core")
+		resource zigbeedevice("importer")dependsOn("zigbee.driver.impl","rose-core")
 		resource zigbeedriver("api")
 		resource zigbeedriver("impl")dependsOn("nrjavaserial","filejson")
 

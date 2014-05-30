@@ -2,6 +2,13 @@ package fr.liglab.adele.philips.rondo
 
 def infra = infrastructure "icasa-philipsHUE",true,true, {
 
+      resource rose-core { bundle
+            'bundle-symbolic-name' "rose-core"
+    		state "ACTIVE"
+    		'bundle-version' ""1.2.3"
+    		source "mvn:org.ow2.chameleon.rose/rose-core/1.2.3"
+         }
+
   resource philipsSDK { bundle
   		'bundle-symbolic-name' "org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle"
   		state "ACTIVE"
@@ -14,7 +21,7 @@ def infra = infrastructure "icasa-philipsHUE",true,true, {
 			state "ACTIVE"
 			'bundle-version' "1.2.6.SNAPSHOT"
 			source "mvn:fr.liglab.adele.icasa/philips.device.discovery/1.2.6-SNAPSHOT"
-	}dependsOn(philipsSDK)
+	}dependsOn("philipsSDK","rose-core")
 
    String userDir = System.getProperty("user.dir")
 
