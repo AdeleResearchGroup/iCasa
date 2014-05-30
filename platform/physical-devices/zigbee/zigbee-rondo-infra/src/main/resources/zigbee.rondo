@@ -1,0 +1,54 @@
+package fr.liglab.adele.zigbee.rondo
+
+def infra = infrastructure "icasa-zigbee",false,false, {
+    resource configuration zigbeefileconf()
+
+    resource zigbeecore zigbee() dependsOn(configuration)
+
+
+}
+
+static def zigbee(){
+    infrastructure "zigbee",true,true,{
+
+        resource zigbeediscovery zigbeedevice("discovery")dependsOn(zigbeeDriverImpl)
+        resource zigbeefactory zigbeedevice("factories")dependsOn(zigbeeDriverImpl)
+        resource zigbeeimporter zigbeedevice("importer")dependsOn(zigbeeDriverImpl)
+        resource zigbeeDriverAPI zigbeedriver("api")
+        resource zigbeeDriverImpl zigbeedriver("impl")
+
+    }
+}
+
+static def icasaBundle(String name, String bundleVersion, String version) {
+    resource name, { bundle
+        'bundle-symbolic-name' name
+        state "ACTIVE"
+        'bundle-version' bundleVersion
+        source "mvn:fr.liglab.adele.icasa/"+name+"/"+version
+    }
+}
+
+static def zigbeedevice(String name){
+    icasaBundle("zigbee.device."+name, "1.2.6.SNAPSHOT", "1.2.6-SNAPSHOT")
+}
+
+
+static def zigbeedriver(String name){
+    icasaBundle("zigbee.driver."+name, "1.2.6.SNAPSHOT", "1.2.6-SNAPSHOT")
+}
+
+static def zigbeefileconf(){
+
+    String userDir = System.getProperty("user.dir")
+
+	 resource "filejson" { file
+		source "file://"+userDir+"/artifacts/rose-conf-zigbee_driver.json"
+	 	path userDir+"/application/rose-conf-zigbee_driver.json"
+	 }
+
+}
+
+println rondo.name
+
+with infra

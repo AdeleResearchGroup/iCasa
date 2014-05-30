@@ -35,6 +35,7 @@
 		<module>zigbee-device-discovery</module>
 		<module>zigbee-device-factories</module>
 		<module>zigbee-device-importer</module>
+        <module>zigbee-rondo-infra</module>
 	</modules>
    <build>
       <plugins>
