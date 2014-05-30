@@ -1,10 +1,9 @@
 package fr.liglab.adele.zigbee.rondo
 
 def infra = infrastructure "icasa-zigbee",false,false, {
-    resource configuration zigbeefileconf()
+    resource zigbeeconfiguration zigbeefileconf()
 
-    resource zigbeecore zigbee() dependsOn(configuration)
-
+    resource zigbeecore zigbee() dependsOn(zigbeeconfiguration)
 
 }
 
@@ -15,7 +14,14 @@ static def zigbee(){
         resource zigbeefactory zigbeedevice("factories")dependsOn(zigbeeDriverImpl)
         resource zigbeeimporter zigbeedevice("importer")dependsOn(zigbeeDriverImpl)
         resource zigbeeDriverAPI zigbeedriver("api")
-        resource zigbeeDriverImpl zigbeedriver("impl")
+        resource zigbeeDriverImpl zigbeedriver("impl")dependsOn(nrjavaserial)
+
+        resource nrjavaserial { bundle
+                    'bundle-symbolic-name' "nrjavaserial"
+                    state "ACTIVE"
+                    'bundle-version' "3.8.8"
+                    source "mvn:com.neuronrobotics/nrjavaserial/3.8.8"
+        }
 
     }
 }
