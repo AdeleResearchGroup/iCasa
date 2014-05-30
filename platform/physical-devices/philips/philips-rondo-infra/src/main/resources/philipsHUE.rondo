@@ -1,6 +1,6 @@
 package fr.liglab.adele.philips.rondo
 
-def infra = infrastructure "icasa-philipsHUE",false,false, {
+def infra = infrastructure "icasa-philipsHUE",true,true, {
 
   resource philipsSDK { bundle
   		'bundle-symbolic-name' "org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle"
@@ -9,18 +9,18 @@ def infra = infrastructure "icasa-philipsHUE",false,false, {
   		source "mvn:fr.liglab.adele.icasa/org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle/1.2.6-SNAPSHOT"
   }
 
-    resource philipsDiscovery { bundle
-    		'bundle-symbolic-name' "philips.device.discovery"
-    		state "ACTIVE"
-    		'bundle-version' "1.2.6.SNAPSHOT"
-    		source "mvn:fr.liglab.adele.icasa/philips.device.discovery/1.2.6-SNAPSHOT"
-    }dependsOn(philipsSDK)
+	resource philipsDiscovery { bundle
+			'bundle-symbolic-name' "philips.device.discovery"
+			state "ACTIVE"
+			'bundle-version' "1.2.6.SNAPSHOT"
+			source "mvn:fr.liglab.adele.icasa/philips.device.discovery/1.2.6-SNAPSHOT"
+	}dependsOn(philipsSDK)
 
    String userDir = System.getProperty("user.dir")
 
 	 resource philipsconfiguration { file
 		source "file://"+userDir+"/artifacts/rose-conf-philips_driver.json"
-	 	path userDir+"/application/rose-conf-philips_driver.json"
+	 	path "application/rose-conf-philips_driver.json"
 	 }
 
 }
