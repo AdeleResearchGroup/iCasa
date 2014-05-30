@@ -33,6 +33,7 @@
         <module>huesdk-resources</module>
         <module>huesdk-bundle</module>
 		<module>discovery</module>
+        <module>philips-rondo-infra</module>
 	</modules>
    <build>
       <plugins>
