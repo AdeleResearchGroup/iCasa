@@ -44,6 +44,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationRegistrationManager;
+import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
@@ -67,7 +69,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     private ServiceReference serviceReference;
 
-    private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
+    private Map<String,TimerTask> lampDiscoveryTaskMap =new HashMap<String, TimerTask>();
     private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
 
     @ServiceProperty(name = "target", value = "(discovery.philips.bridge.type=*)")
@@ -102,14 +104,15 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     private void cleanup(){
 
+        for(TimerTask task : lampDiscoveryTaskMap.values()){
+            task.cancel();
+        }
+
+        timer.purge();
         timer.cancel();
 
         for(Map.Entry<String,ServiceRegistration> bridgeEntry:bridges.entrySet()){
             bridges.remove(bridgeEntry.getKey()).unregister();
-        }
-
-        for(Map.Entry<String,ServiceRegistration> bridgeEntry:lamps.entrySet()){
-            lamps.remove(bridgeEntry.getKey()).unregister();
         }
 
     }
@@ -127,7 +130,11 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         ServiceRegistration bridgeService=context.registerService(new String[]{PHBridge.class.getName(),PHBridgeImpl.class.getName()},pojo.getBridgeObject(),props);
 
-        timer.schedule(new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject()),0,5000);
+        FetchBridgeLampsTask task = new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject(),context);
+
+        lampDiscoveryTaskMap.put(pojo.getId(),task);
+
+        timer.schedule(task,0,5000);
 
         super.handleImportDeclaration(importDeclaration);
 
@@ -142,18 +149,11 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         PhilipsHueBridgeImportDeclarationWrapper pojo= PhilipsHueBridgeImportDeclarationWrapper.create(importDeclaration);
 
-        try {
+        lampDiscoveryTaskMap.get(pojo.getId()).cancel();
 
-            for(Map.Entry<String,ServiceRegistration> entry:lamps.entrySet()){
-                ServiceRegistration sr=lamps.remove(entry.getKey());
-                if(sr!=null) {
-                    sr.unregister();
-                }
-            }
+        lampDiscoveryTaskMap.remove(pojo.getId());
 
-        }catch(IllegalStateException e){
-            LOG.error("failed unregistering lamp", e);
-        }
+        timer.purge();
 
         try {
             ServiceRegistration sr=bridges.remove(pojo.getId());
@@ -174,44 +174,62 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     class FetchBridgeLampsTask extends TimerTask {
 
+        private final Object lock ;
+
         private final PHBridge bridge;
 
-        public FetchBridgeLampsTask(PHBridge bridge){
+        private final DeclarationRegistrationManager declarationManager ;
+
+        public FetchBridgeLampsTask(PHBridge bridge,BundleContext context){
             this.bridge=bridge;
+            declarationManager = new DeclarationRegistrationManager(context,ImportDeclaration.class);
+            lock = new Object();
         }
 
-        @Override
         public void run() {
-           for(PHLight light:bridge.getResourceCache().getAllLights()){
+            for(PHLight light:bridge.getResourceCache().getAllLights()){
                 if(!light.isReachable()){
-                    ServiceRegistration sr=lamps.remove(light.getIdentifier());
-                    if(sr!=null)
-                        sr.unregister();
+                    for(Object obj : declarationManager.getDeclarations()){
+                        Declaration declaration = (Declaration) obj;
+                        if(declaration.getMetadata().containsValue(light.getIdentifier())){
+                            declarationManager.unregisterDeclaration(declaration);
+                            break;
+                        }
+                    }
+                }else {
 
-                }else if(!lamps.keySet().contains(light.getIdentifier())){
-                    Map<String, Object> metadata = new HashMap<String, Object>();
-
-                    metadata.put("id", light.getIdentifier());
-                    metadata.put(DISCOVERY_PHILIPS_DEVICE_NAME, light.getModelNumber());
-                    metadata.put(DISCOVERY_PHILIPS_DEVICE_TYPE, light.getClass().getName());
-                    metadata.put(DISCOVERY_PHILIPS_DEVICE_OBJECT, light);
-                    metadata.put(DISCOVERY_PHILIPS_BRIDGE_FILTER, bridge.toString());
-
-                    Dictionary metatableService=new Hashtable(metadata);
-
-                    ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
-
-                    ServiceRegistration sr=context.registerService(ImportDeclaration.class,declaration,metatableService);
-
-                    if(PhilipsHueBridgeImporter.this.lamps.containsKey(light.getIdentifier())){
-                        LOG.warn("Lamp with identifier {} alreadu exists",light.getIdentifier());
+                    // Check if Declaration already registered
+                    boolean alreadyRegistered = false;
+                    for(Object obj : declarationManager.getDeclarations()){
+                        Declaration declaration = (Declaration) obj;
+                        if(declaration.getMetadata().containsValue(light.getIdentifier())){
+                            alreadyRegistered = true;
+                            break;
+                        }
                     }
 
-                    PhilipsHueBridgeImporter.this.lamps.put(light.getIdentifier(),sr);
+                    if (!alreadyRegistered){
+                        Map<String, Object> metadata = new HashMap<String, Object>();
 
+                        metadata.put("id", light.getIdentifier());
+                        metadata.put(DISCOVERY_PHILIPS_DEVICE_NAME, light.getModelNumber());
+                        metadata.put(DISCOVERY_PHILIPS_DEVICE_TYPE, light.getClass().getName());
+                        metadata.put(DISCOVERY_PHILIPS_DEVICE_OBJECT, light);
+                        metadata.put(DISCOVERY_PHILIPS_BRIDGE_FILTER,bridge.getResourceCache().getBridgeConfiguration().getIpAddress() );
+
+                        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+                        declarationManager.registerDeclaration(declaration);
+                    }
                 }
             }
         }
+
+        public boolean cancel() {
+            declarationManager.unregisterAll();
+            return super.cancel();
+        }
+
     }
 }
 

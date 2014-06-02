@@ -32,8 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.Map;
-
 /**
  * Philips Hue light implementation that allows to change its state (color, brightness)
  */
@@ -41,7 +39,6 @@ import java.util.Map;
 @Provides(specifications={GenericDevice.class, DimmerLight.class, ColoredLight.class,PowerObservable.class})
 public class PhilipsHueLight extends AbstractDevice implements
         ColoredLight,PowerObservable {
-
 
     @ServiceProperty(name = GenericDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
     private String serialNumber;
@@ -58,12 +55,25 @@ public class PhilipsHueLight extends AbstractDevice implements
         super();
         super.setPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME, GenericDevice.LOCATION_UNKNOWN);
         super.setPropertyValue(DimmerLight.DIMMER_LIGHT_MAX_POWER_LEVEL, 8.5d);
-        PHLightState lightState = new PHLightState();
-        lightState.setOn(false);
-        bridge.updateLightState(light, lightState);
         super.setPropertyValue(DimmerLight.DIMMER_LIGHT_POWER_LEVEL,0.0d);
         super.setPropertyValue(PowerObservable.POWER_OBSERVABLE_CURRENT_POWER_LEVEL,0.0d );
     }
+
+
+    /** Component Lifecycle Method */
+    @Invalidate
+    public void stop() {
+
+    }
+
+    /** Component Lifecycle Method */
+    @Validate
+    public void start() {
+        PHLightState lightState = new PHLightState();
+        lightState.setOn(false);
+        bridge.updateLightState(light, lightState);
+    }
+
 
     @Override
     public String getSerialNumber() {
@@ -84,16 +94,17 @@ public class PhilipsHueLight extends AbstractDevice implements
 
         if (level != 0.0){
 
-            PHLightState lightState = new PHLightState();
+                PHLightState lightState = new PHLightState();
 
-            lightState.setOn(true);
-            bridge.updateLightState(light, lightState);
+                lightState.setOn(true);
+                bridge.updateLightState(light, lightState);
+                LOG.info(" Update brightness to " + (int)(level*254));
+                lightState.setBrightness((int)(level*254));
+                bridge.updateLightState(light, lightState);
+                super.setPropertyValue(DimmerLight.DIMMER_LIGHT_POWER_LEVEL,level);
+                getCurrentConsumption();
+                return  level;
 
-            lightState.setBrightness((int)(level*254));
-            bridge.updateLightState(light, lightState);
-            super.setPropertyValue(DimmerLight.DIMMER_LIGHT_POWER_LEVEL,level);
-            getCurrentConsumption();
-            return level;
         }
         else{
             PHLightState lightState = new PHLightState();
