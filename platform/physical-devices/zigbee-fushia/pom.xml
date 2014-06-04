@@ -19,36 +19,18 @@
 		<groupId>fr.liglab.adele.icasa</groupId>
 		<artifactId>parent</artifactId>
       <version>1.2.6-SNAPSHOT</version>
-      <relativePath>../../parent</relativePath>
+      <relativePath>../../../parent</relativePath>
 	</parent>
 
 	<!-- Project Descrkiption -->
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>physical.devices</artifactId>
+	<artifactId>zigbee.fushia.physical.devices</artifactId>
 	<packaging>pom</packaging>
 	<name>${productName} :: ${projectName}</name>
 
-    <profiles>
-        <profile>
-            <id>all</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>zigbee-fushia</module>
-                <module>zigbee</module>
-                <module>philips</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>release</id>
-            <modules>
-                <module>zigbee</module>
-                <module>philips</module>
-            </modules>
-        </profile>
-    </profiles>
-
+	<modules>
+        <module>usb-discovery</module>
+	</modules>
    <build>
       <plugins>
          <plugin>
