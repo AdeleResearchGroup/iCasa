@@ -30,6 +30,7 @@
 
 	<modules>
         <module>usb-discovery</module>
+        <module>zigbee-dongle-importer</module>
 	</modules>
    <build>
       <plugins>
