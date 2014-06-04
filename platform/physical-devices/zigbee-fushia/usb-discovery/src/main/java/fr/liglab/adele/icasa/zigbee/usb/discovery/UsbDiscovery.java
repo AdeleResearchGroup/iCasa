@@ -144,18 +144,15 @@ public class UsbDiscovery extends AbstractDiscoveryComponent {
 
                 synchronized (m_lock){
                     LOG.info("Device disconnet, id: " +  descriptor.idVendor() +":" +descriptor.idProduct());
-                    Set<ImportDeclaration> importDeclarationsToUnregister = new HashSet<ImportDeclaration>();
+                    ImportDeclaration importDeclarationsToUnregister = null;
                     for(ImportDeclaration declaration : m_parent.getImportDeclarations()){;
-
-                        String idVendor = (String)declaration.getMetadata().get("usb.discovery.idVendor");
-                        String idProduct = (String)declaration.getMetadata().get("usb.discovery.idProduct");
-                        String idDeclaration = new String(idVendor+":"+idProduct);
-                        if (idCurrentDevice.equals(idDeclaration)){
-                            importDeclarationsToUnregister.add(declaration);
+                        if ( ((String)declaration.getMetadata().get("usb.discovery.idVendor")).equals(idCurrentDevice) ){
+                            importDeclarationsToUnregister = declaration;
+                            break;
                         }
                     }
-                    for(ImportDeclaration declaration : importDeclarationsToUnregister){
-                        m_parent.unregisterImportDeclaration(declaration);
+                    if(importDeclarationsToUnregister != null ){
+                        m_parent.unregisterImportDeclaration(importDeclarationsToUnregister);
                     }
                 }
             }
@@ -165,6 +162,7 @@ public class UsbDiscovery extends AbstractDiscoveryComponent {
 
         private ImportDeclaration generateImportDeclaration(Device device,DeviceDescriptor descriptor) {
             Map<String, Object> metadata = new HashMap<String, Object>();
+            metadata.put("usb.discovery.id",Short.toString(descriptor.idVendor())+":"+Short.toString(descriptor.idProduct()));
             metadata.put("usb.discovery.idVendor",Short.toString(descriptor.idVendor()));
             metadata.put("usb.discovery.idProduct", Short.toString(descriptor.idProduct()));
             metadata.put("usb.discovery.device.object", device);
