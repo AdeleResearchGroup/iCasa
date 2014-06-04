@@ -36,14 +36,13 @@
             </activation>
             <modules>
                 <module>zigbee-fushia</module>
-                <module>zigbee</module>
                 <module>philips</module>
             </modules>
         </profile>
         <profile>
             <id>release</id>
             <modules>
-                <module>zigbee</module>
+                <module>zigbee-fushia</module>
                 <module>philips</module>
             </modules>
         </profile>

@@ -22,4 +22,5 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 public class ZigbeeDongleFactory {
 
 
+
 }
