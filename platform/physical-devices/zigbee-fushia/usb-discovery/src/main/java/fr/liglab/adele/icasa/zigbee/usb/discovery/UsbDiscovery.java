@@ -35,8 +35,6 @@ public class UsbDiscovery extends AbstractDiscoveryComponent {
 
     HotplugCallbackHandle callbackHandle = new HotplugCallbackHandle();
 
-    private final Map<String,ImportDeclaration> registeredImportDeclaration = new HashMap<String, ImportDeclaration>();
-
     public UsbDiscovery(BundleContext bundleContext) {
         super(bundleContext);
     }
@@ -149,8 +147,8 @@ public class UsbDiscovery extends AbstractDiscoveryComponent {
                     Set<ImportDeclaration> importDeclarationsToUnregister = new HashSet<ImportDeclaration>();
                     for(ImportDeclaration declaration : m_parent.getImportDeclarations()){;
 
-                        String idVendor = (String)declaration.getMetadata().get("idVendor");
-                        String idProduct = (String)declaration.getMetadata().get("idProduct");
+                        String idVendor = (String)declaration.getMetadata().get("usb.discovery.idVendor");
+                        String idProduct = (String)declaration.getMetadata().get("usb.discovery.idProduct");
                         String idDeclaration = new String(idVendor+":"+idProduct);
                         if (idCurrentDevice.equals(idDeclaration)){
                             importDeclarationsToUnregister.add(declaration);
@@ -167,9 +165,9 @@ public class UsbDiscovery extends AbstractDiscoveryComponent {
 
         private ImportDeclaration generateImportDeclaration(Device device,DeviceDescriptor descriptor) {
             Map<String, Object> metadata = new HashMap<String, Object>();
-            metadata.put("idVendor",Short.toString(descriptor.idVendor()));
-            metadata.put("idProduct", Short.toString(descriptor.idProduct()));
-            metadata.put("device.object", device);
+            metadata.put("usb.discovery.idVendor",Short.toString(descriptor.idVendor()));
+            metadata.put("usb.discovery.idProduct", Short.toString(descriptor.idProduct()));
+            metadata.put("usb.discovery.device.object", device);
 
             return ImportDeclarationBuilder.fromMetadata(metadata).build();
         }
