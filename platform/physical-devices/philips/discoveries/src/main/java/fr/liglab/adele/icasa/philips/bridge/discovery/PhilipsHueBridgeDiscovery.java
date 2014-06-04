@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.philips.bridge.discovery;
+package fr.liglab.adele.icasa.philips.bridge.discovery;
 import com.philips.lighting.hue.sdk.*;
 import com.philips.lighting.hue.sdk.connection.impl.PHBridgeInternal;
 import com.philips.lighting.model.PHBridge;
