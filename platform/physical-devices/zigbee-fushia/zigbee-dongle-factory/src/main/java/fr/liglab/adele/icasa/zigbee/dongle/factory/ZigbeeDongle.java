@@ -1,6 +1,8 @@
 package fr.liglab.adele.icasa.zigbee.dongle.factory;
 
 import org.apache.felix.ipojo.annotations.*;
+import org.osgi.framework.BundleContext;
+import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.usb4java.*;
@@ -10,7 +12,7 @@ import org.wisdom.akka.impl.AkkaScheduler;
 import java.util.concurrent.Callable;
 
 @Component(name = "fr.liglab.adele.icasa.zigbee.dongle.factory.ZigbeeDongleFactory")
-public class ZigbeeDongle {
+public class ZigbeeDongle extends AbstractDiscoveryComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZigbeeDongle.class);
 
@@ -29,8 +31,8 @@ public class ZigbeeDongle {
     @Property(mandatory = true,name = "zigbee.dongle.product.id")
     String idProduct;
 
-    public ZigbeeDongle(){
-
+    public ZigbeeDongle(BundleContext context){
+        super(context);
     }
 
     @Validate
@@ -43,6 +45,11 @@ public class ZigbeeDongle {
     public void stop(){
         LOG.info("ZigbeeDongle Stop ");
 
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 
     public class DeviceDiscoveryTask implements Callable<Void> {

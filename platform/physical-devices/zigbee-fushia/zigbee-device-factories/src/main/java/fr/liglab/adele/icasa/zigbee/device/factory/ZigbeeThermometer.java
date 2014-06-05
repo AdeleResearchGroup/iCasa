@@ -19,27 +19,25 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
+import fr.liglab.adele.icasa.zigbee.dongle.api.Data;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDeviceListener;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDriver;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
-
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
-import fr.liglab.adele.icasa.device.zigbee.driver.Data;
-import fr.liglab.adele.icasa.device.zigbee.driver.DeviceInfo;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDeviceTracker;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
+
 
 /**
  *
  */
 @Component(name = "zigbeeThermometer")
 @Provides
-public class ZigbeeThermometer extends AbstractDevice implements Thermometer,
-		ZigbeeDevice {
+public class ZigbeeThermometer extends AbstractDevice implements Thermometer,ZigbeeDevice,ZigbeeDeviceListener {
 
 	@Requires
 	private ZigbeeDriver driver;
@@ -63,29 +61,9 @@ public class ZigbeeThermometer extends AbstractDevice implements Thermometer,
 	}
 
 	/**
-	 * Called when a new device has been discovered by the driver.
-	 * 
-	 * @param deviceInfo
-	 *            information about the device
-	 */
-	@Override
-	public void deviceAdded(DeviceInfo deviceInfo) {/* nothing to do */
-	}
-
-	/**
-	 * Called when a device has been removed by the driver.
-	 * 
-	 * @param deviceInfo
-	 *            information about the device
-	 */
-	@Override
-	public void deviceRemoved(DeviceInfo deviceInfo) {/* nothing to do */
-	}
-
-	/**
 	 * Called when a device data has changed.
 	 * 
-	 * @param address
+	 * @param moduleAddress
 	 *            a device module address
 	 * @param oldData
 	 *            previous device data
@@ -149,7 +127,7 @@ public class ZigbeeThermometer extends AbstractDevice implements Thermometer,
 	/**
 	 * Called when a device battery level has changed.
 	 * 
-	 * @param address
+	 * @param moduleAddress
 	 *            a device module address
 	 * @param oldBatteryLevel
 	 *            previous device battery level

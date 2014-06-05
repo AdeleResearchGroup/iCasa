@@ -15,6 +15,10 @@
  */
 package fr.liglab.adele.icasa.zigbee.device.factory;
 
+import fr.liglab.adele.icasa.zigbee.dongle.api.Data;
+import fr.liglab.adele.icasa.zigbee.dongle.api.DeviceInfo;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDeviceListener;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDriver;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -26,17 +30,14 @@ import fr.liglab.adele.icasa.device.DeviceEventType;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.motion.MotionSensor;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
-import fr.liglab.adele.icasa.device.zigbee.driver.Data;
-import fr.liglab.adele.icasa.device.zigbee.driver.DeviceInfo;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDeviceTracker;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
+
 
 /**
  *
  */
 @Component(name="zigbeeMotionSensor")
 @Provides
-public class ZigbeeMotionSensor extends AbstractDevice implements MotionSensor, ZigbeeDevice {
+public class ZigbeeMotionSensor extends AbstractDevice implements MotionSensor, ZigbeeDevice,ZigbeeDeviceListener {
 
     @Requires
     private ZigbeeDriver driver;
@@ -64,16 +65,6 @@ public class ZigbeeMotionSensor extends AbstractDevice implements MotionSensor, 
      *
      * @param deviceInfo information about the device
      */
-    @Override
-    public void deviceAdded(DeviceInfo deviceInfo)  {/*nothing to do*/}
-
-    /**
-     * Called when a device has been discovered by the driver.
-     *
-     * @param deviceInfo information about the device
-     */
-    @Override
-    public void deviceRemoved(DeviceInfo deviceInfo) {/*nothing to do*/}
 
     /**
      * Called when a device data has changed.

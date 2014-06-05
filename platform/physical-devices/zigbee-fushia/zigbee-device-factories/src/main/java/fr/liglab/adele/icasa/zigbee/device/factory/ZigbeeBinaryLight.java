@@ -3,22 +3,24 @@ package fr.liglab.adele.icasa.zigbee.device.factory;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
-import fr.liglab.adele.icasa.device.zigbee.driver.Data;
-import fr.liglab.adele.icasa.device.zigbee.driver.DeviceInfo;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDeviceTracker;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
+import fr.liglab.adele.icasa.zigbee.dongle.api.Data;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDeviceListener;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDriver;
 import org.apache.felix.ipojo.annotations.*;
 
 
 @Component(name = "zigbeeBinaryLight")
 @Provides(specifications={GenericDevice.class, BinaryLight.class})
-public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,ZigbeeDevice  {
+public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,ZigbeeDevice,ZigbeeDeviceListener {
 
     @ServiceProperty(name = GenericDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
     private String serialNumber;
 
     @Property(mandatory = true, name = "zigbee.moduleAddress")
     private String moduleAddress;
+
+    @Requires
+    private ZigbeeDriver driver;
 
     public ZigbeeBinaryLight() {
         super();
@@ -160,4 +162,5 @@ public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,Zig
             setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, newBatteryLevel);
         }
     }
+
 }

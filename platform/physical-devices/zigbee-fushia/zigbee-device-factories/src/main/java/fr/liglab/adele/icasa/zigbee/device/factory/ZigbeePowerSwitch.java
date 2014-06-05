@@ -19,21 +19,13 @@
 package fr.liglab.adele.icasa.zigbee.device.factory;
 
 import fr.liglab.adele.icasa.Constants;
-import fr.liglab.adele.icasa.device.zigbee.driver.DeviceInfo;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDeviceTracker;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Property;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
-
 import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.power.PowerSwitch;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
-import fr.liglab.adele.icasa.device.zigbee.driver.Data;
-import fr.liglab.adele.icasa.device.zigbee.driver.ZigbeeDriver;
-import org.omg.CORBA.PRIVATE_MEMBER;
+import fr.liglab.adele.icasa.zigbee.dongle.api.Data;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDeviceListener;
+import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDriver;
+import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 @Component(name="zigbeePowerSwitch")
 @Provides
-public class ZigbeePowerSwitch extends AbstractDevice implements PowerSwitch, ZigbeeDevice {
+public class ZigbeePowerSwitch extends AbstractDevice implements PowerSwitch, ZigbeeDevice,ZigbeeDeviceListener {
 
     @Requires
 	private ZigbeeDriver driver;
@@ -90,21 +82,6 @@ public class ZigbeePowerSwitch extends AbstractDevice implements PowerSwitch, Zi
         logger.error("Power switch status modification is not allowed");
 		return getStatus();
 	}
-    /**
-     * Called when a new device has been discovered by the driver.
-     *
-     * @param deviceInfo information about the device
-     */
-    @Override
-    public void deviceAdded(DeviceInfo deviceInfo) {/*nothing to do*/}
-
-    /**
-     * Called when a device has been discovered by the driver.
-     *
-     * @param deviceInfo information about the device
-     */
-    @Override
-    public void deviceRemoved(DeviceInfo deviceInfo){/*nothing to do*/}
 
     /**
      * Called when a device data has changed.
