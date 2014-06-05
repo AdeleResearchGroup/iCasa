@@ -60,10 +60,6 @@
                     <includeDependencies>true</includeDependencies>
                     <deploymentPackage>
                         <resources>
-                            <processedResource>
-                                <processor>org.osgi.deployment.rp.autoload</processor>
-                                <filePath>/src/main/resources/rose-conf-zigbee_driver.json</filePath>
-                            </processedResource>
                         </resources>
                     </deploymentPackage>
                 </configuration>
