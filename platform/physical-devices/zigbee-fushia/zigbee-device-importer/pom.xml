@@ -49,7 +49,14 @@
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>zigbee.dongle.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+    </dependencies>
 
     <!-- Build -->
     <build>
