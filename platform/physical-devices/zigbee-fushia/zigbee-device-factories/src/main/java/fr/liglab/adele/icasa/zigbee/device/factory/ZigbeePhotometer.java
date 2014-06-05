@@ -50,6 +50,16 @@ public class ZigbeePhotometer extends AbstractDevice implements Photometer,Zigbe
 		super.setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, 0f);
 	}
 
+    @Validate
+    public void start() {
+        driver.addListener(this);
+    }
+
+    @Invalidate
+    public void stop() {
+        driver.removeListener(this);
+    }
+
 	@Override
 	public String getSerialNumber() {
 		return serialNumber;

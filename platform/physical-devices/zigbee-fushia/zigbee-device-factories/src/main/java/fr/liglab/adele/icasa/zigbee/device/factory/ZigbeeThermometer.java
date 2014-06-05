@@ -22,11 +22,7 @@ import java.util.Locale;
 import fr.liglab.adele.icasa.zigbee.dongle.api.Data;
 import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDeviceListener;
 import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDriver;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Property;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.*;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
@@ -54,6 +50,16 @@ public class ZigbeeThermometer extends AbstractDevice implements Thermometer,Zig
 				GenericDevice.LOCATION_UNKNOWN);
 		super.setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, 0f);
 	}
+
+    @Validate
+    public void start() {
+        driver.addListener(this);
+    }
+
+    @Invalidate
+    public void stop() {
+        driver.removeListener(this);
+    }
 
 	@Override
 	public String getSerialNumber() {

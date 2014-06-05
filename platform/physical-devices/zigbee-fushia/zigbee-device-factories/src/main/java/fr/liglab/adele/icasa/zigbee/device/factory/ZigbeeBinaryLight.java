@@ -103,13 +103,14 @@ public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,Zig
 
     @Validate
     public void start() {
+        driver.addListener(this);
         boolean initialValue = getPowerStatusFromDevice();
         setPowerStatusToSimulatedDevice(initialValue); //TODO manage in a better way the initial value
     }
 
     @Invalidate
     public void stop() {
-
+        driver.removeListener(this);
     }
 
     /**

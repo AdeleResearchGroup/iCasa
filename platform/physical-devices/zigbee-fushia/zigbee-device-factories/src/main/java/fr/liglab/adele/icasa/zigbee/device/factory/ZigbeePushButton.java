@@ -59,6 +59,16 @@ public class ZigbeePushButton extends AbstractDevice implements PushButton, Zigb
         super.setPropertyValue(BATTERY_LEVEL, 0f);
     }
 
+    @Validate
+    public void start() {
+        driver.addListener(this);
+    }
+
+    @Invalidate
+    public void stop() {
+        driver.removeListener(this);
+    }
+
     @Override
     public boolean isPushed() {
         Boolean powerStatus = (Boolean) getPropertyValue(PushButton.PUSH_AND_HOLD);

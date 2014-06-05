@@ -47,6 +47,16 @@ public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSens
         super.setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, 0f);
 	}
 
+    @Validate
+    public void start() {
+        driver.addListener(this);
+    }
+
+    @Invalidate
+    public void stop() {
+        driver.removeListener(this);
+    }
+
 	@Override
 	public boolean getSensedPresence() {
 		Boolean presence = (Boolean) getPropertyValue(PRESENCE_SENSOR_SENSED_PRESENCE);

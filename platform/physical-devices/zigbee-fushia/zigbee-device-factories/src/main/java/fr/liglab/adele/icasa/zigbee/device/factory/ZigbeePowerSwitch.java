@@ -62,6 +62,16 @@ public class ZigbeePowerSwitch extends AbstractDevice implements PowerSwitch, Zi
         super.setPropertyValue(BATTERY_LEVEL, 0f);
 	}
 
+    @Validate
+    public void start() {
+        driver.addListener(this);
+    }
+
+    @Invalidate
+    public void stop() {
+        driver.removeListener(this);
+    }
+
 	@Override
 	public boolean getStatus() {
 		Boolean powerStatus = (Boolean) getPropertyValue(PowerSwitch.POWER_SWITCH_CURRENT_STATUS);
