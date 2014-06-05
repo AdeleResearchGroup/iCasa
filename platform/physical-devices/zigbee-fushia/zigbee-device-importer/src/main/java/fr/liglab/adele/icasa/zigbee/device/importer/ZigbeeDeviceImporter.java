@@ -1,7 +1,22 @@
+/**
+ *
+ *   Copyright 2011-2013 Universite Joseph Fourier, LIG, ADELE Research
+ *   Group Licensed under a specific end user license agreement;
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *     http://adeleresearchgroup.github.com/iCasa/snapshot/license.html
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
 package fr.liglab.adele.icasa.zigbee.device.importer;
 
 import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.zigbee.dongle.api.TypeCode;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.TypeCode;
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.InvalidSyntaxException;
@@ -20,7 +35,7 @@ import java.util.Map;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 @Component(name = "fr.liglab.adele.icasa.zigbee.device.importer.ZigbeeDeviceImporter")
-@Instantiate(name = "fr.liglab.adele.icasa.zigbee.device.importer.ZigbeeDeviceImporter-0")
+@Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class ZigbeeDeviceImporter extends AbstractImporterComponent {
 
 
