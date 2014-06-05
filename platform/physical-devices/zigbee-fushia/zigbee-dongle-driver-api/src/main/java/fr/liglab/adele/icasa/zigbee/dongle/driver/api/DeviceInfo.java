@@ -13,27 +13,46 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.zigbee.dongle.api;
+package fr.liglab.adele.icasa.zigbee.dongle.driver.api;
 
 import java.util.Date;
 
 /**
- * Represents a data of a device.
+ * Represents general information about a device.
  *
  */
-public interface Data {
+public interface DeviceInfo {
 
     /**
-     * Returns timestamp of data.
+     * Returns the module address of the device.
      *
-     * @return timestamp of data.
+     * @return the module address of the device.
      */
-	Date getTimeStamp();
+    String getModuleAddress();
+	
+	/**
+	 * Returns a battery percentage represented by a float number between 0 and 1.
+	 * 
+	 * @return a battery percentage represented by a float number between 0 and 1.
+	 */
+	float getBatteryLevel();
 
     /**
-     * Returns data in a string format.
+     * Returns device type code.
      *
-     * @return data in a string format.
+     * @return device type code.
      */
-	String getData();
+	TypeCode getTypeCode();
+	
+	/**
+	 * Returns device data.
+	 * @return device data.
+	 */
+	Data getDeviceData();
+	
+	/**
+	 * return last connexion date.
+	 * @return last connexion date.
+	 */
+	Date getLastConnexionDate();
 }

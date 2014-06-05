@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.zigbee.dongle.api;
+package fr.liglab.adele.icasa.zigbee.dongle.driver.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

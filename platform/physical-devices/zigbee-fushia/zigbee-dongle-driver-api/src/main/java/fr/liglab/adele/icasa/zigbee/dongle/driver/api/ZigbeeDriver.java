@@ -13,9 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.zigbee.dongle.api;
-
-import java.util.Set;
+package fr.liglab.adele.icasa.zigbee.dongle.driver.api;
 
 /**
  * Provides this service to implement a Zigbee driver.
