@@ -81,7 +81,7 @@ public class ZigbeeDongleImporter extends AbstractImporterComponent {
         try {
             zigbeeDongles.remove(importDeclaration.getMetadata().get("usb.discovery.id")).unregister();
         }catch(IllegalStateException e){
-            LOG.error("failed unregistering lamp", e);
+            LOG.error("failed unregistering Zigbee Dongle", e);
         }
 
         unhandleImportDeclaration(importDeclaration);
