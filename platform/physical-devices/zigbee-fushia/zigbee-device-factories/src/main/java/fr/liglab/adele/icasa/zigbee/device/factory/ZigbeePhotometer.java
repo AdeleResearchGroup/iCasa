@@ -18,10 +18,9 @@ package fr.liglab.adele.icasa.zigbee.device.factory;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.light.Photometer;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
-import fr.liglab.adele.icasa.zigbee.dongle.api.Data;
-import fr.liglab.adele.icasa.zigbee.dongle.api.DeviceInfo;
-import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDeviceListener;
-import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDriver;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDeviceListener;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDriver;
 import org.apache.felix.ipojo.annotations.*;
 
 import java.text.DecimalFormat;

@@ -19,9 +19,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-import fr.liglab.adele.icasa.zigbee.dongle.api.Data;
-import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDeviceListener;
-import fr.liglab.adele.icasa.zigbee.dongle.api.ZigbeeDriver;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDeviceListener;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDriver;
 import org.apache.felix.ipojo.annotations.*;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
