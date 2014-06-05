@@ -32,6 +32,8 @@
         <module>usb-discovery</module>
         <module>zigbee-dongle-importer</module>
         <module>zigbee-dongle-factory</module>
+        <module>zigbee-device-importer</module>
+        <module>zigbee-device-factories</module>
 	</modules>
    <build>
       <plugins>
