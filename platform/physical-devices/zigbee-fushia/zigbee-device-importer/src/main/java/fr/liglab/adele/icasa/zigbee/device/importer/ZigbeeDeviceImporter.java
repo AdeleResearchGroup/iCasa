@@ -47,8 +47,7 @@ public class ZigbeeDeviceImporter extends AbstractImporterComponent {
     @Requires(filter = "(factory.name=zigbeeThermometer)")
     private Factory thermometerFactory;
 
-    //TODO FILTER
-    @ServiceProperty(name = "target", value = "(=*)")
+    @ServiceProperty(name = "target", value = "(zigbee.device.type.serial.number=*)")
     private String filter;
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
