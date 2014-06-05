@@ -44,9 +44,6 @@ public class UsbDiscovery extends AbstractDiscoveryComponent {
         return null;
     }
 
-    /**
-     * This task is charged of turn off the light.
-     */
     public class EventHandlingThread implements Callable<Void> {
 
         /** If thread should abort. */
