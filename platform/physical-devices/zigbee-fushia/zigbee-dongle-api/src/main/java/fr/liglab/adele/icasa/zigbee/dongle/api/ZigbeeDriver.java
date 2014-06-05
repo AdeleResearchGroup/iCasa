@@ -40,4 +40,8 @@ public interface ZigbeeDriver {
      * @param dataToSet value to set
      */
 	void setData(String moduleAddress, String dataToSet);
+
+    void addListener(ZigbeeDeviceListener listener);
+
+    void removeListener(ZigbeeDeviceListener listener);
 }
