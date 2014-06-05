@@ -34,7 +34,7 @@ public class ZigbeeDongleImporter extends AbstractImporterComponent {
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @Requires(filter = "(factory.name=zigbeeDongleFactory)")
+    @Requires(filter = "(factory.name=fr.liglab.adele.icasa.zigbee.dongle.factory.ZigbeeDongleFactory)")
     private Factory zigbeeDongleFactory;
 
     @Override
@@ -55,6 +55,7 @@ public class ZigbeeDongleImporter extends AbstractImporterComponent {
 
         Hashtable properties = new Hashtable();
         properties.put("zigbee.dongle.id", importDeclaration.getMetadata().get("usb.discovery.id"));
+        properties.put("zigbee.dongle.object", importDeclaration.getMetadata().get("usb.discovery.device.object"));
 
         try {
             instance = zigbeeDongleFactory.createComponentInstance(properties);
