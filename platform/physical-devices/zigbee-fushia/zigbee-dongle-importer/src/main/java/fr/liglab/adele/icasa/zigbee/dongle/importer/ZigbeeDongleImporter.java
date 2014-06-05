@@ -56,6 +56,8 @@ public class ZigbeeDongleImporter extends AbstractImporterComponent {
         Hashtable properties = new Hashtable();
         properties.put("zigbee.dongle.id", importDeclaration.getMetadata().get("usb.discovery.id"));
         properties.put("zigbee.dongle.object", importDeclaration.getMetadata().get("usb.discovery.device.object"));
+        properties.put("zigbee.dongle.vendor.id", importDeclaration.getMetadata().get("usb.discovery.vendor.id"));
+        properties.put("zigbee.dongle.product.id", importDeclaration.getMetadata().get("usb.discovery.product.id"));
 
         try {
             instance = zigbeeDongleFactory.createComponentInstance(properties);
