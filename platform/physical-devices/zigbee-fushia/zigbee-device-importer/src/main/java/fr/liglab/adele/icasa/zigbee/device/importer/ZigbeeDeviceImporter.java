@@ -114,10 +114,8 @@ public class ZigbeeDeviceImporter extends AbstractImporterComponent {
 
             instance = factory.createComponentInstance(properties);
             ServiceRegistration sr = new IpojoServiceRegistration(instance);
-            super.handleImportDeclaration(importDeclaration);
-
             zigbeeDevices.put(serialNumber,sr);
-
+            super.handleImportDeclaration(importDeclaration);
         } catch (UnacceptableConfiguration unacceptableConfiguration) {
             LOG.error("Proxy instantiation failed",unacceptableConfiguration);
         } catch (MissingHandlerException e) {
@@ -130,15 +128,14 @@ public class ZigbeeDeviceImporter extends AbstractImporterComponent {
 
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
-        String serialNumber = (String) importDeclaration.getMetadata().get("zigbee.device.type.serial.number");
-
+        String serialNumber = (String) importDeclaration.getMetadata().get("zigbee.module.serial.number");
+        LOG.info(" denyImportDelcaration " + serialNumber);
         try {
-           zigbeeDevices.remove(serialNumber).unregister();
+            zigbeeDevices.remove(serialNumber).unregister();
         }catch(IllegalStateException e){
             LOG.error("Failed to unregister zigbee device " + serialNumber, e);
         }
-
-        unhandleImportDeclaration(importDeclaration);
+        super.unhandleImportDeclaration(importDeclaration);
 
     }
 
