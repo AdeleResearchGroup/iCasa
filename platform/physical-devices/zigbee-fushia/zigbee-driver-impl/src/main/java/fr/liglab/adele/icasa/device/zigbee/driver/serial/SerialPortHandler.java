@@ -89,18 +89,14 @@ public class SerialPortHandler {
      * @throws java.io.IOException
      */
     public void startListening(String port, int baud) throws IOException {
-      /*  for(String portC : NRSerialPort.getAvailableSerialPorts()) {
-            System.out.println("Port:"+portC);
-            System.out.println("Is equal");
-            if(port.equals(portC)) {
-                System.out.println(" Yes ");
-            }
-            else {
-                System.out.println(" NO !!");
-            }
-        }*/
         NRSerialPort serial = new NRSerialPort(port, baud);
-        serial.connect();
+        try{
+            serial.connect();
+        }catch(Exception e){
+            logger.error(" First connexion error ", e );
+            logger.info(" Second attempt to connect because " + serial.isConnected());
+            serial.connect();
+        }
 
         synchronized (streamLock) {
             this.socketOpened = true;
@@ -439,7 +435,7 @@ public class SerialPortHandler {
             if (expected != null && info.getDeviceData().getData().compareTo(expected) != 0) {
                 logger.debug("Resent request expected value");
                 List<Byte> response = buildResponseWithNewValue(ResponseType.REQUEST, moduleAddress, expected);
-                logger.trace("response sent to device " + moduleAddress + " : "	+ response.toString());
+                logger.debug("response sent to device " + moduleAddress + " : "	+ response.toString());
                 return (response);
             } else {
                 // logger.debug("Sent request value");
@@ -518,9 +514,9 @@ public class SerialPortHandler {
      * @param deviceInfo
      */
     private void notifyDeviceAdded(DeviceInfo deviceInfo) {
-        logger.trace("Device Added");
+        logger.info("Device Added : ");
         logInfo(deviceInfo);
-        zigbeeDriverImpl.deviceRemoved(deviceInfo);
+        zigbeeDriverImpl.deviceAdded(deviceInfo);
     }
 
     /**
@@ -529,7 +525,7 @@ public class SerialPortHandler {
      * @param deviceInfo
      */
     private void notifyDeviceRemoved(DeviceInfo deviceInfo) {
-        logger.trace("Device Removed");
+        logger.info("Device Removed : ");
         logInfo(deviceInfo);
         zigbeeDriverImpl.deviceRemoved(deviceInfo);
     }
@@ -544,8 +540,8 @@ public class SerialPortHandler {
                                           boolean force) {
         if (!force && info.getBatteryLevel() != oldLevel) { // only notify when
             // data has changed.
-            logger.trace("Battery level changed");
-            logInfo(info);
+            logger.info("["+info.getModuleAddress()+"]Battery level changed ");
+      //      logInfo(info);
             zigbeeDriverImpl.updateDeviceBattery(info);
         }
     }
@@ -566,8 +562,8 @@ public class SerialPortHandler {
             // data
             // has
             // changed.
-            logger.trace("Data changed (Old value:" + oldDataValue + ")");
-            logInfo(info);
+            logger.info("["+info.getModuleAddress()+"]Data changed (Old value:" + oldDataValue + ")" );
+       //     logInfo(info);
             zigbeeDriverImpl.updateData(info);
         }
     }
@@ -579,10 +575,10 @@ public class SerialPortHandler {
      */
     private void logInfo(DeviceInfo deviceInfo) {
         try {
-            logger.trace("battery : " + deviceInfo.getBatteryLevel());
-            logger.trace("ModuleAddress : " + deviceInfo.getModuleAddress());
-            logger.trace("data value : " + deviceInfo.getDeviceData().getData());
-            logger.trace("type code : " + deviceInfo.getTypeCode() == null ? "unknown"
+            logger.info("\tbattery ==>" + deviceInfo.getBatteryLevel());
+            logger.info("\tModuleAddress ==> " + deviceInfo.getModuleAddress());
+            logger.info("\tdata value ==> " + deviceInfo.getDeviceData().getData());
+            logger.info("\ttype code ==> " + deviceInfo.getTypeCode() == null ? "unknown"
                     : deviceInfo.getTypeCode().getFriendlyName());
         } catch (Exception ex) {
             logger.error("Unable to log DeviceIngo"

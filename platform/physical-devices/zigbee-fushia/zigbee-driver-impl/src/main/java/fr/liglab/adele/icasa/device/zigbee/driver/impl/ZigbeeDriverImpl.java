@@ -40,7 +40,6 @@ import java.util.concurrent.Callable;
  *
  */
 @Component(name = "zigbee.driver.impl")
-@Instantiate
 @Provides(specifications = { ZigbeeDriver.class })
 public class ZigbeeDriverImpl implements ZigbeeDriver {
 
@@ -104,7 +103,7 @@ public class ZigbeeDriverImpl implements ZigbeeDriver {
             try {
                 handler.startListening(port, baud);
             } catch (Exception e) {
-                LOG.error("Unable to connect into port: " + port);
+                LOG.error(" Error babe ", e );
             }finally {
                 return null;
             }
@@ -156,7 +155,7 @@ public class ZigbeeDriverImpl implements ZigbeeDriver {
 
     public void deviceAdded(DeviceInfo info){
         Hashtable properties = new Hashtable();
-        properties.put("device.adress", info.getModuleAddress());
+        properties.put("device.address", info.getModuleAddress());
         properties.put("device.data",info.getDeviceData().getData());
         properties.put("device.battery",info.getBatteryLevel());
         ServiceRegistration sr = m_context.registerService(DeviceInfo.class,info,properties);
@@ -174,6 +173,8 @@ public class ZigbeeDriverImpl implements ZigbeeDriver {
     public void updateDeviceBattery(DeviceInfo info){
         ServiceRegistration sr = serviceRegistrationMap.get(info.getModuleAddress());
         Hashtable properties = new Hashtable();
+        properties.put("device.address", info.getModuleAddress());
+        properties.put("device.data",info.getDeviceData().getData());
         properties.put("device.battery",info.getBatteryLevel());
         sr.setProperties(properties);
     }
@@ -181,7 +182,9 @@ public class ZigbeeDriverImpl implements ZigbeeDriver {
     public void updateData(DeviceInfo info){
         ServiceRegistration sr = serviceRegistrationMap.get(info.getModuleAddress());
         Hashtable properties = new Hashtable();
+        properties.put("device.address", info.getModuleAddress());
         properties.put("device.data",info.getDeviceData().getData());
+        properties.put("device.battery",info.getBatteryLevel());
         sr.setProperties(properties);
     }
 }

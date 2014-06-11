@@ -39,6 +39,7 @@ import java.util.concurrent.Callable;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 @Component(name = "fr.liglab.adele.icasa.zigbee.dongle.factory.ZigbeeDongleFactory")
+@Instantiate
 @Provides(specifications = {DiscoveryService.class,ZigbeeModuleDriver.class})
 public class ZigbeeDongle extends AbstractDiscoveryComponent implements ZigbeeSerialPortListener, ZigbeeModuleDriver,ServiceTrackerCustomizer {
 
@@ -162,17 +163,22 @@ public class ZigbeeDongle extends AbstractDiscoveryComponent implements ZigbeeSe
     @Override
     public void notifyDataChange(DeviceInfo info) {
         for (ZigbeeDeviceListener deviceListener : listeners.keySet()) {
-            try {
-                deviceListener.deviceDataChanged(info.getDeviceData().getData());
-            } catch (Exception e) {
-                LOG.error("could not notify tracker about data change for device "+ info.getModuleAddress(), e);
+
+            if(listeners.get(deviceListener).equals(info.getModuleAddress())){
+                try {
+                    deviceListener.deviceDataChanged(info.getDeviceData().getData());
+                }catch (Exception e) {
+                    LOG.error("could not notify tracker about data change for device "+ info.getModuleAddress(), e);
+                }
             }
         }
     }
 
     @Override
     public Object addingService(ServiceReference serviceReference) {
+        LOG.info(" Service tracked ");
         DeviceInfo deviceInfo = (DeviceInfo) m_context.getService(serviceReference);
+        LOG.info(" Module adress is : " + deviceInfo.getModuleAddress());
         createImportDeclaration(deviceInfo);
         return deviceInfo;
     }
