@@ -13,29 +13,34 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.zigbee.dongle.driver.api;
+/**
+ * 
+ */
+package fr.liglab.adele.icasa.device.zigbee.driver.serial.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Provides this service to be notified of zigbee device events.
- * You can specify a filter to define what are the events you are interested in:
- * example : zigbee.listener.filter="(module.address =1234)"
+ * Task fired when a device discovery timer expires.
  *
  */
-public interface ZigbeeDeviceListener {
+public class DeviceDiscoveryTimeoutTask implements Runnable {
 
-
-    /**
-     * Called when a device data has changed.
-     *
-     * @param newData new device data
-     */
-	void deviceDataChanged(String newData);
-
-    /**
-     * Called when a device battery level has changed.
-     *
-     * @param newBatteryLevel new device battery level
-     */
-	void deviceBatteryLevelChanged(float newBatteryLevel);
+	private static final Logger logger = LoggerFactory
+			.getLogger(DeviceDiscoveryTimeoutTask.class);
+	
+	private String deviceAddress;
+	
+	public DeviceDiscoveryTimeoutTask(String moduleAddress){
+		this.deviceAddress = moduleAddress;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		logger.debug("Device discovery task started for device : " + deviceAddress);
+	}
 }

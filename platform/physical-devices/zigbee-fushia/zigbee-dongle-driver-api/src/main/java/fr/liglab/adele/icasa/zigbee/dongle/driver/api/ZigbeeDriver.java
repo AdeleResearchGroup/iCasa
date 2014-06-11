@@ -39,7 +39,7 @@ public interface ZigbeeDriver {
      */
 	void setData(String moduleAddress, String dataToSet);
 
-    void addListener(ZigbeeDeviceListener listener);
+    void addListener(ZigbeeSerialPortListener listener);
 
-    void removeListener(ZigbeeDeviceListener listener);
+    void removeListener(ZigbeeSerialPortListener listener);
 }

@@ -15,27 +15,31 @@
  */
 package fr.liglab.adele.icasa.zigbee.dongle.driver.api;
 
-
 /**
- * Provides this service to be notified of zigbee device events.
- * You can specify a filter to define what are the events you are interested in:
- * example : zigbee.listener.filter="(module.address =1234)"
+ * Provides this service to implement a Zigbee driver.
  *
  */
-public interface ZigbeeDeviceListener {
+public interface ZigbeeModuleDriver {
 
 
     /**
-     * Called when a device data has changed.
+     * Returns the current data of the device with specified module address.
+     * The returned data could be cached data from last data sent from the device.
      *
-     * @param newData new device data
+     * @param moduleAddress a device module address
+     * @return the current data of the device with specified module address.
      */
-	void deviceDataChanged(String newData);
+	Data getData(String moduleAddress);
 
     /**
-     * Called when a device battery level has changed.
+     * Sets specified value to the device with corresponding module address.
      *
-     * @param newBatteryLevel new device battery level
+     * @param moduleAddress a device module address
+     * @param dataToSet value to set
      */
-	void deviceBatteryLevelChanged(float newBatteryLevel);
+	void setData(String moduleAddress, String dataToSet);
+
+    void addListener(ZigbeeDeviceListener listener,String moduleAdress);
+
+    void removeListener(ZigbeeDeviceListener listener);
 }

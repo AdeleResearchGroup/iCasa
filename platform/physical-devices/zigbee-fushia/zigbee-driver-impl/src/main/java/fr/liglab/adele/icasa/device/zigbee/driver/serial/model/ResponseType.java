@@ -16,44 +16,42 @@
 /**
  * 
  */
-package fr.liglab.adele.icasa.zigbee.dongle.factory;
-
-
-import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
-
-import java.util.Date;
+package fr.liglab.adele.icasa.device.zigbee.driver.serial.model;
 
 /**
+ * Enum class for zigbee data response types.
  *
  */
-public class DataImpl implements Data {
-	
-	private String data;
-	private Date timeStamp;
-	
+public enum ResponseType {
 
-	public void setData(String data) {
-		this.data = data;
+	WATCHDOG('w'), DATA('d'), REQUEST('r'), IDENTIFICATION('i');
+
+	private char value;
+
+	private ResponseType(char value) {
+		this.value = value;
 	}
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
-	}
-
-	/* (non-Javadoc)
-	 * @see fr.liglab.adele.habits.monitoring.zigbee.driver.Data#getTimeStamp()
-	 */
 	@Override
-	public Date getTimeStamp() {
-		return this.timeStamp;
+	public String toString() {
+		switch (this) {
+		case WATCHDOG:
+			System.out.println("Watchdog : " + value);
+			break;
+		case DATA:
+			System.out.println("Data : " + value);
+			break;
+		case REQUEST:
+			System.out.println("Request : " + value);
+			break;
+		case IDENTIFICATION:
+			System.out.println("Identification : " + value);
+		}
+		return super.toString();
 	}
-
-	/* (non-Javadoc)
-	 * @see fr.liglab.adele.habits.monitoring.zigbee.driver.Data#getData()
-	 */
-	@Override
-	public String getData() {
-		return this.data;
+	
+	public char getValue(){
+		return this.value;
 	}
 
 }

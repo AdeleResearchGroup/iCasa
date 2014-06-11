@@ -15,13 +15,12 @@
  */
 package fr.liglab.adele.icasa.zigbee.device.factory;
 
-import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
-import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDeviceListener;
-import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDriver;
-import org.apache.felix.ipojo.annotations.*;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDeviceListener;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeModuleDriver;
+import org.apache.felix.ipojo.annotations.*;
 
 @Component(name="zigbeePresenceSensor")
 @Provides
@@ -32,7 +31,7 @@ import fr.liglab.adele.icasa.device.util.AbstractDevice;
 public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSensor, ZigbeeDevice,ZigbeeDeviceListener {
 	
 	@Requires
-	private ZigbeeDriver driver;
+	private ZigbeeModuleDriver driver;
 	
 	@Property(mandatory=true, name="zigbee.moduleAddress")
 	private String moduleAddress;
@@ -49,7 +48,7 @@ public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSens
 
     @Validate
     public void start() {
-        driver.addListener(this);
+        driver.addListener(this,moduleAddress);
     }
 
     @Invalidate
@@ -72,31 +71,23 @@ public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSens
 
     /**
      * Called when a device data has changed.
-     *
-     * @param address a device module address
-     * @param oldData       previous device data
      * @param newData       new device data
      */
     @Override
-    public void deviceDataChanged(String address, Data oldData, Data newData) {
-        if(address.compareTo(this.moduleAddress) == 0){
-            String data = newData.getData();
+    public void deviceDataChanged(String newData) {
+   String data = newData;
             boolean status = data.compareTo("1")==0? true : false;
             setPropertyValue(PRESENCE_SENSOR_SENSED_PRESENCE, status);
-        }
+
     }
 
     /**
      * Called when a device battery level has changed.
      *
-     * @param address   a device module address
-     * @param oldBatteryLevel previous device battery level
      * @param newBatteryLevel new device battery level
      */
     @Override
-    public void deviceBatteryLevelChanged(String address, float oldBatteryLevel, float newBatteryLevel) {
-        if(address.compareToIgnoreCase(this.moduleAddress) == 0){ //this device.
-            setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, newBatteryLevel);
-        }
+    public void deviceBatteryLevelChanged(float newBatteryLevel) {
+       setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, newBatteryLevel);
     }
 }

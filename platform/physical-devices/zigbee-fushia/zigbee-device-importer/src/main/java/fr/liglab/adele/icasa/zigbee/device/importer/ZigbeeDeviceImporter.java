@@ -62,7 +62,7 @@ public class ZigbeeDeviceImporter extends AbstractImporterComponent {
     @Requires(filter = "(factory.name=zigbeeThermometer)")
     private Factory thermometerFactory;
 
-    @ServiceProperty(name = "target", value = "(zigbee.device.type.serial.number=*)")
+    @ServiceProperty(name = "target", value = "(zigbee.module.serial.number=*)")
     private String filter;
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
@@ -70,7 +70,7 @@ public class ZigbeeDeviceImporter extends AbstractImporterComponent {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     public ZigbeeDeviceImporter() {
@@ -86,9 +86,9 @@ public class ZigbeeDeviceImporter extends AbstractImporterComponent {
 
 
             String deviceType = (String) importDeclaration.getMetadata().get("zigbee.device.type.code");
-            String moduleAddress = (String) importDeclaration.getMetadata().get("zigbee.device.id");
-            String serialNumber = (String) importDeclaration.getMetadata().get("zigbee.device.type.serial.number");
-            LOG.debug("Importer trigged with module address : " + moduleAddress);
+            String moduleAddress = (String) importDeclaration.getMetadata().get("zigbee.module.adress");
+            String serialNumber = (String) importDeclaration.getMetadata().get("zigbee.module.serial.number");
+            LOG.info("Importer trigged with module address : " + moduleAddress + " device Type " + deviceType + " Serial Number " + serialNumber);
 
             if (TypeCode.A001.toString().equals(deviceType)) {
                 factory = binaryLightFactory;

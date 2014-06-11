@@ -19,9 +19,8 @@ import fr.liglab.adele.icasa.Constants;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
-import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDeviceListener;
-import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDriver;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeModuleDriver;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class ZigbeePushButton extends AbstractDevice implements PushButton, ZigbeeDevice,ZigbeeDeviceListener {
 
     @Requires
-    private ZigbeeDriver driver;
+    private ZigbeeModuleDriver driver;
 
     @Property(mandatory = true, name = "zigbee.moduleAddress")
     private String moduleAddress;
@@ -61,7 +60,7 @@ public class ZigbeePushButton extends AbstractDevice implements PushButton, Zigb
 
     @Validate
     public void start() {
-        driver.addListener(this);
+        driver.addListener(this,moduleAddress);
     }
 
     @Invalidate
@@ -81,30 +80,23 @@ public class ZigbeePushButton extends AbstractDevice implements PushButton, Zigb
     /**
      * Called when a device data has changed.
      *
-     * @param address a device module address
-     * @param oldData       previous device data
      * @param newData       new device data
      */
     @Override
-    public void deviceDataChanged(String address, Data oldData, Data newData) {
-        if(address.compareToIgnoreCase(this.moduleAddress) == 0){ //this device.
-            boolean status = newData.getData().equalsIgnoreCase("1")? true: false;
-            setPropertyValue(PushButton.PUSH_AND_HOLD, status);
-        }
+    public void deviceDataChanged(String newData) {
+        boolean status = newData.equalsIgnoreCase("1")? true: false;
+        setPropertyValue(PushButton.PUSH_AND_HOLD, status);
+
     }
 
     /**
      * Called when a device battery level has changed.
      *
-     * @param address   a device module address
-     * @param oldBatteryLevel previous device battery level
      * @param newBatteryLevel new device battery level
      */
     @Override
-    public void deviceBatteryLevelChanged(String address, float oldBatteryLevel, float newBatteryLevel) {
-        if(address.compareToIgnoreCase(this.moduleAddress) == 0){ //this device.
-            setPropertyValue(BATTERY_LEVEL, newBatteryLevel);
-        }
+    public void deviceBatteryLevelChanged( float newBatteryLevel) {
+        setPropertyValue(BATTERY_LEVEL, newBatteryLevel);
     }
 
 

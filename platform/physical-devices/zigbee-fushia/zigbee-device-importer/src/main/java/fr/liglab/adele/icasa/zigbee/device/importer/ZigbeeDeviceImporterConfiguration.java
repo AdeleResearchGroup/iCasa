@@ -26,13 +26,13 @@ import static org.apache.felix.ipojo.configuration.Instance.instance;
 @Configuration
 public class ZigbeeDeviceImporterConfiguration {
 
-    Instance philipsImporter = instance()
+    Instance zigbeeDeviceImporter = instance()
             .of("fr.liglab.adele.icasa.zigbee.device.importer.ZigbeeDeviceImporter")
-            .with("target").setto("(discovery.philips.device.name=*)");
+            .with("target").setto("(zigbee.module.serial.number=*)");
 
-    Instance philipsLinker = instance()
+    Instance zigbeeDeviceLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
-            .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(zigbee.device.type.serial.number=*)")
-            .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=ZigbeeDeviceImporter)");
+            .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(zigbee.module.serial.number=*)")
+            .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=zigbeeDeviceImporter)");
 
 }

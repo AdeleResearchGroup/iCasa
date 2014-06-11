@@ -21,6 +21,7 @@ import fr.liglab.adele.icasa.device.util.AbstractDevice;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDeviceListener;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDriver;
+import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeModuleDriver;
 import org.apache.felix.ipojo.annotations.*;
 
 import java.text.DecimalFormat;
@@ -34,7 +35,7 @@ import java.text.DecimalFormat;
 public class ZigbeePhotometer extends AbstractDevice implements Photometer,ZigbeeDevice,ZigbeeDeviceListener {
 
 	@Requires
-	private ZigbeeDriver driver;
+	private ZigbeeModuleDriver driver;
 
 	@Property(mandatory = true, name = "zigbee.moduleAddress")
 	private String moduleAddress;
@@ -51,7 +52,7 @@ public class ZigbeePhotometer extends AbstractDevice implements Photometer,Zigbe
 
     @Validate
     public void start() {
-        driver.addListener(this);
+        driver.addListener(this,moduleAddress);
     }
 
     @Invalidate
@@ -65,16 +66,13 @@ public class ZigbeePhotometer extends AbstractDevice implements Photometer,Zigbe
 	}
 
 	@Override
-	public void deviceDataChanged(String moduleAddress, Data oldData,
-			Data newData) {
-		if (moduleAddress.compareTo(this.moduleAddress) == 0) {
-			String data = newData.getData();
+	public void deviceDataChanged(String newData) {
+			String data = newData;
 			Double computedIlluminance = computeIlluminance(data);
 			if (computedIlluminance != null) {
 				setPropertyValue(PHOTOMETER_CURRENT_ILLUMINANCE,
 						computedIlluminance);
 			}
-		}
 	}
 
 	/**
@@ -176,12 +174,8 @@ public class ZigbeePhotometer extends AbstractDevice implements Photometer,Zigbe
 	}
 
 	@Override
-	public void deviceBatteryLevelChanged(String moduleAddress,
-			float oldBatteryLevel, float newBatteryLevel) {
-		if (moduleAddress.compareToIgnoreCase(this.moduleAddress) == 0) { // this
-																			// device.
+	public void deviceBatteryLevelChanged( float newBatteryLevel) {
 			setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, newBatteryLevel);
-		}
 	}
 
 	@Override

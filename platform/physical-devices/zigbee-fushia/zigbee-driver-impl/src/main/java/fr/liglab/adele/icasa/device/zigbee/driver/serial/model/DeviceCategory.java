@@ -13,29 +13,38 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.zigbee.dongle.driver.api;
-
+/**
+ * 
+ */
+package fr.liglab.adele.icasa.device.zigbee.driver.serial.model;
 
 /**
- * Provides this service to be notified of zigbee device events.
- * You can specify a filter to define what are the events you are interested in:
- * example : zigbee.listener.filter="(module.address =1234)"
- *
+ * Enum class for zigbee devices categories.
+ * 
  */
-public interface ZigbeeDeviceListener {
+public enum DeviceCategory {
 
+	ACTUATOR('A'), SENSOR('C');
 
-    /**
-     * Called when a device data has changed.
-     *
-     * @param newData new device data
-     */
-	void deviceDataChanged(String newData);
+	private char value;
 
-    /**
-     * Called when a device battery level has changed.
-     *
-     * @param newBatteryLevel new device battery level
-     */
-	void deviceBatteryLevelChanged(float newBatteryLevel);
+	private DeviceCategory(char value) {
+		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		switch (this) {
+		case ACTUATOR:
+			System.out.println("Actuator : " + value);
+			break;
+		case SENSOR:
+			System.out.println("Sensor : " + value);
+		}
+		return super.toString();
+	}
+
+	public char getValue() {
+		return this.value;
+	}
 }

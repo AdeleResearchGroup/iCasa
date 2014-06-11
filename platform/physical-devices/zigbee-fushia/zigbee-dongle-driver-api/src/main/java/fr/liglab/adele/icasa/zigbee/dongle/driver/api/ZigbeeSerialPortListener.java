@@ -22,20 +22,21 @@ package fr.liglab.adele.icasa.zigbee.dongle.driver.api;
  * example : zigbee.listener.filter="(module.address =1234)"
  *
  */
-public interface ZigbeeDeviceListener {
-
+public interface ZigbeeSerialPortListener {
 
     /**
      * Called when a device data has changed.
      *
-     * @param newData new device data
+     * @param info a device module info
      */
-	void deviceDataChanged(String newData);
+    void notifyDataChange(DeviceInfo info);
 
     /**
      * Called when a device battery level has changed.
      *
-     * @param newBatteryLevel new device battery level
+     * @param info a device module info
      */
-	void deviceBatteryLevelChanged(float newBatteryLevel);
+    void notifyBatteryLevelChange(DeviceInfo info);
+
+
 }
