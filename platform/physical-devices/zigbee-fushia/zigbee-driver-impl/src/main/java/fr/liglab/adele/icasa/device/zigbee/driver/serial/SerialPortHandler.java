@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
 import fr.liglab.adele.icasa.Constants;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.DeviceInfo;
@@ -37,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import fr.liglab.adele.icasa.device.zigbee.driver.impl.DataImpl;
 import fr.liglab.adele.icasa.device.zigbee.driver.impl.DeviceInfoImpl;
 import fr.liglab.adele.icasa.device.zigbee.driver.impl.ZigbeeDriverImpl;
-import fr.liglab.adele.icasa.device.zigbee.driver.serial.model.DeviceDiscoveryTimeoutTask;
 import fr.liglab.adele.icasa.device.zigbee.driver.serial.model.ResponseType;
 import gnu.io.NRSerialPort;
 
@@ -54,7 +52,6 @@ public class SerialPortHandler {
     private DataOutputStream ous = null;
     private Object streamLock = new Object();
     // requests to sent to devices.
-    private Queue<List<Byte>> toWriteData = new LinkedList<List<Byte>>();// handle
     // write
     // in
     // the
@@ -62,11 +59,11 @@ public class SerialPortHandler {
     // thread
     // as
     // read.
-    private Map<String/* module */, String /* Expected data */> requestData = new Hashtable<String, String>();
+    private final Map<String/* module */, String /* Expected data */> requestData = new Hashtable<String, String>();
 
-    private Map<String /* module address */, ScheduledFuture<?>> deviceDiscoveryList = new HashMap<String, ScheduledFuture<?>>();
+    private final Map<String /* module address */, ScheduledFuture<?>> deviceDiscoveryList = new HashMap<String, ScheduledFuture<?>>();
     /* @GardedBy(deviceList) */
-    private Map<String /* module address */, DeviceInfo> deviceList = new HashMap<String, DeviceInfo>();
+    private final Map<String /* module address */, DeviceInfo> deviceList = new HashMap<String, DeviceInfo>();
     /* @GardedBy(deviceList) */
     private ZigbeeDriverImpl zigbeeDriverImpl;
     private ScheduledExecutorService executor;
@@ -146,57 +143,57 @@ public class SerialPortHandler {
                 case 'W':
                 case 'R':
                 case 'D':
-                    moduleAddress = parseModuleAddress(sb);
-                    boolean existingDevice = deviceList.containsKey(moduleAddress);
-                    if (existingDevice) {
-                        deviceInfos = deviceList.get(moduleAddress);
-                    } else {
-                        deviceInfos = new DeviceInfoImpl();
-                        ((DeviceInfoImpl) deviceInfos).setModuleAddress(moduleAddress);
-                        ScheduledFuture<?> scheduledDeviceTimeout = executor.scheduleWithFixedDelay(new DeviceDiscoveryTimeoutTask(moduleAddress), 0, 120,TimeUnit.SECONDS);
-                        deviceDiscoveryList.put(moduleAddress,scheduledDeviceTimeout);
-                        Runnable extendDeviceTimeoutTask = new ExtendDeviceTimeoutTask(scheduledDeviceTimeout, moduleAddress);
-                        executor.schedule(extendDeviceTimeoutTask, 120,TimeUnit.SECONDS);
+                    synchronized (deviceList){
+                        moduleAddress = parseModuleAddress(sb);
+                        boolean existingDevice = deviceList.containsKey(moduleAddress);
+                        if (existingDevice) {
+                            deviceInfos = deviceList.get(moduleAddress);
+                        } else {
+                            deviceInfos = new DeviceInfoImpl();
+                            ((DeviceInfoImpl) deviceInfos).setModuleAddress(moduleAddress);
+                            Runnable extendDeviceTimeoutTask = new ExtendDeviceTimeoutTask(moduleAddress);
+                            executor.schedule(extendDeviceTimeoutTask, 60,TimeUnit.SECONDS);
+                        }
+                        dataValue = new DataImpl();
+                        Data oldData = deviceInfos.getDeviceData();
+                        float oldBatteryLevel = deviceInfos.getBatteryLevel();
+                        // parse to get data
+                        dataValue.setTimeStamp(new Date());
+                        dataValue.setData(parseDataValue(sb));
+                        // parse to get battery level
+                        ((DeviceInfoImpl) deviceInfos).setBatteryLevel(Integer
+                                .valueOf(parseBatteryLevel(sb)));
+                        ((DeviceInfoImpl) deviceInfos).setDeviceData(dataValue);
+                        ((DeviceInfoImpl) deviceInfos).setLastConnexionDate(new Date());
+                        ((DeviceInfoImpl) deviceInfos).setTypeCode(TypeCode
+                                .valueOf(parseTypeCode(sb)));
+                        // notify battery level change and data change.
+                        // It will notify only when value has already changed.
+                        if (type == 'R') {
+                            // send data to set to device.
+                            handleWrite(moduleAddress);
+                        } else if (type == 'D') {
+                            logger.debug("Sending ack of Data to "
+                                    + deviceInfos.getModuleAddress());
+                            write(buildResponse(ResponseType.DATA,
+                                    deviceInfos.getModuleAddress()));
+                        } else if (type == 'W') {
+                            logger.debug("Sending ack of Watchdog to "
+                                    + deviceInfos.getModuleAddress());
+                            write(buildResponse(ResponseType.WATCHDOG, moduleAddress));
+                        }
+                        if (!existingDevice) {
+                            logger.debug("notifying tracker about new device.");
+                            // notify to trackers.
+                            notifyDeviceAdded(deviceInfos);
+                            notifyBatteryLevelChange(deviceInfos, oldBatteryLevel, true);
+                            notifyDataChange(deviceInfos, oldData, true);
+                        }
+                        notifyBatteryLevelChange(deviceInfos, oldBatteryLevel, false);
+                        notifyDataChange(deviceInfos, oldData, false);
+                        deviceList.put(moduleAddress, deviceInfos);
+                        break;
                     }
-                    dataValue = new DataImpl();
-                    Data oldData = deviceInfos.getDeviceData();
-                    float oldBatteryLevel = deviceInfos.getBatteryLevel();
-                    // parse to get data
-                    dataValue.setTimeStamp(new Date());
-                    dataValue.setData(parseDataValue(sb));
-                    // parse to get battery level
-                    ((DeviceInfoImpl) deviceInfos).setBatteryLevel(Integer
-                            .valueOf(parseBatteryLevel(sb)));
-                    ((DeviceInfoImpl) deviceInfos).setDeviceData(dataValue);
-                    ((DeviceInfoImpl) deviceInfos).setLastConnexionDate(new Date());
-                    ((DeviceInfoImpl) deviceInfos).setTypeCode(TypeCode
-                            .valueOf(parseTypeCode(sb)));
-                    // notify battery level change and data change.
-                    // It will notify only when value has already changed.
-                    if (type == 'R') {
-                        // send data to set to device.
-                        handleWrite(moduleAddress);
-                    } else if (type == 'D') {
-                        logger.debug("Sending ack of Data to "
-                                + deviceInfos.getModuleAddress());
-                        write(buildResponse(ResponseType.DATA,
-                                deviceInfos.getModuleAddress()));
-                    } else if (type == 'W') {
-                        logger.debug("Sending ack of Watchdog to "
-                                + deviceInfos.getModuleAddress());
-                        write(buildResponse(ResponseType.WATCHDOG, moduleAddress));
-                    }
-                    if (!existingDevice) {
-                        logger.debug("notifying tracker about new device.");
-                        // notify to trackers.
-                        notifyDeviceAdded(deviceInfos);
-                        notifyBatteryLevelChange(deviceInfos, oldBatteryLevel, true);
-                        notifyDataChange(deviceInfos, oldData, true);
-                    }
-                    notifyBatteryLevelChange(deviceInfos, oldBatteryLevel, false);
-                    notifyDataChange(deviceInfos, oldData, false);
-                    deviceList.put(moduleAddress, deviceInfos);
-                    break;
                 default:
                     logger.debug("unknown frame received : " + sb);
                     break;
@@ -475,29 +472,31 @@ public class SerialPortHandler {
      */
     private final class ExtendDeviceTimeoutTask implements Runnable {
 
-        private ScheduledFuture<?> fSchedFuture;
         private String moduleAddress;
 
-        ExtendDeviceTimeoutTask(ScheduledFuture<?> aSchedFuture,
-                                String moduleAddress) {
-            fSchedFuture = aSchedFuture;
+        ExtendDeviceTimeoutTask(String moduleAddress) {
             this.moduleAddress = moduleAddress;
         }
 
         public void run() {
             DeviceInfo infos = deviceList.get(moduleAddress);
-            if (infos.getLastConnexionDate().getTime() < (new Date().getTime() - 120000)) {
+            if ((infos.getLastConnexionDate().getTime()+ 60000) > (new Date().getTime()) ) {
+                // extend timeout
+
+                int nextScheduled =  (int)(((infos.getLastConnexionDate().getTime()+ 60000 ) - (new Date().getTime()))/1000.0)  +5;
+                Runnable extendDeviceTimeoutTask = new ExtendDeviceTimeoutTask( moduleAddress);
+                executor.schedule(extendDeviceTimeoutTask, nextScheduled,TimeUnit.SECONDS);
+            } else {
+
                 // last connexion was before 2min, unregister device
-                fSchedFuture.cancel(true);
-                deviceList.remove(moduleAddress);
+                synchronized (deviceList) {
+                    deviceList.remove(moduleAddress);
+                }
+                synchronized (streamLock) {
+                    if(requestData.containsKey(moduleAddress)) requestData.remove(moduleAddress);
+                }
                 // notify to trackers.
                 notifyDeviceRemoved(infos);
-            } else {
-                // extend timeout
-                Runnable extendDeviceTimeoutTask = new ExtendDeviceTimeoutTask(
-                        fSchedFuture, moduleAddress);
-                executor.schedule(extendDeviceTimeoutTask, 120,
-                        TimeUnit.SECONDS);
             }
         }
     }
@@ -541,7 +540,7 @@ public class SerialPortHandler {
         if (!force && info.getBatteryLevel() != oldLevel) { // only notify when
             // data has changed.
             logger.info("["+info.getModuleAddress()+"]Battery level changed ");
-      //      logInfo(info);
+            //      logInfo(info);
             zigbeeDriverImpl.updateDeviceBattery(info);
         }
     }
@@ -563,7 +562,7 @@ public class SerialPortHandler {
             // has
             // changed.
             logger.info("["+info.getModuleAddress()+"]Data changed (Old value:" + oldDataValue + ")" );
-       //     logInfo(info);
+            //     logInfo(info);
             zigbeeDriverImpl.updateData(info);
         }
     }
