@@ -50,7 +50,7 @@ public class SerialPortHandler {
     private volatile boolean socketOpened = true;
     private DataInputStream ins = null;
     private DataOutputStream ous = null;
-    private Object streamLock = new Object();
+    private final Object streamLock = new Object();
     // requests to sent to devices.
     // write
     // in
@@ -65,18 +65,12 @@ public class SerialPortHandler {
     /* @GardedBy(deviceList) */
     private final Map<String /* module address */, DeviceInfo> deviceList = new HashMap<String, DeviceInfo>();
     /* @GardedBy(deviceList) */
-    private ZigbeeDriverImpl zigbeeDriverImpl;
-    private ScheduledExecutorService executor;
+    private final ZigbeeDriverImpl zigbeeDriverImpl;
+    private final ScheduledExecutorService executor;
 
     public SerialPortHandler(ZigbeeDriverImpl zigbeeDriverImpl) {
         this.zigbeeDriverImpl = zigbeeDriverImpl;
         executor = Executors.newSingleThreadScheduledExecutor();
-    }
-
-    public List<DeviceInfo> getDeviceInfos() {
-        synchronized (deviceList) {
-            return new ArrayList<DeviceInfo>(deviceList.values());
-        }
     }
 
     /**
@@ -479,24 +473,24 @@ public class SerialPortHandler {
         }
 
         public void run() {
-            DeviceInfo infos = deviceList.get(moduleAddress);
-            if ((infos.getLastConnexionDate().getTime()+ 60000) > (new Date().getTime()) ) {
-                // extend timeout
+            synchronized (deviceList) {
+                DeviceInfo infos = deviceList.get(moduleAddress);
+                if ((infos.getLastConnexionDate().getTime()+ 60000) > (new Date().getTime()) ) {
+                    // extend timeout
 
-                int nextScheduled =  (int)(((infos.getLastConnexionDate().getTime()+ 60000 ) - (new Date().getTime()))/1000.0)  +5;
-                Runnable extendDeviceTimeoutTask = new ExtendDeviceTimeoutTask( moduleAddress);
-                executor.schedule(extendDeviceTimeoutTask, nextScheduled,TimeUnit.SECONDS);
-            } else {
+                    int nextScheduled =  (int)(((infos.getLastConnexionDate().getTime()+ 60000 ) - (new Date().getTime()))/1000.0)  +5;
+                    Runnable extendDeviceTimeoutTask = new ExtendDeviceTimeoutTask( moduleAddress);
+                    executor.schedule(extendDeviceTimeoutTask, nextScheduled,TimeUnit.SECONDS);
+                } else {
 
-                // last connexion was before 2min, unregister device
-                synchronized (deviceList) {
+                    // last connexion was before 2min, unregister device
                     deviceList.remove(moduleAddress);
+                    synchronized (streamLock) {
+                        if(requestData.containsKey(moduleAddress)) requestData.remove(moduleAddress);
+                    }
+                    // notify to trackers.
+                    notifyDeviceRemoved(infos);
                 }
-                synchronized (streamLock) {
-                    if(requestData.containsKey(moduleAddress)) requestData.remove(moduleAddress);
-                }
-                // notify to trackers.
-                notifyDeviceRemoved(infos);
             }
         }
     }
