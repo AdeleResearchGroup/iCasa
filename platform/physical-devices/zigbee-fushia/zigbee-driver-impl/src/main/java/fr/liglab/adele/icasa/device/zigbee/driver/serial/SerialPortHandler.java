@@ -61,8 +61,7 @@ public class SerialPortHandler {
     // read.
     private final Map<String/* module */, String /* Expected data */> requestData = new Hashtable<String, String>();
 
-    private final Map<String /* module address */, ScheduledFuture<?>> deviceDiscoveryList = new HashMap<String, ScheduledFuture<?>>();
-    /* @GardedBy(deviceList) */
+   /* @GardedBy(deviceList) */
     private final Map<String /* module address */, DeviceInfo> deviceList = new HashMap<String, DeviceInfo>();
     /* @GardedBy(deviceList) */
     private final ZigbeeDriverImpl zigbeeDriverImpl;
