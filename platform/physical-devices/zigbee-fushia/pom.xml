@@ -32,7 +32,7 @@
         <module>zigbee-library-install</module>
         <module>zigbee-dongle-driver-api</module>
         <module>zigbee-driver-impl</module>
-        <module>zigbee-dongle-factory</module>
+        <module>zigbee-dongle-discovery</module>
         <module>zigbee-device-importer</module>
         <module>zigbee-device-factories</module>
 	</modules>
