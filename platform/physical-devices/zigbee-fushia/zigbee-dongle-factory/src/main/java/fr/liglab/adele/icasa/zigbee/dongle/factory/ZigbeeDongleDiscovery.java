@@ -38,12 +38,12 @@ import java.util.concurrent.Callable;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
-@Component(name = "fr.liglab.adele.icasa.zigbee.dongle.factory.ZigbeeDongleFactory")
-@Instantiate
+@Component(name = "fr.liglab.adele.icasa.zigbee.dongle.factory.ZigbeeDongleDiscovery")
+@Instantiate(name = "fr.liglab.adele.icasa.zigbee.dongle.factory.ZigbeeDongleDiscovery-0")
 @Provides(specifications = {DiscoveryService.class,ZigbeeModuleDriver.class})
-public class ZigbeeDongle extends AbstractDiscoveryComponent implements ZigbeeSerialPortListener, ZigbeeModuleDriver,ServiceTrackerCustomizer {
+public class ZigbeeDongleDiscovery extends AbstractDiscoveryComponent implements ZigbeeSerialPortListener, ZigbeeModuleDriver,ServiceTrackerCustomizer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ZigbeeDongle.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ZigbeeDongleDiscovery.class);
 
     private final Object m_listenerLock;
 
@@ -59,7 +59,7 @@ public class ZigbeeDongle extends AbstractDiscoveryComponent implements ZigbeeSe
 
     private BundleContext m_context;
 
-    public ZigbeeDongle(BundleContext context){
+    public ZigbeeDongleDiscovery(BundleContext context){
         super(context);
         m_listenerLock = new Object();
         m_context = context;
