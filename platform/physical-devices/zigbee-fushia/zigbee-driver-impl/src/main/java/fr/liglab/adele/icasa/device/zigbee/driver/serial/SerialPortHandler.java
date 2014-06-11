@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import fr.liglab.adele.icasa.Constants;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
@@ -51,14 +50,7 @@ public class SerialPortHandler {
     private DataInputStream ins = null;
     private DataOutputStream ous = null;
     private final Object streamLock = new Object();
-    // requests to sent to devices.
-    // write
-    // in
-    // the
-    // same
-    // thread
-    // as
-    // read.
+    /* requests to sent to devices write in the same thread as read*/
     private final Map<String/* module */, String /* Expected data */> requestData = new Hashtable<String, String>();
 
    /* @GardedBy(deviceList) */
@@ -548,12 +540,7 @@ public class SerialPortHandler {
         String oldDataValue = oldData != null ? oldData.getData() : "";
 
         if (!force && oldData == null || !force
-                && info.getDeviceData().getData().compareTo(oldDataValue) != 0) { // only
-            // notify
-            // when
-            // data
-            // has
-            // changed.
+                && info.getDeviceData().getData().compareTo(oldDataValue) != 0) { // only notify when data has changed.
             logger.info("["+info.getModuleAddress()+"]Data changed (Old value:" + oldDataValue + ")" );
             //     logInfo(info);
             zigbeeDriverImpl.updateData(info);
