@@ -81,6 +81,12 @@
             <version>${fuchsia.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.neuronrobotics</groupId>
+            <artifactId>nrjavaserial</artifactId>
+            <version>3.9.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
