@@ -22,11 +22,15 @@ import fr.liglab.adele.icasa.zigbee.dongle.driver.api.Data;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeDeviceListener;
 import fr.liglab.adele.icasa.zigbee.dongle.driver.api.ZigbeeModuleDriver;
 import org.apache.felix.ipojo.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @Component(name = "zigbeeBinaryLight")
 @Provides(specifications={GenericDevice.class, BinaryLight.class})
 public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,ZigbeeDevice,ZigbeeDeviceListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ZigbeeBinaryLight.class);
 
     @ServiceProperty(name = GenericDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
     private String serialNumber;
@@ -95,7 +99,7 @@ public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,Zig
         try {
             intValue = Integer.valueOf(strValue);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            LOG.error("exception in get power status",e);
             return value;
         }
 
