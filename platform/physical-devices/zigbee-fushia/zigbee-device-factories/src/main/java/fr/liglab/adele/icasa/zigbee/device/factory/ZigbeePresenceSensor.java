@@ -29,22 +29,22 @@ import org.apache.felix.ipojo.annotations.*;
  *
  */
 public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSensor, ZigbeeDevice,ZigbeeDeviceListener {
-	
-	@Requires
-	private ZigbeeModuleDriver driver;
-	
-	@Property(mandatory=true, name="zigbee.moduleAddress")
-	private String moduleAddress;
-	
-	@ServiceProperty(name = GenericDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
-	private String serialNumber;
-	
-	public ZigbeePresenceSensor(){
-		super();
+
+    @Requires
+    private ZigbeeModuleDriver driver;
+
+    @Property(mandatory=true, name="zigbee.moduleAddress")
+    private String moduleAddress;
+
+    @ServiceProperty(name = GenericDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
+    private String serialNumber;
+
+    public ZigbeePresenceSensor(){
+        super();
         super.setPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME, GenericDevice.LOCATION_UNKNOWN);
         super.setPropertyValue(PRESENCE_SENSOR_SENSED_PRESENCE, false);
         super.setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, 0f);
-	}
+    }
 
     @Validate
     public void start() {
@@ -56,18 +56,18 @@ public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSens
         driver.removeListener(this);
     }
 
-	@Override
-	public boolean getSensedPresence() {
-		Boolean presence = (Boolean) getPropertyValue(PRESENCE_SENSOR_SENSED_PRESENCE);
-		if (presence != null)
-			return presence;
-		return false;
-	}
+    @Override
+    public boolean getSensedPresence() {
+        Boolean presence = (Boolean) getPropertyValue(PRESENCE_SENSOR_SENSED_PRESENCE);
+        if (presence != null)
+            return presence;
+        return false;
+    }
 
-	@Override
-	public String getSerialNumber() {
-		return serialNumber;
-	}
+    @Override
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 
     /**
      * Called when a device data has changed.
@@ -75,9 +75,9 @@ public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSens
      */
     @Override
     public void deviceDataChanged(String newData) {
-   String data = newData;
-            boolean status = data.compareTo("1")==0? true : false;
-            setPropertyValue(PRESENCE_SENSOR_SENSED_PRESENCE, status);
+        String data = newData;
+        boolean status = data.compareTo("1")==0? true : false;
+        setPropertyValue(PRESENCE_SENSOR_SENSED_PRESENCE, status);
 
     }
 
@@ -88,6 +88,6 @@ public class ZigbeePresenceSensor extends AbstractDevice implements PresenceSens
      */
     @Override
     public void deviceBatteryLevelChanged(float newBatteryLevel) {
-       setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, newBatteryLevel);
+        setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, newBatteryLevel);
     }
 }

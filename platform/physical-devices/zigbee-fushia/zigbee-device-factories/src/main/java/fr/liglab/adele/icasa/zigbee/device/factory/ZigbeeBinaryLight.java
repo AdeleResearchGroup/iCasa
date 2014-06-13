@@ -56,7 +56,10 @@ public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,Zig
 
     @Override
     public boolean getPowerStatus() {
-        Boolean powerStatus = (Boolean) getPropertyValue(BinaryLight.BINARY_LIGHT_POWER_STATUS);
+      /*  Boolean powerStatus = (Boolean) getPropertyValue(BinaryLight.BINARY_LIGHT_POWER_STATUS);
+
+    */
+        Boolean powerStatus = getPowerStatusFromDevice();
         if (powerStatus == null)
             return false;
 
@@ -65,6 +68,7 @@ public class ZigbeeBinaryLight extends AbstractDevice implements BinaryLight,Zig
 
     @Override
     public boolean setPowerStatus(boolean status) {
+        setPowerStatusToSimulatedDevice(status);
         setPowerStatusToDevice(status);
         return status;
     }

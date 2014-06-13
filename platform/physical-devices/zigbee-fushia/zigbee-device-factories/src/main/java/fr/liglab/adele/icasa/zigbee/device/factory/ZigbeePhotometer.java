@@ -45,8 +45,7 @@ public class ZigbeePhotometer extends AbstractDevice implements Photometer,Zigbe
 
 	public ZigbeePhotometer() {
 		super();
-		super.setPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME,
-				GenericDevice.LOCATION_UNKNOWN);
+		super.setPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME,GenericDevice.LOCATION_UNKNOWN);
 		super.setPropertyValue(ZigbeeDevice.BATTERY_LEVEL, 0f);
 	}
 
@@ -70,8 +69,7 @@ public class ZigbeePhotometer extends AbstractDevice implements Photometer,Zigbe
 			String data = newData;
 			Double computedIlluminance = computeIlluminance(data);
 			if (computedIlluminance != null) {
-				setPropertyValue(PHOTOMETER_CURRENT_ILLUMINANCE,
-						computedIlluminance);
+				setPropertyValue(PHOTOMETER_CURRENT_ILLUMINANCE,computedIlluminance);
 			}
 	}
 

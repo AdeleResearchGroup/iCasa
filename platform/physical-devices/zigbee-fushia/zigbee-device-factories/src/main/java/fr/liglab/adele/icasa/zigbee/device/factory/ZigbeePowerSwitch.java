@@ -43,8 +43,7 @@ public class ZigbeePowerSwitch extends AbstractDevice implements PowerSwitch, Zi
 
 
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(Constants.ICASA_LOG_DEVICE + ".zigBee.powerSwitch");
+    private static final Logger logger = LoggerFactory.getLogger(Constants.ICASA_LOG_DEVICE + ".zigBee.powerSwitch");
 
     @ServiceProperty(name = GenericDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
     private String serialNumber;
