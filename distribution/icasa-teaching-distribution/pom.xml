@@ -46,18 +46,6 @@
             <type>osgi-distribution</type>
         </dependency>
 
-        <!-- RoSe bundles -->
-        <dependency>
-            <groupId>org.ow2.chameleon.rose</groupId>
-            <artifactId>rose-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.liglab.adele.common</groupId>
-            <artifactId>rose-chameleon-deployer-configurator</artifactId>
-            <version>${AdeleBaseVersion}</version>
-        </dependency>
-
         <dependency>
             <!-- iCasa Platform -->
             <groupId>fr.liglab.adele.icasa</groupId>

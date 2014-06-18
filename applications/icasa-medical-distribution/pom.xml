@@ -78,7 +78,6 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
             <artifactId>fuchsia-gogo-shell</artifactId>
-            <version>${fuchsia.version}</version>
         </dependency>
 
         <dependency>

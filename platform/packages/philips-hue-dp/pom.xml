@@ -39,12 +39,6 @@
                     <writeExtraData>true</writeExtraData>
                     <includeDependencies>true</includeDependencies>
                     <deploymentPackage>
-                        <resources>
-                            <processedResource>
-                                <processor>org.osgi.deployment.rp.autoload</processor>
-                                <filePath>/src/main/resources/rose-conf-philips_driver.json</filePath>
-                            </processedResource>
-                        </resources>
                     </deploymentPackage>
                 </configuration>
             </plugin>
