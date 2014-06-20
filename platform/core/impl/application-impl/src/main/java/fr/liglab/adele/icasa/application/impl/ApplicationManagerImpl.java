@@ -40,7 +40,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Provides(specifications = ApplicationManager.class)
 public class ApplicationManagerImpl implements ApplicationManager, ServiceTrackerCustomizer {
 
-    protected static Logger logger = LoggerFactory.getLogger(Constants.ICASA_LOG + ".applications");
+    private static final  Logger LOG = LoggerFactory.getLogger(ApplicationManagerImpl.class);
 
     private ServiceTracker _appTracker;
 
@@ -48,70 +48,62 @@ public class ApplicationManagerImpl implements ApplicationManager, ServiceTracke
     /**
      * List of application trackers
      */
-    private List<ApplicationListener> _listeners = new ArrayList<ApplicationListener>();
+    private final List<ApplicationListener> _listeners = new ArrayList<ApplicationListener>();
 
     /**
      * Map keeping the record of applications
      */
-    private Map<String, ApplicationImpl> _appPerId = new HashMap<String, ApplicationImpl>();
+    private final Map<String, ApplicationImpl> _appPerId = new HashMap<String, ApplicationImpl>();
 
     /**
-     *  guard the applicationPerIdMap & listener ( bad but it's because of the dirty implementation of the dependency device annotation )
+     *  guard the applicationPerIdMap & listener ( bad but it's due to the dirty implementation of the dependency device annotation )
      */
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+  /*  private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     private final Lock readLock = lock.readLock();
 
     private final Lock writeLock = lock.writeLock();
+*/
+    private final Object m_lock;
 
-
-    private BundleContext _context;
+    private final BundleContext _context;
 
     public ApplicationManagerImpl(BundleContext context) {
         _context = context;
         _appTracker = new ServiceTracker(_context, ApplicationDescription.class.getName(),this);
+        m_lock = new Object();
     }
 
     @Override
     public Set<ApplicationCategory> getCategories() {
         Set<ApplicationCategory> categories = new HashSet<ApplicationCategory>();
-        readLock.lock();
-        try{
+        synchronized (m_lock){
             for(String key : _appPerId.keySet()){
                 categories.add(_appPerId.get(key).getCategory());
             }
             return categories;
-        }finally {
-            readLock.unlock();
         }
     }
 
     @Override
     public Set<Application> getApplications() {
-        readLock.lock();
-        try{
+        synchronized (m_lock){
             Collection<ApplicationImpl> appsCollection = _appPerId.values();
             return Collections.unmodifiableSet(new HashSet<Application>(appsCollection));
-        }finally {
-            readLock.unlock();
         }
     }
 
     @Override
     public Application getApplication(String appId) {
-        readLock.lock();
-        try{
+        synchronized (m_lock){
             Application app = _appPerId.get(appId);
             return app;
-        }finally {
-            readLock.unlock();
         }
     }
 
     @Override
     public void addApplicationListener(ApplicationListener listener) {
-        writeLock.lock();
-        try{
+        synchronized (m_lock){
             _listeners.add(listener);
             for(String key : _appPerId.keySet()){
                 Application application = _appPerId.get(key);
@@ -120,8 +112,6 @@ public class ApplicationManagerImpl implements ApplicationManager, ServiceTracke
                     listener.bundleAdded(application,bundle.getSymbolicName());
                 }
             }
-        }finally {
-            writeLock.unlock();
         }
 
 
@@ -129,40 +119,32 @@ public class ApplicationManagerImpl implements ApplicationManager, ServiceTracke
 
     @Override
     public void removeApplicationListener(ApplicationListener listener) {
-        writeLock.lock();
-        try{
+        synchronized (m_lock){
             _listeners.remove(listener);
-        }finally {
-            writeLock.unlock();
         }
     }
 
     @Validate
     public void start() {
-        logger.debug("start");
+        LOG.debug("start");
         _appTracker.open();
     }
 
     @Invalidate
     public void stop() {
         _appTracker.close();
-        logger.debug("stop");
+        LOG.debug("stop");
 
-        // Not sure this part is mandatory
-        writeLock.lock();
-        try{
+        synchronized (m_lock){
             _appPerId.clear();
             _listeners.clear();
-        }finally {
-            writeLock.unlock();
         }
     }
 
     @Override
     public Application getApplicationOfBundle(String bundleSymbolicName) {
         Application resultApp = null;
-        readLock.lock();
-        try{
+        synchronized (m_lock){
             for (ApplicationImpl app : _appPerId.values()) {
                 if (app.containsBundle(bundleSymbolicName)) {
                     resultApp = app;
@@ -170,8 +152,6 @@ public class ApplicationManagerImpl implements ApplicationManager, ServiceTracke
                 }
             }
             return resultApp;
-        }finally{
-            readLock.unlock();
         }
     }
 
@@ -181,63 +161,62 @@ public class ApplicationManagerImpl implements ApplicationManager, ServiceTracke
     }
 
     @Override
-    public Object addingService(ServiceReference serviceReference) {
+    public  Object addingService(ServiceReference serviceReference) {
+        LOG.info("Application added");
         ApplicationDescription applicationDescription = (ApplicationDescription) _context.getService(serviceReference);
-        writeLock.lock();
-        try{
+        synchronized (m_lock){
             _appPerId.put(applicationDescription.getId(),new ApplicationImpl(applicationDescription,this));
             Application application = _appPerId.get(applicationDescription.getId());
-            for(ApplicationListener listener : _listeners){
+            List<ApplicationListener> unmodifiableListenerNotifyAdd = getListeners();
+            for(ApplicationListener listener : unmodifiableListenerNotifyAdd){
                 listener.addApplication(application);
                 for(Bundle bundle : application.getBundles()){
                     listener.bundleAdded(application,bundle.getSymbolicName());
                 }
             }
             return applicationDescription;
-        }finally {
-            writeLock.unlock();
         }
     }
 
     @Override
-    public void modifiedService(ServiceReference serviceReference, Object o) {
+    public  void modifiedService(ServiceReference serviceReference, Object o) {
+        LOG.info("Application modified");
         ApplicationDescription applicationDescription = (ApplicationDescription) o;
-        writeLock.lock();
-        try{
+        synchronized (m_lock){
             Application application = _appPerId.get(applicationDescription.getId());
             Set<Bundle> bundles = new HashSet<Bundle>(application.getBundles());
             _appPerId.get(applicationDescription.getId()).updateApplicationImpl(applicationDescription);
             Set<Bundle> newBundles = new HashSet<Bundle>(application.getBundles());
+            List<ApplicationListener> unmodifiableListenerNotifyModif = getListeners();
             if(!(bundles.containsAll(newBundles) && newBundles.containsAll(bundles))){
                 if((bundles.containsAll(newBundles))){
                     bundles.removeAll(newBundles);
 
                     for(Bundle bundle : bundles){
-                        for(ApplicationListener listener : _listeners){
+                        for(ApplicationListener listener : unmodifiableListenerNotifyModif){
                             listener.bundleAdded(application,bundle.getSymbolicName());
                         }
                     }
                 }else {
                     newBundles.removeAll(bundles);
                     for(Bundle bundle : newBundles){
-                        for(ApplicationListener listener : _listeners){
+                        for(ApplicationListener listener : unmodifiableListenerNotifyModif){
                             listener.bundleAdded(application,bundle.getSymbolicName());
                         }
                     }
                 }
             }
-        }finally {
-            writeLock.unlock();
         }
     }
 
     @Override
-    public void removedService(ServiceReference serviceReference, Object o) {
+    public  void removedService(ServiceReference serviceReference, Object o) {
+        LOG.info("Application removed");
         ApplicationDescription applicationDescription = (ApplicationDescription) o;
-        writeLock.lock();
-        try{
+        synchronized (m_lock){
+            List<ApplicationListener> unmodifiableListenerNotifyRemove = getListeners();
             Application application = _appPerId.get(applicationDescription.getId());
-            for(ApplicationListener listener : _listeners){
+            for(ApplicationListener listener : unmodifiableListenerNotifyRemove){
                 listener.removeApplication(application);
                 for(Bundle bundle : application.getBundles()){
                     listener.bundleRemoved(application, bundle.getSymbolicName());
@@ -245,8 +224,10 @@ public class ApplicationManagerImpl implements ApplicationManager, ServiceTracke
             }
 
             _appPerId.remove(((ApplicationDescription) o).getId());
-        }finally {
-            writeLock.unlock();
         }
+    }
+
+    private List<ApplicationListener> getListeners(){
+        return Collections.unmodifiableList(new ArrayList<ApplicationListener>(_listeners));
     }
 }
