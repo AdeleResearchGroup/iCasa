@@ -16,12 +16,14 @@ def infra = infrastructure "icasa-actimetrics",false,false, {
     		state "ACTIVE"
     		'bundle-version' "1.2.6.SNAPSHOT"
     		source "mvn:fr.liglab.adele.icasa.apps/actimetrics.event.webservice.api/1.2.6-SNAPSHOT"
+    		'bundle-symbolic-name' "actimetrics.event.webservice.api"
     }
 
     resource eventWebServiceImpl { bundle
         		state "ACTIVE"
         		'bundle-version' "1.2.6.SNAPSHOT"
         		source "mvn:fr.liglab.adele.icasa.apps/actimetrics.event.webservice.impl/1.2.6-SNAPSHOT"
+        		'bundle-symbolic-name' "actimetrics.event.webservice.impl"
     }dependsOn("configfile")
 
 
@@ -29,12 +31,13 @@ def infra = infrastructure "icasa-actimetrics",false,false, {
 		state "ACTIVE"
 		'bundle-version' "1.2.6.SNAPSHOT"
 		source "mvn:fr.liglab.adele.icasa.apps/actimetrics.actimetrics.manager/1.2.6-SNAPSHOT"
+		'bundle-symbolic-name' "actimetrics.actimetrics.manager"
 	}dependsOn("eventWebServiceImpl")
 
 }
 
 
-application id:"Actimetrics", name:"Actimetrics", version:"1.2.6-SNAPSHOT", vendor:"LIG - equipe ADELE",{
+application id:"Actimetrics", name:"Actimetrics", version:"1.2.6.SNAPSHOT", vendor:"LIG - equipe ADELE",{
 	
 	with infra
 
