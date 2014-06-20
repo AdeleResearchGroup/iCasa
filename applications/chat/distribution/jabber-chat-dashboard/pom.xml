@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2010-2011 Université Joseph Fourier
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project parent -->
+    <parent>
+        <groupId>fr.liglab.adele.icasa</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.2.6-SNAPSHOT</version>
+        <relativePath>../../../../parent</relativePath>
+    </parent>
+
+    <!-- Project coordinates -->
+    <groupId>fr.liglab.adele.icasa.apps</groupId>
+    <artifactId>jabber.chat.dashboard</artifactId>
+    <packaging>osgi-distribution</packaging>
+    <name>${productName} :: ${projectName}</name>
+
+
+    <!-- Project dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>icasa.dashboard.distribution</artifactId>
+            <version>${project.version}</version>
+            <type>osgi-distribution</type>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.commands.get-action</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.commands.set-action</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.commands.turn-action</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.commands.parser</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.regulators.regInt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.regulators.temperature-regulator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.regulators.light-regulator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.xmpp.config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.xmpp.discovery</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.xmpp.importer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.message-receiver</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>jabber.chat.config.interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ow2.chameleon.chat</groupId>
+            <artifactId>jabber</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.discovery.filebased</artifactId>
+            <version>0.0.2</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>fr.liglab.adele.common</groupId>
+                <artifactId>maven-osgi-distribution-plugin</artifactId>
+                <configuration>
+                    <flattenDP>false</flattenDP>
+                    <defaultOutputDirectory>applications</defaultOutputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- Project parent -->
+    <parent>
+        <groupId>fr.liglab.adele.icasa</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.2.6-SNAPSHOT</version>
+        <relativePath />
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project Descrkiption -->
+    <groupId>fr.liglab.adele.icasa.apps</groupId>
+    <artifactId>electricity.manager</artifactId>
+    <packaging>pom</packaging>
+    <name>${productName} :: ${projectName}</name>
+
+    <modules>
+        <module>application</module>
+        <module>distribution</module>
+        <module>packages</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <snapshots />
+            <id>adele-central-snapshots</id>
+            <name>adele-central-snapshot</name>
+            <url>http://repository-icasa.forge.cloudbees.com/snapshot</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

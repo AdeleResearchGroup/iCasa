@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- Project parent -->
+    <parent>
+        <groupId>fr.liglab.adele.icasa</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.2.6-SNAPSHOT</version>
+        <relativePath />
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project Description -->
+    <groupId>fr.liglab.adele.icasa.apps</groupId>
+    <artifactId>electricity.manager.application.dp</artifactId>
+    <packaging>deployment-package</packaging>
+    <name>${productName} :: ${projectName}</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>electricity.manager.application</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.akquinet.gomobile</groupId>
+                <artifactId>maven-dp-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <writeExtraData>true</writeExtraData>
+                    <includeDependencies>true</includeDependencies>
+                    <deploymentPackage>
+                        <headers>
+                            <bundleHeader>
+                                <name>ICasa-Application-Id</name>
+                                <value>electricity.manager</value>
+                            </bundleHeader>
+                            <bundleHeader>
+                                <name>ICasa-Application-Name</name>
+                                <value>Electricity manager app</value>
+                            </bundleHeader>
+                            <bundleHeader>
+                                <name>ICasa-Application-Version</name>
+                                <value>${project.version}</value>
+                            </bundleHeader>
+                        </headers>
+                        <resources>
+                        </resources>
+                    </deploymentPackage>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

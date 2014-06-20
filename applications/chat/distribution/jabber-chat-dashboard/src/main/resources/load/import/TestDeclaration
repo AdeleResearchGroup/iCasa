@@ -1,0 +1,6 @@
+id=1
+protocol=XMPP
+username=ow2.chameleon.test@googlemail.com
+password=chameleon
+service=gmail.com
+host=talk.google.com

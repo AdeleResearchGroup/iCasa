@@ -1,0 +1,4 @@
+Private-Package: fr.liglab.adele.icasa.electricity.manager
+Import-Package: javassist.util.proxy, \
+    javax.persistence;version="[0,2)", \
+    *
