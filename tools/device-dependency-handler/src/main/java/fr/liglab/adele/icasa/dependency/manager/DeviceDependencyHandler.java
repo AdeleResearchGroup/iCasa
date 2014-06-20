@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import fr.liglab.adele.icasa.application.ApplicationListener;
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.ConfigurationException;
 import org.apache.felix.ipojo.ContextSource;
@@ -52,10 +53,9 @@ import org.osgi.framework.ServiceReference;
 import fr.liglab.adele.icasa.access.AccessManager;
 import fr.liglab.adele.icasa.application.Application;
 import fr.liglab.adele.icasa.application.ApplicationManager;
-import fr.liglab.adele.icasa.application.ApplicationTracker;
 
 @org.apache.felix.ipojo.annotations.Handler(name = "requiresdevice", namespace = "fr.liglab.adele.icasa.dependency.handler.annotations")
-public class DeviceDependencyHandler extends DependencyHandler implements ApplicationTracker {
+public class DeviceDependencyHandler extends DependencyHandler implements ApplicationListener {
 
     public static final String NAME_SPACE = "fr.liglab.adele.icasa.dependency.handler.annotations";
 

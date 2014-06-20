@@ -34,6 +34,7 @@ limitations under the License.
          <modules>
             <module>application</module>
             <module>packages</module>
+             <module>infrastructure</module>
             <module>distribution</module>
          </modules>
       </profile>
@@ -45,6 +46,7 @@ limitations under the License.
          <modules>
             <module>application</module>
             <module>packages</module>
+             <module>infrastructure</module>
             <module>distribution</module>
          </modules>
       </profile>

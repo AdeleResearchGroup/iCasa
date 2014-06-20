@@ -15,252 +15,195 @@
  */
 package fr.liglab.adele.icasa.application.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
-
 import fr.liglab.adele.icasa.application.Application;
 import fr.liglab.adele.icasa.application.ApplicationCategory;
+import fr.liglab.adele.icasa.application.ApplicationDescription;
 import fr.liglab.adele.icasa.application.ApplicationState;
-import fr.liglab.adele.icasa.application.impl.internal.DeploymentPackageRepresentation;
 import fr.liglab.adele.icasa.common.ProgressMonitor;
-import fr.liglab.adele.icasa.common.StateVariable;
-import fr.liglab.adele.icasa.common.VariableType;
-import fr.liglab.adele.icasa.common.impl.EntityImpl;
-import fr.liglab.adele.icasa.common.impl.StateVariableImpl;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
-public class ApplicationImpl extends EntityImpl implements Application, ServiceTrackerCustomizer {
+import java.util.HashSet;
+import java.util.Set;
 
-    public static final String VENDOR_PROP_NAME = "Vendor";
+public class ApplicationImpl  implements Application {
 
-    public static final String NAME_PROP_NAME = "Name";
+    private  String _id;
 
-    public static final String VERSION_PROP_NAME = "Version";
+    private String _name;
 
-    public static final String ACTIVATION_STATE_PROP_NAME = "ActivationState";
+    private Version _version;
 
-    private ApplicationCategory _category;
+    private String _vendor;
+
+    private String _category;
+
+    private Set<Bundle> _bundles = new HashSet<Bundle>();
+
+    private ApplicationState _state;
 
     private ApplicationManagerImpl _appMgr;
 
-    private ServiceTracker _appTracker;
+    private final Object _lock;
 
-    private BundleContext _context;
+    private static final String UNDEFINED = "undefined";
 
-    private Application _app;
-
-    private Map<String, DeploymentPackageRepresentation> deploymentPackageRepresentations;
-
-    public ApplicationImpl(String id, String vendor, String name, ApplicationCategory category, ApplicationManagerImpl appMgr,
-            BundleContext context) {
-        this(id, vendor, name, category, ApplicationState.STOPED, appMgr, context);
+    public ApplicationImpl(ApplicationDescription description, ApplicationManagerImpl appMgr) {
+        this(description.getId(),description.getName(),description.getVersion(),description.getVendor(),description.getCategory(), description.getBundles(), ApplicationState.STOPPED, appMgr);
     }
 
-    public ApplicationImpl(String id, String vendor, String name, ApplicationCategory category, ApplicationState state,
-            ApplicationManagerImpl appMgr, BundleContext context) {
-        super(id);
-        _context = context;
-        StateVariable vendorVar = new StateVariableImpl(VENDOR_PROP_NAME, vendor, String.class,
-                VariableType.HUMAN_READABLE_DESCRIPTION, "Entity identifier", false, true, this);
-        addStateVariable(vendorVar);
-        StateVariable nameVar = new StateVariableImpl(NAME_PROP_NAME, name, String.class,
-                VariableType.HUMAN_READABLE_DESCRIPTION, "Name", false, true, this);
-        addStateVariable(nameVar);
-        StateVariable stateVar = new StateVariableImpl(ACTIVATION_STATE_PROP_NAME, state, ApplicationState.class,
-                VariableType.STATE, "State", true, true, this);
-        addStateVariable(stateVar);
-        StateVariable versionVar = new StateVariableImpl(VERSION_PROP_NAME, state, ApplicationState.class,
-                VariableType.STATE, "State", true, true, this);
-        addStateVariable(versionVar);
+    private ApplicationImpl(String id, String name,Version version,String vendor,String category,Set<Bundle> bundles, ApplicationState state,ApplicationManagerImpl appMgr) {
+        _lock = new Object();
+        _id = id;
+        _name =name;
+        _version = version;
 
-        if (category == null)
-            throw new IllegalArgumentException("category cannot be null.");
+        if( (vendor != null) && !(vendor.equals(""))){
+            _vendor = vendor;
+        }else {
+            _vendor =UNDEFINED;
+        }
 
-        _category = category;
+        if( (category != null) && !(category.equals(""))){
+            _category=category;
+        }else {
+            _category =UNDEFINED;
+        }
+
+        _bundles=bundles;
+        _state = state;
         _appMgr = appMgr;
-        _appTracker = new ServiceTracker(context, Application.class.getName(), this);
 
-        deploymentPackageRepresentations = new HashMap<String, DeploymentPackageRepresentation>();
+    }
+
+    @Override
+    public String getId() {
+        synchronized (_lock){
+            return _id;
+        }
     }
 
     @Override
     public String getName() {
-        return (String) getVariableValue(NAME_PROP_NAME);
+        synchronized (_lock){
+            return _name;
+        }
     }
 
     @Override
     public String getVendor() {
-        return (String) getVariableValue(VENDOR_PROP_NAME);
+        synchronized (_lock){
+            return _vendor;
+        }
     }
 
     @Override
     public ApplicationCategory getCategory() {
-        return _category;
+        synchronized (_lock){
+            return new ApplicationCategoryImpl(_category);
+        }
     }
 
     @Override
     public synchronized void start(ProgressMonitor monitor) {
-        // TODO start bundles
-        _appTracker.open();
-        if (_app != null) // TODO better manage synchronization and start process
-            _app.start(monitor);
+
     }
 
     @Override
     public synchronized void stop(ProgressMonitor monitor) {
-        if (_app != null)
-            _app.stop(monitor);
-        _appTracker.close();
-        // TODO stop bundles
+
     }
 
     @Override
     public synchronized void resume(ProgressMonitor monitor) {
-        if (_app != null)
-            _app.resume(monitor);
+
     }
 
     @Override
     public synchronized void pause(ProgressMonitor monitor) {
-        if (_app != null)
-            _app.pause(monitor);
+
     }
 
     @Override
     public Set<Bundle> getBundles() {
-        return _appMgr.getBundles(getId());
+        synchronized (_lock){
+            return _bundles;
+        }
     }
 
     @Override
     public ApplicationState getState() {
-        return (ApplicationState) getVariableValue(ACTIVATION_STATE_PROP_NAME);
+        synchronized (_lock){
+            return _state;
+        }
     }
 
     public void setState(ApplicationState newState) {
-        setVariableValue(ACTIVATION_STATE_PROP_NAME, newState);
-        // manage state changed
-    }
-
-    @Override
-    public String getVersion() {
-        return (String) getVariableValue(VERSION_PROP_NAME);
-    }
-
-    public void setVersion(String version) {
-        setVariableValue(VERSION_PROP_NAME, version);
-    }
-
-    @Override
-    public Object addingService(ServiceReference reference) {
-        Application app = (Application) _context.getService(reference);
-        String appId = app.getId();
-        synchronized (this) {
-            if (appId.equals(getId())) {
-                _app = app;
-                return app;
-            } else
-                return null;
+        synchronized (_lock){
+            _state = newState;
         }
     }
 
     @Override
-    public void modifiedService(ServiceReference reference, Object service) {
-        // do nothing
-    }
-
-    @Override
-    public void removedService(ServiceReference reference, Object service) {
-        Application app = (Application) service;
-        String appId = app.getId();
-        synchronized (this) {
-            if (appId.equals(getId())) {
-                _app = null;
-                _context.ungetService(reference);
-            }
-        }
-    }
-
-    /**
-     * Adds a DP representation on this application
-     * 
-     * @param dpr
-     */
-    public void addDeploymentPackageRepresentation(DeploymentPackageRepresentation dpr) {
-        deploymentPackageRepresentations.put(dpr.getName(), dpr);
-    }
-
-    /**
-     * Removes a DP representation on this application
-     * 
-     * @param name
-     */
-    public void removeDeploymentPackageRepresentation(String name) {
-        deploymentPackageRepresentations.remove(name);
-    }
-
-    /**
-     * Determines if this application contains a DP
-     * 
-     * @param name the DP name
-     * @return true if app contains DP. False otherwise
-     */
-    public boolean containsDeploymentPackageRepresentation(String name) {
-        return deploymentPackageRepresentations.keySet().contains(name);
-    }
-
-    public DeploymentPackageRepresentation getDeploymentPackageRepresentation(String name) {
-        return deploymentPackageRepresentations.get(name);
+    public Version getVersion() {
+       synchronized (_lock){
+           return _version;
+       }
     }
 
     /**
      * Determines if this application contains a Bundle
-     * 
+     *
      * @param bundleSymbolicName bundle name
      * @return true if app contains the bundle. False otherwise
      */
-    public boolean constainsBundle(String bundleSymbolicName) {
-        for (DeploymentPackageRepresentation dpr : deploymentPackageRepresentations.values()) {
-            if (dpr.constainsBundle(bundleSymbolicName))
-                return true;
+    public boolean containsBundle(String bundleSymbolicName) {
+        synchronized (_lock){
+            for (Bundle bundle : _bundles) {
+                if (bundle.getSymbolicName().equals(bundleSymbolicName))
+                    return true;
+            }
+            return false;
         }
-        return false;
-    }
-
-    /**
-     * Determines if this application has at least one Deployment package
-     * 
-     * @return
-     */
-    public boolean isEmptyApplication() {
-        return (deploymentPackageRepresentations.size() == 0);
     }
 
     /**
      * Get a string set with bundles symbolic names in this App
-     * 
+     *
      * @return
      */
     public Set<String> getBundlesIds() {
         Set<String> bundlesIds = new HashSet<String>();
-        for (DeploymentPackageRepresentation dpr : deploymentPackageRepresentations.values()) {
-            bundlesIds.addAll(dpr.getBundleIds());
+        synchronized (_lock){
+            for (Bundle bundle : _bundles) {
+                bundlesIds.add(bundle.getSymbolicName());
+            }
+            return bundlesIds;
         }
-        return bundlesIds;
     }
 
-    public List<DeploymentPackageRepresentation> getAllDeploymentPackageRepresentations() {
-        List<DeploymentPackageRepresentation> list = new ArrayList<DeploymentPackageRepresentation>(
-                deploymentPackageRepresentations.values());
-        return list;
+    /**
+     * Get a string set with bundles symbolic names in this App
+     *
+     */
+    public void updateApplicationImpl(ApplicationDescription description){
+        synchronized (_lock){
+            _id = description.getId();
+            _name = description.getName();
+            if( (description.getVendor() != null) && !(description.getVendor().equals(""))){
+                _vendor = description.getVendor();
+            }else {
+                _vendor =UNDEFINED;
+            }
+
+            if( (description.getCategory() != null) && !(description.getCategory().equals(""))){
+                _category=description.getCategory();
+            }else {
+                _category =UNDEFINED;
+            }
+            _version = description.getVersion();
+            _bundles = description.getBundles();
+        }
     }
 
 }
