@@ -32,21 +32,21 @@ def infra = infrastructure "icasa-actimetrics",false,false, {
 		'bundle-version' "1.2.6.SNAPSHOT"
 		source "mvn:fr.liglab.adele.icasa.apps/jersey-core/1.2.6-SNAPSHOT"
 		'bundle-symbolic-name' "actimetrics.actimetrics.manager"
-	}dependsOn("eventWebServiceImpl")
+	}dependsOn("eventWebServiceImpl","jerseyClient","jerseyCore")
 
 		resource jerseyClient { bundle
     		state "ACTIVE"
     		'bundle-version' "1.18.1"
     		source "mvn:com.sun.jersey/jersey-client/1.18.1"
     		'bundle-symbolic-name' "com.sun.jersey.client"
-    	}dependsOn("eventWebServiceImpl")
+    	}dependsOn()
 
     		resource jerseyCore { bundle
         		state "ACTIVE"
         		'bundle-version' "1.18.1"
         		source "mvn:com.sun.jersey/jersey-core/1.18.1"
         		'bundle-symbolic-name' "com.sun.jersey.core"
-        	}dependsOn("eventWebServiceImpl")
+        	}dependsOn()
 
 }
 
