@@ -1,0 +1,113 @@
+package fr.liglab.adele.actimetrics.rondo
+
+def infra = infrastructure "icasa-actimetrics",false,false, {
+
+
+    String userDir = System.getProperty("user.dir")
+
+    resource configfile { file
+    	source "file://"+userDir+"/artifacts/TestDeclaration"
+     	path "/load/import/TestDeclaration"
+    }
+
+    resource commandGetAction { bundle
+    		state "ACTIVE"
+    		'bundle-version' "1.2.6.SNAPSHOT"
+    		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.commands.get-action/1.2.6-SNAPSHOT"
+    		'bundle-symbolic-name' "jabber.chat.commands.get-action"
+    }dependsOn("regulatorInterface")
+
+        resource commandSetAction { bundle
+        		state "ACTIVE"
+        		'bundle-version' "1.2.6.SNAPSHOT"
+        		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.commands.set-action/1.2.6-SNAPSHOT"
+        		'bundle-symbolic-name' "jabber.chat.commands.set-action"
+        }dependsOn("regulatorInterface")
+
+
+    resource commandTurnAction { bundle
+    		state "ACTIVE"
+    		'bundle-version' "1.2.6.SNAPSHOT"
+    		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.commands.turn-action/1.2.6-SNAPSHOT"
+    		'bundle-symbolic-name' "jabber.chat.commands.turn-action"
+    }dependsOn("regulatorInterface")
+
+       resource commandParser { bundle
+        		state "ACTIVE"
+        		'bundle-version' "1.2.6.SNAPSHOT"
+        		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.commands.parser/1.2.6-SNAPSHOT"
+        		'bundle-symbolic-name' "jabber.chat.commands.parser"
+        }
+
+    resource regulatorInterface { bundle
+    		state "ACTIVE"
+    		'bundle-version' "1.2.6.SNAPSHOT"
+    		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.regulators.regInt/1.2.6-SNAPSHOT"
+    		'bundle-symbolic-name' "jabber.chat.regulators.regInt"
+    }
+
+        resource temperatureRegulator { bundle
+        		state "ACTIVE"
+        		'bundle-version' "1.2.6.SNAPSHOT"
+        		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.regulators.temperature-regulator/1.2.6-SNAPSHOT"
+        		'bundle-symbolic-name' "jabber.chat.regulators.temperature-regulator"
+        }dependsOn("regulatorInterface")
+
+
+    resource lightRegulator { bundle
+    		state "ACTIVE"
+    		'bundle-version' "1.2.6.SNAPSHOT"
+    		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.regulators.light-regulator/1.2.6-SNAPSHOT"
+    		'bundle-symbolic-name' "jabber.chat.regulators.light-regulator"
+    }dependsOn("regulatorInterface")
+
+
+      resource configXmpp { bundle
+        		state "ACTIVE"
+        		'bundle-version' "1.2.6.SNAPSHOT"
+        		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.xmpp.config/1.2.6-SNAPSHOT"
+        		'bundle-symbolic-name' "jabber.chat.xmpp.config"
+        }dependsOn("importerXmpp","discoveryFileBased","jabber")
+
+
+    resource importerXmpp { bundle
+    		state "ACTIVE"
+    		'bundle-version' "1.2.6.SNAPSHOT"
+    		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.xmpp.importer/1.2.6-SNAPSHOT"
+    		'bundle-symbolic-name' "jabber.chat.xmpp.importer"
+    }dependsOn("jabber")
+
+        resource discoveryFileBased { bundle
+        		state "ACTIVE"
+        		'bundle-version' "0.0.2"
+        		source "mvn:org.ow2.chameleon.fuchsia.discovery/org.ow2.chameleon.fuchsia.discovery.filebased/0.0.2"
+        		'bundle-symbolic-name' "org.ow2.chameleon.fuchsia.discovery.filebased"
+        }
+
+   resource jabber { bundle
+    		state "ACTIVE"
+    		'bundle-version' "1.0.0"
+    		source "mvn:org.ow2.chameleon.chat/jabber/1.0.0"
+    		'bundle-symbolic-name' "org.ow2.chameleon.chat.jabber"
+    }
+
+
+           resource messageReceiver { bundle
+            		state "ACTIVE"
+            		'bundle-version' "1.2.6.SNAPSHOT"
+            		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.message-receiver/1.2.6-SNAPSHOT"
+            		'bundle-symbolic-name' "jabber.chat.message-receiver"
+            }dependsOn("jabber","commandParser")
+
+
+}
+
+
+application id:"JabberChat", name:"JabberChat", version:"1.2.6.SNAPSHOT", vendor:"LIG - equipe ADELE",{
+	
+	with infra
+
+}
+
+
+
