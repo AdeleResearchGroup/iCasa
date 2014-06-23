@@ -1,0 +1,22 @@
+package fr.liglab.adele.lightFollowMe.rondo
+
+def infra = infrastructure "icasa-LightFollowMe",false,false, {
+
+	resource LightFollowMeWithMotionSensorAndPhotometer { bundle
+		state "ACTIVE"
+		'bundle-version' "1.2.6.SNAPSHOT"
+		source "mvn:fr.liglab.adele.icasa.apps/light.follow.me.with.photometer.application/1.2.6-SNAPSHOT"
+		'bundle-symbolic-name' "light.follow.me.with.photometer.application"
+	}
+
+}
+
+
+
+application id:"LightFollowMeWithMotionSensorAndPhotometer", name:"LightFollowMeWithMotionSensorAndPhotometer", version:"1.2.6.SNAPSHOT", vendor:"LIG - equipe ADELE",{
+	
+	with infra
+
+}
+
+

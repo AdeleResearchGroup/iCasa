@@ -20,7 +20,7 @@ package fr.liglab.adele.icasa.application;
  *
  */
 public enum ApplicationState {
-	STARTED("started"), STOPED("stoped"), PAUSED("paused");
+	STARTED("started"), STOPPED("stopped"), PAUSED("paused");
 	
 	private String _stateStr;
 	
@@ -46,8 +46,8 @@ public enum ApplicationState {
 			return STARTED;
 		} else if (PAUSED.toString().equals(stateStr)) {
 			return PAUSED;
-		} else if (STOPED.toString().equals(stateStr)) {
-			return STOPED;
+		} else if (STOPPED.toString().equals(stateStr)) {
+			return STOPPED;
 		} 
 		
 		return null;
