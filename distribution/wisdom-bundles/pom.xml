@@ -57,10 +57,10 @@
             <artifactId>thymeleaf-template-engine</artifactId>
         </dependency>
 
-  <!--      <dependency>
-            <groupId>org.wisdom-framework</groupId>
-            <artifactId>wisdom-orientdb-object</artifactId>
-        </dependency> -->
+        <!-- <dependency>
+             <groupId>org.wisdom-framework</groupId>
+             <artifactId>wisdom-orientdb-object</artifactId>
+         </dependency>-->
 
         <dependency>
             <groupId>io.netty</groupId>
