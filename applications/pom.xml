@@ -39,6 +39,8 @@
         <module>dimmer-light-follow-me</module>
         <module>gas-alarm-system</module>
         <module>electricity-viewer</module>
+        <module>electricity-monitor</module>
+        <module>chat</module>
         <module>self-star</module>
         <module>icasa-teaching-distribution-with-apps</module>
         <module>icasa-medical-distribution</module>

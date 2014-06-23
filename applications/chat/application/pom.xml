@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project parent -->
+    <parent>
+        <groupId>fr.liglab.adele.icasa</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.2.6-SNAPSHOT</version>
+        <relativePath>../../../parent</relativePath>
+    </parent>
+
+    
+    <artifactId>jabber.chat.application</artifactId>
+    <groupId>fr.liglab.adele.icasa.apps</groupId>
+    <name>${productName} :: ${projectName}</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>chat-messages-receiver</module>
+        <module>chat-regulators</module>
+        <module>chat-config</module>
+        <module>chat-commands</module>
+        <module>xmpp - importer</module>
+        <module>xmpp - config</module>
+        <module>xmpp - discovery</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

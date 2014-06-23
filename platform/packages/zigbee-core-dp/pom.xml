@@ -19,11 +19,6 @@
     <dependencies>
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>zigbee.usb.discovery</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.liglab.adele.icasa</groupId>
             <artifactId>zigbee.device.factories</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -34,17 +29,17 @@
         </dependency>
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>zigbee.dongle.api</artifactId>
+            <artifactId>zigbee.dongle.driver.api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>zigbee.dongle.factory</artifactId>
+            <artifactId>zigbee.dongle.discovery</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>zigbee.dongle.importer</artifactId>
+            <artifactId>zigbee.driver.impl</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
