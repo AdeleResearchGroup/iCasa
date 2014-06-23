@@ -7,7 +7,7 @@ def infra = infrastructure "icasa-actimetrics",false,false, {
 
     resource configfile { file
     	source "file://"+userDir+"/artifacts/TestDeclaration"
-     	path "/load/import/TestDeclaration"
+     	path "load/import/TestDeclaration"
     }
 
     resource commandGetAction { bundle
@@ -95,8 +95,8 @@ def infra = infrastructure "icasa-actimetrics",false,false, {
            resource messageReceiver { bundle
             		state "ACTIVE"
             		'bundle-version' "1.2.6.SNAPSHOT"
-            		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.message-receiver/1.2.6-SNAPSHOT"
-            		'bundle-symbolic-name' "jabber.chat.message-receiver"
+            		source "mvn:fr.liglab.adele.icasa.apps/jabber.chat.message.receiver/1.2.6-SNAPSHOT"
+            		'bundle-symbolic-name' "jabber.chat.message.receiver"
             }dependsOn("jabber","commandParser")
 
 
