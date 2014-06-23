@@ -46,16 +46,15 @@
             <type>osgi-distribution</type>
         </dependency>
 
-        <!-- RoSe bundles -->
+        <!-- fuchsia bundles -->
         <dependency>
-            <groupId>org.ow2.chameleon.rose</groupId>
-            <artifactId>rose-core</artifactId>
+            <groupId>org.ow2.chameleon.fuchsia</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>fr.liglab.adele.common</groupId>
-            <artifactId>rose-chameleon-deployer-configurator</artifactId>
-            <version>${AdeleBaseVersion}</version>
+            <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+            <artifactId>fuchsia-gogo-shell</artifactId>
         </dependency>
 
         <dependency>
