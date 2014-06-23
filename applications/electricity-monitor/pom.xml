@@ -20,7 +20,7 @@
         <groupId>fr.liglab.adele.icasa</groupId>
         <artifactId>parent</artifactId>
         <version>1.2.6-SNAPSHOT</version>
-        <relativePath />
+        <relativePath>../../parent</relativePath>
     </parent>
 
     <!-- Project Description -->

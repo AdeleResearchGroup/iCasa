@@ -107,7 +107,7 @@
 
         <dependency>
             <groupId>fr.liglab.adele.icasa.apps</groupId>
-            <artifactId>jabber.chat.message-receiver</artifactId>
+            <artifactId>jabber.chat.message.receiver</artifactId>
             <version>${project.version}</version>
         </dependency>
 

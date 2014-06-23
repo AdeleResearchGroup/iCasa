@@ -7,7 +7,7 @@
         <groupId>fr.liglab.adele.icasa</groupId>
         <artifactId>parent</artifactId>
         <version>1.2.6-SNAPSHOT</version>
-        <relativePath />
+        <relativePath>../../../parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,15 +18,6 @@
     <modules>
         <module>application</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <snapshots />
-            <id>adele-central-snapshots</id>
-            <name>adele-central-snapshot</name>
-            <url>http://repository-icasa.forge.cloudbees.com/snapshot</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
