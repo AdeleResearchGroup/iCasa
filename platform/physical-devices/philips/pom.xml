@@ -30,8 +30,11 @@
 
     <modules>
         <module>philips-hue</module>
-        <module>discoveries</module>
-        <module>importers</module>
+        <module>bridge-discovery</module>
+        <module>bridge-importer</module>
+        <module>bridge-factory</module>
+        <module>light-importer</module>
+        <module>light-factory</module>
     </modules>
 
     <build>
