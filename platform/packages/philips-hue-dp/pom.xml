@@ -24,9 +24,36 @@
         </dependency>
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>philips.device.discovery</artifactId>
+            <artifactId>philips.physical.devices.bridge.discoverie</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>philips.physical.devices.bridge.importer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>philips.physical.devices.bridge.factory</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>philips.physical.devices.light.importer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>philips.physical.devices.light.factory</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
