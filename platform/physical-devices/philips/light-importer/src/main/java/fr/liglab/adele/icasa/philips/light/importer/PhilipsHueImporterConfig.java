@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.philips.importers;
+package fr.liglab.adele.icasa.philips.light.importer;
 
 
 import org.apache.felix.ipojo.configuration.Configuration;
@@ -24,15 +24,15 @@ import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import static org.apache.felix.ipojo.configuration.Instance.instance;
 
 @Configuration
-public class PhilipsBridgeImporterConfig {
+public class PhilipsHueImporterConfig {
 
     Instance philipsBridgeImporter = instance()
-            .of("fr.liglab.adele.icasa.philips.importers.PhilipsHueBridgeImporter")
+            .of("fr.liglab.adele.icasa.philips.light.importer.PhilipsHueBridgeImporter")
             .with("target").setto("(discovery.philips.bridge.type=*)");
 
-    Instance philipsLinkerBridge = instance()
+    Instance philipsLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
-            .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.philips.bridge.type=*)")
-            .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=philipsBridgeImporter)");
+            .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.philips.device.name=*)")
+            .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=philipsImporter)");
 
 }

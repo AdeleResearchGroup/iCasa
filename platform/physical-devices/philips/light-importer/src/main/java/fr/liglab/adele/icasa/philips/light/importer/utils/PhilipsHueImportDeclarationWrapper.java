@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.philips.importers.utils;
+package fr.liglab.adele.icasa.philips.light.importer.utils;
 
 /*
  * #%L
@@ -43,25 +43,28 @@ import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 
 import java.util.Map;
 
+import static fr.liglab.adele.icasa.philips.light.importer.utils.Constants.*;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
-import static fr.liglab.adele.icasa.philips.importers.utils.Constants.*;
 
-public class PhilipsHueBridgeImportDeclarationWrapper {
+public class PhilipsHueImportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 
     private String id;
-    private String bridgeType;
-    private Object bridgeObject;
+    private String name;
+    private String type;
+    private String bridgeID;
+    private Object object;
 
-    private PhilipsHueBridgeImportDeclarationWrapper() {
+    private PhilipsHueImportDeclarationWrapper() {
 
     }
 
     private static Filter buildFilter() {
         Filter filter;
-        String stringFilter = String.format("(&(%s=*)(%s=*)(%s=*))",
-                ID,DISCOVERY_PHILIPS_BRIDGE_TYPE, DISCOVERY_PHILIPS_BRIDGE_OBJECT);
+        String stringFilter = String.format("(&(%s=*)(%s=*)(%s=*)(%s=*))",
+                ID,
+                DISCOVERY_PHILIPS_DEVICE_NAME, DISCOVERY_PHILIPS_DEVICE_TYPE, DISCOVERY_PHILIPS_DEVICE_OBJECT);
         try {
             filter = FuchsiaUtils.getFilter(stringFilter);
         } catch (InvalidFilterException e) {
@@ -70,30 +73,44 @@ public class PhilipsHueBridgeImportDeclarationWrapper {
         return filter;
     }
 
-    public static PhilipsHueBridgeImportDeclarationWrapper create(ImportDeclaration importDeclaration) throws BinderException {
+    public static PhilipsHueImportDeclarationWrapper create(ImportDeclaration importDeclaration) throws BinderException {
         Map<String, Object> metadata = importDeclaration.getMetadata();
 
         if (!declarationFilter.matches(metadata)) {
             throw new BinderException("Not enough information in the metadata to be used by the phillips hue importer");
         }
-        PhilipsHueBridgeImportDeclarationWrapper wrapper = new PhilipsHueBridgeImportDeclarationWrapper();
+        PhilipsHueImportDeclarationWrapper wrapper = new PhilipsHueImportDeclarationWrapper();
 
         wrapper.id = (String) metadata.get(ID);
-        wrapper.bridgeType = (String) metadata.get(DISCOVERY_PHILIPS_BRIDGE_TYPE);
-        wrapper.bridgeObject = metadata.get(DISCOVERY_PHILIPS_BRIDGE_OBJECT);
+        wrapper.name = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_NAME);
+        wrapper.type = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_TYPE);
+        wrapper.object = metadata.get(DISCOVERY_PHILIPS_DEVICE_OBJECT);
+        wrapper.bridgeID = (String) metadata.get(DISCOVERY_PHILIPS_BRIDGE_FILTER);
 
         return wrapper;
     }
 
-    public String getId() {
+    public String getLightId() {
         return id;
     }
 
-    public String getBridgeType() {
-        return bridgeType;
+    public String getName() {
+        return name;
     }
 
-    public Object getBridgeObject() {
-        return bridgeObject;
+    public String getType() {
+        return type;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public String getBridgeID() {
+        return bridgeID;
+    }
+
+    public String getUniqueId(){
+        return (object.toString()+ bridgeID);
     }
 }

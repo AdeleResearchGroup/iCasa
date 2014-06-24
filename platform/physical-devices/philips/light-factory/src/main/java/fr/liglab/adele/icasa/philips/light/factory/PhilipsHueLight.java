@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.philips.importers;
+package fr.liglab.adele.icasa.philips.light.factory;
 
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
@@ -27,7 +27,6 @@ import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.util.AbstractDevice;
 import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.ipojo.annotations.Component;
-import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

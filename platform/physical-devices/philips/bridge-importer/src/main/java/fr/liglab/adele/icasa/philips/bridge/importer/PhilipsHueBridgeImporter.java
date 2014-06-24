@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.philips.importers;
+package fr.liglab.adele.icasa.philips.bridge.importer;
 
 /*
  * #%L
@@ -35,11 +35,9 @@ package fr.liglab.adele.icasa.philips.importers;
  * #L%
  */
 
-import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.philips.importers.utils.PhilipsHueImportDeclarationWrapper;
+import fr.liglab.adele.icasa.philips.bridge.importer.utils.PhilipsHueBridgeImportDeclarationWrapper;
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -56,37 +54,35 @@ import java.util.Map;
 
 @Component
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
-public class PhilipsHueImporter extends AbstractImporterComponent {
+public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueImporter.class);
-
-    private final BundleContext context;
+    private final Logger LOG = LoggerFactory.getLogger(PhilipsHueBridgeImporter.class);
 
     private ServiceReference serviceReference;
 
-    @Requires(filter = "(factory.name=philipsHueLight)")
-    private Factory philipsHueLightFactory;
+    private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
 
-    private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
+    @Requires(filter = "(factory.name=PhilipsHueBridge)")
+    private Factory philipsHueBridgeFactory;
 
-
-    @ServiceProperty(name = "target", value = "(discovery.philips.device.name=*)")
+    @ServiceProperty(name = "target", value = "(discovery.philips.bridge.type=*)")
     private String filter;
 
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
     private String name;
 
-    public PhilipsHueImporter(BundleContext context) {
-        this.context = context;
+    public PhilipsHueBridgeImporter() {
+
     }
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        setServiceReference(serviceReference);
+        super.setServiceReference(serviceReference);
     }
 
     @Validate
     public void validate() {
+        super.start();
         LOG.info("Philips hue Importer is up and running");
     }
 
@@ -94,48 +90,41 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     public void invalidate() {
 
         LOG.info("Cleaning up instances into Philips hue Importer");
-
         cleanup();
         super.stop();
-
     }
 
     private void cleanup(){
 
-        for(Map.Entry<String,ServiceRegistration> lampEntry:lamps.entrySet()){
-            lamps.remove(lampEntry.getKey()).unregister();
-        }
+        for(String id : bridges.keySet())
+            try {
+                bridges.remove(id).unregister();
+            }catch(IllegalStateException e){
+                LOG.error("failed unregistering lamp", e);
+            }
+
     }
 
     @Override
-    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
+    protected void useImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
 
-        LOG.info("philips hue importer triggered");
+        LOG.info("philips hue bridge importer triggered");
 
-        PhilipsHueImportDeclarationWrapper pojo= PhilipsHueImportDeclarationWrapper.create(importDeclaration);
+        PhilipsHueBridgeImportDeclarationWrapper pojo= PhilipsHueBridgeImportDeclarationWrapper.create(importDeclaration);
 
         ComponentInstance instance;
 
-
-
-        LOG.debug("Creating proxy for the light " + pojo.getLightId());
-
         Hashtable properties = new Hashtable();
-        properties.put("philips.device.light", pojo.getObject());
-        //properties.put("bridge.filter",pojo.getBridgeID());
-        //properties.put("PHBridge.filter","(bridgeId="+pojo.getBridgeID()+")");
-        Hashtable filters = new Hashtable();
-        filters.put("PHBridge","(bridgeId="+pojo.getBridgeID()+")");
-        properties.put("requires.filters",filters);
-        properties.put(GenericDevice.DEVICE_SERIAL_NUMBER,pojo.getLightId());
+        properties.put("philips.device.bridge", pojo.getBridgeObject());
+        properties.put("philips.device.bridge.id", pojo.getId());
 
         try {
-           instance = philipsHueLightFactory.createComponentInstance(properties);
-           ServiceRegistration sr = new IpojoServiceRegistration(
+            instance = philipsHueBridgeFactory.createComponentInstance(properties);
+            ServiceRegistration sr = new IpojoServiceRegistration(
                     instance);
             super.handleImportDeclaration(importDeclaration);
 
-            lamps.put(pojo.getUniqueId(),sr);
+            bridges.put(pojo.getId(),sr);
         } catch (UnacceptableConfiguration unacceptableConfiguration) {
             LOG.error("Proxy instantiation failed",unacceptableConfiguration);
         } catch (MissingHandlerException e) {
@@ -144,17 +133,17 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
             LOG.error("Proxy instantiation failed",e);
         }
 
-
-
     }
 
     @Override
-    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
+    protected void denyImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
 
-        PhilipsHueImportDeclarationWrapper pojo= PhilipsHueImportDeclarationWrapper.create(importDeclaration);
+        LOG.info("philips hue bridge importer removal triggered");
+
+        PhilipsHueBridgeImportDeclarationWrapper pojo= PhilipsHueBridgeImportDeclarationWrapper.create(importDeclaration);
 
         try {
-            lamps.remove(pojo.getUniqueId()).unregister();
+            bridges.remove(pojo.getId()).unregister();
         }catch(IllegalStateException e){
             LOG.error("failed unregistering lamp", e);
         }
@@ -166,7 +155,6 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     public String getName() {
         return name;
     }
-
 
     class IpojoServiceRegistration implements ServiceRegistration {
 
@@ -218,6 +206,5 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
         }
 
     }
-
 }
 

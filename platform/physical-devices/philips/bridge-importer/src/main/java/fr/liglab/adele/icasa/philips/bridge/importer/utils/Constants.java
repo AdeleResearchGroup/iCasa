@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.philips.importers.utils;
+package fr.liglab.adele.icasa.philips.bridge.importer.utils;
 
 /*
  * #%L

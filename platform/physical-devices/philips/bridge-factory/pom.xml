@@ -14,7 +14,7 @@
     <!-- Project Descrkiption -->
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.liglab.adele.icasa</groupId>
-    <artifactId>philips.physical.bridge.factory</artifactId>
+    <artifactId>philips.physical.devices.bridge.factory</artifactId>
     <packaging>bundle</packaging>
     <name>${productName} :: ${projectName}</name>
 

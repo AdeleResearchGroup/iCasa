@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.philips.importers;
+package fr.liglab.adele.icasa.philips.bridge.factory;
 
 /*
  * #%L
@@ -53,7 +53,7 @@ import org.wisdom.api.scheduler.Scheduled;
 
 import java.util.*;
 
-import static fr.liglab.adele.icasa.philips.importers.utils.Constants.*;
+import static fr.liglab.adele.icasa.philips.bridge.factory.utils.Constants.*;
 
 @Component
 @Provides(specifications = {Scheduled.class})
