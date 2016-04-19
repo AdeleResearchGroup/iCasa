@@ -32,12 +32,12 @@
 			<version>${fuchsia.version}</version>
         </dependency>
 
-		<dependency>
+	<!--	<dependency>
 			<groupId>org.openhab.binding</groupId>
 			<artifactId>org.openhab.binding.zwave</artifactId>
 			<type>eclipse-plugin</type>
-			<version>1.6.2</version>
-		</dependency>
+			<version>1.8.2</version>
+		</dependency>-->
 
         <dependency>
             <groupId>org.apache.felix</groupId>
@@ -54,9 +54,14 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.openhab.binding</groupId>
+			<artifactId>org.openhab.binding.zwave</artifactId>
+			<version>1.8.2</version>
+		</dependency>
 
 
-    </dependencies>
+	</dependencies>
 	
 	
 	<build>
@@ -73,6 +78,7 @@
                         <Private-Package>
                         	org.openhab.binding.zwave.internal.protocol.initialization;-split-package:=merge-first,
                         	org.openhab.binding.zwave.internal.protocol.*,
+							org.openhab.binding.zwave.internal.config.*,
                         	org.openhab.binding.zwave.internal
                         </Private-Package>
                         <Import-Package>
@@ -104,6 +110,10 @@
 					</dependencySourceExcludes>
 
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

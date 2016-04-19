@@ -36,6 +36,7 @@ import org.openhab.binding.zwave.internal.protocol.SerialInterfaceException;
 import org.openhab.binding.zwave.internal.protocol.ZWaveController;
 import org.openhab.binding.zwave.internal.protocol.ZWaveEventListener;
 import org.openhab.binding.zwave.internal.protocol.ZWaveNode;
+import org.openhab.binding.zwave.internal.protocol.ZWaveNodeState;
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveCommandClass.CommandClass;
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveMultiInstanceCommandClass;
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveWakeUpCommandClass.ZWaveWakeUpEvent;
@@ -163,9 +164,9 @@ public class ZWaveImporter extends AbstractImporterComponent  {
     	public ControllerManager(String serialPort) throws SerialInterfaceException {
     		
     		this.serialPort		= serialPort;
-            this.controller		= new ZWaveController(false,serialPort,10000);
+            this.controller		= new ZWaveController(true,false,serialPort,10000,false);
 		}
-    	
+
     	public void open() {
             controller.initialize();
             controller.addEventListener(this);
@@ -182,12 +183,12 @@ public class ZWaveImporter extends AbstractImporterComponent  {
     		
     		EndPointIdentifier endPoint = new EndPointIdentifier(serialPort, event.getNodeId(), event.getEndpoint());
     		  		
-			boolean discovered 		= 	( (event instanceof ZWaveNodeStatusEvent) && (! ((ZWaveNodeStatusEvent)event).getState().equals(ZWaveNodeStatusEvent.State.Alive)) ) ||
+			boolean discovered 		= 	( (event instanceof ZWaveNodeStatusEvent) && (! ((ZWaveNodeStatusEvent)event).getState().equals(ZWaveNodeState.ALIVE)) ) ||
     									( (event instanceof ZWaveInclusionEvent) && (! ((ZWaveInclusionEvent)event).getEvent().equals(ZWaveInclusionEvent.Type.IncludeDone)) ) ||
     									( (event instanceof ZWaveWakeUpEvent)) ||
     									( (event instanceof ZWaveCommandClassValueEvent));
     		
-    		boolean undiscovered 	= 	( (event instanceof ZWaveNodeStatusEvent) && (! ((ZWaveNodeStatusEvent)event).getState().equals(ZWaveNodeStatusEvent.State.Alive)) ) ||
+    		boolean undiscovered 	= 	( (event instanceof ZWaveNodeStatusEvent) && (! ((ZWaveNodeStatusEvent)event).getState().equals(ZWaveNodeState.ALIVE)) ) ||
 										( (event instanceof ZWaveInclusionEvent) && (! ((ZWaveInclusionEvent)event).getEvent().equals(ZWaveInclusionEvent.Type.ExcludeDone)) ) ;
     		
     		if (discovered && ! isManaged(endPoint) ) {

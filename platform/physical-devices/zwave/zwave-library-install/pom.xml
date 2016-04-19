@@ -43,7 +43,7 @@
 		           		</goals>
 		           		<inherited>false</inherited>
 			            <configuration>
-			            	<file>lib/org.openhab.binding.zwave-1.6.2.jar</file>
+			            	<file>lib/org.openhab.binding.zwave-1.8.2.jar</file>
 			            </configuration>
 					</execution>
 				</executions>

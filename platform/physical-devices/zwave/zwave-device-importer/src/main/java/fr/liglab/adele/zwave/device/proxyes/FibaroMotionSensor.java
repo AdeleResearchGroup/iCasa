@@ -160,10 +160,10 @@ public class FibaroMotionSensor extends AbstractDevice implements MotionSensor, 
 					Integer batteryLevel = (Integer) changedValue.getValue();
 					setPropertyValue("zwave.batteryLevel", batteryLevel);
 				}
-			}			
+			}
 
 		}
-		
+
 	}
 
 }
