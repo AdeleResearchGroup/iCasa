@@ -31,18 +31,19 @@
 
 
     <modules>
-        <module>context-impl-helpers</module>
-        <module>context-impl</module>
-        <module>gogo-adapter</module>
-        <module>context-remote</module>
-        <module>clock-system-impl</module>
-        <module>device-manager-impl</module>
-        <module>application-impl</module>
-        <module>application-remote</module>
-        <module>technical-services-impl</module>
         <module>access-manager-impl</module>
         <module>access-manager-remote</module>
+        <module>application-impl</module>
+        <module>application-remote</module>
+        <module>clock-system-impl</module>
+        <module>context-impl-helpers</module>
+        <module>context-impl</module>
+        <module>context-remote</module>
+        <module>context-manager-impl</module>
+        <module>device-manager-impl</module>
         <module>gateway-as-box</module>
+        <module>gogo-adapter</module>
+        <module>technical-services-impl</module>
     </modules>
     <build>
         <plugins>

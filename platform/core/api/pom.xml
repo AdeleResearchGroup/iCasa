@@ -29,12 +29,13 @@
     <name>${productName} :: ${projectName}</name>
 
     <modules>
+        <module>access-manager-api</module>
+        <module>application-api</module>
         <module>common</module>
         <module>common-metrics</module>
         <module>context-api</module>
-        <module>application-api</module>
+        <module>context-manager-api</module>
         <module>device-manager-api</module>
-        <module>access-manager-api</module>
         <module>technical-services-api</module>
     </modules>
     <build>
