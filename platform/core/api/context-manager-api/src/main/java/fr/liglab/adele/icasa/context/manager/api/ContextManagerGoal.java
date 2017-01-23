@@ -1,40 +1,51 @@
 package fr.liglab.adele.icasa.context.manager.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * TEMP
  * Les besoins en API de contexte sont exprimés
  */
 public class ContextManagerGoal {
-    private String[] optimalConfig;
+    private Set<String> optimalConfig = null;
 
-    private String[] minimumConfig;
+    private Set<String> minimumConfig = null;
 
     public ContextManagerGoal() {
-        optimalConfig = null;
-        minimumConfig = null;
+        this(null, null);
     }
 
-    public String[] getOptimalConfig() {
+    public ContextManagerGoal(Set<String> minimumConfig) {
+        this(null, minimumConfig);
+    }
+
+    public ContextManagerGoal(Set<String> optimalConfig, Set<String> minimumConfig) {
+        setOptimalConfig(optimalConfig);
+        setMinimumConfig(minimumConfig);
+    }
+
+    public Set<String> getOptimalConfig() {
         return optimalConfig;
     }
 
-    public boolean setOptimalConfig(String[] optimalConfig) {
+    public boolean setOptimalConfig(Set<String> optimalConfig) {
         boolean check = checkConfig(optimalConfig);
-        if(check){this.optimalConfig = optimalConfig;}
+        if(check){this.optimalConfig = new HashSet<String>(optimalConfig);}
         return check;
     }
 
-    public String[] getMinimumConfig() {
+    public Set<String> getMinimumConfig() {
         return minimumConfig;
     }
 
-    public boolean setMinimumConfig(String[] minimumConfig) {
+    public boolean setMinimumConfig(Set<String> minimumConfig) {
         boolean check = checkConfig(minimumConfig);
-        if(check){this.minimumConfig = minimumConfig;}
+        if(check){this.minimumConfig = new HashSet<String>(minimumConfig);}
         return check;
     }
 
-    private boolean checkConfig(String[] config){
+    private boolean checkConfig(Set<String> config){
         boolean check = true;
         for(String contextInterface : config){
             /*TODO*/

@@ -15,6 +15,8 @@
  */
 package fr.liglab.adele.icasa.binary.light.follow.me;
 
+import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoal;
+import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoalRegistration;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
@@ -22,6 +24,7 @@ import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,15 +44,36 @@ public class LightFollowMeApplication {
     /** Component Lifecycle Method */
     @Invalidate
     public void stop() {
-        /*TODO*/
+
     }
 
     /** Component Lifecycle Method */
     @Validate
     public void start() {
         // do nothing
-        /*TODO*/
     }
+
+    @Requires(id="manager", optional = true, specification = ContextManagerGoalRegistration.class)
+    public ContextManagerGoalRegistration contextRegistration;
+
+    @Bind(id="manager")
+    public void bindContextManagerGoalRegistration(ContextManagerGoalRegistration contextManagerGoalRegistration){
+        Set<String> minimumConfig = new HashSet<>();
+        minimumConfig.add(BinaryLight.class.toGenericString());
+
+        Set<String> optimalConfig = new HashSet<>();
+        optimalConfig.add(BinaryLight.class.toGenericString());
+        optimalConfig.add(PresenceService.class.toGenericString());
+
+        ContextManagerGoal contextManagerGoal = new ContextManagerGoal(minimumConfig, optimalConfig);
+        contextManagerGoalRegistration.registerContextManagerGoals(this.getClass().toGenericString(), contextManagerGoal);
+    }
+
+    @Unbind
+    public void unbindContextManagerGoalRegistration(ContextManagerGoalRegistration contextManagerGoalRegistration){
+        contextRegistration.unregisterContextManagerGoals(this.getClass().toGenericString());
+    }
+
 
     @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
     private List<BinaryLight> binaryLights;
@@ -64,7 +88,6 @@ public class LightFollowMeApplication {
         }else {
             binaryLight.turnOff();
         }
-
     }
 
     @Modified(id="lights")
@@ -76,11 +99,11 @@ public class LightFollowMeApplication {
         }
     }
 
-
     @Unbind(id="lights")
     public void unbindBinaryLight(BinaryLight binaryLight){
         binaryLight.turnOff();
     }
+
 
     @Bind(id="presence")
     public void bindPresenceService(PresenceService presenceService){

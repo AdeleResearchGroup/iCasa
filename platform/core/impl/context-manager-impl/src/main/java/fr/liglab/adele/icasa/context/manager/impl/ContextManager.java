@@ -4,16 +4,15 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl;
 import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoal;
-import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoalRegistering;
+import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoalRegistration;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Validate;
 
 @Component
 @Provides
 @Instantiate
-public class ContextManager implements ContextManagerGoalRegistering{
+public class ContextManager implements ContextManagerGoalRegistration {
 
 
 

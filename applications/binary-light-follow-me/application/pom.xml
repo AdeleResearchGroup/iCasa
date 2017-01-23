@@ -15,25 +15,30 @@
   <artifactId>binary.light.follow.me.application</artifactId>
   <name>${productName} :: ${projectName}</name>
 
-   <dependencies>
-    <dependency>
-      <groupId>fr.liglab.adele.icasa</groupId>
-      <artifactId>context.api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+  <dependencies>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.annotations</artifactId>
     </dependency>
     <dependency>
-    	<groupId>org.apache.felix</groupId>
-    	<artifactId>org.apache.felix.ipojo</artifactId>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo</artifactId>
     </dependency>
     <dependency>
       <groupId>fr.liglab.adele.icasa</groupId>
-      <artifactId>device.dependency.annotations</artifactId>     
+      <artifactId>device.dependency.annotations</artifactId>
       <version>${project.version}</version>
-    </dependency>      
+    </dependency>
+     <dependency>
+       <groupId>fr.liglab.adele.icasa</groupId>
+       <artifactId>context.api</artifactId>
+       <version>${project.version}</version>
+     </dependency>
+     <dependency>
+       <groupId>fr.liglab.adele.icasa</groupId>
+       <artifactId>context.manager.api</artifactId>
+       <version>${project.version}</version>
+     </dependency>
   </dependencies>
   
   <build>
