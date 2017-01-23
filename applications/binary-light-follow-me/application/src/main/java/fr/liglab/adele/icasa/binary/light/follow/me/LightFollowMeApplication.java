@@ -41,13 +41,14 @@ public class LightFollowMeApplication {
     /** Component Lifecycle Method */
     @Invalidate
     public void stop() {
-
+        /*TODO*/
     }
 
     /** Component Lifecycle Method */
     @Validate
     public void start() {
         // do nothing
+        /*TODO*/
     }
 
     @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
