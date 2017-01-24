@@ -63,12 +63,12 @@ public class LightFollowMeApplication {
         optimalConfig.add(PresenceService.class.toGenericString());
 
         ContextGoal contextGoal = new ContextGoal(minimumConfig, optimalConfig);
-        contextGoalRegistration.registerContextManagerGoals(this.getClass().toGenericString(), contextGoal);
+        contextGoalRegistration.registerContextGoals(this.getClass().toGenericString(), contextGoal);
     }
 
     @Unbind
     public void unbindContextManagerGoalRegistration(ContextGoalRegistration contextGoalRegistration){
-        contextRegistration.unregisterContextManagerGoals(this.getClass().toGenericString());
+        contextRegistration.unregisterContextGoals(this.getClass().toGenericString());
     }
 
 
