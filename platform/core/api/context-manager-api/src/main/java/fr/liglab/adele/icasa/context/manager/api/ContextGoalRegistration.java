@@ -5,7 +5,7 @@ package fr.liglab.adele.icasa.context.manager.api;
  * Les applications enregistrent leurs besoins au gestionnaire de contexte
  * Ces besoins représentent un but sur l'API à fournir
  */
-public interface ContextManagerGoalRegistration {
+public interface ContextGoalRegistration {
 
     boolean registerContextManagerGoals(String appId, ContextGoal contextGoal);
 
