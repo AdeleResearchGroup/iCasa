@@ -40,7 +40,10 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Private-Package>fr.liglab.adele.icasa.context.manager.impl</Private-Package>
+                        <Private-Package>
+                            fr.liglab.adele.icasa.context.manager.emul,
+                            fr.liglab.adele.icasa.context.manager.impl
+                        </Private-Package>
                     </instructions>
                 </configuration>
             </plugin>
