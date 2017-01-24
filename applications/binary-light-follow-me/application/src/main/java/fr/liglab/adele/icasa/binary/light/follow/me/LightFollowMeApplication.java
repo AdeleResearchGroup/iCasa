@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.binary.light.follow.me;
 
-import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoal;
+import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
 import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoalRegistration;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
@@ -24,7 +24,6 @@ import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,8 +62,8 @@ public class LightFollowMeApplication {
         optimalConfig.add(BinaryLight.class.toGenericString());
         optimalConfig.add(PresenceService.class.toGenericString());
 
-        ContextManagerGoal contextManagerGoal = new ContextManagerGoal(minimumConfig, optimalConfig);
-        contextManagerGoalRegistration.registerContextManagerGoals(this.getClass().toGenericString(), contextManagerGoal);
+        ContextGoal contextGoal = new ContextGoal(minimumConfig, optimalConfig);
+        contextManagerGoalRegistration.registerContextManagerGoals(this.getClass().toGenericString(), contextGoal);
     }
 
     @Unbind

@@ -3,7 +3,7 @@
  * Classe principale du gestionnaire de contexte
  */
 package fr.liglab.adele.icasa.context.manager.impl;
-import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoal;
+import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
 import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoalRegistration;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -17,12 +17,12 @@ public class ContextManager implements ContextManagerGoalRegistration {
 
 
     @Override
-    public boolean registerContextManagerGoals(String appId, ContextManagerGoal contextManagerGoal) {
+    public boolean registerContextManagerGoals(String appId, ContextGoal contextGoal) {
         return false;
     }
 
     @Override
-    public ContextManagerGoal getRegisteredContextManagerGoals(String appId) {
+    public ContextGoal getRegisteredContextManagerGoals(String appId) {
         return null;
     }
 

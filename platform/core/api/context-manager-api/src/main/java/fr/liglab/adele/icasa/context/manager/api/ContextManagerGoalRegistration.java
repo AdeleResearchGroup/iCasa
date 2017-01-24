@@ -7,9 +7,9 @@ package fr.liglab.adele.icasa.context.manager.api;
  */
 public interface ContextManagerGoalRegistration {
 
-    boolean registerContextManagerGoals(String appId, ContextManagerGoal contextManagerGoal);
+    boolean registerContextManagerGoals(String appId, ContextGoal contextGoal);
 
-    ContextManagerGoal getRegisteredContextManagerGoals(String appId);
+    ContextGoal getRegisteredContextManagerGoals(String appId);
 
     boolean unregisterContextManagerGoals(String appId);
 }
