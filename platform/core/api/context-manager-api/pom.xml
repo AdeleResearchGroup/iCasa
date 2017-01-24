@@ -42,6 +42,13 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-ipojo-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>fr.liglab.adele.cream</groupId>
+                        <artifactId>cream.ipojo.module</artifactId>
+                        <version>${context.socm.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <goals>

@@ -27,6 +27,14 @@
             <artifactId>org.apache.felix.ipojo</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fr.liglab.adele.cream</groupId>
+            <artifactId>cream.core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>context.manager.api</artifactId>
             <version>${project.version}</version>
@@ -50,6 +58,13 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-ipojo-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>fr.liglab.adele.cream</groupId>
+                        <artifactId>cream.ipojo.module</artifactId>
+                        <version>${context.socm.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <goals>

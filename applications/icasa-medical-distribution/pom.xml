@@ -113,6 +113,19 @@
 			<artifactId>battery.monitoring</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!--TEMP dependency-->
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>context.manager.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>context.manager.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
