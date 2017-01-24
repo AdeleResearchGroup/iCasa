@@ -7,20 +7,20 @@ import java.util.Set;
  * TEMP
  * Les besoins en API de contexte sont exprimés
  */
-public class ContextManagerGoal {
+public class ContextGoal {
     private Set<String> optimalConfig = null;
 
     private Set<String> minimumConfig = null;
 
-    public ContextManagerGoal() {
+    public ContextGoal() {
         this(null, null);
     }
 
-    public ContextManagerGoal(Set<String> minimumConfig) {
+    public ContextGoal(Set<String> minimumConfig) {
         this(null, minimumConfig);
     }
 
-    public ContextManagerGoal(Set<String> optimalConfig, Set<String> minimumConfig) {
+    public ContextGoal(Set<String> optimalConfig, Set<String> minimumConfig) {
         setOptimalConfig(optimalConfig);
         setMinimumConfig(minimumConfig);
     }
