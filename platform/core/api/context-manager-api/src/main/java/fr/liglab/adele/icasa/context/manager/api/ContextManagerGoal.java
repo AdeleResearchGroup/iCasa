@@ -47,10 +47,13 @@ public class ContextManagerGoal {
 
     private boolean checkConfig(Set<String> config){
         boolean check = true;
-        for(String contextInterface : config){
-            /*TODO*/
-            /*Check if all the interfaces exist*/
-
+        /*Check if all the interfaces exist*/
+        try {
+            for(String contextInterface : config){
+               Class.forName(contextInterface);
+            }
+        } catch (ClassNotFoundException e) {
+            check = false;
         }
         return check;
     }

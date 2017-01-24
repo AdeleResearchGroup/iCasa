@@ -41,16 +41,14 @@ public class LightFollowMeApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(LightFollowMeApplication.class);
 
-    /** Component Lifecycle Method */
     @Invalidate
     public void stop() {
 
     }
 
-    /** Component Lifecycle Method */
     @Validate
     public void start() {
-        // do nothing
+
     }
 
     @Requires(id="manager", optional = true, specification = ContextManagerGoalRegistration.class)
@@ -158,5 +156,4 @@ public class LightFollowMeApplication {
         ).collect(Collectors.toSet());
         return lightInZone;
     }
-
 }
