@@ -16,7 +16,7 @@
 package fr.liglab.adele.icasa.binary.light.follow.me;
 
 import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
-import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoalRegistration;
+import fr.liglab.adele.icasa.context.manager.api.ContextGoalRegistration;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
@@ -50,11 +50,11 @@ public class LightFollowMeApplication {
 
     }
 
-    @Requires(id="manager", optional = true, specification = ContextManagerGoalRegistration.class)
-    public ContextManagerGoalRegistration contextRegistration;
+    @Requires(id="manager", optional = true, specification = ContextGoalRegistration.class)
+    public ContextGoalRegistration contextRegistration;
 
     @Bind(id="manager")
-    public void bindContextManagerGoalRegistration(ContextManagerGoalRegistration contextManagerGoalRegistration){
+    public void bindContextManagerGoalRegistration(ContextGoalRegistration contextGoalRegistration){
         Set<String> minimumConfig = new HashSet<>();
         minimumConfig.add(BinaryLight.class.toGenericString());
 
@@ -63,11 +63,11 @@ public class LightFollowMeApplication {
         optimalConfig.add(PresenceService.class.toGenericString());
 
         ContextGoal contextGoal = new ContextGoal(minimumConfig, optimalConfig);
-        contextManagerGoalRegistration.registerContextManagerGoals(this.getClass().toGenericString(), contextGoal);
+        contextGoalRegistration.registerContextManagerGoals(this.getClass().toGenericString(), contextGoal);
     }
 
     @Unbind
-    public void unbindContextManagerGoalRegistration(ContextManagerGoalRegistration contextManagerGoalRegistration){
+    public void unbindContextManagerGoalRegistration(ContextGoalRegistration contextGoalRegistration){
         contextRegistration.unregisterContextManagerGoals(this.getClass().toGenericString());
     }
 

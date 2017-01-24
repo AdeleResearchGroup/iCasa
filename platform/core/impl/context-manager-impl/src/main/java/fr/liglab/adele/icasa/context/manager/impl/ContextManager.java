@@ -4,7 +4,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl;
 import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
-import fr.liglab.adele.icasa.context.manager.api.ContextManagerGoalRegistration;
+import fr.liglab.adele.icasa.context.manager.api.ContextGoalRegistration;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -12,7 +12,7 @@ import org.apache.felix.ipojo.annotations.Provides;
 @Component
 @Provides
 @Instantiate
-public class ContextManager implements ContextManagerGoalRegistration {
+public class ContextManager implements ContextGoalRegistration {
 
 
 
