@@ -15,32 +15,38 @@
  */
 
 package fr.liglab.adele.icasa.context.manager.impl;
+
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-//import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
-//import fr.liglab.adele.icasa.context.manager.api.ContextGoalRegistration;
+import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
+import fr.liglab.adele.icasa.context.manager.api.ContextGoalRegistration;
 import org.apache.felix.ipojo.annotations.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * TEMP
  * Classe principale du gestionnaire de contexte
  */
-@Component(immediate = true)//(publicFactory = false)
+@Component(immediate = true, publicFactory = false)
 @Provides
 @Instantiate
-//public class ContextManager implements ContextGoalRegistration, Runnable {
-public class ContextManager implements Runnable {
-    /*Runnable parameters*/
-    private static Thread thread = null;
-    private static boolean end = true;
-    private static final int DELAY = 10 * 1000; //milliseconds
+public class ContextManager implements ContextGoalRegistration {
 
-//    private Map<String, ContextGoal> contextGoalMap = new HashMap<>();
+    /*Thread management*/
+    private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
+    private static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private static ScheduledFuture scheduledFuture = null;
+    private static Runnable runnable = new ContextResolutionMachine();
+    private long delay = 10L;
 
+    /*Goal management*/
+    private Map<String, ContextGoal> contextGoalMap = new HashMap<>();
+
+    /*Managed elements*/
     @Requires(optional = true)
     private ContextEntity[] contextEntities;
 
@@ -50,47 +56,49 @@ public class ContextManager implements Runnable {
     @Requires(optional = true)
     private RelationProvider[] relationProviders;
 
+
     @Validate
     public void start(){
-        thread = new Thread(this);
-        end = false;
-        thread.start();
+        scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0, delay, TimeUnit.SECONDS);
     }
 
     @Invalidate
     public void stop(){
-        end = true;
+        scheduledExecutorService.shutdown();
     }
 
-//    @Override
-//    public boolean registerContextGoals(String appId, ContextGoal contextGoal) {
-//        contextGoalMap.put(appId,contextGoal);
-//        thread.interrupt(); //refresh
-//        return true;
-//    }
-//
-//    @Override
-//    public ContextGoal getRegisteredContextGoals(String appId) {
-//        return contextGoalMap.get(appId);
-//    }
-//
-//    @Override
-//    public boolean unregisterContextGoals(String appId) {
-//        contextGoalMap.remove(appId);
-//        return true;
-//    }
+    public long getDelay() {
+        return delay;
+    }
 
+    public boolean setDelay(long delay){
+        boolean modified = false;
+
+        modified = scheduledFuture.cancel(false);
+        if(modified){
+            scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0, delay, TimeUnit.SECONDS);
+            this.delay = scheduledFuture.getDelay(TimeUnit.SECONDS);
+        }
+        return modified;
+    }
 
     @Override
-    public void run() {
-        while (!end) {
-            try {
-                Thread.sleep(DELAY);
-            } catch (InterruptedException ie) {
-                /* will recheck quit */
-            } finally {
-                /*TODO do something*/
-            }
-        }
+    public boolean registerContextGoals(String appId, ContextGoal contextGoal) {
+        contextGoalMap.put(appId,contextGoal);
+        singleExecutorService.submit(runnable);
+        /*TODO test*/
+//        scheduledExecutorService.execute(runnable);
+        return true;
+    }
+
+    @Override
+    public ContextGoal getRegisteredContextGoals(String appId) {
+        return contextGoalMap.get(appId);
+    }
+
+    @Override
+    public boolean unregisterContextGoals(String appId) {
+        contextGoalMap.remove(appId);
+        return true;
     }
 }

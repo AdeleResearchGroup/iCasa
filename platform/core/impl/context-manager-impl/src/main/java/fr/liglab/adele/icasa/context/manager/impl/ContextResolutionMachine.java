@@ -15,10 +15,22 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl;
 
+import org.slf4j.LoggerFactory;
+
 /**
  * TEMP
  * Classe qui détermine la meilleure configuration avec les buts et l'environnement actuel
  */
-public class ContextResolutionMachine {
-    /*TODO Hard coder ???*/
+public final class ContextResolutionMachine implements Runnable {
+
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ContextResolutionMachine.class);
+
+    private static int i =0;
+
+    @Override
+    public void run() {
+        /*TODO Hard coder ???*/
+        /*Attention aux multiples acces*/
+        LOG.info("Execution " + i++);
+    }
 }
