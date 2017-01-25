@@ -74,7 +74,12 @@ public class ContextManager implements ContextGoalRegistration {
     public boolean setDelay(long delay){
         boolean modified = false;
 
-        modified = scheduledFuture.cancel(false);
+        if(scheduledFuture != null){
+            modified = scheduledFuture.cancel(false);
+        } else {
+            modified = true;
+        }
+
         if(modified){
             scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0, delay, TimeUnit.SECONDS);
             this.delay = scheduledFuture.getDelay(TimeUnit.SECONDS);
