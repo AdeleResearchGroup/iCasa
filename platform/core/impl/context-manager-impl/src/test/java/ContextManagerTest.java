@@ -8,13 +8,19 @@ import java.util.concurrent.TimeUnit;
  */
 public class ContextManagerTest {
 
+
     @Test
     public void modifyingSchedule() throws Exception{
         ContextManager contextManager = new ContextManager();
-        TimeUnit.SECONDS.sleep(10);
-        contextManager.setDelay(1L);
-        TimeUnit.SECONDS.sleep(10);
-        contextManager.setDelay(5L);
-        TimeUnit.SECONDS.sleep(25);
+
+        System.out.println("\n1st config");
+        contextManager.setDelay(10L, TimeUnit.MILLISECONDS);
+        System.out.println("-");
+        TimeUnit.MILLISECONDS.sleep(100);
+
+        System.out.println("\n2nd config");
+        contextManager.setDelay(5L, TimeUnit.MILLISECONDS);
+        System.out.println("-");
+        TimeUnit.MILLISECONDS.sleep(50);
     }
 }

@@ -42,6 +42,7 @@ public class ContextManager implements ContextGoalRegistration {
     private static ScheduledFuture scheduledFuture = null;
     private static Runnable runnable = new ContextResolutionMachine();
     private long delay = 10L;
+    private TimeUnit timeUnit = TimeUnit.SECONDS;
 
     /*Goal management*/
     private Map<String, ContextGoal> contextGoalMap = new HashMap<>();
@@ -71,19 +72,19 @@ public class ContextManager implements ContextGoalRegistration {
         return delay;
     }
 
-    public boolean setDelay(long delay){
-        boolean modified = false;
+    public boolean setDelay(long delay, TimeUnit timeUnit){
+        boolean modified = true;
 
         if(scheduledFuture != null){
             modified = scheduledFuture.cancel(false);
-        } else {
-            modified = true;
         }
 
         if(modified){
-            scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0, delay, TimeUnit.SECONDS);
-            this.delay = scheduledFuture.getDelay(TimeUnit.SECONDS);
+            scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0, delay, timeUnit);
+            this.timeUnit = timeUnit;
+            this.delay = scheduledFuture.getDelay(this.timeUnit);
         }
+
         return modified;
     }
 
