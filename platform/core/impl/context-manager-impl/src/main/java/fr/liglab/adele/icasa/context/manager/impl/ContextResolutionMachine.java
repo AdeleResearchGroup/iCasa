@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -23,15 +24,14 @@ import org.slf4j.LoggerFactory;
  */
 public final class ContextResolutionMachine implements Runnable {
 
-//    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ContextResolutionMachine.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ContextResolutionMachine.class);
 
-    private static int i =0;
+    private static int i = 0;
 
     @Override
     public void run() {
         /*TODO Hard coder ???*/
         /*Attention aux multiples acces*/
-//        LOG.info("Execution " + i++);
-        System.out.println("Execution " + i++);
+        LOG.info("Execution " + i++);
     }
 }
