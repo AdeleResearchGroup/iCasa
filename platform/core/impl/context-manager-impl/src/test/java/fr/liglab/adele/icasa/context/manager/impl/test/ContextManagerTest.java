@@ -60,14 +60,15 @@ public class ContextManagerTest {
 
 
         /*Test*/
+        System.out.println("\nTEST Context Schedule - Verification manuelle - 10 execution par config");
         ContextManager contextManager = new ContextManager();
 
-        System.out.println("\n1st config");
+        System.out.println("\n1ere config");
         contextManager.setDelay(100L, TimeUnit.MILLISECONDS);
         System.out.println("-");
         TimeUnit.MILLISECONDS.sleep(1000);
 
-        System.out.println("\n2nd config");
+        System.out.println("\n2eme config");
         contextManager.setDelay(500L, TimeUnit.MILLISECONDS);
         System.out.println("-");
         TimeUnit.MILLISECONDS.sleep(5000);

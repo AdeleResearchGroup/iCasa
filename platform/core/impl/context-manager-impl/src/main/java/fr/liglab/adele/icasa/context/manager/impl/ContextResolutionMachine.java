@@ -37,10 +37,10 @@ final class ContextResolutionMachine implements Runnable {
     private static int i = 0;
 
     /*Copied state*/
-    private Set<ContextGoal> contextGoals;
-    private Set<ContextEntity> contextEntities;
-    private Set<EntityProvider> entityProviders;
-    private Set<RelationProvider> relationProviders;
+    private Set<ContextGoal> contextGoals = new HashSet<>();
+    private Set<ContextEntity> contextEntities = new HashSet<>();
+    private Set<EntityProvider> entityProviders = new HashSet<>();
+    private Set<RelationProvider> relationProviders = new HashSet<>();
 
     @Override
     public void run() {
@@ -48,7 +48,8 @@ final class ContextResolutionMachine implements Runnable {
         /*Attention aux multiples acces*/
         /*TODO Recupérer les info nécessaires du manager*/
         LOG.info("Execution " + i++);
-        resolutionAlgorithm();
+        /*TODO UNCOMMENT*/
+//        resolutionAlgorithm();
     }
 
     protected synchronized void configureState(Map<String, ContextGoal> contextGoalMap, ContextEntity[] contextEntities, EntityProvider[] entityProviders, RelationProvider[]relationProviders){
@@ -62,33 +63,39 @@ final class ContextResolutionMachine implements Runnable {
 
         /*TODO Algorithme naze, à repenser*/
 
-        /*Services disponibles, avec les entités de contexte correspondantes*/
-        Map<String, Set<ContextEntity>> contextEntityByService = new HashMap<>();
-        for(ContextEntity contextEntity : contextEntities){
-            Set<String> services = new HashSet<>();
-            services.addAll(contextEntity.getServices());
-
-            for (String service : services){
-                Set<ContextEntity> contextEntitySet = contextEntityByService.get(service);
-
-                if(contextEntitySet == null){
-                    contextEntitySet = new HashSet<>();
-                }
-                contextEntitySet.add(contextEntity);
-                contextEntityByService.put(service, contextEntitySet);
-            }
-        }
-
-        /*App, Config optimale*/
+        /*App, set de services en config optimale*/
         Set<String> goals = new HashSet<>();
         for(ContextGoal contextGoal : contextGoals){
             goals.addAll(contextGoal.getOptimalConfig());
         }
 
-//        for(String goal : goals){
-////            if(services.contains(goal))
-//            //TODO Continuer
-//        }
+        /*Entities à activées*/
+        Set<String> entityActivationMap = new HashSet<>();
+        for(ContextEntity contextEntity : contextEntities){
+            for(String s : contextEntity.getServices()){
+                if(goals.contains(s)){
+                    entityActivationMap.add(contextEntity.getClass().toString());
+                    /*TODO VERIFIER*/
+                }
+            }
+
+        }
+
+        /*Activation de la création des entities dans chaque provider*/
+        for(EntityProvider entityProvider : entityProviders){
+            for(String providedEntity : entityProvider.getProvidedEntities()){
+                /*TODO VERIFIER LA CORRESPONDANCE*/
+                if(entityActivationMap.contains(providedEntity)){
+                    entityProvider.enable(providedEntity);
+                } else {
+                    entityProvider.disable(providedEntity);
+                }
+            }
+        }
+
+
+        /*Verif config optimale*/
+        /*TODO*/
 
     }
 }
