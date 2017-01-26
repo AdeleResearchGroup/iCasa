@@ -40,7 +40,7 @@ public class ContextManager implements ContextGoalRegistration {
     private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
     private static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture scheduledFuture = null;
-    private static Runnable runnable = new ContextResolutionMachine();
+
     private long delay = 10L;
     private TimeUnit timeUnit = TimeUnit.SECONDS;
 
@@ -57,15 +57,36 @@ public class ContextManager implements ContextGoalRegistration {
     @Requires(optional = true)
     private RelationProvider[] relationProviders;
 
+    /*Adaptation*/
+    private Runnable contextCompositionAdaptation = new Runnable() {
+        /*Resolution machine : calcule et effectue l'adaptation*/
+        private ContextResolutionMachine resolutionMachine = new ContextResolutionMachine();
+
+        @Override
+        public void run() {
+            /*Passage de l'etat du contexte à un instant t*/
+            resolutionMachine.configureState(
+                    ContextManager.this.contextGoalMap,
+                    ContextManager.this.contextEntities,
+                    ContextManager.this.entityProviders,
+                    ContextManager.this.relationProviders);
+            /*Adaptation*/
+            resolutionMachine.run();
+        }
+    };
 
     @Validate
     public void start(){
-        scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0, delay, TimeUnit.SECONDS);
+        scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, TimeUnit.SECONDS);
     }
 
     @Invalidate
     public void stop(){
         scheduledExecutorService.shutdown();
+    }
+
+    public TimeUnit getTimeUnit() {
+        return timeUnit;
     }
 
     public long getDelay() {
@@ -80,7 +101,7 @@ public class ContextManager implements ContextGoalRegistration {
         }
 
         if(modified){
-            scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0, delay, timeUnit);
+            scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, timeUnit);
             this.timeUnit = timeUnit;
             this.delay = scheduledFuture.getDelay(this.timeUnit);
         }
@@ -91,9 +112,9 @@ public class ContextManager implements ContextGoalRegistration {
     @Override
     public boolean registerContextGoals(String appId, ContextGoal contextGoal) {
         contextGoalMap.put(appId,contextGoal);
-        singleExecutorService.submit(runnable);
+        singleExecutorService.submit(contextCompositionAdaptation);
         /*TODO test*/
-//        scheduledExecutorService.execute(runnable);
+//        scheduledExecutorService.execute(contextCompositionAdaptation);
         return true;
     }
 
