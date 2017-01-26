@@ -41,11 +41,11 @@ public class ContextManager implements ContextGoalRegistration {
     private static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture scheduledFuture = null;
 
-    private long delay = 10L;
-    private TimeUnit timeUnit = TimeUnit.SECONDS;
+    private static long delay = 10L;
+    private static TimeUnit timeUnit = TimeUnit.SECONDS;
 
     /*Goal management*/
-    private Map<String, ContextGoal> contextGoalMap = new HashMap<>();
+    private static Map<String, ContextGoal> contextGoalMap = new HashMap<>();
 
     /*Managed elements*/
     @Requires(optional = true)
@@ -57,22 +57,19 @@ public class ContextManager implements ContextGoalRegistration {
     @Requires(optional = true)
     private RelationProvider[] relationProviders;
 
-    /*Adaptation*/
-    private Runnable contextCompositionAdaptation = new Runnable() {
-        /*Resolution machine : calcule et effectue l'adaptation*/
-        private ContextResolutionMachine resolutionMachine = new ContextResolutionMachine();
+    /*Resolution machine : calcule et effectue l'adaptation*/
+    private static final ContextResolutionMachine resolutionMachine = new ContextResolutionMachine();
 
-        @Override
-        public void run() {
-            /*Passage de l'etat du contexte à un instant t*/
-            resolutionMachine.configureState(
-                    ContextManager.this.contextGoalMap,
-                    ContextManager.this.contextEntities,
-                    ContextManager.this.entityProviders,
-                    ContextManager.this.relationProviders);
-            /*Adaptation*/
-            resolutionMachine.run();
-        }
+    /*Adaptation*/
+    private Runnable contextCompositionAdaptation = () -> {
+        /*Passage de l'etat du contexte à un instant t*/
+        resolutionMachine.configureState(
+                ContextManager.contextGoalMap,
+                ContextManager.this.contextEntities,
+                ContextManager.this.entityProviders,
+                ContextManager.this.relationProviders);
+        /*Adaptation*/
+        resolutionMachine.run();
     };
 
     @Validate
@@ -102,8 +99,8 @@ public class ContextManager implements ContextGoalRegistration {
 
         if(modified){
             scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, timeUnit);
-            this.timeUnit = timeUnit;
-            this.delay = scheduledFuture.getDelay(this.timeUnit);
+            ContextManager.timeUnit = timeUnit;
+            ContextManager.delay = scheduledFuture.getDelay(ContextManager.timeUnit);
         }
 
         return modified;
