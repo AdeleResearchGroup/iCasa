@@ -61,12 +61,12 @@ public class ContextManagerTest {
 
 
         /*Test*/
-        System.out.println("\nTEST Context Schedule (Verification manuelle à faire : nombre d'executions par config)");
+        System.out.println("\n***TEST Context Schedule (Verification manuelle à faire : nombre d'executions par config)***");
         ContextManager contextManager = new ContextManager();
         contextManager.start();
 
 
-        System.out.println("\n1ere config");
+        System.out.println("\n***1ere config***");
         int nExecutions = 10;
         TimeUnit timeUnit = TimeUnit.MILLISECONDS;
         long delay = 100L;
@@ -76,7 +76,7 @@ public class ContextManagerTest {
         System.out.println("--- ("+nExecutions+" executions)");
         TimeUnit.MILLISECONDS.sleep(nExecutions*delay);
 
-        System.out.println("\n2eme config");
+        System.out.println("\n***2eme config***");
         delay = 500L;
         contextManager.setDelay(delay, timeUnit);
         Assert.assertEquals("Modification de delay non appliquee", delay, contextManager.getDelay());

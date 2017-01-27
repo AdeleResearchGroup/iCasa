@@ -73,7 +73,7 @@ public class ContextResolutionMachineTest {
 
         /*Mocked entities*/
         ContextEntity mockedBinaryLightZwave = Mockito.mock(ContextEntity.class);
-        String nameBinaryLightZwave = "BinaryLightZwave";
+        String nameBinaryLightZwave = "mockedBinaryLightZwave";
         Set<String> servicesBinaryLightZwave = new HashSet<>();
         servicesBinaryLightZwave.add(serviceLight);
         servicesBinaryLightZwave.add(serviceZwave);
@@ -84,7 +84,7 @@ public class ContextResolutionMachineTest {
 //        when(mockedBinaryLightZwave.getClass()).thenReturn(mockedLightClass);
 
         ContextEntity mockedPresenceSensorZigbee = Mockito.mock(ContextEntity.class);
-        String namePresenceSensorZigbee = "PresenceSensorZigbee";
+        String namePresenceSensorZigbee = "mockedPresenceSensorZigbee";
         Set<String> servicesPresenceSensorZigbee = new HashSet<>();
         servicesPresenceSensorZigbee.add(servicePresence);
         when(mockedPresenceSensorZigbee.getServices()).thenReturn(servicesPresenceSensorZigbee);
@@ -94,7 +94,7 @@ public class ContextResolutionMachineTest {
 //        when(mockedPresenceSensorZigbee.getClass()).thenReturn(mockedPresClass);
 
         ContextEntity mockedTemperatureSensorZwave = Mockito.mock(ContextEntity.class);
-        String nameTemperatureSensorZwave = "TemperatureSensorZwave";
+        String nameTemperatureSensorZwave = "mockedTemperatureSensorZwave";
         Set<String> servicesTemperatureSensorZwave = new HashSet<>();
         servicesTemperatureSensorZwave.add(serviceTemp);
         servicesTemperatureSensorZwave.add(serviceZwave);
@@ -120,13 +120,13 @@ public class ContextResolutionMachineTest {
 
 
         /*Test*/
-        System.out.println("\nTEST Algorithme de resolution du contexte");
+        System.out.println("\n***TEST Algorithme de resolution du contexte***");
         ContextResolutionMachine contextResolutionMachine = new ContextResolutionMachine();
         Map<String, ContextGoal> contextGoals = new HashMap<>();
         ContextEntity[] contextEntities;
         EntityProvider[] entityProviders;
 
-        System.out.println("\n1ere config");
+        System.out.println("\n***1ere config***");
         /*Goal config*/
         Set<String> config = new HashSet<String>();
         config.add(serviceLight);

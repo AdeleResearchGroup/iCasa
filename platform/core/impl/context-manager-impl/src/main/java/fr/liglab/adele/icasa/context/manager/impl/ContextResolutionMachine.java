@@ -76,16 +76,19 @@ final class ContextResolutionMachine implements Runnable {
             LOG.debug("GOALS "+contextGoal.getOptimalConfig().toString());
         }
 
-        /*Entities à activées*/
+        /*Entities à activer*/
+        /*TODO vision au runtime des possibilités de services ?*/
+        /*TODO MODIFIER : NE FONCTIONNE PAS (normal, ça ne prend en compte que ce qui est actif*/
         Set<String> entityActivationMap = new HashSet<>();
         for(ContextEntity contextEntity : contextEntities){
             for(String s : contextEntity.getServices()){
+                LOG.debug("CONTEXT ENTITY "+contextEntity.toString()+" SERVICE "+s);
                 if(goals.contains(s)){
                     /*TODO MODIFIER*/
 //                    entityActivationMap.add(contextEntity.getClass().toString());
 //                    LOG.debug("CONTEXT ENTITY TO ACTIVATE "+contextEntity.getClass().toString());
                     entityActivationMap.add(contextEntity.toString());
-                    LOG.debug("CONTEXT ENTITY TO ACTIVATE "+contextEntity.toString());
+                    LOG.debug("--> TO ACTIVATE");
                 }
             }
 
@@ -108,6 +111,22 @@ final class ContextResolutionMachine implements Runnable {
 
         /*Verif config optimale*/
         /*TODO*/
+//        Set<String> activatedEntityMap = new HashSet<>();
+//        for(ContextEntity contextEntity : contextEntities){
+//            for(String s : contextEntity.getServices()){
+//                LOG.debug("CONTEXT ENTITY "+contextEntity.toString()+" SERVICE "+s);
+//                if(goals.contains(s)){
+//                    /*TODO MODIFIER*/
+////                    entityActivationMap.add(contextEntity.getClass().toString());
+////                    LOG.debug("CONTEXT ENTITY TO ACTIVATE "+contextEntity.getClass().toString());
+//                    entityActivationMap.add(contextEntity.toString());
+//                    LOG.debug("--> TO ACTIVATE");
+//                }
+//            }
+//
+//        }
 
     }
+
+
 }
