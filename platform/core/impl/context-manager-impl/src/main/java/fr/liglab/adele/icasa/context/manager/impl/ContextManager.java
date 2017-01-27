@@ -80,6 +80,7 @@ public class ContextManager implements ContextGoalRegistration {
     @Invalidate
     public void stop(){
         scheduledExecutorService.shutdown();
+        singleExecutorService.shutdown();
     }
 
     public TimeUnit getTimeUnit() {
@@ -100,7 +101,8 @@ public class ContextManager implements ContextGoalRegistration {
         if(modified){
             scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, timeUnit);
             ContextManager.timeUnit = timeUnit;
-            ContextManager.delay = scheduledFuture.getDelay(ContextManager.timeUnit);
+            ContextManager.delay = delay;
+//            ContextManager.delay = scheduledFuture.getDelay(ContextManager.timeUnit);
         }
 
         return modified;

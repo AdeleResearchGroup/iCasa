@@ -54,9 +54,21 @@ final class ContextResolutionMachine implements Runnable {
 
     protected synchronized void configureState(Map<String, ContextGoal> contextGoalMap, ContextEntity[] contextEntities, EntityProvider[] entityProviders, RelationProvider[]relationProviders){
         this.contextGoals = new HashSet<>(contextGoalMap.values());
-        this.contextEntities = new HashSet<>(Arrays.asList(contextEntities));
-        this.entityProviders = new HashSet<>(Arrays.asList(entityProviders));
-        this.relationProviders = new HashSet<>(Arrays.asList(relationProviders));
+        try{
+            this.contextEntities = new HashSet<>(Arrays.asList(contextEntities));
+        } catch (NullPointerException ne){
+            this.contextEntities = new HashSet<>();
+        }
+        try{
+            this.entityProviders = new HashSet<>(Arrays.asList(entityProviders));
+        } catch (NullPointerException ne){
+            this.entityProviders = new HashSet<>();
+        }
+        try{
+            this.relationProviders = new HashSet<>(Arrays.asList(relationProviders));
+        } catch (NullPointerException ne){
+            this.relationProviders = new HashSet<>();
+        }
     }
 
     private synchronized void resolutionAlgorithm(){

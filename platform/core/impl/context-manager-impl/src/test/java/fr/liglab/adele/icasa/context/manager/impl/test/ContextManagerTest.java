@@ -17,6 +17,7 @@ package fr.liglab.adele.icasa.context.manager.impl.test;
 
 import fr.liglab.adele.icasa.context.manager.impl.ContextManager;
 import org.junit.Test;
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -60,17 +61,29 @@ public class ContextManagerTest {
 
 
         /*Test*/
-        System.out.println("\nTEST Context Schedule - Verification manuelle - 10 execution par config");
+        System.out.println("\nTEST Context Schedule (Verification manuelle à faire : nombre d'executions par config)");
         ContextManager contextManager = new ContextManager();
+        contextManager.start();
+
 
         System.out.println("\n1ere config");
-        contextManager.setDelay(100L, TimeUnit.MILLISECONDS);
-        System.out.println("-");
-        TimeUnit.MILLISECONDS.sleep(1000);
+        int nExecutions = 10;
+        TimeUnit timeUnit = TimeUnit.MILLISECONDS;
+        long delay = 100L;
+        contextManager.setDelay(delay, timeUnit);
+        Assert.assertEquals("Modification de delay non appliquee", delay, contextManager.getDelay());
+        Assert.assertEquals("Modification d'unite de temps non appliquee", timeUnit, contextManager.getTimeUnit());
+        System.out.println("--- ("+nExecutions+" executions)");
+        TimeUnit.MILLISECONDS.sleep(nExecutions*delay);
 
         System.out.println("\n2eme config");
-        contextManager.setDelay(500L, TimeUnit.MILLISECONDS);
-        System.out.println("-");
-        TimeUnit.MILLISECONDS.sleep(5000);
+        delay = 500L;
+        contextManager.setDelay(delay, timeUnit);
+        Assert.assertEquals("Modification de delay non appliquee", delay, contextManager.getDelay());
+        Assert.assertEquals("Modification d'unite de temps non appliquee", timeUnit, contextManager.getTimeUnit());
+        System.out.println("--- ("+nExecutions+" executions)");
+        TimeUnit.MILLISECONDS.sleep(nExecutions*delay);
+
+        contextManager.stop();
     }
 }

@@ -62,7 +62,9 @@ public class LightFollowMeApplication {
         optimalConfig.add(BinaryLight.class.toGenericString());
         optimalConfig.add(PresenceService.class.toGenericString());
 
-        ContextGoal contextGoal = new ContextGoal(minimumConfig, optimalConfig);
+        ContextGoal contextGoal = new ContextGoal(optimalConfig);
+        contextGoal.addConfigWithLastPriority(minimumConfig);
+
         contextGoalRegistration.registerContextGoals(this.getClass().toGenericString(), contextGoal);
     }
 

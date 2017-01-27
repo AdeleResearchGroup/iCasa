@@ -15,7 +15,9 @@
  */
 package fr.liglab.adele.icasa.context.manager.api;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -23,41 +25,65 @@ import java.util.Set;
  * Les besoins en API de contexte sont exprimés
  */
 public class ContextGoal {
-    private Set<String> optimalConfig = null;
+    /*Liste des configs ordonnées, la première est la config optimale*/
+    private List<Set<String>> configs;
 
-    private Set<String> minimumConfig = null;
-
-    public ContextGoal() {
-        this(null, null);
+    public ContextGoal(Set<String> optimalConfig) {
+        Objects.requireNonNull(optimalConfig, "optimalConfig parameter must not be null");
+        this.configs = new ArrayList<>();
+        configs.add(optimalConfig);
     }
 
-    public ContextGoal(Set<String> minimumConfig) {
-        this(null, minimumConfig);
-    }
-
-    public ContextGoal(Set<String> optimalConfig, Set<String> minimumConfig) {
-        setOptimalConfig(optimalConfig);
-        setMinimumConfig(minimumConfig);
+    public ContextGoal(List<Set<String>> configs) {
+        Objects.requireNonNull(configs, "configs parameter must not be null");
+        this.configs = new ArrayList<>(configs);
     }
 
     public Set<String> getOptimalConfig() {
-        return optimalConfig;
+        return getConfig(0);
     }
 
-    public boolean setOptimalConfig(Set<String> optimalConfig) {
-        boolean check = checkConfig(optimalConfig);
-        if(check){this.optimalConfig = new HashSet<String>(optimalConfig);}
+    public Set<String> getConfig(int index) {
+        if(index>=0 && index < configs.size()){
+            return configs.get(index);
+        } else {
+            return null;
+        }
+    }
+
+    public List<Set<String>> getConfigList() {
+        return configs;
+    }
+
+    public boolean setConfigList(List<Set<String>> configs) {
+        boolean check = checkConfigList(configs);
+        if(check){this.configs = new ArrayList<>(configs);}
         return check;
     }
 
-    public Set<String> getMinimumConfig() {
-        return minimumConfig;
+    public boolean addConfigWithLastPriority(Set<String> config){
+        if(config != null){
+            return configs.add(config);
+        } else {
+            return false;
+        }
     }
 
-    public boolean setMinimumConfig(Set<String> minimumConfig) {
-        boolean check = checkConfig(minimumConfig);
-        if(check){this.minimumConfig = new HashSet<String>(minimumConfig);}
-        return check;
+    public boolean addConfigWithFirstPriority(Set<String> config){
+        /*TODO améliorer*/
+        if(config != null){
+            configs.add(0, config);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean checkConfigList(List<Set<String>> configList){
+        for(Set<String> config : configList){
+            if(!checkConfig(config)){return false;}
+        }
+        return true;
     }
 
     private boolean checkConfig(Set<String> config){
