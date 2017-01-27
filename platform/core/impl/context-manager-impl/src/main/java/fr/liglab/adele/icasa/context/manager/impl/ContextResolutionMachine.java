@@ -40,19 +40,18 @@ final class ContextResolutionMachine implements Runnable {
     private Set<ContextGoal> contextGoals = new HashSet<>();
     private Set<ContextEntity> contextEntities = new HashSet<>();
     private Set<EntityProvider> entityProviders = new HashSet<>();
-    private Set<RelationProvider> relationProviders = new HashSet<>();
 
     @Override
     public void run() {
         /*TODO Hard coder ???*/
         /*Attention aux multiples acces*/
         /*TODO Recupérer les info nécessaires du manager*/
-        LOG.info("Execution " + i++);
+        LOG.debug("CONTEXT RESOLUTION MACHINE - Execution " + i++);
         /*TODO UNCOMMENT*/
-//        resolutionAlgorithm();
+        resolutionAlgorithm();
     }
 
-    protected synchronized void configureState(Map<String, ContextGoal> contextGoalMap, ContextEntity[] contextEntities, EntityProvider[] entityProviders, RelationProvider[]relationProviders){
+    protected synchronized void configureState(Map<String, ContextGoal> contextGoalMap, ContextEntity[] contextEntities, EntityProvider[] entityProviders){
         this.contextGoals = new HashSet<>(contextGoalMap.values());
         try{
             this.contextEntities = new HashSet<>(Arrays.asList(contextEntities));
@@ -64,11 +63,6 @@ final class ContextResolutionMachine implements Runnable {
         } catch (NullPointerException ne){
             this.entityProviders = new HashSet<>();
         }
-        try{
-            this.relationProviders = new HashSet<>(Arrays.asList(relationProviders));
-        } catch (NullPointerException ne){
-            this.relationProviders = new HashSet<>();
-        }
     }
 
     private synchronized void resolutionAlgorithm(){
@@ -79,6 +73,7 @@ final class ContextResolutionMachine implements Runnable {
         Set<String> goals = new HashSet<>();
         for(ContextGoal contextGoal : contextGoals){
             goals.addAll(contextGoal.getOptimalConfig());
+            LOG.debug("GOALS "+contextGoal.getOptimalConfig().toString());
         }
 
         /*Entities à activées*/
@@ -86,8 +81,11 @@ final class ContextResolutionMachine implements Runnable {
         for(ContextEntity contextEntity : contextEntities){
             for(String s : contextEntity.getServices()){
                 if(goals.contains(s)){
-                    entityActivationMap.add(contextEntity.getClass().toString());
-                    /*TODO VERIFIER*/
+                    /*TODO MODIFIER*/
+//                    entityActivationMap.add(contextEntity.getClass().toString());
+//                    LOG.debug("CONTEXT ENTITY TO ACTIVATE "+contextEntity.getClass().toString());
+                    entityActivationMap.add(contextEntity.toString());
+                    LOG.debug("CONTEXT ENTITY TO ACTIVATE "+contextEntity.toString());
                 }
             }
 
@@ -99,8 +97,10 @@ final class ContextResolutionMachine implements Runnable {
                 /*TODO VERIFIER LA CORRESPONDANCE*/
                 if(entityActivationMap.contains(providedEntity)){
                     entityProvider.enable(providedEntity);
+                    LOG.debug("PROVIDER "+entityProvider.getName()+" ENABLE "+providedEntity);
                 } else {
                     entityProvider.disable(providedEntity);
+                    LOG.debug("PROVIDER "+entityProvider.getName()+" DISABLE "+providedEntity);
                 }
             }
         }

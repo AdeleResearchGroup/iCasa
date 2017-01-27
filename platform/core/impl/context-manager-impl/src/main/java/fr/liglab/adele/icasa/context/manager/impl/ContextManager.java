@@ -54,8 +54,8 @@ public class ContextManager implements ContextGoalRegistration {
     @Requires(optional = true)
     private EntityProvider[] entityProviders;
 
-    @Requires(optional = true)
-    private RelationProvider[] relationProviders;
+//    @Requires(optional = true)
+//    private RelationProvider[] relationProviders;
 
     /*Resolution machine : calcule et effectue l'adaptation*/
     private static final ContextResolutionMachine resolutionMachine = new ContextResolutionMachine();
@@ -66,8 +66,7 @@ public class ContextManager implements ContextGoalRegistration {
         resolutionMachine.configureState(
                 ContextManager.contextGoalMap,
                 ContextManager.this.contextEntities,
-                ContextManager.this.entityProviders,
-                ContextManager.this.relationProviders);
+                ContextManager.this.entityProviders);
         /*Adaptation*/
         resolutionMachine.run();
     };
