@@ -14,13 +14,12 @@
  *   limitations under the License.
  */
 
-package fr.liglab.adele.icasa.context.manager.impl;
+package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
-import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
-import fr.liglab.adele.icasa.context.manager.api.ContextGoalRegistration;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
 import org.apache.felix.ipojo.annotations.*;
 
 import java.util.HashMap;
@@ -34,7 +33,7 @@ import java.util.concurrent.*;
 @Component(immediate = true, publicFactory = false)
 @Provides
 @Instantiate
-public class ContextManager implements ContextGoalRegistration {
+public class ContextManager implements ContextAPIAppRegistration {
 
     /*Thread management*/
     private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
@@ -45,7 +44,7 @@ public class ContextManager implements ContextGoalRegistration {
     private static TimeUnit timeUnit = TimeUnit.SECONDS;
 
     /*Goal management*/
-    private static Map<String, ContextGoal> contextGoalMap = new HashMap<>();
+    private static Map<String, ContextAPIConfigs> contextGoalMap = new HashMap<>();
 
     /*Managed elements*/
     @Requires(optional = true)
@@ -108,16 +107,17 @@ public class ContextManager implements ContextGoalRegistration {
     }
 
     @Override
-    public boolean registerContextGoals(String appId, ContextGoal contextGoal) {
-        contextGoalMap.put(appId,contextGoal);
-        singleExecutorService.submit(contextCompositionAdaptation);
+    public boolean registerContextGoals(String appId, ContextAPIConfigs contextAPIConfigs) {
+        /*TODO CHECK GOALS*/
+        contextGoalMap.put(appId, contextAPIConfigs);
+//        singleExecutorService.submit(contextCompositionAdaptation);
         /*TODO test*/
 //        scheduledExecutorService.execute(contextCompositionAdaptation);
         return true;
     }
 
     @Override
-    public ContextGoal getRegisteredContextGoals(String appId) {
+    public ContextAPIConfigs getRegisteredContextGoals(String appId) {
         return contextGoalMap.get(appId);
     }
 

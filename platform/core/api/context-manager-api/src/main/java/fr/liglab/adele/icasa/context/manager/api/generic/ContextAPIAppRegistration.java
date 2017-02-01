@@ -13,18 +13,18 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api;
+package fr.liglab.adele.icasa.context.manager.api.generic;
 
 /**
  * TEMP
  * Les applications enregistrent leurs besoins au gestionnaire de contexte
  * Ces besoins représentent un but sur l'API à fournir
  */
-public interface ContextGoalRegistration {
+public interface ContextAPIAppRegistration {
 
-    boolean registerContextGoals(String appId, ContextGoal contextGoal);
+    boolean registerContextGoals(String appId, ContextAPIConfigs contextAPIConfigs);
 
-    ContextGoal getRegisteredContextGoals(String appId);
+    ContextAPIConfigs getRegisteredContextGoals(String appId);
 
     boolean unregisterContextGoals(String appId);
 }

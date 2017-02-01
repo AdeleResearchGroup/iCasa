@@ -98,7 +98,8 @@
                     <instructions>
                         <Private-Package>
                             fr.liglab.adele.icasa.context.manager.emul,
-                            fr.liglab.adele.icasa.context.manager.impl
+                            fr.liglab.adele.icasa.context.manager.impl,
+                            fr.liglab.adele.icasa.context.manager.impl.*
                         </Private-Package>
                     </instructions>
                 </configuration>

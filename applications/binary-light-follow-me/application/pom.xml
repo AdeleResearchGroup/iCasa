@@ -39,6 +39,12 @@
        <artifactId>context.manager.api</artifactId>
        <version>${project.version}</version>
      </dependency>
+    <dependency>
+      <groupId>fr.liglab.adele.icasa</groupId>
+      <artifactId>command.handler</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   
   <build>

@@ -35,7 +35,10 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Export-Package>fr.liglab.adele.icasa.context.manager.api</Export-Package>
+                        <Export-Package>
+                            fr.liglab.adele.icasa.context.manager.api,
+                            fr.liglab.adele.icasa.context.manager.api.*
+                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

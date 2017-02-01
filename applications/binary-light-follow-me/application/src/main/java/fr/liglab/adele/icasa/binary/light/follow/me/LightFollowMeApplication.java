@@ -15,8 +15,11 @@
  */
 package fr.liglab.adele.icasa.binary.light.follow.me;
 
-import fr.liglab.adele.icasa.context.manager.api.ContextGoal;
-import fr.liglab.adele.icasa.context.manager.api.ContextGoalRegistration;
+import fr.liglab.adele.icasa.command.handler.Command;
+import fr.liglab.adele.icasa.command.handler.CommandProvider;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
@@ -36,48 +39,41 @@ import java.util.stream.Collectors;
 })
 
 @Instantiate
+@CommandProvider(namespace = "app-followme")
 public class LightFollowMeApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(LightFollowMeApplication.class);
+
+    private ContextAPIConfigs contextAPIConfigs;
+    private boolean registered;
+
+    @Validate
+    public void start() {
+        registered = false;
+
+        Set<ContextAPI> minimumConfig = new HashSet<>();
+        minimumConfig.add(ContextAPI.BinaryLight);
+
+        Set<ContextAPI> optimalConfig = new HashSet<>();
+        optimalConfig.add(ContextAPI.BinaryLight);
+        optimalConfig.add(ContextAPI.PresenceService);
+
+        this.contextAPIConfigs = new ContextAPIConfigs(optimalConfig);
+        this.contextAPIConfigs.addConfigWithLastPriority(minimumConfig);
+    }
 
     @Invalidate
     public void stop() {
 
     }
 
-    @Validate
-    public void start() {
-
-    }
-
-    @Requires(id="manager", optional = true, specification = ContextGoalRegistration.class)
-    public ContextGoalRegistration contextRegistration;
-
-    @Bind(id="manager")
-    public void bindContextManagerGoalRegistration(ContextGoalRegistration contextGoalRegistration){
-        Set<String> minimumConfig = new HashSet<>();
-        minimumConfig.add(BinaryLight.class.toGenericString());
-
-        Set<String> optimalConfig = new HashSet<>();
-        optimalConfig.add(BinaryLight.class.toGenericString());
-        optimalConfig.add(PresenceService.class.toGenericString());
-
-        ContextGoal contextGoal = new ContextGoal(optimalConfig);
-        contextGoal.addConfigWithLastPriority(minimumConfig);
-
-        contextGoalRegistration.registerContextGoals(this.getClass().toGenericString(), contextGoal);
-    }
-
-    @Unbind
-    public void unbindContextManagerGoalRegistration(ContextGoalRegistration contextGoalRegistration){
-        contextRegistration.unregisterContextGoals(this.getClass().toGenericString());
-    }
-
+    @Requires(id="manager", optional = true, specification = ContextAPIAppRegistration.class)
+    public ContextAPIAppRegistration contextAPIAppRegistration;
 
     @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
     private List<BinaryLight> binaryLights;
 
-    @Requires(id="presence",optional = false,specification = PresenceService.class)
+    @Requires(id="presence",optional = true,specification = PresenceService.class)
     private List<PresenceService> presenceServices;
 
     @Bind(id="lights")
@@ -156,5 +152,21 @@ public class LightFollowMeApplication {
                 zone.equals(((LocatedObject)light).getZone())
         ).collect(Collectors.toSet());
         return lightInZone;
+    }
+
+
+    @Command
+    public void toggleAppRegistration() {
+        if(contextAPIAppRegistration!=null){
+            if(!registered){
+                contextAPIAppRegistration.registerContextGoals(this.getClass().toGenericString(), contextAPIConfigs);
+                registered = true;
+                LOG.info("APP REGISTERED");
+            } else {
+                contextAPIAppRegistration.unregisterContextGoals(this.getClass().toGenericString());
+                registered = false;
+                LOG.info("APP UNREGISTERED");
+            }
+        }
     }
 }
