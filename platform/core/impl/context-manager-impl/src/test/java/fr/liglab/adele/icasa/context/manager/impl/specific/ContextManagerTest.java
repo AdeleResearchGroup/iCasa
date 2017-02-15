@@ -54,6 +54,15 @@ public class ContextManagerTest {
             }
         }).when(mockedLogger).debug(anyString());
 
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                Object[] args = invocationOnMock.getArguments();
+                System.out.println(args[0]);
+                return null;
+            }
+        }).when(mockedLogger).info(anyString());
+
 
         PowerMockito.mockStatic(LoggerFactory.class);
         when(LoggerFactory.getLogger((Class)any())).thenReturn(mockedLogger);

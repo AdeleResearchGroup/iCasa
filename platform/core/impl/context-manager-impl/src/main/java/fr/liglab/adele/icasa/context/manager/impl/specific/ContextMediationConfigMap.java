@@ -27,6 +27,8 @@ import java.util.*;
 final class ContextMediationConfigMap {
     Map<ContextAPI,ContextMediationConfig> contextMediationConfigMap;
 
+    /*TODO : IL MANQUE DES PARTIES DU SIMULATEUR !!! (Person, PresenceSimulatorModel...)*/
+
     public ContextMediationConfigMap() {
         contextMediationConfigMap = new HashMap<>();
         Set<EnvProxy> envProxies;

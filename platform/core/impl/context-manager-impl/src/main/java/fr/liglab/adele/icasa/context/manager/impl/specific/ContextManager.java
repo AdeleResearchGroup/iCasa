@@ -18,6 +18,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
+import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
 import org.apache.felix.ipojo.annotations.*;
@@ -53,8 +54,8 @@ public class ContextManager implements ContextAPIAppRegistration {
     @Requires(optional = true)
     private EntityProvider[] entityProviders;
 
-//    @Requires(optional = true)
-//    private RelationProvider[] relationProviders;
+    @Requires(optional = true)
+    private RelationProvider[] relationProviders;
 
     /*Resolution machine : calcule et effectue l'adaptation*/
     private static final ContextResolutionMachine resolutionMachine = new ContextResolutionMachine();
@@ -65,7 +66,8 @@ public class ContextManager implements ContextAPIAppRegistration {
         resolutionMachine.configureState(
                 ContextManager.contextGoalMap,
                 ContextManager.this.contextEntities,
-                ContextManager.this.entityProviders);
+                ContextManager.this.entityProviders,
+                ContextManager.this.relationProviders);
         /*Adaptation*/
         resolutionMachine.run();
     };

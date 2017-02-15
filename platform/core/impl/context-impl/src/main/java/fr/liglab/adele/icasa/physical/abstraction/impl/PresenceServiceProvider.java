@@ -16,6 +16,7 @@
 package fr.liglab.adele.icasa.physical.abstraction.impl;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.location.Zone;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
@@ -26,9 +27,11 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class PresenceServiceProvider {
 
-    @Creator.Field Creator.Entity<PresenceServiceImpl> creator;
+    /*TODO Prendre en compte les capteurs de présence ?*/
 
-    @Creator.Field(PresenceServiceImpl.RELATION_IS_ATTACHED) Creator.Relation<PresenceServiceImpl,Zone> attachedLumModelCreator;
+    @Creator.Field(requirements = {Zone.class, PresenceSensor.class}) Creator.Entity<PresenceServiceImpl> creator;
+
+    @Creator.Field(value = PresenceServiceImpl.RELATION_IS_ATTACHED, requirements = Zone.class) Creator.Relation<PresenceServiceImpl,Zone> attachedLumModelCreator;
 
     @Bind(id = "zones",specification = Zone.class,aggregate = true,optional = true)
     public void bindZone(Zone zone){

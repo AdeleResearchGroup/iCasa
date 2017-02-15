@@ -42,6 +42,10 @@ public enum ContextAPI {
         return null;
     }
 
+    public String getInterfaceName(){
+        return interfaceName;
+    }
+
     public boolean equalsInterface(String otherInterface) {
         return interfaceName.equals(otherInterface);
     }

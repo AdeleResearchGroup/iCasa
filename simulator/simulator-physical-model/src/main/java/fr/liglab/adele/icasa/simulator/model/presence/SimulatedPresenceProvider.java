@@ -17,6 +17,7 @@ package fr.liglab.adele.icasa.simulator.model.presence;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
 import fr.liglab.adele.icasa.location.Zone;
+import fr.liglab.adele.icasa.simulator.person.Person;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -26,7 +27,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class SimulatedPresenceProvider {
 
-    @Creator.Field Creator.Entity<SimulatedPresenceModel> creator;
+    @Creator.Field(requirements = {Zone.class, Person.class}) Creator.Entity<SimulatedPresenceModel> creator;
 
     @Creator.Field(SimulatedPresenceModel.RELATION_IS_ATTACHED) Creator.Relation<SimulatedPresenceModel,Zone> attachedPresModelCreator;
 

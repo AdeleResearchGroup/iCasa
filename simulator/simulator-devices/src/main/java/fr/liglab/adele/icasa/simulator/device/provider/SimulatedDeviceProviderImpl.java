@@ -57,6 +57,8 @@ import fr.liglab.adele.icasa.simulator.device.presence.impl.SimulatedPresenceSen
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedCoolerImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedHeaterImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedThermometerImpl;
+import fr.liglab.adele.icasa.simulator.model.api.PresenceModel;
+import fr.liglab.adele.icasa.simulator.person.Person;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +87,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
 
     @Creator.Field Creator.Entity<SimulatedThermometerImpl> simulatedThermometerCreator;
 
-    @Creator.Field Creator.Entity<SimulatedPresenceSensorImpl> simulatedPresenceSensorCreator;
+    @Creator.Field(requirements = {PresenceModel.class}) Creator.Entity<SimulatedPresenceSensorImpl> simulatedPresenceSensorCreator;
 
     @Validate
     public void start(){
