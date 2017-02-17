@@ -16,7 +16,10 @@
 package fr.liglab.adele.icasa.simulator.model.luminosity;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.icasa.device.light.BinaryLight;
+import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.location.Zone;
+import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -26,7 +29,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class SimulatedLuminosityProvider {
 
-    @Creator.Field Creator.Entity<SimulatedLuminosityModel> creator;
+    @Creator.Field(requirements = {Zone.class, MomentOfTheDay.class}) Creator.Entity<SimulatedLuminosityModel> creator;
 
     @Creator.Field(SimulatedLuminosityModel.RELATION_IS_ATTACHED) Creator.Relation<SimulatedLuminosityModel,Zone> attachedLumModelCreator;
 

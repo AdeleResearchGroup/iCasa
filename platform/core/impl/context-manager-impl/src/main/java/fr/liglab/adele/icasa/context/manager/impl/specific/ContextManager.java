@@ -32,8 +32,8 @@ import java.util.concurrent.*;
  * Classe principale du gestionnaire de contexte
  */
 @Component(immediate = true, publicFactory = false)
-@Provides
 @Instantiate
+@Provides
 public class ContextManager implements ContextAPIAppRegistration {
 
     /*Thread management*/
@@ -47,33 +47,24 @@ public class ContextManager implements ContextAPIAppRegistration {
     /*Goal management*/
     private static Map<String, ContextAPIConfigs> contextGoalMap = new HashMap<>();
 
-    /*Managed elements*/
-    @Requires(optional = true)
-    private ContextEntity[] contextEntities;
-
-    @Requires(optional = true)
-    private EntityProvider[] entityProviders;
-
-    @Requires(optional = true)
-    private RelationProvider[] relationProviders;
+    /*Management sub-parts*/
+    @Requires(optional = false)
+    private ContextInternalManager contextInternalManager;
 
     /*Resolution machine : calcule et effectue l'adaptation*/
-    private static final ContextResolutionMachine resolutionMachine = new ContextResolutionMachine();
+    private static Runnable resolutionMachine;
 
     /*Adaptation*/
     private Runnable contextCompositionAdaptation = () -> {
         /*Passage de l'etat du contexte à un instant t*/
-        resolutionMachine.configureState(
-                ContextManager.contextGoalMap,
-                ContextManager.this.contextEntities,
-                ContextManager.this.entityProviders,
-                ContextManager.this.relationProviders);
+        contextInternalManager.configureGoals(ContextManager.contextGoalMap);
         /*Adaptation*/
         resolutionMachine.run();
     };
 
     @Validate
     public void start(){
+        resolutionMachine = contextInternalManager.getContextResolutionMachine();
         scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, TimeUnit.SECONDS);
     }
 

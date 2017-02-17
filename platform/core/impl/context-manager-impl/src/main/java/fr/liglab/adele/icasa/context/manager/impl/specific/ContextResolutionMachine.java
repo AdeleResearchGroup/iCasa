@@ -18,13 +18,15 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
 import fr.liglab.adele.icasa.context.manager.impl.generic.ContextMediationConfig;
 import fr.liglab.adele.icasa.context.manager.impl.generic.ContextMediationSlice;
+import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.*;
 
 /**
@@ -37,79 +39,269 @@ final class ContextResolutionMachine implements Runnable {
 
     private static int i = 0;
 
-    /*Copied state*/
-    private Set<ContextAPIConfigs> contextAPIConfigsSet = new HashSet<>();
-    private Set<ContextEntity> contextEntities = new HashSet<>();
-    private Set<EntityProvider> entityProviders = new HashSet<>();
-    private Set<RelationProvider> relationProviders = new HashSet<>();
+    /**/
+    private static ContextInternalManagerImpl contextInternalManager;
 
-    private Map<ContextAPI,ContextMediationConfig> contextMediationConfigMap = new ContextMediationConfigMap().getContextMediationConfigMap();
+    /*Trees*/
+    private static Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
 
-    Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
-    Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
-    Map<String, EntityProvider> eProviderByName = new HashMap<>();
+
+    private Map<ContextAPI, ContextMediationConfig> contextMediationConfigMap = new ContextMediationConfigMap().getContextMediationConfigMap();
+
+    private Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
+    private Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
+    private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
+
+    protected ContextResolutionMachine(ContextInternalManagerImpl contextInternalManager) {
+        ContextResolutionMachine.contextInternalManager = contextInternalManager;
+    }
 
     @Override
     public void run() {
         /*Attention aux multiples acces*/
-        /*TODO Recupérer les info nécessaires du manager*/
         LOG.info("CONTEXT RESOLUTION MACHINE - Execution " + i++);
-        /*TODO UNCOMMENT*/
         resolutionAlgorithm();
     }
 
-    public synchronized void configureState(Map<String, ContextAPIConfigs> contextGoalMap, ContextEntity[] contextEntities,
-                                            EntityProvider[] entityProviders, RelationProvider[] relationProviders){
-        this.contextAPIConfigsSet = new HashSet<>(contextGoalMap.values());
-        try{
-            this.contextEntities = new HashSet<>(Arrays.asList(contextEntities));
-        } catch (NullPointerException ne){
-            this.contextEntities = new HashSet<>();
-        }
-        try{
-            this.entityProviders = new HashSet<>(Arrays.asList(entityProviders));
-        } catch (NullPointerException ne){
-            this.entityProviders = new HashSet<>();
-        }
-        try{
-            this.relationProviders = new HashSet<>(Arrays.asList(relationProviders));
-        } catch (NullPointerException ne){
-            this.relationProviders = new HashSet<>();
-        }
-    }
 
-    private synchronized void resolutionAlgorithm(){
-        /*TODO Algorithme naze, à repenser*/
+    /*TODO Algorithme naze, à repenser*/
+    private synchronized void resolutionAlgorithm() {
 
-        /*TODO Ne pas refaire à chaque fois, maintenir autrement (bind, unbind)*/
-        eCreatorsByServices = new HashMap<>();
-        eCreatorsRequirements = new HashMap<>();
 
+        /*App, set de services en config optimale*/
+        /*TODO SELECTION DES CONFIGS D'APP ? */
+        /*TODO (pour l'instant toutes les app traitées en même temps, avec la meilleure config)*/
+        Set<ContextAPIConfigs> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
+        Set<ContextAPI> goals = new HashSet<>();
+        for (ContextAPIConfigs contextAPIConfigs : contextAPIConfigsSet) {
+            goals.addAll(contextAPIConfigs.getOptimalConfig());
+            LOG.info("GOALS " + contextAPIConfigs.getOptimalConfig().toString());
+        }
+
+        Set<RelationProvider> relationProviders = contextInternalManager.getRelationProviders();
+        /*TODO Modifier (difficile de déduire les relations depuis le service -> requises par les implementations)*/
+        /*TODO Dépend d'un service et d'une implem*/
+        /*TODO Activer si les 2 sont présents*/
+        /*Activation de toutes les relations*/
+        for(RelationProvider relationProvider : relationProviders){
+            for(String relation : relationProvider.getProvidedRelations()){
+                relationProvider.enable(relation);
+                LOG.info("PROVIDER "+relationProvider.getName()+" ENABLE RELATION "+relation);
+            }
+        }
+
+        /*Services à activer*/
+        /*Initialisation des arbres*/
+        mediationTrees = new HashMap<>();
+        for (ContextAPI contextAPI : goals) {
+            String goalName = contextAPI.getInterfaceName();
+            LOG.info("CONTEXT API TO ACTIVATE: " + contextAPI + " named: " + goalName);
+
+            DefaultMutableTreeNode goalNode = new DefaultMutableTreeNode(goalName);
+            mediationTrees.put(goalName, goalNode);
+        }
+
+        /*Si activation possible --> activation, sinon autre config/query*/
+        Set<String> creatorsToActivate = new HashSet<>();
+        Set<String> nonActivableServices = new HashSet<>();
+        Set<String> nonActivableGoals = new HashSet<>();
+
+        Set<EntityProvider> entityProviders = contextInternalManager.getEntityProviders();
+        eCreatorsByServices = contextInternalManager.geteCreatorsByServices();
+        eCreatorsRequirements = contextInternalManager.geteCreatorsRequirements();
+        eProviderByCreatorName = contextInternalManager.geteProviderByCreatorName();
+
+        if (recursiveCreatorRegistrationTree(new HashSet<>(mediationTrees.values()), nonActivableServices)) {
+            for (Map.Entry<String, DefaultMutableTreeNode> mediationTree : mediationTrees.entrySet()) {
+                String goalName = mediationTree.getKey();
+                DefaultMutableTreeNode goalNode = mediationTree.getValue();
+                if (goalNode != null) {
+                    LOG.info("TREE OK FOR GOAL: " + goalName);
+                    LOG.info("FIRST LEAF: " + goalNode.getFirstLeaf().toString());
+                    LOG.info("LAST LEAF: " + goalNode.getLastLeaf().toString());
+                } else {
+                    LOG.info("TREE KO FOR GOAL: " + goalName);
+                }
+
+                Set<String> creatorsToActivateSubSet = new HashSet<>();
+                if(creatorTreeActivation(goalNode, creatorsToActivateSubSet, nonActivableGoals)){
+                    LOG.info("ACTIVATION OK FOR GOAL: " + goalName);
+                    creatorsToActivate.addAll(creatorsToActivateSubSet);
+                } else {
+                    LOG.info("ACTIVATION FAIL FOR GOAL: " + goalName);
+                    LOG.info("MISSING SERVICE: " + "...");
+                    /*TODO : TRAITER LE CHANGEMENT DE CONFIG ET LES CAS OU LA CONFIG COMPLETE N'EST PAS RESOLUE*/
+                }
+            }
+        } else {
+            LOG.info("ERROR: MISSING PROVIDER");
+            /*TODO : TRAITER les provider manquants*/
+        }
+
+        /*Désactivation de la création des entities dans les providers non traités*/
         for(EntityProvider entityProvider : entityProviders){
-            for(String providedEntity : entityProvider.getProvidedEntities()) {
+            for(String providedEntity : entityProvider.getProvidedEntities()){
                 String creatorName = eCreatorName(entityProvider, providedEntity);
-
-                LOG.info("PROVIDER: "+ entityProvider.getName());
-                LOG.info("ENTITY: "+ providedEntity);
-                LOG.info("PROVIDING: "+ entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
-                LOG.info("WITH REQUIREMENTS: "+ entityProvider.getPotentiallyRequiredServices(providedEntity));
-
-                eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
-
-                for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                    if (!eCreatorsByServices.containsKey(service)) {
-                        Set<String> entityProviderSubSet = new HashSet<>();
-                        entityProviderSubSet.add(creatorName);
-                        eCreatorsByServices.put(service, entityProviderSubSet);
-                    } else {
-                        eCreatorsByServices.get(service).add(creatorName);
-                    }
+                if(creatorsToActivate.contains(creatorName)) {
+                    entityProvider.enable(providedEntity);
+                    LOG.info("PROVIDER " + entityProvider.getName() + " ENABLE ENTITY " + providedEntity);
+                } else {
+                    entityProvider.disable(providedEntity);
+                    LOG.info("PROVIDER " + entityProvider.getName() + " DISABLE ENTITY " + providedEntity);
                 }
             }
         }
 
+        /*Vérification*/
+        /*Services à activer*/
+        BundleContext bundleContext = contextInternalManager.getBundleContext();
+        for (ContextAPI contextAPI : goals) {
+            String contextAPIName = contextAPI.getInterfaceName();
+            if (bundleContext.getServiceReference(contextAPIName) == null) {
+                LOG.info("MISSING CONTEXT API: " + contextAPIName);
+            } else {
+                LOG.info("PROVIDING CONTEXT API: " + contextAPIName);
+            }
+        }
+    }
+
+    String eCreatorName(EntityProvider entityProvider, String providedEntity) {
+        return entityProvider.getName() + ":" + providedEntity;
+    }
+
+    private String getProvidedEntityFromCreatorName(String eCreatorName) {
+        return eCreatorName.split(":")[1];
+    }
+
+    private String getEntityProviderFromCreatorName(String eCreatorName) {
+        return eCreatorName.split(":")[0];
+    }
+
+    private boolean recursiveCreatorRegistrationTree(Set<DefaultMutableTreeNode> requiredNodes, Set<String> nonActivableServices){
+
+        Set<DefaultMutableTreeNode> stepRequiredNodes = new HashSet<>();
+
+        for(DefaultMutableTreeNode requiredNode : requiredNodes){
+            String requiredService = (String) requiredNode.getUserObject();
+            LOG.info("REQUIRED SERVICE: "+requiredService);
+            /*Find corresponding creators*/
+            Set<String> creators = eCreatorsByServices.get(requiredService);
+            if(creators == null){
+                LOG.info("NO CREATORS FOUND");
+                nonActivableServices.add(requiredService);
+                /*TODO REMOVE ?*/
+                return false;
+            } else {
+                for(String creator : creators){
+                    LOG.info("CREATOR FOUND : "+creator);
+                    DefaultMutableTreeNode creatorNode = new DefaultMutableTreeNode(creator);
+                    requiredNode.add(creatorNode);
+                    Set<String> reqSet = eCreatorsRequirements.get(creator);
+                    for(String req : reqSet){
+                        DefaultMutableTreeNode serviceNode = new DefaultMutableTreeNode(req);
+                        creatorNode.add(serviceNode);
+                        stepRequiredNodes.add(serviceNode);
+                    }
+                    LOG.info("ASSOCIATED REQUIRED SERVICES: "+reqSet);
+                }
+            }
+        }
+
+        return stepRequiredNodes.isEmpty() || recursiveCreatorRegistrationTree(stepRequiredNodes, nonActivableServices);
+    }
+
+    private boolean creatorTreeActivation(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
+
+
+        if(goal.getDepth()>0){
+
+            boolean providableGoal = true;
+            Set<DefaultMutableTreeNode> serviceSet = new HashSet<>();
+
+            DefaultMutableTreeNode nextLeaf = goal.getFirstLeaf();
+            while((nextLeaf != null) && providableGoal) {
+                DefaultMutableTreeNode service = ((DefaultMutableTreeNode)nextLeaf.getParent());
+                if(!serviceSet.contains(service)){
+                    serviceSet.add(service);
+
+                    DefaultMutableTreeNode nextChild = (DefaultMutableTreeNode)service.getFirstChild();
+                    boolean providableService = false;
+                    while(nextChild != null){
+
+                        try{
+                            /*Pour l'instant, activation que des creators où il y a des instances disponibles*/
+                            String creator = nextChild.toString();
+                            String entityName = getProvidedEntityFromCreatorName(creator);
+                            EntityProvider entityProvider = eProviderByCreatorName.get(creator);
+                            creatorsToActivate.add(creator);
+                            LOG.info("CREATOR TO ACTIVATE: "+creator);
+                            if(entityProvider.getInstances(entityName, true).isEmpty()){
+                                LOG.info("KO CREATOR: "+creator);
+                            } else {
+                                providableService = true;
+                                LOG.info("OK CREATOR: "+creator);
+                            }
+                        } catch (NullPointerException ne){
+                            LOG.info("ERROR IN PROCESSING CREATOR: " +nextChild.toString());
+                        }
+
+                        nextChild = nextChild.getNextSibling();
+                    }
+
+                    if(!providableService){
+                        nonActivableServices.add(service.toString());
+                        providableGoal = false;
+                        LOG.info("MISSING INSTANCES FOR SERVICE: " +service.toString());
+                    }
+                }
+
+                nextLeaf = nextLeaf.getNextLeaf();
+            }
+
+            /*TODO : activation à la fin*/
+            /*TODO: enable le reste de la mediation si toutes les leafs sont disponibles ?*/
+            if(!providableGoal) {
+                creatorsToActivate = Collections.emptySet();
+            } else {
+                for(DefaultMutableTreeNode service : serviceSet){
+                    /*TODO recursif jusqu'à ce que service .isRoot()*/
+                    DefaultMutableTreeNode nextParent = ((DefaultMutableTreeNode)service.getParent());
+                    while(nextParent != null){
+                        String creator = nextParent.toString();
+                        /*TODO VERIFY*/
+                        creatorsToActivate.add(creator);
+                        LOG.info("CREATOR TO ACTIVATE: "+creator);
+
+                        nextParent = ((DefaultMutableTreeNode)nextParent.getParent());
+                        if(nextParent != null){
+                            nextParent = ((DefaultMutableTreeNode)nextParent.getParent());
+                        }
+                    }
+
+                }
+            }
+
+            return providableGoal;
+        }
+
+        return false;
+    }
+
+
+
+    /*TODO OLD VERSION !!!*/
+    /*TODO REMOVE !!!*/
+    private synchronized void resolutionAlgorithm_creator_activation_no_environment_check(){
+
+        /*Pas de détermination de faisabilité, verir API a la fin*/
+        /*Pas de traitement de la non-activation*/
+        /*Pas de distinction dans les branches :*/
+        /*Pas de traitement particulier dans le cas où une branche n'a pas de require, mais que ce n'est pas grave*/
+        /*parce qu'une autre branche est complète*/
+
         /*App, set de services en config optimale*/
-        /*TODO Sélectionner les configs ? (pour l'instant toutes les app traitées en même temps)*/
+        /*Toutes les app traitées en même temps, avec la meilleure config*/
+        Set<ContextAPIConfigs> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
         Set<ContextAPI> goals = new HashSet<>();
         for(ContextAPIConfigs contextAPIConfigs : contextAPIConfigsSet){
             goals.addAll(contextAPIConfigs.getOptimalConfig());
@@ -119,17 +311,22 @@ final class ContextResolutionMachine implements Runnable {
         /*Services à activer*/
         Set<String> goalsName = new HashSet<>();
         for (ContextAPI contextAPI : goals){
-            LOG.info("CONTEXT API TO ACTIVATE: "+contextAPI+ " named: "+contextAPI.getInterfaceName());
-            goalsName.add(contextAPI.getInterfaceName());
+            String goalName = contextAPI.getInterfaceName();
+            LOG.info("CONTEXT API TO ACTIVATE: "+contextAPI+" named: "+goalName);
+            goalsName.add(goalName);
         }
 
         /*Si activation possible --> activation, sinon autre config/query*/
         Set<String> creatorsToActivate = new HashSet<>();
-        /*TODO TRAITER LA NON-ACTIVATION*/
         Set<String> nonActivableServices = new HashSet<>();
         Map<String,Set<String>> creatorsToActivateByProviderNames = new HashMap<>();
 
-        if(recursiveActivation(goalsName, creatorsToActivate, nonActivableServices)){
+        Set<EntityProvider> entityProviders = contextInternalManager.getEntityProviders();
+        eCreatorsByServices = contextInternalManager.geteCreatorsByServices();
+        eCreatorsRequirements = contextInternalManager.geteCreatorsRequirements();
+
+
+        if(recursiveCreatorActivation(goalsName, creatorsToActivate, nonActivableServices)){
             for(String creator: creatorsToActivate){
                 String providerName = getEntityProviderFromCreatorName(creator);
                 String entityName = getProvidedEntityFromCreatorName(creator);
@@ -167,9 +364,7 @@ final class ContextResolutionMachine implements Runnable {
             }
         }
 
-        /*TODO Modifier (difficile de déduire les relations depuis le service -> requises par les implementations)*/
-        /*TODO Dépend d'un service et d'une implem*/
-        /*TODO Activer si les 2 sont présents*/
+        Set<RelationProvider> relationProviders = contextInternalManager.getRelationProviders();
         /*Activation de toutes les relations*/
         for(RelationProvider relationProvider : relationProviders){
             for(String relation : relationProvider.getProvidedRelations()){
@@ -177,12 +372,51 @@ final class ContextResolutionMachine implements Runnable {
                 LOG.info("PROVIDER "+relationProvider.getName()+" ENABLE RELATION "+relation);
             }
         }
+
+        /*Vérification des services à activer*/
+        BundleContext bundleContext = contextInternalManager.getBundleContext();
+        for (ContextAPI contextAPI : goals){
+            String contextAPIName = contextAPI.getInterfaceName();
+            if(bundleContext.getServiceReference(contextAPIName) == null){
+                LOG.info("MISSING CONTEXT API: " +contextAPIName);
+            } else {
+                LOG.info("PROVIDING CONTEXT API: " +contextAPIName);
+            }
+        }
     }
 
-    private synchronized void resolutionAlgorithm_1(){
+    private boolean recursiveCreatorActivation(Set<String> requiredServices, Set<String> creatorsToActivate, Set<String> nonActivableServices){
+        Set<String> stepRequiredServices = new HashSet<>();
+
+        for(String requiredService : requiredServices){
+            LOG.info("REQUIRED SERVICE: "+requiredService);
+            /*Find corresponding creators*/
+            Set<String> creators = eCreatorsByServices.get(requiredService);
+            if(creators == null){
+                LOG.info("NO CREATORS FOUND");
+                nonActivableServices.add(requiredService);
+            } else {
+                LOG.info("CREATORS FOUND : "+creators);
+                for(String creator : creators){
+                    creatorsToActivate.add(creator);
+                    Set<String> reqSet = eCreatorsRequirements.get(creator);
+                    if (reqSet != null){
+                        stepRequiredServices.addAll(reqSet);
+                    }
+                }
+                LOG.info("ASSOCIATED REQUIRED SERVICES: "+stepRequiredServices);
+            }
+        }
+
+        return stepRequiredServices.isEmpty() || recursiveCreatorActivation(stepRequiredServices, creatorsToActivate, nonActivableServices);
+    }
+
+
+    private synchronized void resolutionAlgorithm_config_creators(){
         /*Version 0, config en dur, pas de reflexion particulière*/
 
         /*App, set de services en config optimale*/
+        Set<ContextAPIConfigs> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
         Set<ContextAPI> goals = new HashSet<>();
         for(ContextAPIConfigs contextAPIConfigs : contextAPIConfigsSet){
             goals.addAll(contextAPIConfigs.getOptimalConfig());
@@ -206,6 +440,7 @@ final class ContextResolutionMachine implements Runnable {
             }
         }
 
+        Set<EntityProvider> entityProviders = contextInternalManager.getEntityProviders();
         /*Activation de la création des entities dans chaque provider*/
         for(EntityProvider entityProvider : entityProviders){
             for(String implementation : entityProvider.getProvidedEntities()){
@@ -238,6 +473,7 @@ final class ContextResolutionMachine implements Runnable {
 
     private synchronized void resolutionAlgorithm_tests(){
         /*Test metadata providers*/
+        Set<EntityProvider> entityProviders = contextInternalManager.getEntityProviders();
         for(EntityProvider entityProvider: entityProviders){
             LOG.info("ENTITY " + entityProvider.toString());
             try{
@@ -254,6 +490,8 @@ final class ContextResolutionMachine implements Runnable {
 
         /*Verif config optimale*/
         Set<String> activatedEntityMap = new HashSet<>();
+
+        Set<ContextEntity> contextEntities = contextInternalManager.getContextEntities();
         for(ContextEntity contextEntity : contextEntities){
             for(String s : contextEntity.getServices()){
 //                LOG.debug("CONTEXT ENTITY "+contextEntity.toString()+" SERVICE "+s);
@@ -265,44 +503,5 @@ final class ContextResolutionMachine implements Runnable {
 //                }
             }
         }
-    }
-
-    private String eCreatorName (EntityProvider entityProvider, String providedEntity){
-        return entityProvider.getName() + ":" + providedEntity;
-    }
-
-    private String getProvidedEntityFromCreatorName (String eCreatorName){
-        return eCreatorName.split(":")[1];
-    }
-
-    private String getEntityProviderFromCreatorName (String eCreatorName){
-        return eCreatorName.split(":")[0];
-    }
-
-    private boolean recursiveActivation(Set<String> requiredServices, Set<String> creatorsToActivate, Set<String> nonActivableServices){
-        Set<String> stepRequiredServices = new HashSet<>();
-        /*TODO Traiter le cas où une branche n'a pas de require, mais c'est pas grave, parce qu'une autre branche est complète*/
-
-        for(String requiredService : requiredServices){
-            LOG.info("REQUIRED SERVICE: "+requiredService);
-            /*Find corresponding creators*/
-            Set<String> creators = eCreatorsByServices.get(requiredService);
-            if(creators == null){
-                LOG.info("NO CREATORS FOUND");
-                nonActivableServices.add(requiredService);
-                return false;
-            }
-            creatorsToActivate.addAll(creators);
-            LOG.info("CREATORS FOUND : "+creators);
-            for(String creator : creators){
-                Set<String> reqSet = eCreatorsRequirements.get(creator);
-                if (reqSet != null){
-                    stepRequiredServices.addAll(reqSet);
-                }
-            }
-            LOG.info("ASSOCIATED REQUIRED SERVICES: "+stepRequiredServices);
-        }
-
-        return stepRequiredServices.isEmpty() || recursiveActivation(stepRequiredServices, creatorsToActivate, nonActivableServices);
     }
 }

@@ -21,8 +21,9 @@ import fr.liglab.adele.cream.model.Relation;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.location.Zone;
-import org.apache.felix.ipojo.annotations.*;
 import fr.liglab.adele.icasa.location.impl.ZoneImpl;
+import org.apache.felix.ipojo.annotations.*;
+
 
 import java.util.List;
 

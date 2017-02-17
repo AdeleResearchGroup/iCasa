@@ -13,10 +13,17 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.emul;
+package fr.liglab.adele.icasa.context.manager.impl.specific;
+
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+
+import java.util.Map;
 
 /**
- * TEMP
+ * Created by Eva on 16/02/2017.
  */
-public class EnvironmentManagerEmul {
+public interface ContextInternalManager {
+    void configureGoals(Map<String, ContextAPIConfigs> contextGoalMap);
+
+    Runnable getContextResolutionMachine();
 }

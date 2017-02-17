@@ -26,7 +26,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class SimulatedTemperatureProvider {
 
-    @Creator.Field Creator.Entity<SimulatedTemperatureModel> creator;
+    @Creator.Field(requirements = Zone.class) Creator.Entity<SimulatedTemperatureModel> creator;
 
     @Creator.Field(SimulatedTemperatureModel.RELATION_IS_ATTACHED) Creator.Relation<SimulatedTemperatureModel,Zone> attachedTempModelCreator;
 
