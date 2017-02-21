@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.helpers.device.provider;
 
-import fr.liglab.adele.cream.annotations.behavior.BehaviorProvider;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtender;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.device.testable.TestResult;
 import fr.liglab.adele.icasa.device.testable.Testable;
@@ -26,7 +26,7 @@ import org.wisdom.api.concurrent.ManagedScheduledExecutorService;
 
 import java.util.concurrent.TimeUnit;
 
-@BehaviorProvider(spec = Testable.class)
+@FunctionalExtender(contextServices = Testable.class)
 public class TestablePresenceSensor extends AbstractTestableService implements Testable{
 
     @Requires(filter = "(name=" + ManagedScheduledExecutorService.SYSTEM + ")", proxy = false)
@@ -35,7 +35,7 @@ public class TestablePresenceSensor extends AbstractTestableService implements T
     private ManagedFutureTask futureTask ;
 
 
-    @BehaviorProvider.ChangeOn(spec = PresenceSensor.class, id = PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE)
+    @FunctionalExtender.ChangeOn(contextService = PresenceSensor.class, id = PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE)
     public void changeOn(boolean status){
         if (isTestRunning()){
             futureTask.cancel(true);

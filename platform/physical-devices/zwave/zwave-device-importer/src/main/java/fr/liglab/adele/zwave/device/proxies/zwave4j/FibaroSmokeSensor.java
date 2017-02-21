@@ -15,13 +15,13 @@
  */
 package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
-import fr.liglab.adele.cream.annotations.behavior.InjectedBehavior;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
-import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
 import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
 import org.slf4j.Logger;
@@ -38,8 +38,8 @@ import javax.measure.quantity.Temperature;
 
 @ContextEntity(services = {Thermometer.class,Zwave4jDevice.class,})
 
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
-@Behavior(id="ZwaveBehavior",spec = ZwaveDevice.class,implem = ZwaveDeviceBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
 
 public class FibaroSmokeSensor extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice,Thermometer {
 
@@ -48,7 +48,7 @@ public class FibaroSmokeSensor extends AbstractZwave4jDevice implements  Generic
 	/**
 	 * Injected Behavior
 	 */
-	@InjectedBehavior(id="ZwaveBehavior")
+	@InjectedFunctionalExtension(id="ZwaveBehavior")
 	private ZwaveDevice device;
 
 	@Override

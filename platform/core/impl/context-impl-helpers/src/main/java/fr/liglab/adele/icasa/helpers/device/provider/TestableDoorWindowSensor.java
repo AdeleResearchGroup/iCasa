@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.helpers.device.provider;
 
-import fr.liglab.adele.cream.annotations.behavior.BehaviorProvider;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtender;
 import fr.liglab.adele.icasa.device.doorWindow.DoorWindowSensor;
 import fr.liglab.adele.icasa.device.testable.TestResult;
 import fr.liglab.adele.icasa.device.testable.Testable;
@@ -26,7 +26,7 @@ import org.wisdom.api.concurrent.ManagedScheduledExecutorService;
 
 import java.util.concurrent.TimeUnit;
 
-@BehaviorProvider(spec = Testable.class)
+@FunctionalExtender(contextServices = Testable.class)
 public class TestableDoorWindowSensor extends AbstractTestableService implements Testable{
 
     @Requires(filter = "(name=" + ManagedScheduledExecutorService.SYSTEM + ")", proxy = false)
@@ -35,7 +35,7 @@ public class TestableDoorWindowSensor extends AbstractTestableService implements
     private ManagedFutureTask futureTask ;
 
 
-    @BehaviorProvider.ChangeOn(spec = DoorWindowSensor.class, id = DoorWindowSensor.DOOR_WINDOW_SENSOR_OPENING_DETECTCION)
+    @FunctionalExtender.ChangeOn(contextService = DoorWindowSensor.class, id = DoorWindowSensor.DOOR_WINDOW_SENSOR_OPENING_DETECTCION)
     public void changeOn(boolean status){
         if (isTestRunning()){
             futureTask.cancel(true);

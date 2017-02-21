@@ -15,8 +15,8 @@
  */
 package fr.liglab.adele.zwave.device.proxies;
 
-import fr.liglab.adele.cream.annotations.behavior.BehaviorProvider;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtender;
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Requires;
@@ -25,7 +25,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 import java.util.ArrayList;
 import java.util.List;
 
-@BehaviorProvider(spec = ZwaveDevice.class)
+@FunctionalExtender(contextServices = ZwaveDevice.class)
 public class ZwaveDeviceBehaviorProvider implements ZwaveDevice{
 
     @ContextEntity.State.Field(service = ZwaveDevice.class,state = ZwaveDevice.HOME_ID)

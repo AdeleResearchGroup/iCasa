@@ -15,23 +15,18 @@
  */
 package fr.liglab.adele.zwave.device.proxies.openhab;
 
-import fr.liglab.adele.cream.annotations.behavior.InjectedBehavior;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
-
-import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
-import org.apache.felix.ipojo.annotations.Validate;
-import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Requires;
-
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.motion.MotionSensor;
-
-import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
-
+import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
-
+import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Validate;
 import org.openhab.binding.zwave.internal.protocol.ZWaveEventListener;
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveAlarmCommandClass.ZWaveAlarmValueEvent;
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveAlarmSensorCommandClass.ZWaveAlarmSensorValueEvent;
@@ -40,13 +35,12 @@ import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveCommandClas
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveMultiLevelSensorCommandClass.ZWaveMultiLevelSensorValueEvent;
 import org.openhab.binding.zwave.internal.protocol.event.ZWaveCommandClassValueEvent;
 import org.openhab.binding.zwave.internal.protocol.event.ZWaveEvent;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ContextEntity(services = {MotionSensor.class})
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
-@Behavior(id="ZwaveBehavior",spec = ZwaveDevice.class,implem = ZwaveDeviceBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
 
 public class FibaroMotionSensor implements MotionSensor, ZWaveEventListener, GenericDevice  {
 
@@ -67,7 +61,7 @@ public class FibaroMotionSensor implements MotionSensor, ZWaveEventListener, Gen
     /**
      * Injected Behavior
      */
-    @InjectedBehavior(id="ZwaveBehavior")
+    @InjectedFunctionalExtension(id="ZwaveBehavior")
     ZwaveDevice device;
 
     /**

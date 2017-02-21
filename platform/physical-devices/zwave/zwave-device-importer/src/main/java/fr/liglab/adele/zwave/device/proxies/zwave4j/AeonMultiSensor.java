@@ -15,9 +15,9 @@
  */
 package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
-import fr.liglab.adele.cream.annotations.behavior.InjectedBehavior;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.humidity.HumiditySensor;
 import fr.liglab.adele.icasa.device.light.Photometer;
@@ -42,8 +42,8 @@ import javax.measure.quantity.Temperature;
 
 @ContextEntity(services = {PresenceSensor.class,Thermometer.class,Photometer.class,Zwave4jDevice.class,HumiditySensor.class})
 
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
-@Behavior(id="ZwaveBehavior",spec = ZwaveDevice.class,implem = ZwaveDeviceBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
 
 public class AeonMultiSensor extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice, PresenceSensor,Thermometer,Photometer,HumiditySensor {
 
@@ -52,7 +52,7 @@ public class AeonMultiSensor extends AbstractZwave4jDevice implements  GenericDe
 	/**
 	 * Injected Behavior
 	 */
-	@InjectedBehavior(id="ZwaveBehavior")
+	@InjectedFunctionalExtension(id="ZwaveBehavior")
 	private ZwaveDevice device;
 
 	@Override

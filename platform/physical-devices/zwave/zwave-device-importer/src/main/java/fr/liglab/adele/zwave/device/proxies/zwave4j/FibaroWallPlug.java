@@ -16,9 +16,14 @@
 package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
-import fr.liglab.adele.cream.annotations.behavior.InjectedBehavior;
-
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
+import fr.liglab.adele.icasa.device.GenericDevice;
+import fr.liglab.adele.icasa.device.power.SmartPlug;
+import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+import fr.liglab.adele.icasa.location.LocatedObject;
+import fr.liglab.adele.zwave.device.api.ZwaveDevice;
+import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
 import org.apache.felix.ipojo.annotations.ServiceController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,49 +31,40 @@ import org.zwave4j.Manager;
 import org.zwave4j.Notification;
 import org.zwave4j.ValueId;
 
-import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.power.SmartPlug;
-import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
-
-
-import fr.liglab.adele.zwave.device.api.ZwaveDevice;
-import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
-
 
 @ContextEntity(services = {SmartPlug.class,Zwave4jDevice.class})
 
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
-@Behavior(id="ZwaveBehavior",spec = ZwaveDevice.class,implem = ZwaveDeviceBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
 
 public class FibaroWallPlug extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice, SmartPlug  {
 
 	private static final Logger LOG = LoggerFactory.getLogger(FibaroWallPlug.class);
 
 
-    /**
-     * Injected Behavior
-     */
-    @InjectedBehavior(id="ZwaveBehavior")
-    private ZwaveDevice device;
+	/**
+	 * Injected Behavior
+	 */
+	@InjectedFunctionalExtension(id="ZwaveBehavior")
+	private ZwaveDevice device;
 
-    /**
-     * Device network status
-     */
+	/**
+	 * Device network status
+	 */
 	@ServiceController(value=true, specification=SmartPlug.class)
 	private boolean active;
 
-	
+
 	@Override
 	public void initialize(Manager manager) {
 		active = isActive(manager);
 	}
-	
+
 	@Override
 	public void notification(Manager manager, Notification notification) {
 		super.notification(manager, notification);
 	}
-	
+
 	@Override
 	protected void nodeStatusChanged(Manager manager, short status) {
 		active = isActive(manager);
@@ -78,24 +74,24 @@ public class FibaroWallPlug extends AbstractZwave4jDevice implements  GenericDev
 	protected void valueChanged(Manager manager, ValueId valueId) {
 		ZWaveCommandClass command = ZWaveCommandClass.valueOf(valueId.getCommandClassId());
 		LOG.debug("Value changed = "+command+" instance "+valueId.getInstance()+" index "+valueId.getIndex()+" type "+valueId.getType());
-		
+
 		switch (command) {
-		case SWITCH_BINARY:
-			statusChange((Boolean)getValue(manager,valueId));
-			break;
-		case SENSOR_MULTILEVEL:
-			consumptionChange((Float)getValue(manager,valueId));
-			break;
-		case POWERLEVEL:
-			break;
-		case METER:
-			break;
-		default:
-			break;
+			case SWITCH_BINARY:
+				statusChange((Boolean)getValue(manager,valueId));
+				break;
+			case SENSOR_MULTILEVEL:
+				consumptionChange((Float)getValue(manager,valueId));
+				break;
+			case POWERLEVEL:
+				break;
+			case METER:
+				break;
+			default:
+				break;
 		}
-		
+
 	}
-	
+
 	protected final boolean isActive(Manager manager) {
 
 		boolean listening = manager.isNodeListeningDevice(device.getHomeId(),(short) device.getNodeId());
@@ -105,43 +101,43 @@ public class FibaroWallPlug extends AbstractZwave4jDevice implements  GenericDev
 		return (listening && !failed) || (!listening && awake);
 	}
 
-	
+
 	/**
-     * STATES
-     */
-    @ContextEntity.State.Field(service = SmartPlug.class,state = SmartPlug.SMART_PLUG_STATUS,value = "false")
-    private boolean status;
+	 * STATES
+	 */
+	@ContextEntity.State.Field(service = SmartPlug.class,state = SmartPlug.SMART_PLUG_STATUS,value = "false")
+	private boolean status;
 
-    @ContextEntity.State.Push(service = SmartPlug.class,state =SmartPlug.SMART_PLUG_STATUS )
-    public boolean statusChange(boolean newStatus){
-        return newStatus;
-    }
-    
-    @ContextEntity.State.Field(service = SmartPlug.class,state = SmartPlug.SMART_PLUG_CONSUMPTION,value = "0.0")
-    private float consumption;
-    @ContextEntity.State.Push(service = SmartPlug.class,state =SmartPlug.SMART_PLUG_CONSUMPTION )
-    public float consumptionChange(float newConso){
-        return newConso;
-    }
-    
-    @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
-    private String serialNumber;
+	@ContextEntity.State.Push(service = SmartPlug.class,state =SmartPlug.SMART_PLUG_STATUS )
+	public boolean statusChange(boolean newStatus){
+		return newStatus;
+	}
+
+	@ContextEntity.State.Field(service = SmartPlug.class,state = SmartPlug.SMART_PLUG_CONSUMPTION,value = "0.0")
+	private float consumption;
+	@ContextEntity.State.Push(service = SmartPlug.class,state =SmartPlug.SMART_PLUG_CONSUMPTION )
+	public float consumptionChange(float newConso){
+		return newConso;
+	}
+
+	@ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
+	private String serialNumber;
 
 
-    @Override
-    public boolean isOn() {
-        return status;
-    }
+	@Override
+	public boolean isOn() {
+		return status;
+	}
 
-    @Override
-    public float currentConsumption() {
-        return consumption;
-    }
+	@Override
+	public float currentConsumption() {
+		return consumption;
+	}
 
-    @Override
-    public String getSerialNumber() {
-        return serialNumber;
-    }
+	@Override
+	public String getSerialNumber() {
+		return serialNumber;
+	}
 
- 
+
 }

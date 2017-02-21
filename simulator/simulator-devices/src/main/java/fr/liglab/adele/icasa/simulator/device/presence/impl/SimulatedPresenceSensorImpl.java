@@ -15,13 +15,13 @@
  */
 package fr.liglab.adele.icasa.simulator.device.presence.impl;
 
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity.State;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
-import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
 import fr.liglab.adele.icasa.simulator.model.api.PresenceModel;
 import org.apache.felix.ipojo.annotations.Bind;
@@ -34,7 +34,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
  *
  */
 @ContextEntity(services = {PresenceSensor.class,SimulatedDevice.class})
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class SimulatedPresenceSensorImpl implements PresenceSensor,SimulatedDevice,GenericDevice{
 
     public final static String SIMULATED_PRESENCE_SENSOR = "iCasa.PresenceSensor";

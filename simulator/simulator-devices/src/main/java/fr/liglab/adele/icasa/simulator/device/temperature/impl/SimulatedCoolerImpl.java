@@ -15,12 +15,12 @@
  */
 package fr.liglab.adele.icasa.simulator.device.temperature.impl;
 
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
-import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
 
 
@@ -29,7 +29,7 @@ import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
  *
  */
 @ContextEntity(services = {Cooler.class,SimulatedDevice.class})
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class SimulatedCoolerImpl implements Cooler, SimulatedDevice,GenericDevice {
 
     public final static String SIMULATED_COOLER = "iCasa.Cooler";

@@ -15,8 +15,8 @@
  */
 package fr.liglab.adele.icasa.helpers.location.provider;
 
-import fr.liglab.adele.cream.annotations.behavior.BehaviorProvider;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtender;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.location.Position;
 import fr.liglab.adele.icasa.location.Zone;
@@ -24,7 +24,7 @@ import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
 
-@BehaviorProvider(spec = LocatedObject.class)
+@FunctionalExtender(contextServices = LocatedObject.class)
 public class LocatedObjectBehaviorProvider implements LocatedObject {
 
     public final static String IS_IN_RELATION = "IsIn";
