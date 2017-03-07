@@ -62,6 +62,7 @@ public class ContextManager implements ContextAPIAppRegistration {
         resolutionMachine.run();
     };
 
+    /*TODO bug de start/stop*/
     @Validate
     public void start(){
         resolutionMachine = contextInternalManager.getContextResolutionMachine();

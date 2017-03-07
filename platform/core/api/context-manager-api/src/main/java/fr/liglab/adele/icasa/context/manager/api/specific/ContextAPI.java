@@ -25,7 +25,9 @@ public enum ContextAPI {
     DimmerLight("fr.liglab.adele.icasa.device.light.DimmerLight"),
     Photometer("fr.liglab.adele.icasa.device.light.Photometer"),
     PresenceService("fr.liglab.adele.icasa.physical.abstraction.PresenceService"),
-    MomentOfTheDay("fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay");
+    MomentOfTheDay("fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay"),
+
+    IOPController("fr.liglab.adele.iop.device.api.IOPController");
 
     private String interfaceName;
 

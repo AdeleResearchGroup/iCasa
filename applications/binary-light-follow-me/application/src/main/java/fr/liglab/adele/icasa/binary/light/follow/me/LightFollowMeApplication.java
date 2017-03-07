@@ -57,6 +57,7 @@ public class LightFollowMeApplication {
         Set<ContextAPI> optimalConfig = new HashSet<>();
         optimalConfig.add(ContextAPI.BinaryLight);
         optimalConfig.add(ContextAPI.PresenceService);
+        optimalConfig.add(ContextAPI.IOPController);
 
         this.contextAPIConfigs = new ContextAPIConfigs(optimalConfig);
         this.contextAPIConfigs.addConfigWithLastPriority(minimumConfig);
