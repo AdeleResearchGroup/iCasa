@@ -15,8 +15,8 @@
  */
 package fr.liglab.adele.icasa.zigbee.device.factories;
 
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.battery.BatteryObservable;
 import fr.liglab.adele.icasa.device.motion.MotionSensor;
@@ -31,7 +31,7 @@ import fr.liglab.adele.icasa.zigbee.device.api.ZigbeeDevice;
  *
  */
 @ContextEntity(services = {MotionSensor.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class ZigbeeMotionSensor implements MotionSensor, ZigbeeDevice, ZigbeeDeviceTracker,GenericDevice,BatteryObservable {
 
     @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)

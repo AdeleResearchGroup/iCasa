@@ -15,11 +15,11 @@
  */
 package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.zwave4j.Manager;
 import org.zwave4j.Notification;
 import org.zwave4j.ValueId;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class AbstractZwave4jDevice implements Zwave4jDevice {
 

@@ -16,11 +16,16 @@
 package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
-import fr.liglab.adele.cream.annotations.behavior.InjectedBehavior;
-
-import fr.liglab.adele.icasa.helpers.device.provider.TestableDoorWindowSensor;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
+import fr.liglab.adele.icasa.device.GenericDevice;
+import fr.liglab.adele.icasa.device.doorWindow.DoorWindowSensor;
 import fr.liglab.adele.icasa.device.testable.Testable;
+import fr.liglab.adele.icasa.helpers.device.provider.TestableDoorWindowSensor;
+import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+import fr.liglab.adele.icasa.location.LocatedObject;
+import fr.liglab.adele.zwave.device.api.ZwaveDevice;
+import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
 import org.apache.felix.ipojo.annotations.ServiceController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,50 +33,41 @@ import org.zwave4j.Manager;
 import org.zwave4j.Notification;
 import org.zwave4j.ValueId;
 
-import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.doorWindow.DoorWindowSensor;
-import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
-
-
-import fr.liglab.adele.zwave.device.api.ZwaveDevice;
-import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
-
 
 @ContextEntity(services = {DoorWindowSensor.class,Zwave4jDevice.class})
 
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
-@Behavior(id="ZwaveBehavior",spec = ZwaveDevice.class,implem = ZwaveDeviceBehaviorProvider.class)
-@Behavior(id="testable",spec = Testable.class,implem = TestableDoorWindowSensor.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+@FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
+@FunctionalExtension(id="testable",contextServices = Testable.class,implementation = TestableDoorWindowSensor.class)
 
 public class FibaroDoorWindowSensor extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice, DoorWindowSensor  {
 
 	private static final Logger LOG = LoggerFactory.getLogger(FibaroWallPlug.class);
 
-    /**
-     * Injected Behavior
-     */
-    @InjectedBehavior(id="ZwaveBehavior")
-    private ZwaveDevice device;
+	/**
+	 * Injected Behavior
+	 */
+	@InjectedFunctionalExtension(id="ZwaveBehavior")
+	private ZwaveDevice device;
 
-    /**
-     * Device network status
-     */
+	/**
+	 * Device network status
+	 */
 	@ServiceController(value=true, specification=DoorWindowSensor.class)
 	private boolean active;
 
-	
+
 	@Override
 	public void initialize(Manager manager) {
 		active = isActive(manager);
 	}
 
-	
+
 	@Override
 	public void notification(Manager manager, Notification notification) {
 		super.notification(manager, notification);
 	}
-	
+
 	@Override
 	protected void nodeStatusChanged(Manager manager, short status) {
 		active = isActive(manager);
@@ -79,21 +75,21 @@ public class FibaroDoorWindowSensor extends AbstractZwave4jDevice implements  Ge
 
 	@Override
 	protected void valueChanged(Manager manager, ValueId valueId) {
-		
+
 		ZWaveCommandClass command = ZWaveCommandClass.valueOf(valueId.getCommandClassId());
 		LOG.debug("Value changed = "+command+" instance "+valueId.getInstance()+" index "+valueId.getIndex()+" type "+valueId.getType());
-		
+
 		switch (command) {
-		case SENSOR_BINARY:
-			openingDetectionChanged((Boolean)getValue(manager,valueId));
-			break;
-		case BATTERY:
-			break;
-		default:
-			break;
+			case SENSOR_BINARY:
+				openingDetectionChanged((Boolean)getValue(manager,valueId));
+				break;
+			case BATTERY:
+				break;
+			default:
+				break;
 		}
 	}
-	
+
 	protected final boolean isActive(Manager manager) {
 
 		boolean listening = manager.isNodeListeningDevice(device.getHomeId(),(short) device.getNodeId());
@@ -103,28 +99,28 @@ public class FibaroDoorWindowSensor extends AbstractZwave4jDevice implements  Ge
 		return (listening && !failed) || (!listening && awake);
 	}
 
-	
-    @ContextEntity.State.Field(service = DoorWindowSensor.class,state = DoorWindowSensor.DOOR_WINDOW_SENSOR_OPENING_DETECTCION,value = "false")
-    private boolean status;
 
-    @ContextEntity.State.Push(service = DoorWindowSensor.class,state =DoorWindowSensor.DOOR_WINDOW_SENSOR_OPENING_DETECTCION)
-    public boolean openingDetectionChanged(boolean newStatus){
-        return newStatus;
-    }    
-    
-    @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
-    private String serialNumber;
+	@ContextEntity.State.Field(service = DoorWindowSensor.class,state = DoorWindowSensor.DOOR_WINDOW_SENSOR_OPENING_DETECTCION,value = "false")
+	private boolean status;
+
+	@ContextEntity.State.Push(service = DoorWindowSensor.class,state =DoorWindowSensor.DOOR_WINDOW_SENSOR_OPENING_DETECTCION)
+	public boolean openingDetectionChanged(boolean newStatus){
+		return newStatus;
+	}
+
+	@ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
+	private String serialNumber;
 
 
- 
-    @Override
-    public String getSerialNumber() {
-        return serialNumber;
-    }
 
-    @Override
-    public boolean isOpened() {
-        return status;
-    }
- 
+	@Override
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	@Override
+	public boolean isOpened() {
+		return status;
+	}
+
 }

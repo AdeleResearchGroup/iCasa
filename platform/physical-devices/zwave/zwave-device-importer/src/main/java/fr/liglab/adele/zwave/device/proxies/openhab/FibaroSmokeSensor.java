@@ -15,17 +15,16 @@
  */
 package fr.liglab.adele.zwave.device.proxies.openhab;
 
-import fr.liglab.adele.cream.annotations.behavior.Behavior;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.icasa.location.LocatedObject;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
-
 import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
 
-@ContextEntity(services = {})
-@Behavior(id="ZwaveBehavior",spec = ZwaveDevice.class,implem = ZwaveDeviceBehaviorProvider.class)
-@Behavior(id="LocatedBehavior",spec = LocatedObject.class,implem = LocatedObjectBehaviorProvider.class)
+@ContextEntity
+@FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
+@FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class FibaroSmokeSensor {
 
 }
