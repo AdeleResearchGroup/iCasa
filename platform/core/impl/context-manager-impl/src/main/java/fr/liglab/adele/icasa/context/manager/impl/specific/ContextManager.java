@@ -21,10 +21,13 @@ import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
 import org.apache.felix.ipojo.annotations.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.*;
 
 /**
@@ -62,15 +65,22 @@ public class ContextManager implements ContextAPIAppRegistration {
         resolutionMachine.run();
     };
 
-    /*TODO bug de start/stop*/
     @Validate
     public void start(){
+        /*TODO: REMOVE INITIAL CONFIG*/
+        Set<ContextAPI> optimalConfig = new HashSet<>();
+        optimalConfig.add(ContextAPI.IOPController);
+        ContextAPIConfigs contextAPIConfigs = new ContextAPIConfigs(optimalConfig);
+        registerContextGoals(this.getClass().toGenericString(), contextAPIConfigs);
+
+        /*Start scheduling*/
         resolutionMachine = contextInternalManager.getContextResolutionMachine();
         scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, TimeUnit.SECONDS);
     }
 
     @Invalidate
     public void stop(){
+        /*TODO bug de stop/start*/
         scheduledExecutorService.shutdown();
         singleExecutorService.shutdown();
     }

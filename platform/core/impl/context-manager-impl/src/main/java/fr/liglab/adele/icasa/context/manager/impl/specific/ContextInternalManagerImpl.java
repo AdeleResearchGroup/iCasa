@@ -149,6 +149,34 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
         }
     }
 
+    @Modified(id = "entityProviders")
+    private void modifyEntityProvider(EntityProvider entityProvider){
+        LOG.info("PROVIDER MODIFIED: "+ entityProvider.getName());
+        for(String providedEntity : entityProvider.getProvidedEntities()) {
+            String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
+
+            if(!eProviderByCreatorName.containsKey(creatorName)){
+                LOG.info("ENTITY: "+ providedEntity);
+                LOG.info("PROVIDING: "+ entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
+                LOG.info("WITH REQUIREMENTS: "+ entityProvider.getPotentiallyRequiredServices(providedEntity));
+
+                eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
+                eProviderByCreatorName.put(creatorName, entityProvider);
+
+                for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
+                    if (!eCreatorsByServices.containsKey(service)) {
+                        Set<String> entityProviderSubSet = new HashSet<>();
+                        entityProviderSubSet.add(creatorName);
+                        eCreatorsByServices.put(service, entityProviderSubSet);
+                    } else {
+                        eCreatorsByServices.get(service).add(creatorName);
+                    }
+                }
+            }
+            /*TODO: does not manage creator deletion*/
+        }
+    }
+
     private void unbindEntityProvider(EntityProvider entityProvider){
         for(String providedEntity : entityProvider.getProvidedEntities()) {
             String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
