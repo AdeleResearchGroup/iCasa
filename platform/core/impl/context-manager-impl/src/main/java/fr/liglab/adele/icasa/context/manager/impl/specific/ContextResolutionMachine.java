@@ -51,6 +51,7 @@ final class ContextResolutionMachine implements Runnable {
     private Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
     private Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
     private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
+    private Set<String> lookupFilter = new HashSet<>();
 
     protected ContextResolutionMachine(ContextInternalManagerImpl contextInternalManager) {
         ContextResolutionMachine.contextInternalManager = contextInternalManager;
@@ -59,13 +60,23 @@ final class ContextResolutionMachine implements Runnable {
     @Override
     public void run() {
         /*Attention aux multiples acces*/
-        LOG.info("CONTEXT RESOLUTION MACHINE - Execution " + i++);
+
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
+        if(logLevel>=1) {
+            LOG.info("CONTEXT RESOLUTION MACHINE - Execution " + i++);
+        }
+
         resolutionAlgorithm();
+        contextInternalManager.setLookupFilter(lookupFilter);
     }
 
 
     /*TODO Algorithme naze, à repenser*/
     private synchronized void resolutionAlgorithm() {
+
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
 
 
         /*App, set de services en config optimale*/
@@ -75,7 +86,9 @@ final class ContextResolutionMachine implements Runnable {
         Set<ContextAPI> goals = new HashSet<>();
         for (ContextAPIConfigs contextAPIConfigs : contextAPIConfigsSet) {
             goals.addAll(contextAPIConfigs.getOptimalConfig());
-            LOG.info("GOALS " + contextAPIConfigs.getOptimalConfig().toString());
+            if(logLevel>=2) {
+                LOG.info("GOALS " + contextAPIConfigs.getOptimalConfig().toString());
+            }
         }
 
         Set<RelationProvider> relationProviders = contextInternalManager.getRelationProviders();
@@ -86,7 +99,9 @@ final class ContextResolutionMachine implements Runnable {
         for(RelationProvider relationProvider : relationProviders){
             for(String relation : relationProvider.getProvidedRelations()){
                 relationProvider.enable(relation);
-                LOG.info("PROVIDER "+relationProvider.getName()+" ENABLE RELATION "+relation);
+                if(logLevel>=3) {
+                    LOG.info("PROVIDER "+relationProvider.getName()+" ENABLE RELATION "+relation);
+                }
             }
         }
 
@@ -95,7 +110,9 @@ final class ContextResolutionMachine implements Runnable {
         mediationTrees = new HashMap<>();
         for (ContextAPI contextAPI : goals) {
             String goalName = contextAPI.getInterfaceName();
-            LOG.info("CONTEXT API TO ACTIVATE: " + contextAPI + " named: " + goalName);
+            if(logLevel>=2) {
+                LOG.info("CONTEXT API TO ACTIVATE: " + contextAPI + " named: " + goalName);
+            }
 
             DefaultMutableTreeNode goalNode = new DefaultMutableTreeNode(goalName);
             mediationTrees.put(goalName, goalNode);
@@ -111,31 +128,39 @@ final class ContextResolutionMachine implements Runnable {
         eCreatorsRequirements = contextInternalManager.geteCreatorsRequirements();
         eProviderByCreatorName = contextInternalManager.geteProviderByCreatorName();
 
+        /*TODO*/
+        lookupFilter = new HashSet<>();
         if (recursiveCreatorRegistrationTree(new HashSet<>(mediationTrees.values()), nonActivableServices)) {
             for (Map.Entry<String, DefaultMutableTreeNode> mediationTree : mediationTrees.entrySet()) {
                 String goalName = mediationTree.getKey();
                 DefaultMutableTreeNode goalNode = mediationTree.getValue();
-                if (goalNode != null) {
-                    LOG.info("TREE OK FOR GOAL: " + goalName);
-                    LOG.info("FIRST LEAF: " + goalNode.getFirstLeaf().toString());
-                    LOG.info("LAST LEAF: " + goalNode.getLastLeaf().toString());
-                } else {
-                    LOG.info("TREE KO FOR GOAL: " + goalName);
+                if(logLevel>=3) {
+                    if (goalNode != null) {
+                        LOG.info("TREE OK FOR GOAL: " + goalName);
+                    } else {
+                        LOG.info("TREE KO FOR GOAL: " + goalName);
+                    }
                 }
+
 
                 Set<String> creatorsToActivateSubSet = new HashSet<>();
                 if(creatorTreeActivation(goalNode, creatorsToActivateSubSet, nonActivableGoals)){
-                    LOG.info("ACTIVATION OK FOR GOAL: " + goalName);
+                    if(logLevel>=2) {
+                        LOG.info("ACTIVATION POSSIBLE FOR GOAL: " + goalName);
+                    }
                     creatorsToActivate.addAll(creatorsToActivateSubSet);
                 } else {
-                    LOG.info("ACTIVATION FAIL FOR GOAL: " + goalName);
-                    LOG.info("MISSING SERVICE: " + "...");
+                    if(logLevel>=2) {
+                        LOG.info("ACTIVATION NOT POSSIBLE FOR GOAL: " + goalName);
+                    }
                     /*TODO : TRAITER LE CHANGEMENT DE CONFIG ET LES CAS OU LA CONFIG COMPLETE N'EST PAS RESOLUE*/
                 }
             }
         } else {
-            LOG.info("ERROR: MISSING PROVIDER");
-            /*TODO : TRAITER les provider manquants*/
+            if(logLevel>=2) {
+                LOG.info("ERROR: MISSING PROVIDER");
+                /*TODO : TRAITER les provider manquants*/
+            }
         }
 
         /*Désactivation de la création des entities dans les providers non traités*/
@@ -144,10 +169,14 @@ final class ContextResolutionMachine implements Runnable {
                 String creatorName = eCreatorName(entityProvider, providedEntity);
                 if(creatorsToActivate.contains(creatorName)) {
                     entityProvider.enable(providedEntity);
-                    LOG.info("PROVIDER " + entityProvider.getName() + " ENABLE ENTITY " + providedEntity);
+                    if(logLevel>=3) {
+                        LOG.info("PROVIDER " + entityProvider.getName() + " ENABLE ENTITY " + providedEntity);
+                    }
                 } else {
                     entityProvider.disable(providedEntity);
-                    LOG.info("PROVIDER " + entityProvider.getName() + " DISABLE ENTITY " + providedEntity);
+                    if(logLevel>=3) {
+                        LOG.info("PROVIDER " + entityProvider.getName() + " DISABLE ENTITY " + providedEntity);
+                    }
                 }
             }
         }
@@ -158,9 +187,13 @@ final class ContextResolutionMachine implements Runnable {
         for (ContextAPI contextAPI : goals) {
             String contextAPIName = contextAPI.getInterfaceName();
             if (bundleContext.getServiceReference(contextAPIName) == null) {
-                LOG.info("MISSING CONTEXT API: " + contextAPIName);
+                if(logLevel>=1) {
+                    LOG.info("MISSING CONTEXT API: " + contextAPIName);
+                }
             } else {
-                LOG.info("PROVIDING CONTEXT API: " + contextAPIName);
+                if(logLevel>=1) {
+                    LOG.info("PROVIDING CONTEXT API: " + contextAPIName);
+                }
             }
         }
     }
@@ -178,22 +211,33 @@ final class ContextResolutionMachine implements Runnable {
     }
 
     private boolean recursiveCreatorRegistrationTree(Set<DefaultMutableTreeNode> requiredNodes, Set<String> nonActivableServices){
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
 
         Set<DefaultMutableTreeNode> stepRequiredNodes = new HashSet<>();
 
         for(DefaultMutableTreeNode requiredNode : requiredNodes){
             String requiredService = (String) requiredNode.getUserObject();
-            LOG.info("REQUIRED SERVICE: "+requiredService);
+            if(logLevel>=3) {
+                LOG.info("REQUIRED SERVICE: "+requiredService);
+            }
+
+            /*TODO ADD TO LOOKUP FILTER*/
+            /*All services*/
+            lookupFilter.add(requiredService);
+
             /*Find corresponding creators*/
             Set<String> creators = eCreatorsByServices.get(requiredService);
             if(creators == null){
-                LOG.info("NO CREATORS FOUND");
+                if(logLevel>=3) {
+                    LOG.info("NO CREATORS FOUND");
+                }
+
                 nonActivableServices.add(requiredService);
                 /*TODO REMOVE ?*/
                 return false;
             } else {
                 for(String creator : creators){
-                    LOG.info("CREATOR FOUND : "+creator);
                     DefaultMutableTreeNode creatorNode = new DefaultMutableTreeNode(creator);
                     requiredNode.add(creatorNode);
                     Set<String> reqSet = eCreatorsRequirements.get(creator);
@@ -202,7 +246,11 @@ final class ContextResolutionMachine implements Runnable {
                         creatorNode.add(serviceNode);
                         stepRequiredNodes.add(serviceNode);
                     }
-                    LOG.info("ASSOCIATED REQUIRED SERVICES: "+reqSet);
+
+                    if(logLevel>=3) {
+                        LOG.info("CREATOR FOUND: "+creator);
+                        LOG.info("ASSOCIATED REQUIRED SERVICES: "+reqSet);
+                    }
                 }
             }
         }
@@ -211,7 +259,8 @@ final class ContextResolutionMachine implements Runnable {
     }
 
     private boolean creatorTreeActivation(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
-
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
 
         if(goal.getDepth()>0){
 
@@ -234,15 +283,25 @@ final class ContextResolutionMachine implements Runnable {
                             String entityName = getProvidedEntityFromCreatorName(creator);
                             EntityProvider entityProvider = eProviderByCreatorName.get(creator);
                             creatorsToActivate.add(creator);
-                            LOG.info("CREATOR TO ACTIVATE: "+creator);
+
+                            if(logLevel>=3) {
+                                LOG.info("CREATOR TO ACTIVATE: "+creator);
+                            }
+
                             if(entityProvider.getInstances(entityName, true).isEmpty()){
-                                LOG.info("KO CREATOR: "+creator);
+                                if(logLevel>=3) {
+                                    LOG.info("KO CREATOR: "+creator);
+                                }
                             } else {
                                 providableService = true;
-                                LOG.info("OK CREATOR: "+creator);
+                                if(logLevel>=3) {
+                                    LOG.info("OK CREATOR: "+creator);
+                                }
                             }
                         } catch (NullPointerException ne){
-                            LOG.info("ERROR IN PROCESSING CREATOR: " +nextChild.toString());
+                            if(logLevel>=3) {
+                                LOG.info("ERROR IN PROCESSING CREATOR: " +nextChild.toString());
+                            }
                         }
 
                         nextChild = nextChild.getNextSibling();
@@ -251,7 +310,9 @@ final class ContextResolutionMachine implements Runnable {
                     if(!providableService){
                         nonActivableServices.add(service.toString());
                         providableGoal = false;
-                        LOG.info("MISSING INSTANCES FOR SERVICE: " +service.toString());
+                        if(logLevel>=2) {
+                            LOG.info("MISSING INSTANCES FOR SERVICE: " +service.toString());
+                        }
                     }
                 }
 
@@ -270,14 +331,16 @@ final class ContextResolutionMachine implements Runnable {
                         String creator = nextParent.toString();
                         /*TODO VERIFY*/
                         creatorsToActivate.add(creator);
-                        LOG.info("CREATOR TO ACTIVATE: "+creator);
+
+                        if(logLevel>=3) {
+                            LOG.info("CREATOR TO ACTIVATE: "+creator);
+                        }
 
                         nextParent = ((DefaultMutableTreeNode)nextParent.getParent());
                         if(nextParent != null){
                             nextParent = ((DefaultMutableTreeNode)nextParent.getParent());
                         }
                     }
-
                 }
             }
 

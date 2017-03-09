@@ -18,6 +18,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Eva on 16/02/2017.
@@ -26,4 +27,6 @@ public interface ContextInternalManager {
     void configureGoals(Map<String, ContextAPIConfigs> contextGoalMap);
 
     Runnable getContextResolutionMachine();
+
+    Set<String> getCurrentLookupFilter();
 }

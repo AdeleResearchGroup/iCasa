@@ -16,18 +16,17 @@
 
 package fr.liglab.adele.icasa.context.manager.impl.specific;
 
-import fr.liglab.adele.cream.model.ContextEntity;
-import fr.liglab.adele.cream.model.introspection.EntityProvider;
-import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+import fr.liglab.adele.icasa.command.handler.Command;
+import fr.liglab.adele.icasa.command.handler.CommandProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
+import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -37,7 +36,15 @@ import java.util.concurrent.*;
 @Component(immediate = true, publicFactory = false)
 @Instantiate
 @Provides
-public class ContextManager implements ContextAPIAppRegistration {
+@CommandProvider(namespace = "AM-ctxt")
+public class ContextManager implements ContextAPIAppRegistration{
+
+    private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
+
+    /*Log level (debug) 0: nothing, 3: all*/
+    private static final int logLevelMax = 3;
+    public static int logLevel = 2;
+
 
     /*Thread management*/
     private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
@@ -50,12 +57,21 @@ public class ContextManager implements ContextAPIAppRegistration {
     /*Goal management*/
     private static Map<String, ContextAPIConfigs> contextGoalMap = new HashMap<>();
 
+    /*TODO: les appels à RoSe doivent être faits ici, ou dans un composant specifique (pas dans contextInternalManager)*/
+    /*Lookup IOP Controller*/
+    @Requires(optional = true)
+    public IOPLookupService iopLookupService;
+
+    /*Lookup mode*/
+    public static boolean autoLookup = false;
+    public static Set<String> lookupFilter = new HashSet<>();
+
     /*Management sub-parts*/
     @Requires(optional = false)
     private ContextInternalManager contextInternalManager;
 
     /*Resolution machine : calcule et effectue l'adaptation*/
-    private static Runnable resolutionMachine;
+    private Runnable resolutionMachine;
 
     /*Adaptation*/
     private Runnable contextCompositionAdaptation = () -> {
@@ -63,6 +79,8 @@ public class ContextManager implements ContextAPIAppRegistration {
         contextInternalManager.configureGoals(ContextManager.contextGoalMap);
         /*Adaptation*/
         resolutionMachine.run();
+        /*Lookup filter*/
+        modifyLookupFilter(contextInternalManager.getCurrentLookupFilter());
     };
 
     @Validate
@@ -129,5 +147,69 @@ public class ContextManager implements ContextAPIAppRegistration {
     public boolean unregisterContextGoals(String appId) {
         contextGoalMap.remove(appId);
         return true;
+    }
+
+    private void modifyLookupFilter(Set<String> filter) {
+        if(autoLookup) {
+            Set<String> toConsider = new HashSet<>();
+            Set<String> toDiscard  = new HashSet<>();
+
+            /*To consider list*/
+            for (String service : filter) {
+                if (!lookupFilter.contains(service)) {
+                    toConsider.add(service);
+                }
+            }
+            lookupFilter.addAll(toConsider);
+
+            /*To discard list*/
+            for (String service : lookupFilter) {
+                if (!filter.contains(service)) {
+                    toDiscard.add(service);
+                }
+            }
+            lookupFilter.removeAll(toDiscard);
+
+            /*Environment lookup*/
+            if (iopLookupService != null) {
+                if(!toConsider.isEmpty()){
+                    String[] c = new String[toConsider.size()];
+                    c = toConsider.toArray(c);
+                    iopLookupService.consider(c);
+                }
+
+                if(!toDiscard.isEmpty()){
+                    String[] d = new String[toDiscard.size()];
+                    d = toDiscard.toArray(d);
+                    iopLookupService.discard(d);
+                }
+
+                if(logLevel>=3) {
+                    LOG.info("AUTO LOOKUP FILTER CONSIDER: " + toConsider);
+                    LOG.info("AUTO LOOKUP FILTER DISCARD: " + toDiscard);
+                }
+                if(logLevel>=1) {
+                    LOG.info("AUTO LOOKUP FILTER: " + lookupFilter);
+                }
+            }
+
+        }
+    }
+
+    @Command
+    public void ctxtAmLogLevel(int level){
+        if(level<0) level = 0;
+        if(level>logLevelMax) level = logLevelMax;
+        logLevel = level;
+    }
+
+    @Command
+    public void ctxtAmAutoLookup(){
+        autoLookup = true;
+    }
+
+    @Command
+    public void ctxtAmManualLookup(){
+        autoLookup = false;
     }
 }

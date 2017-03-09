@@ -43,6 +43,10 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     @Context
     private BundleContext bundleContext;
 
+    /**/
+    @Requires(optional = true)
+    private ContextManager contextManager;
+
     /*Managed elements*/
     @Requires(optional = true)
     private ContextEntity[] contextEntities;
@@ -58,6 +62,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     private Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
     private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
     private Map<String, ContextAPIConfigs> contextGoalMap = new HashMap<>();
+    private Set<String> lookupFilter = new HashSet<>();
 
     /*Initialization*/
     public ContextInternalManagerImpl(){
@@ -72,6 +77,11 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     @Override
     public ContextResolutionMachine getContextResolutionMachine() {
         return resolutionMachine;
+    }
+
+    @Override
+    public Set<String> getCurrentLookupFilter() {
+        return lookupFilter;
     }
 
     BundleContext getBundleContext() {
@@ -116,7 +126,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
         return eCreatorsRequirements;
     }
 
-    public Map<String, EntityProvider> geteProviderByCreatorName() {
+    Map<String, EntityProvider> geteProviderByCreatorName() {
         return eProviderByCreatorName;
     }
 
@@ -124,15 +134,26 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
         return contextGoalMap;
     }
 
+    void setLookupFilter(Set<String> filter){
+        lookupFilter = new HashSet<>(filter);
+    }
+
     @Bind(id = "entityProviders")
     private void bindEntityProvider(EntityProvider entityProvider){
-        LOG.info("PROVIDER ADDED: "+ entityProvider.getName());
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
+        if(logLevel>=1){
+            LOG.info("PROVIDER ADDED: "+ entityProvider.getName());
+        }
+
         for(String providedEntity : entityProvider.getProvidedEntities()) {
             String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
 
-            LOG.info("ENTITY: "+ providedEntity);
-            LOG.info("PROVIDING: "+ entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
-            LOG.info("WITH REQUIREMENTS: "+ entityProvider.getPotentiallyRequiredServices(providedEntity));
+            if(logLevel>=3){
+                LOG.info("ENTITY: "+ providedEntity);
+                LOG.info("PROVIDING: "+ entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
+                LOG.info("WITH REQUIREMENTS: "+ entityProvider.getPotentiallyRequiredServices(providedEntity));
+            }
 
             eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
             eProviderByCreatorName.put(creatorName, entityProvider);
@@ -151,14 +172,22 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
 
     @Modified(id = "entityProviders")
     private void modifyEntityProvider(EntityProvider entityProvider){
-        LOG.info("PROVIDER MODIFIED: "+ entityProvider.getName());
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
+        if(logLevel>=1) {
+            LOG.info("PROVIDER MODIFIED: "+ entityProvider.getName());
+        }
+
         for(String providedEntity : entityProvider.getProvidedEntities()) {
             String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
 
             if(!eProviderByCreatorName.containsKey(creatorName)){
-                LOG.info("ENTITY: "+ providedEntity);
-                LOG.info("PROVIDING: "+ entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
-                LOG.info("WITH REQUIREMENTS: "+ entityProvider.getPotentiallyRequiredServices(providedEntity));
+
+                if(logLevel>=3) {
+                    LOG.info("ENTITY: " + providedEntity);
+                    LOG.info("PROVIDING: " + entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
+                    LOG.info("WITH REQUIREMENTS: " + entityProvider.getPotentiallyRequiredServices(providedEntity));
+                }
 
                 eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
                 eProviderByCreatorName.put(creatorName, entityProvider);
@@ -177,7 +206,9 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
         }
     }
 
+    @Unbind
     private void unbindEntityProvider(EntityProvider entityProvider){
+        /*TODO Might have been not tested*/
         for(String providedEntity : entityProvider.getProvidedEntities()) {
             String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
 
@@ -191,6 +222,8 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
             }
         }
 
-        LOG.info("PROVIDER REMOVED: "+ entityProvider.getName());
+        if(ContextManager.logLevel>=1) {
+            LOG.info("PROVIDER REMOVED: "+ entityProvider.getName());
+        }
     }
 }

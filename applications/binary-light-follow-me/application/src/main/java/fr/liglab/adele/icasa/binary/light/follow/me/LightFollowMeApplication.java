@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 })
 
 @Instantiate
-@CommandProvider(namespace = "app-followme")
+@CommandProvider(namespace = "followme-app")
 public class LightFollowMeApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(LightFollowMeApplication.class);
@@ -156,7 +156,7 @@ public class LightFollowMeApplication {
 
 
     @Command
-    public void toggleAppRegistration() {
+    public void appToggleRegistration() {
         if(contextAPIAppRegistration!=null){
             if(!registered){
                 contextAPIAppRegistration.registerContextGoals(this.getClass().toGenericString(), contextAPIConfigs);

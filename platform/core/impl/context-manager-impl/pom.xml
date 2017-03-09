@@ -43,6 +43,13 @@
             <artifactId>cream.runtime.facilities</artifactId>
         </dependency>
 
+        <!--X-WARE-->
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>iop-device-importer</artifactId>
+            <version>1.2.7-SNAPSHOT</version>
+        </dependency>
+
         <!--TESTS-->
         <dependency>
             <groupId>junit</groupId>
@@ -91,6 +98,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>context.manager.api</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>command.handler</artifactId>
+            <version>1.2.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
