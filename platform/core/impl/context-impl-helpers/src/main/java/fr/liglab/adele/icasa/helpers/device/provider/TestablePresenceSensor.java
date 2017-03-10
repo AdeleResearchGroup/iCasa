@@ -50,6 +50,6 @@ public class TestablePresenceSensor extends AbstractTestableService implements T
 
     @Override
     protected void testLaunch() {
-        futureTask = scheduler.schedule(()-> finishTest(TestResult.FAILED,"No event detected during 40 seconds"),40, TimeUnit.SECONDS);
+        futureTask = scheduler.schedule(()-> finishTest(TestResult.FAILED,"No presence event detected during 40 seconds"),40, TimeUnit.SECONDS);
     }
 }

@@ -50,6 +50,6 @@ public class TestableDoorWindowSensor extends AbstractTestableService implements
 
     @Override
     protected void testLaunch() {
-        futureTask = scheduler.schedule(()-> finishTest(TestResult.FAILED,"No event detected during 20 seconds"),20, TimeUnit.SECONDS);
+        futureTask = scheduler.schedule(()-> finishTest(TestResult.FAILED,"No open or closed door/window event detected during 20 seconds"),20, TimeUnit.SECONDS);
     }
 }
