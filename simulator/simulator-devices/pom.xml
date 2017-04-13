@@ -67,6 +67,11 @@
 			<groupId>fr.liglab.adele.cream</groupId>
 			<artifactId>cream.core</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>fr.liglab.adele.conflict</groupId>
+			<artifactId>conflict.api</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -77,6 +82,7 @@
 				<configuration>
 					<instructions>
 						<Private-Package>fr.liglab.adele.icasa.simulator.device.light.impl,
+							fr.liglab.adele.icasa.simulator.device.gasSensor.impl,
 							fr.liglab.adele.icasa.simulator.device.presence.impl,
 							fr.liglab.adele.icasa.simulator.device.provider,
 							fr.liglab.adele.icasa.simulator.device.temperature.impl

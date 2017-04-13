@@ -18,6 +18,7 @@ package fr.liglab.adele.icasa.remote.wisdom.impl;
 import fr.liglab.adele.icasa.Constants;
 import fr.liglab.adele.icasa.clockservice.Clock;
 import fr.liglab.adele.icasa.clockservice.ClockListener;
+import fr.liglab.adele.icasa.device.gasSensor.CarbonDioxydeSensor;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.light.Photometer;
@@ -452,6 +453,42 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 		JSONObject json = new JSONObject();
 		try {
 			json.put("deviceId", presenceSensor.getSerialNumber());
+			sendEvent("device-removed", json);
+		} catch (JSONException e) {
+			logger.error("Building message error" + json, e);
+		}
+	}
+
+	@Bind(id="carbonDioxydeSensors",specification = CarbonDioxydeSensor.class,optional = true,aggregate = true)
+	public synchronized void bindCarbonDioxydeSensor(CarbonDioxydeSensor carbonDioxydeSensor){
+		JSONObject json = new JSONObject();
+		try {
+			json.put("deviceId", carbonDioxydeSensor.getSerialNumber());
+			json.put("device", IcasaJSONUtil.getCarbonDioxydeSensorJSON(carbonDioxydeSensor));
+			sendEvent("device-added", json);
+		} catch (JSONException e) {
+			logger.error("Building message error" + json, e);
+		}
+	}
+
+	@Modified(id="carbonDioxydeSensors")
+	public synchronized void modifiedCarbonDioxydeSensor(CarbonDioxydeSensor carbonDioxydeSensor){
+		JSONObject json = new JSONObject();
+		try {
+			json.put("deviceId", carbonDioxydeSensor.getSerialNumber());
+			json.put("device", IcasaJSONUtil.getCarbonDioxydeSensorJSON(carbonDioxydeSensor));
+			sendEvent("device-position-update", json);
+			sendEvent("device-property-updated",json);
+		} catch (JSONException e) {
+			logger.error("Building message error" + json, e);
+		}
+	}
+
+	@Unbind(id="carbonDioxydeSensors")
+	public synchronized void unbindCarbonDioxydeSensor(CarbonDioxydeSensor carbonDioxydeSensor){
+		JSONObject json = new JSONObject();
+		try {
+			json.put("deviceId", carbonDioxydeSensor.getSerialNumber());
 			sendEvent("device-removed", json);
 		} catch (JSONException e) {
 			logger.error("Building message error" + json, e);

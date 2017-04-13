@@ -19,6 +19,7 @@ import fr.liglab.adele.icasa.clockservice.Clock;
 import fr.liglab.adele.icasa.clockservice.util.DateTextUtil;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.button.PushButton;
+import fr.liglab.adele.icasa.device.gasSensor.CarbonDioxydeSensor;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.light.Photometer;
@@ -82,7 +83,7 @@ public class IcasaJSONUtil {
         services.add(Heater.class.getName());
         deviceJSON.putOnce(DeviceJSON.SERVICES,services);
         JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("heater.powerLevel",heater.getPowerLevel(),NO_UNIT));
+        propObject.put(buildDeviceProperty(Heater.HEATER_POWER_LEVEL,heater.getPowerLevel(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
 
@@ -94,7 +95,7 @@ public class IcasaJSONUtil {
         services.add(Cooler.class.getName());
         deviceJSON.putOnce(DeviceJSON.SERVICES,services);
         JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("cooler.powerLevel",cooler.getPowerLevel(),NO_UNIT));
+        propObject.put(buildDeviceProperty(Cooler.COOLER_POWER_LEVEL,cooler.getPowerLevel(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
     }
@@ -105,7 +106,7 @@ public class IcasaJSONUtil {
         services.add(PresenceSensor.class.getName());
         deviceJSON.putOnce(DeviceJSON.SERVICES,services);
         JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("presenceSensor.sensedPresence",presenceSensor.getSensedPresence(),NO_UNIT));
+        propObject.put(buildDeviceProperty(PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE,presenceSensor.getSensedPresence(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
     }
@@ -124,7 +125,7 @@ public class IcasaJSONUtil {
         services.add(DimmerLight.class.getName());
         deviceJSON.putOnce(DeviceJSON.SERVICES,services);
         JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("dimmerLight.powerLevel",dimmerLight.getPowerLevel(),NO_UNIT));
+        propObject.put(buildDeviceProperty(DimmerLight.DIMMER_LIGHT_POWER_LEVEL,dimmerLight.getPowerLevel(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
     }
@@ -135,7 +136,7 @@ public class IcasaJSONUtil {
         services.add(BinaryLight.class.getName());
         deviceJSON.putOnce(DeviceJSON.SERVICES,services);
         JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("binaryLight.powerStatus",binaryLight.getPowerStatus(),NO_UNIT));
+        propObject.put(buildDeviceProperty(BinaryLight.BINARY_LIGHT_POWER_STATUS,binaryLight.getPowerStatus(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
     }
@@ -151,7 +152,17 @@ public class IcasaJSONUtil {
         }else {
             propObject.put(buildDeviceProperty(Thermometer.THERMOMETER_CURRENT_TEMPERATURE,"none","Kelvin"));
         }
+        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
+        return deviceJSON;
+    }
 
+    public static JSONObject getCarbonDioxydeSensorJSON(CarbonDioxydeSensor carbonDioxydeSensor) throws JSONException{
+        JSONObject deviceJSON = buildDeviceJsonObject(carbonDioxydeSensor);
+        Set<String> services = new HashSet<>();
+        services.add(CarbonDioxydeSensor.class.getName());
+        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
+        JSONArray propObject = new JSONArray();
+        propObject.put(buildDeviceProperty(CarbonDioxydeSensor.CARBON_DIOXYDE_SENSOR_CURRENT_CONCENTRATION,carbonDioxydeSensor.getCO2Concentration(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
     }

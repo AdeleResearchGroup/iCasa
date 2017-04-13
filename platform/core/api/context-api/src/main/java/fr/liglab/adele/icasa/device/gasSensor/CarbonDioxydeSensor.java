@@ -15,13 +15,15 @@
  */
 package fr.liglab.adele.icasa.device.gasSensor;
 
+import fr.liglab.adele.cream.annotations.ContextService;
+import fr.liglab.adele.cream.annotations.State;
 import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
  * Service definition of a CO2 sensor device.
  *
  */
-public interface CarbonDioxydeSensor extends GenericDevice {
+public @ContextService interface CarbonDioxydeSensor extends GenericDevice {
 
     /**
      * Service property indicating the current value of CO2 measured by the gas sensor, expressed in µg/m^3.
@@ -35,7 +37,7 @@ public interface CarbonDioxydeSensor extends GenericDevice {
      * 
      * @see #getCO2Concentration()
      */
-    String CARBON_DIOXYDE_SENSOR_CURRENT_CONCENTRATION = "carbonDioxydeSensor.currentConcentration";
+    @State String CARBON_DIOXYDE_SENSOR_CURRENT_CONCENTRATION = "carbonDioxydeSensor.currentConcentration";
 
     /**
      * Return the current CO2 concentration sensed by this gas sensor, expressed in

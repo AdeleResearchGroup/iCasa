@@ -50,6 +50,7 @@ See the License for the specific language governing permissions and
         <jackson.version>2.4.4</jackson.version>
 
         <context.socm.version>0.1-SNAPSHOT</context.socm.version>
+        <conflict.management.version>0.1-SNAPSHOT</conflict.management.version>
     </properties>
 
     <developers>
@@ -432,6 +433,12 @@ See the License for the specific language governing permissions and
                 <version>${context.socm.version}</version>
             </dependency>
 
+            <!--Conflict Management-->
+            <dependency>
+                <groupId>fr.liglab.adele.conflict</groupId>
+                <artifactId>conflict.api</artifactId>
+                <version>${conflict.management.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>tec.units</groupId>

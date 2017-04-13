@@ -50,6 +50,7 @@ import fr.liglab.adele.cream.annotations.provider.Creator;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDeviceProvider;
+import fr.liglab.adele.icasa.simulator.device.gasSensor.impl.SimulatedCarbonDioxydeSensorImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedBinaryLightImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedDimmerLightImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedPhotometerImpl;
@@ -86,6 +87,8 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
     @Creator.Field Creator.Entity<SimulatedThermometerImpl> simulatedThermometerCreator;
 
     @Creator.Field Creator.Entity<SimulatedPresenceSensorImpl> simulatedPresenceSensorCreator;
+
+    @Creator.Field Creator.Entity<SimulatedCarbonDioxydeSensorImpl> simulatedCarbonDioxydeSensorCreator;
 
     @Validate
     public void start(){
@@ -142,6 +145,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         returnSet.add(SimulatedHeaterImpl.SIMULATED_HEATER);
         returnSet.add(SimulatedThermometerImpl.SIMULATED_THERMOMETER);
         returnSet.add(SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR);
+        returnSet.add(SimulatedCarbonDioxydeSensorImpl.SIMULATED_CARBON_DIOXYDE_SENSOR);
         return returnSet;
     }
 
@@ -154,6 +158,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         simulatedHeaterCreator.deleteAll();
         simulatedThermometerCreator.deleteAll();
         simulatedPresenceSensorCreator.deleteAll();
+        simulatedCarbonDioxydeSensorCreator.deleteAll();
     }
 
     private Creator.Entity getCreator(String deviceType){
@@ -172,6 +177,8 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
                 return simulatedThermometerCreator;
             case SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR:
                 return simulatedPresenceSensorCreator;
+            case SimulatedCarbonDioxydeSensorImpl.SIMULATED_CARBON_DIOXYDE_SENSOR:
+                return simulatedCarbonDioxydeSensorCreator;
             default:return null;
         }
     }

@@ -13,37 +13,35 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.simulator.device.light.impl;
+package fr.liglab.adele.icasa.simulator.device.gasSensor.impl;
 
-import fr.liglab.adele.conflict.ipojo.annotation.ProviderConflictManagement;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.entity.ContextEntity.State;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.light.BinaryLight;
+import fr.liglab.adele.icasa.device.gasSensor.CarbonDioxydeSensor;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
 
 /**
- * Implementation of a simulated binary light device.
+ * Implementation of a simulated carbon dioxyde Sensor.
  *
  */
-@ProviderConflictManagement
-@ContextEntity(services = {BinaryLight.class,SimulatedDevice.class})
+@ContextEntity(services = {CarbonDioxydeSensor.class,SimulatedDevice.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
-public class SimulatedBinaryLightImpl implements BinaryLight, SimulatedDevice,GenericDevice{
+public class SimulatedCarbonDioxydeSensorImpl implements CarbonDioxydeSensor,SimulatedDevice,GenericDevice{
 
-    public final static String SIMULATED_BINARY_LIGHT = "iCasa.BinaryLight";
+    public final static String SIMULATED_CARBON_DIOXYDE_SENSOR = "iCasa.CO2GasSensor";
 
-    @ContextEntity.State.Field(service = BinaryLight.class,state = BinaryLight.BINARY_LIGHT_POWER_STATUS,directAccess = true,value = "false")
-    private boolean powerStatus;
+    @State.Field(service = CarbonDioxydeSensor.class,state = CarbonDioxydeSensor.CARBON_DIOXYDE_SENSOR_CURRENT_CONCENTRATION,value ="4.0" )
+    private double currentConcentration;
 
-    @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_BINARY_LIGHT)
+    @State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_CARBON_DIOXYDE_SENSOR)
     private String deviceType;
 
-    @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
+    @State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
     private String serialNumber;
-
 
     @Override
     public String getDeviceType() {
@@ -56,23 +54,7 @@ public class SimulatedBinaryLightImpl implements BinaryLight, SimulatedDevice,Ge
     }
 
     @Override
-    public boolean getPowerStatus() {
-        return powerStatus;
+    public double getCO2Concentration() {
+        return currentConcentration;
     }
-
-    @Override
-    public void setPowerStatus(boolean status) {
-        powerStatus = status;
-    }
-
-    @Override
-    public void turnOn() {
-        setPowerStatus(true);
-    }
-
-    @Override
-    public void turnOff() {
-        setPowerStatus(false);
-    }
-
 }
