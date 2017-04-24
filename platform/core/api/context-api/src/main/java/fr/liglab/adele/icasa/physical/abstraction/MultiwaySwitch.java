@@ -13,20 +13,29 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.physical.abstraction;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
+import fr.liglab.adele.cream.annotations.ContextService;
+import fr.liglab.adele.cream.annotations.State;
 
-import java.util.Map;
-import java.util.Set;
+public @ContextService interface MultiwaySwitch {
 
-/**
- * Created by Eva on 16/02/2017.
- */
-public interface ContextInternalManager {
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
+    public @State static final String GLOBAL_SWITCH_STATE="global.switch.state";
 
-    Runnable getContextResolutionMachine();
+    public @State static final String ZONE_ATTACHED="zone.attached";
 
-    Set<String> getCurrentLookupFilter();
+    public SwitchState stateInZone();
+
+    public String switchStateOf();
+
+    public enum SwitchState {
+        ON(1), OFF(0), NOT_MEASURED(-1);
+
+        private final int state;
+
+        private SwitchState(int state) {
+            assert ((1 >= state) && (state >= -1));
+            this.state = state;
+        }
+    }
 }

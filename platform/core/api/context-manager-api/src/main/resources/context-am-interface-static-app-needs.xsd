@@ -17,29 +17,41 @@
 
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="fr.liglab.adele.icasa.context.manager.impl"
-           xmlns="fr.liglab.adele.icasa.context.manager.impl"
+           targetNamespace="fr.liglab.adele.icasa.context.manager.api"
+           xmlns="fr.liglab.adele.icasa.context.manager.api"
            elementFormDefault="qualified">
 
-    <xs:element name="context-black-box">
+    <xs:element name="app-needs-description">
         <xs:complexType>
-            <xs:sequence>
-                <xs:element name="context-api">
+            <xs:all>
+                <xs:element name="app-id" type="xs:string"/>
+                <xs:element name="main-config" type="config"/>
+                <xs:element name="alternative-configs" >
                     <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="name" type="xs:string"/>
-                            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                                <xs:element name="proxies" type="proxy-service"/>
-                            </xs:sequence>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="alternative-config" type="config"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-            </xs:sequence>
+            </xs:all>
         </xs:complexType>
     </xs:element>
 
-    <!--<xs:attribute name="proxy" type="xs:string" default=""/>-->
-    <xs:simpleType name="proxy-service">
+    <xs:complexType name="config">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="context-api-need" type="context-api-need"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="context-api-need">
+        <xs:all>
+            <xs:element name="context-api" type="context-api"/>
+            <xs:element name="permanent" type="xs:boolean"/>
+            <xs:element name="optional" type="xs:boolean"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:simpleType name="context-api">
         <xs:restriction base="xs:string">
             <xs:enumeration value="fr.liglab.adele.icasa.device.light.BinaryLight"/>
             <xs:enumeration value="fr.liglab.adele.icasa.device.light.DimmerLight"/>

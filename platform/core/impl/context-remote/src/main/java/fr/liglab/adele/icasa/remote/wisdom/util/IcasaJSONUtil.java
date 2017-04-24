@@ -54,7 +54,7 @@ public class IcasaJSONUtil {
         services.add(PushButton.class.getName());
         deviceJSON.putOnce(DeviceJSON.SERVICES,services);
         JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty(PushButton.PUSH_AND_HOLD,pushButton.isPushed(),"Lux"));
+        propObject.put(buildDeviceProperty(PushButton.PUSH_AND_HOLD,pushButton.isPushed(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
     }

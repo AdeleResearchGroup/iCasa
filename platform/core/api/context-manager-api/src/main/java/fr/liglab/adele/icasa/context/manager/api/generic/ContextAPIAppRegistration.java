@@ -22,9 +22,9 @@ package fr.liglab.adele.icasa.context.manager.api.generic;
  */
 public interface ContextAPIAppRegistration {
 
-    boolean registerContextGoals(String appId, ContextAPIConfigs contextAPIConfigs);
+    boolean registerContextGoals(String appId, ContextAPIConfig contextAPIConfig);
 
-    ContextAPIConfigs getRegisteredContextGoals(String appId);
+    ContextAPIConfig getRegisteredContextGoals(String appId);
 
     boolean unregisterContextGoals(String appId);
 }

@@ -18,7 +18,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
 import fr.liglab.adele.icasa.context.manager.impl.generic.ContextMediationConfig;
 import fr.liglab.adele.icasa.context.manager.impl.generic.ContextMediationSlice;
@@ -82,12 +82,12 @@ final class ContextResolutionMachine implements Runnable {
         /*App, set de services en config optimale*/
         /*TODO SELECTION DES CONFIGS D'APP ? */
         /*TODO (pour l'instant toutes les app traitées en même temps, avec la meilleure config)*/
-        Set<ContextAPIConfigs> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
+        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
         Set<ContextAPI> goals = new HashSet<>();
-        for (ContextAPIConfigs contextAPIConfigs : contextAPIConfigsSet) {
-            goals.addAll(contextAPIConfigs.getOptimalConfig());
+        for (ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet) {
+            goals.addAll(contextAPIConfigs.getConfig());
             if(logLevel>=2) {
-                LOG.info("GOALS " + contextAPIConfigs.getOptimalConfig().toString());
+                LOG.info("GOALS " + contextAPIConfigs.getConfig().toString());
             }
         }
 
@@ -364,11 +364,11 @@ final class ContextResolutionMachine implements Runnable {
 
         /*App, set de services en config optimale*/
         /*Toutes les app traitées en même temps, avec la meilleure config*/
-        Set<ContextAPIConfigs> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
+        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
         Set<ContextAPI> goals = new HashSet<>();
-        for(ContextAPIConfigs contextAPIConfigs : contextAPIConfigsSet){
-            goals.addAll(contextAPIConfigs.getOptimalConfig());
-            LOG.info("GOALS "+ contextAPIConfigs.getOptimalConfig().toString());
+        for(ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet){
+            goals.addAll(contextAPIConfigs.getConfig());
+            LOG.info("GOALS "+ contextAPIConfigs.getConfig().toString());
         }
 
         /*Services à activer*/
@@ -479,11 +479,11 @@ final class ContextResolutionMachine implements Runnable {
         /*Version 0, config en dur, pas de reflexion particulière*/
 
         /*App, set de services en config optimale*/
-        Set<ContextAPIConfigs> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
+        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
         Set<ContextAPI> goals = new HashSet<>();
-        for(ContextAPIConfigs contextAPIConfigs : contextAPIConfigsSet){
-            goals.addAll(contextAPIConfigs.getOptimalConfig());
-            LOG.info("GOALS "+ contextAPIConfigs.getOptimalConfig().toString());
+        for(ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet){
+            goals.addAll(contextAPIConfigs.getConfig());
+            LOG.info("GOALS "+ contextAPIConfigs.getConfig().toString());
         }
 
         /*Entities à activer*/

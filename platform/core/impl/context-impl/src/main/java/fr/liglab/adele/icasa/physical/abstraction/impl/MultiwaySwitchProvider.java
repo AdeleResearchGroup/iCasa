@@ -16,7 +16,7 @@
 package fr.liglab.adele.icasa.physical.abstraction.impl;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
-import fr.liglab.adele.icasa.device.presence.PresenceSensor;
+import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.location.Zone;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
@@ -25,27 +25,27 @@ import org.apache.felix.ipojo.annotations.Unbind;
 
 @Component(immediate = true,publicFactory = false)
 @Instantiate
-public class PresenceServiceProvider {
+public class MultiwaySwitchProvider {
 
-    @Creator.Field(requirements = {Zone.class, PresenceSensor.class}) Creator.Entity<PresenceServiceImpl> creator;
+    @Creator.Field(requirements = {Zone.class, PushButton.class}) Creator.Entity<MultiwaySwitchImpl> creator;
 
-    @Creator.Field(value = PresenceServiceImpl.RELATION_IS_ATTACHED, requirements = Zone.class) Creator.Relation<PresenceServiceImpl,Zone> attachedPresModelCreator;
+    @Creator.Field(value = MultiwaySwitchImpl.RELATION_IS_ATTACHED, requirements = Zone.class) Creator.Relation<MultiwaySwitchImpl,Zone> attachedMultiSwitchModelCreator;
 
     @Bind(id = "zones",specification = Zone.class,aggregate = true,optional = true)
     public void bindZone(Zone zone){
         String name = generateEntityName(zone);
         creator.create(name);
-        attachedPresModelCreator.create(name,zone);
+        attachedMultiSwitchModelCreator.create(name,zone);
     }
 
     @Unbind(id = "zones")
     public void unbindZone(Zone zone){
         String name = generateEntityName(zone);
         creator.delete(name);
-        attachedPresModelCreator.delete(name,zone);
+        attachedMultiSwitchModelCreator.delete(name,zone);
     }
 
     private String generateEntityName(Zone zone){
-        return zone.getZoneName()+".presence.service";
+        return zone.getZoneName()+".multiway.switch";
     }
 }

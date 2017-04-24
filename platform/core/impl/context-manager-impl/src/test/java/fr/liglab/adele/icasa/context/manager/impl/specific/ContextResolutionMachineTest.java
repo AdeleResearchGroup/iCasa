@@ -17,7 +17,7 @@
 //
 //import fr.liglab.adele.cream.model.ContextEntity;
 //import fr.liglab.adele.cream.model.introspection.EntityProvider;
-//import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+//import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 //import fr.liglab.adele.icasa.context.manager.impl.specific.ContextResolutionMachine;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
@@ -119,7 +119,7 @@
 //        /*Test*/
 //        System.out.println("\n***TEST Algorithme de resolution du contexte***");
 //        ContextResolutionMachine contextResolutionMachine = new ContextResolutionMachine();
-//        Map<String, ContextAPIConfigs> contextGoals = new HashMap<>();
+//        Map<String, ContextAPIConfig> contextGoals = new HashMap<>();
 //        ContextEntity[] contextEntities;
 //        EntityProvider[] entityProviders;
 //
@@ -129,7 +129,7 @@
 //        config.add(serviceLight);
 //        config.add(servicePresence);
 //        /*TODO MODIFY*/
-////        contextGoals.put("LightFollowMe", new ContextAPIConfigs(config));
+////        contextGoals.put("LightFollowMe", new ContextAPIConfig(config));
 //
 //        /*Entity config*/
 //        contextEntities = new ContextEntity[3];

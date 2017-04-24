@@ -13,42 +13,49 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.binary.light.follow.me;
+package fr.liglab.adele.icasa.app.test.am;
 
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
+import fr.liglab.adele.icasa.physical.abstraction.MultiwaySwitch;
 import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
 import org.apache.felix.ipojo.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component(name="LightFollowMeApplication")
+@Component(name = "app-test-mgmt-switch")
+public class AppLightMgmtSwitch {
 
-@Provides(properties= {
-        @StaticServiceProperty(name="icasa.application", type="String", value="Light.Follow.Me.Application", immutable=true)
-})
-
-@Instantiate
-public class LightFollowMeApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(AppLightMgmtSwitch.class);
 
     @Validate
-    public void start() {}
+    @SuppressWarnings("unused")
+    public void start() {
+    }
 
     @Invalidate
-    public void stop() {}
+    @SuppressWarnings("unused")
+    public void stop() {
+
+    }
 
     @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
+    @SuppressWarnings("unused")
     private List<BinaryLight> binaryLights;
 
-    @Requires(id="presence",optional = true,specification = PresenceService.class)
-    private List<PresenceService> presenceServices;
+    @Requires(id="switches",optional = true,specification = MultiwaySwitch.class)
+    @SuppressWarnings("unused")
+    private List<MultiwaySwitch> multiwaySwitches;
 
     @Bind(id="lights")
+    @SuppressWarnings("unused")
     public void bindBinaryLight(BinaryLight binaryLight){
-        if (computePresenceInZone(getPresenceService(((LocatedObject)binaryLight).getZone()))){
+        if (computeSwitchStateInZone(getMultiwaySwitch(((LocatedObject)binaryLight).getZone()))){
             binaryLight.turnOn();
         }else {
             binaryLight.turnOff();
@@ -56,8 +63,9 @@ public class LightFollowMeApplication {
     }
 
     @Modified(id="lights")
+    @SuppressWarnings("unused")
     public void modifiedBinaryLight(BinaryLight binaryLight){
-        if (computePresenceInZone(getPresenceService(((LocatedObject)binaryLight).getZone()))){
+        if (computeSwitchStateInZone(getMultiwaySwitch(((LocatedObject)binaryLight).getZone()))){
             binaryLight.turnOn();
         }else {
             binaryLight.turnOff();
@@ -65,48 +73,51 @@ public class LightFollowMeApplication {
     }
 
     @Unbind(id="lights")
+    @SuppressWarnings("unused")
     public void unbindBinaryLight(BinaryLight binaryLight){
         binaryLight.turnOff();
     }
 
 
-    @Bind(id="presence")
-    public void bindPresenceService(PresenceService presenceService){
-        managelight(presenceService);
+    @Bind(id="switches")
+    @SuppressWarnings("unused")
+    public void bindMultiwaySwitching(MultiwaySwitch multiwaySwitch){
+        managelight(multiwaySwitch);
     }
 
-    @Modified(id="presence")
-    public void modifiedPresenceService(PresenceService presenceService){
-        managelight(presenceService);
+    @Modified(id="switches")
+    @SuppressWarnings("unused")
+    public void modifiedMultiwaySwitching(MultiwaySwitch multiwaySwitch){
+        managelight(multiwaySwitch);
     }
 
-    @Unbind(id="presence")
-    public void unbindPresenceService(PresenceService presenceService){
-        String zoneName = presenceService.sensePresenceIn();
+    @Unbind(id="switches")
+    @SuppressWarnings("unused")
+    public void unbindMultiwaySwitching(MultiwaySwitch multiwaySwitch){
+        String zoneName = multiwaySwitch.switchStateOf();
         Set<BinaryLight> lightInZone = getLightInZone(zoneName);
-        lightInZone.stream().forEach((light) ->light.turnOff() );
+        lightInZone.forEach(BinaryLight::turnOff);
     }
 
-    private void managelight(PresenceService presenceService){
-        String zoneName = presenceService.sensePresenceIn();
+    private void managelight(MultiwaySwitch multiwaySwitch){
+        String zoneName = multiwaySwitch.switchStateOf();
         Set<BinaryLight> lightInZone = getLightInZone(zoneName);
-        if (presenceService.havePresenceInZone().equals(PresenceService.PresenceSensing.YES)){
-            lightInZone.stream().forEach((light) ->light.turnOn() );
+        if (multiwaySwitch.stateInZone().equals(MultiwaySwitch.SwitchState.ON)){
+            lightInZone.forEach(BinaryLight::turnOn);
         }else {
-            lightInZone.stream().forEach((light) ->light.turnOff() );
+            lightInZone.forEach(BinaryLight::turnOff);
         }
     }
 
-    private boolean computePresenceInZone(PresenceService service){
-        if (service == null)return false;
-        return service.havePresenceInZone().equals(PresenceService.PresenceSensing.YES);
+    private boolean computeSwitchStateInZone(MultiwaySwitch multiwaySwitch) {
+        return multiwaySwitch != null && multiwaySwitch.stateInZone().equals(MultiwaySwitch.SwitchState.ON);
     }
 
-    private PresenceService getPresenceService(String zone){
-        if (zone == null)return null;
-        for (PresenceService service : presenceServices){
-            if (zone.equals(service.sensePresenceIn())){
-                return service;
+    private MultiwaySwitch getMultiwaySwitch(String zone){
+        if (zone == null) return null;
+        for (MultiwaySwitch multiwaySwitch : multiwaySwitches){
+            if (zone.equals(multiwaySwitch.switchStateOf())){
+                return multiwaySwitch;
             }
         }
         return null;

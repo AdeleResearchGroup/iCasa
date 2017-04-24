@@ -15,12 +15,15 @@
  */
 package fr.liglab.adele.icasa.device.button;
 
+import fr.liglab.adele.cream.annotations.ContextService;
+import fr.liglab.adele.cream.annotations.State;
 import fr.liglab.adele.icasa.device.GenericDevice;
 
 /**
+ * Service definition of a simple push button.
  *
  */
-public interface PushButton extends GenericDevice {
+public @ContextService interface PushButton extends GenericDevice {
     /**
      * Service property indicating if the button is pushed and hold.
      *
@@ -32,7 +35,7 @@ public interface PushButton extends GenericDevice {
      * </ul>
      *
      */
-    String PUSH_AND_HOLD = "pushButton.pushAndHold";
+    @State String PUSH_AND_HOLD = "pushButton.pushAndHold";
 
 
 
@@ -41,4 +44,7 @@ public interface PushButton extends GenericDevice {
      * @return
      */
     boolean isPushed();
+
+    /*TODO REMOVE (TEMP)*/
+    void push();
 }

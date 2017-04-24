@@ -19,7 +19,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.*;
@@ -55,16 +55,16 @@ public class ContextManager implements ContextAPIAppRegistration{
     private static TimeUnit timeUnit = TimeUnit.SECONDS;
 
     /*Goal management*/
-    private static Map<String, ContextAPIConfigs> contextGoalMap = new HashMap<>();
+    private static Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
 
     /*TODO: les appels à RoSe doivent être faits ici, ou dans un composant specifique (pas dans contextInternalManager)*/
     /*Lookup IOP Controller*/
     @Requires(optional = true)
-    public IOPLookupService iopLookupService;
+    private IOPLookupService iopLookupService;
 
     /*Lookup mode*/
-    public static boolean autoLookup = false;
-    public static Set<String> lookupFilter = new HashSet<>();
+    private static boolean autoLookup = false;
+    private static Set<String> lookupFilter = new HashSet<>();
 
     /*Management sub-parts*/
     @Requires(optional = false)
@@ -88,7 +88,7 @@ public class ContextManager implements ContextAPIAppRegistration{
         /*TODO: REMOVE INITIAL CONFIG*/
         Set<ContextAPI> optimalConfig = new HashSet<>();
         optimalConfig.add(ContextAPI.IOPController);
-        ContextAPIConfigs contextAPIConfigs = new ContextAPIConfigs(optimalConfig);
+        ContextAPIConfig contextAPIConfigs = new ContextAPIConfig(optimalConfig);
         registerContextGoals(this.getClass().toGenericString(), contextAPIConfigs);
 
         /*Start scheduling*/
@@ -129,9 +129,9 @@ public class ContextManager implements ContextAPIAppRegistration{
     }
 
     @Override
-    public boolean registerContextGoals(String appId, ContextAPIConfigs contextAPIConfigs) {
+    public boolean registerContextGoals(String appId, ContextAPIConfig contextAPIConfig) {
         /*TODO CHECK GOALS*/
-        contextGoalMap.put(appId, contextAPIConfigs);
+        contextGoalMap.put(appId, contextAPIConfig);
 //        singleExecutorService.submit(contextCompositionAdaptation);
         /*TODO test*/
 //        scheduledExecutorService.execute(contextCompositionAdaptation);
@@ -139,7 +139,7 @@ public class ContextManager implements ContextAPIAppRegistration{
     }
 
     @Override
-    public ContextAPIConfigs getRegisteredContextGoals(String appId) {
+    public ContextAPIConfig getRegisteredContextGoals(String appId) {
         return contextGoalMap.get(appId);
     }
 

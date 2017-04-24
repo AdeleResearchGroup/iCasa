@@ -18,7 +18,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfigs;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     private Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
     private Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
     private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
-    private Map<String, ContextAPIConfigs> contextGoalMap = new HashMap<>();
+    private Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
     private Set<String> lookupFilter = new HashSet<>();
 
     /*Initialization*/
@@ -70,7 +70,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     }
 
     @Override
-    public void configureGoals(Map<String, ContextAPIConfigs> contextGoalMap) {
+    public void configureGoals(Map<String, ContextAPIConfig> contextGoalMap) {
         this.contextGoalMap = new HashMap<>(contextGoalMap);
     }
 
@@ -130,7 +130,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
         return eProviderByCreatorName;
     }
 
-    Map<String, ContextAPIConfigs> getContextGoalMap() {
+    Map<String, ContextAPIConfig> getContextGoalMap() {
         return contextGoalMap;
     }
 

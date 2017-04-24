@@ -26,6 +26,7 @@ public enum ContextAPI {
     Photometer("fr.liglab.adele.icasa.device.light.Photometer"),
     PresenceService("fr.liglab.adele.icasa.physical.abstraction.PresenceService"),
     MomentOfTheDay("fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay"),
+    MultiwaySwitch("fr.liglab.adele.icasa.physical.abstraction.MultiwaySwitch"),
 
     IOPController("fr.liglab.adele.iop.device.api.IOPController");
 

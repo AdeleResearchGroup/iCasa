@@ -59,6 +59,11 @@ public class ZigbeePushButton implements PushButton, ZigbeeDevice, ZigbeeDeviceT
         return isPush;
     }
 
+    /*TODO REMOVE (TEMP)*/
+    @Override
+    public void push() {
+    }
+
     /**
      * Called when a new device has been discovered by the driver.
      *
