@@ -15,9 +15,11 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.generic;
 
-/**
- * TEMP
- */
-public interface ContextBlackBox {
+import fr.liglab.adele.cream.model.ContextEntity;
 
+public class Resource {
+    private String id;
+    private ContextEntity type;
+    private String name;
+    private String origin;
 }

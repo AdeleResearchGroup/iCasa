@@ -21,6 +21,8 @@
            xmlns="fr.liglab.adele.icasa.context.manager.api"
            elementFormDefault="qualified">
 
+
+    <!--Complex definition of app needs - Include every relevant piece of information about app needs -->
     <xs:element name="app-needs-description">
         <xs:complexType>
             <xs:all>
@@ -51,12 +53,49 @@
         </xs:all>
     </xs:complexType>
 
+
+    <!--Simplest definition of app needs  - Context API list with AND / OR-->
+    <!--Prefix notation (NPN)-->
+    <xs:element name="app-needs-description-simplest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="app-id" type="xs:string"/>
+                <xs:element name="alternative-configs" type="simplest-alternatives-config"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="simplest-alternatives-config">
+        <xs:all>
+            <xs:element name="link" type="operations"/>
+            <xs:element name="context-api-group" type="context-api-group"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="context-api-group">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element name="context-api" type="context-api"/>
+                <xs:element name="config" type="simplest-alternatives-config"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="operations">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AND"/>
+            <xs:enumeration value="OR"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--Common definitions-->
     <xs:simpleType name="context-api">
         <xs:restriction base="xs:string">
             <xs:enumeration value="fr.liglab.adele.icasa.device.light.BinaryLight"/>
             <xs:enumeration value="fr.liglab.adele.icasa.device.light.DimmerLight"/>
             <xs:enumeration value="fr.liglab.adele.icasa.device.light.Photometer"/>
             <xs:enumeration value="fr.liglab.adele.icasa.device.presence.PresenceSensor"/>
+            <xs:enumeration value="fr.liglab.adele.icasa.device.button.PushButton"/>
             <xs:enumeration value="fr.liglab.adele.icasa.location.Zone"/>
         </xs:restriction>
     </xs:simpleType>

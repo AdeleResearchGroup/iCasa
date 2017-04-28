@@ -35,11 +35,11 @@ import java.util.Set;
 @Instantiate(name = "ZoneProvider-0")
 public class ZoneProviderImpl implements ZoneProvider {
 
-	@Creator.Field 	 Creator.Entity<ZoneImpl> creator;
+	private @Creator.Field 	 Creator.Entity<ZoneImpl> creator;
 
 	@Override
 	public void createZone(String id, int leftX, int topY, int bottomZ, int width, int height, int depth) {
-		Map propertiesInit = new HashMap<>();
+		Map<String, Object> propertiesInit = new HashMap<>();
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.NAME),id);
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.X),leftX);
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.Y),topY);
@@ -75,9 +75,6 @@ public class ZoneProviderImpl implements ZoneProvider {
 
 	@Override
 	public Set<String> getZoneIds() {
-		Set<String> ids = new HashSet<>(creator.getInstances());
-		return ids;
+		return new HashSet<>(creator.getInstances());
 	}
-
-
 }

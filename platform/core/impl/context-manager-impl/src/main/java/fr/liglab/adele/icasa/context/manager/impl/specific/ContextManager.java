@@ -30,8 +30,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * TEMP
- * Classe principale du gestionnaire de contexte
+ * Programmatic context manager main class
  */
 @Component(immediate = true, publicFactory = false)
 @Instantiate
@@ -41,31 +40,48 @@ public class ContextManager implements ContextAPIAppRegistration{
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
 
-    /*Log level (debug) 0: nothing, 3: all*/
+    /*DEBUG*/
+    /*Log level - 0: nothing, 3: all*/
     private static final int logLevelMax = 3;
-    public static int logLevel = 2;
+    static int logLevel = 2;
 
+    /*CONFIGURATION (TEMPORARY)*/
+    /*Starting configuration of the context model - mandatory goals*/
+    /*(includes context components that are useful for RoSe*/
+    private static final ContextAPIConfig startingGoalsConfig = new ContextAPIConfig(
+            new HashSet<>(Collections.singletonList(ContextAPI.IOPController)));
 
-    /*Thread management*/
-    private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
+    /*Environment lookup mode*/
+    private static boolean autoLookup = false;
+
+    /*Internal configuration mode*/
+    private static final int MODE_SCHEDULED = 0;
+    private static final int MODE_EVENT_DRIVEN = 1;
+    private static final int internal_configuration_mode = MODE_SCHEDULED;
+
+    /*Only scheduled mode - Thread management*/
     private static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture scheduledFuture = null;
-
     private static long delay = 10L;
     private static TimeUnit timeUnit = TimeUnit.SECONDS;
 
+    /*Event-driven mode*/
+    private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
+
+
+    /*CONTEXT AM EXTERNAL INTERFACES*/
     /*Goal management*/
     private static Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
 
-    /*TODO: les appels à RoSe doivent être faits ici, ou dans un composant specifique (pas dans contextInternalManager)*/
-    /*Lookup IOP Controller*/
+    /*Environment filter - Lookup IOP Controller*/
     @Requires(optional = true)
     private IOPLookupService iopLookupService;
 
-    /*Lookup mode*/
-    private static boolean autoLookup = false;
+    /*Environment lookup filter*/
     private static Set<String> lookupFilter = new HashSet<>();
 
+
+    /*CONTEXT AM INTERNAL INTERFACES*/
     /*Management sub-parts*/
     @Requires(optional = false)
     private ContextInternalManager contextInternalManager;
@@ -85,15 +101,20 @@ public class ContextManager implements ContextAPIAppRegistration{
 
     @Validate
     public void start(){
-        /*TODO: REMOVE INITIAL CONFIG*/
-        Set<ContextAPI> optimalConfig = new HashSet<>();
-        optimalConfig.add(ContextAPI.IOPController);
-        ContextAPIConfig contextAPIConfigs = new ContextAPIConfig(optimalConfig);
-        registerContextGoals(this.getClass().toGenericString(), contextAPIConfigs);
+        registerContextGoals(ContextManager.class.toGenericString(), startingGoalsConfig);
 
         /*Start scheduling*/
-        resolutionMachine = contextInternalManager.getContextResolutionMachine();
-        scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, TimeUnit.SECONDS);
+        switch (internal_configuration_mode){
+            case MODE_SCHEDULED:
+                resolutionMachine = contextInternalManager.getContextResolutionMachine();
+                scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
+                        contextCompositionAdaptation, 0, delay, TimeUnit.SECONDS);
+                break;
+            case MODE_EVENT_DRIVEN:
+                break;
+        }
+
+
     }
 
     @Invalidate
@@ -149,6 +170,7 @@ public class ContextManager implements ContextAPIAppRegistration{
         return true;
     }
 
+    /*Environment interface*/
     private void modifyLookupFilter(Set<String> filter) {
         if(autoLookup) {
             Set<String> toConsider = new HashSet<>();
@@ -196,7 +218,9 @@ public class ContextManager implements ContextAPIAppRegistration{
         }
     }
 
+    /*Context manager debug interface*/
     @Command
+    @SuppressWarnings("unused")
     public void ctxtAmLogLevel(int level){
         if(level<0) level = 0;
         if(level>logLevelMax) level = logLevelMax;
@@ -204,11 +228,13 @@ public class ContextManager implements ContextAPIAppRegistration{
     }
 
     @Command
+    @SuppressWarnings("unused")
     public void ctxtAmAutoLookup(){
         autoLookup = true;
     }
 
     @Command
+    @SuppressWarnings("unused")
     public void ctxtAmManualLookup(){
         autoLookup = false;
     }

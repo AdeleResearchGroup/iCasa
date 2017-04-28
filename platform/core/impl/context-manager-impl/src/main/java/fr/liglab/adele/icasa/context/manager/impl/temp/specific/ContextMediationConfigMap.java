@@ -13,18 +13,19 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.temp.specific;
 
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
-import fr.liglab.adele.icasa.context.manager.impl.generic.ContextMediationConfig;
-import fr.liglab.adele.icasa.context.manager.impl.generic.ContextMediationSlice;
+import fr.liglab.adele.icasa.context.manager.impl.temp.generic.ContextMediationConfig;
+import fr.liglab.adele.icasa.context.manager.impl.temp.generic.ContextMediationSlice;
 
 import java.util.*;
 
 /**
  * TEMP
  */
-final class ContextMediationConfigMap {
+public final class ContextMediationConfigMap {
+//final class ContextMediationConfigMap {
     Map<ContextAPI,ContextMediationConfig> contextMediationConfigMap;
 
     /*TODO : IL MANQUE DES PARTIES DU SIMULATEUR !!! (Person, PresenceSimulatorModel...)*/

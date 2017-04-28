@@ -15,10 +15,7 @@ public enum AppStateEnum implements AppStateEventListener{
         /*Init context interactions - is there available lights*/
         /*Useless - No available lights*/
         @Override public AppStateEnum onEventLights(boolean available){
-            if(available)
-                return MODE;
-            else
-                return this;
+            return available ? MODE : this;
         }
     },
 
@@ -30,17 +27,11 @@ public enum AppStateEnum implements AppStateEventListener{
                 /*Init context interactions - wait to know which mode to choose*/
                 /*HS - Not enough available devices to work*/
                 @Override public AppStateEnum onEventSwitch(boolean available){
-                    if(available)
-                        return MANUAL;
-                    else
-                        return this;
+                    return available ? MANUAL : this;
                 }
 
                 @Override public AppStateEnum onEventPresenceAvailable(boolean available){
-                    if(available)
-                        return AUTO_ACTIVATED;
-                    else
-                        return this;
+                    return available ? AUTO_ACTIVATED : this;
                 }
             },
 
@@ -52,17 +43,11 @@ public enum AppStateEnum implements AppStateEventListener{
         /*Manual - No presence information available - back up state*/
         /*Wait anyway for presence information*/
         @Override public AppStateEnum onEventSwitch(boolean available){
-            if(available)
-                return MANUAL;
-            else
-                return this;
+            return available ? MANUAL : this;
         }
 
         @Override public AppStateEnum onEventPresenceAvailable(boolean available){
-            if(available)
-                return AUTO_ACTIVATED;
-            else
-                return this;
+            return available ? AUTO_ACTIVATED : this;
         }
 
     },
@@ -75,17 +60,11 @@ public enum AppStateEnum implements AppStateEventListener{
         }
 
         @Override public AppStateEnum onEventPresenceAvailable(boolean available){
-            if(available)
-                return this;
-            else
-                return INIT;
+            return available ? this : INIT;
         }
 
         @Override public AppStateEnum onEventPresence(boolean presence){
-            if(presence)
-                return INIT;
-            else
-                return this;
+            return presence ? INIT : this;
         }
     },
 
@@ -94,17 +73,11 @@ public enum AppStateEnum implements AppStateEventListener{
             ContextAPI.PresenceService))))
     {
         @Override public AppStateEnum onEventPresenceAvailable(boolean available){
-            if(available)
-                return this;
-            else
-                return MODE;
+            return available ? this : MODE;
         }
 
         @Override public AppStateEnum onEventPresence(boolean presence){
-            if(presence)
-                return this;
-            else
-                return AUTO_ECO;
+            return  presence ? this : AUTO_ECO;
         }
     },
     ;
@@ -120,10 +93,7 @@ public enum AppStateEnum implements AppStateEventListener{
     }
 
     @Override public AppStateEnum onEventLights(boolean available){
-        if(available)
-            return this;
-        else
-            return INIT;
+        return available ? this : INIT;
     }
 
     @Override public AppStateEnum onEventSwitch(boolean available){

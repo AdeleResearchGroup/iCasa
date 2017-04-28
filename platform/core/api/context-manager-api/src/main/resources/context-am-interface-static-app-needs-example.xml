@@ -31,5 +31,18 @@
             <optional>false</optional>
         </context-api-need>
     </main-config>
-    <alternative-configs/>
+    <alternative-configs>
+        <alternative-config>
+            <context-api-need>
+                <context-api>fr.liglab.adele.icasa.device.light.BinaryLight</context-api>
+                <permanent>true</permanent>
+                <optional>false</optional>
+            </context-api-need>
+            <context-api-need>
+                <context-api>fr.liglab.adele.icasa.device.button.PushButton</context-api>
+                <permanent>true</permanent>
+                <optional>false</optional>
+            </context-api-need>
+        </alternative-config>
+    </alternative-configs>
 </app-needs-description>

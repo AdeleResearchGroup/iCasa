@@ -13,10 +13,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic;
+package fr.liglab.adele.icasa.context.manager.impl.temp.generic;
 
-import fr.liglab.adele.icasa.context.manager.impl.specific.AbstractContextEntities;
-import fr.liglab.adele.icasa.context.manager.impl.specific.EnvProxy;
+import fr.liglab.adele.icasa.context.manager.impl.temp.specific.AbstractContextEntities;
+import fr.liglab.adele.icasa.context.manager.impl.temp.specific.EnvProxy;
 
 import java.util.HashSet;
 import java.util.Set;

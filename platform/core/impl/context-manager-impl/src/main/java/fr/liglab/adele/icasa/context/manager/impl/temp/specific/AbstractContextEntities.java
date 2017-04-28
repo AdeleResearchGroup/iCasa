@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.temp.specific;
 
 /**
  * Created by Eva on 31/01/2017.

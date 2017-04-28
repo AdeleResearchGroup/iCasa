@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by Eva on 16/02/2017.
+ * Interface of context internal manager
  */
 public interface ContextInternalManager {
     void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);

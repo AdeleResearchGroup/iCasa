@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Component(name="AppTestAMApplication")
 
@@ -39,21 +40,29 @@ import java.util.*;
 @Instantiate
 @CommandProvider(namespace = "app-test")
 public class AppManager {
-
     private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);
+
+    /*App state*/
+    private static AppStateEnum appState = AppStateEnum.INIT;
+    private static AppStateEnum previousAppState = null;
 
     /*Interaction with context*/
     private static boolean registered;
     private static final String appId = AppManager.class.toGenericString();
 
     /*Contexte state*/
-    /*TODO when a presenceService changes, with temporal check and all that stuff*/
-//    private static boolean userLeftRoom = false;
+    private static boolean userIsAtHome = false;
 
-    /*App state*/
-    private static AppStateEnum appState = AppStateEnum.INIT;
-    private static AppStateEnum previousAppState = null;
+    /*Timer*/
+    private static Timer userIsNotAtHomeTimer = new Timer();
+    private static final long timerDelay = TimeUnit.SECONDS.toMillis(20);
+    private TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+        }
+    };
 
+    /*AppManager component life cycle methods*/
     @Validate
     @SuppressWarnings("unused")
     public void start() {
@@ -68,7 +77,7 @@ public class AppManager {
         }
     }
 
-    /*Factories for internal reconfiguration*/
+    /*Factories for app internal reconfiguration*/
     @Requires(optional = false, specification = Factory.class, filter = "(factory.name=app-test-mgmt-switch)")
     private Factory factorySwitch;
     private static ComponentInstance appLightMgmtSwitch = null;
@@ -82,8 +91,8 @@ public class AppManager {
     @SuppressWarnings("unused")
     private ContextAPIAppRegistration contextAPIAppRegistration;
 
+    //TODO QoS REQUIREMENTS
 //    @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
-    //TODO
     @Requires(id="lights",optional = true,specification = BinaryLight.class,proxy = false)
     @SuppressWarnings("unused")
     private List<BinaryLight> binaryLights;
@@ -114,28 +123,6 @@ public class AppManager {
         }
     }
 
-    @Bind(id="presence")
-    @SuppressWarnings("unused")
-    public synchronized void bindPresenceService(PresenceService presenceService){
-        appState = previousAppState.onEventPresenceAvailable(true);
-        appReconfiguration();
-    }
-
-    @Modified(id = "presence")
-    @SuppressWarnings("unused")
-    public synchronized void modifyPresenceService(PresenceService presenceService){
-        /*TODO*/
-        //APP STATE CHANGE TO AUTO_ECO (temporisation for state)
-    }
-
-    @Unbind(id = "presence")
-    @SuppressWarnings("unused")
-    public synchronized void unbindPresenceService(PresenceService presenceService){
-        if(presenceServices.size()<=1){
-            appState = previousAppState.onEventPresenceAvailable(false);
-            appReconfiguration();
-        }
-    }
 
     @Bind(id="multiwaySwitch")
     @SuppressWarnings("unused")
@@ -151,6 +138,95 @@ public class AppManager {
             appState = previousAppState.onEventSwitch(false);
             appReconfiguration();
         }
+    }
+
+
+
+    @Bind(id="presence")
+    @SuppressWarnings("unused")
+    public synchronized void bindPresenceService(PresenceService presenceService){
+        appState = previousAppState.onEventPresenceAvailable(true);
+        appReconfiguration();
+        modifiedPresenceRoutine(presenceService.havePresenceInZone() == PresenceService.PresenceSensing.YES);
+    }
+
+    @Modified(id = "presence")
+    @SuppressWarnings("unused")
+    public synchronized void modifyPresenceService(PresenceService presenceService){
+        modifiedPresenceRoutine(presenceService.havePresenceInZone() == PresenceService.PresenceSensing.YES);
+    }
+
+    @Unbind(id = "presence")
+    @SuppressWarnings("unused")
+    public synchronized void unbindPresenceService(PresenceService presenceService){
+        if(presenceServices.size()<=1){
+            /*TODO Verify*/
+            appState = previousAppState.onEventPresenceAvailable(false);
+            appReconfiguration();
+        } else {
+            modifiedPresenceRoutine(false);
+        }
+    }
+
+    /*Methods to handle context property modification - presence*/
+    private synchronized void modifiedPresenceRoutine(boolean presenceOfSelectedSensor){
+        switch (appState) {
+            case AUTO_ACTIVATED:
+                if(checkPresence()){
+                    if(!userIsAtHome){
+                        LOG.info("APP USER DID NOT LEAVE HOME");
+                        resetUserNotAtHomeTimer();
+                        appState = previousAppState.onEventPresence(true);
+                        appReconfiguration();
+                    }
+                } else {
+                    if(userIsAtHome){
+                        initUserNotAtHomeTimer();
+                    }
+                }
+                break;
+            case AUTO_ECO:
+                if(presenceOfSelectedSensor){
+                    LOG.info("APP USER IS BACK HOME");
+                    appState = previousAppState.onEventPresence(true);
+                    appReconfiguration();
+                }
+                break;
+        }
+    }
+
+    private boolean checkPresence(){
+        boolean presenceInHome = false;
+        for(PresenceService p : presenceServices){
+            if(p.havePresenceInZone() == PresenceService.PresenceSensing.YES){
+                presenceInHome = true;
+                break;
+            }
+        }
+        return presenceInHome;
+    }
+
+    /*Set and start user presence timer*/
+    private synchronized void initUserNotAtHomeTimer(){
+        userIsAtHome = false;
+        userIsNotAtHomeTimer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                LOG.info("APP USER LEFT HOME");
+                appState = previousAppState.onEventPresence(false);
+                appReconfiguration();
+            }
+        };
+        userIsNotAtHomeTimer.schedule(timerTask, timerDelay);
+        LOG.info("APP DID USER LEAVE HOME?");
+    }
+
+    /*Reset user presence timer*/
+    private synchronized void resetUserNotAtHomeTimer(){
+        userIsAtHome = true;
+        userIsNotAtHomeTimer.cancel();
+        userIsNotAtHomeTimer.purge();
     }
 
     /*App state change with context reconfiguration*/
@@ -180,14 +256,20 @@ public class AppManager {
     private void appInternalReconfiguration(){
         switch(appState){
             case MANUAL:
+                resetUserNotAtHomeTimer();
                 disposeSubComponent(appLightMgmtPresence);
                 appLightMgmtSwitch=activateSubComponent(factorySwitch);
                 break;
             case AUTO_ACTIVATED:
                 disposeSubComponent(appLightMgmtSwitch);
                 appLightMgmtPresence=activateSubComponent(factoryPresence);
+                if(checkPresence())
+                    resetUserNotAtHomeTimer();
+                else
+                    initUserNotAtHomeTimer();
                 break;
             default:
+                resetUserNotAtHomeTimer();
                 disposeSubComponent(appLightMgmtSwitch);
                 disposeSubComponent(appLightMgmtPresence);
                 break;
