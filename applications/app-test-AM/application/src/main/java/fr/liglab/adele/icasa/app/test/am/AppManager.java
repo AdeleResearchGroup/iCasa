@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 
 @Instantiate
 @CommandProvider(namespace = "app-test")
+@SuppressWarnings("unused")
 public class AppManager {
     private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);
 
@@ -56,11 +57,6 @@ public class AppManager {
     /*Timer*/
     private static Timer userIsNotAtHomeTimer = new Timer();
     private static final long timerDelay = TimeUnit.SECONDS.toMillis(20);
-    private TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-        }
-    };
 
     /*AppManager component life cycle methods*/
     @Validate
@@ -79,10 +75,12 @@ public class AppManager {
 
     /*Factories for app internal reconfiguration*/
     @Requires(optional = false, specification = Factory.class, filter = "(factory.name=app-test-mgmt-switch)")
+    @SuppressWarnings("all")
     private Factory factorySwitch;
     private static ComponentInstance appLightMgmtSwitch = null;
 
     @Requires(optional = false, specification = Factory.class, filter = "(factory.name=app-test-mgmt-presence)")
+    @SuppressWarnings("all")
     private Factory factoryPresence;
     private static ComponentInstance appLightMgmtPresence = null;
 
@@ -94,20 +92,21 @@ public class AppManager {
     //TODO QoS REQUIREMENTS
 //    @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
     @Requires(id="lights",optional = true,specification = BinaryLight.class,proxy = false)
-    @SuppressWarnings("unused")
+    @SuppressWarnings("all")
     private List<BinaryLight> binaryLights;
 
     @Requires(id="presence",optional = true,specification = PresenceService.class)
-    @SuppressWarnings("unused")
+    @SuppressWarnings("all")
     private List<PresenceService> presenceServices;
 
     @Requires(id="multiwaySwitch", optional = true, specification = MultiwaySwitch.class)
-    @SuppressWarnings("unused")
+    @SuppressWarnings("all")
     private List<MultiwaySwitch> multiwaySwitches;
 
     /*!TODO ATTENTION AU SYNCHRONIZED*/
     /*TODO ok car pas beaucoup de lignes dans la methode registerGoals*/
     @Bind(id="lights")
+    @SuppressWarnings("unused")
     public synchronized void bindBinaryLight(BinaryLight binaryLight){
         appState = previousAppState.onEventLights(true);
         appReconfiguration();
@@ -210,7 +209,7 @@ public class AppManager {
     private synchronized void initUserNotAtHomeTimer(){
         userIsAtHome = false;
         userIsNotAtHomeTimer = new Timer();
-        timerTask = new TimerTask() {
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 LOG.info("APP USER LEFT HOME");
@@ -295,7 +294,7 @@ public class AppManager {
     /*Debug interface*/
     @Command
     @SuppressWarnings("unused")
-    public void appToggleRegistration() {
+    private void appToggleRegistration() {
         if(contextAPIAppRegistration!=null){
             if(!registered){
                 appState = AppStateEnum.INIT;
@@ -312,16 +311,18 @@ public class AppManager {
 
     /*TODO REMOVE (TEMP)*/
     @Requires(id="buttons", optional = true, specification = PushButton.class)
-    @SuppressWarnings("unused")
+    @SuppressWarnings("all")
     private List<PushButton> buttons;
 
     /*TODO REMOVE (TEMP)*/
     @Command
+    @SuppressWarnings("unused")
     public void pushButtons(){
         buttons.forEach(PushButton::push);
     }
 
     @Command
+    @SuppressWarnings("unused")
     public void pushButtons(String zone){
         for(PushButton b : buttons){
             if(b instanceof LocatedObject){
