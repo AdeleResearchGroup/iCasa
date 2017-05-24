@@ -13,23 +13,18 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
-
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
-
-import java.util.Map;
-import java.util.Set;
+package fr.liglab.adele.icasa.context.manager.api.generic;
 
 /**
- * Interface of context internal manager
+ * TEMP
+ * Les applications enregistrent leurs besoins au gestionnaire de contexte
+ * Ces besoins représentent un but sur l'API à fournir
  */
-public interface ContextInternalManager {
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
+public interface ContextDependencyRegistration {
 
-    Runnable getContextResolutionMachine();
+    boolean registerContextDependencies(String id, ContextAPIConfig contextAPIConfig);
 
-    Set<String> getCurrentLookupFilter();
+    ContextAPIConfig getRegisteredContextDependencies(String id);
 
-    /*TODO MODIFY*/
-    Set<String> getInstancesByCreator(String creator);
+    boolean unregisterContextDependencies(String id);
 }

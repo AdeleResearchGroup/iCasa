@@ -13,13 +13,25 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic;
+package fr.liglab.adele.icasa.context.manager.api.temp.generic;
 
-import fr.liglab.adele.cream.model.ContextEntity;
+import java.util.Set;
+import java.util.UUID;
 
-public class Resource {
-    private String id;
-    private ContextEntity type;
-    private String name;
-    private String origin;
+/**
+ * Interface of EntityResource Model
+ * Modified by importers
+ * Read by context manager components
+ */
+public interface ResourceRegistration {
+
+    Set<Resource> getImportedResources(String importerId);
+
+    boolean importResource(EntityResource resource);
+
+    boolean importResource(RelationResource relation);
+
+    boolean removeResource(UUID resourceId);
+
+    boolean removeAllResourcesFromImporter(String importerId);
 }

@@ -16,10 +16,10 @@
 package fr.liglab.adele.icasa.context.manager.api.specific;
 
 /**
- * TEMP
- * API de contexte, services pouvant être fournis aux applications
+ * Context API, services that can be provided to applications
+ * Can be generated from the different existing context entities in the distribution
  */
-public enum ContextAPI {
+public enum ContextAPIEnum {
     BinaryLight("fr.liglab.adele.icasa.device.light.BinaryLight"),
     ColorLight("fr.liglab.adele.icasa.device.light.ColorLight"),
     DimmerLight("fr.liglab.adele.icasa.device.light.DimmerLight"),
@@ -32,12 +32,12 @@ public enum ContextAPI {
 
     private String interfaceName;
 
-    private ContextAPI(String s) {
+    private ContextAPIEnum(String s) {
         interfaceName = s;
     }
 
-    public static ContextAPI containsInterface(String interfaceName){
-        for (ContextAPI contextAPI : ContextAPI.values()){
+    public static ContextAPIEnum containsInterface(String interfaceName){
+        for (ContextAPIEnum contextAPI : ContextAPIEnum.values()){
             if(contextAPI.equalsInterface(interfaceName)){
                 return contextAPI;
             }
@@ -51,5 +51,10 @@ public enum ContextAPI {
 
     public boolean equalsInterface(String otherInterface) {
         return interfaceName.equals(otherInterface);
+    }
+
+    @Override
+    public String toString() {
+        return "CtxtAPI{" + interfaceName + '}';
     }
 }

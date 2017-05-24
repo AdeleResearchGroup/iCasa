@@ -1,7 +1,7 @@
 package fr.liglab.adele.icasa.app.test.am;
 
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import java.util.HashSet;
 public enum AppStateEnum implements AppStateEventListener{
 
     INIT (new ContextAPIConfig(new HashSet<>(Collections.singletonList(
-            ContextAPI.BinaryLight))))
+            ContextAPIEnum.BinaryLight))))
     {
         /*Init context interactions - is there available lights*/
         /*Useless - No available lights*/
@@ -20,9 +20,9 @@ public enum AppStateEnum implements AppStateEventListener{
     },
 
     MODE (new ContextAPIConfig(new HashSet<>(Arrays.asList(
-            ContextAPI.BinaryLight,
-            ContextAPI.PresenceService,
-            ContextAPI.MultiwaySwitch))))
+            ContextAPIEnum.BinaryLight,
+            ContextAPIEnum.PresenceService,
+            ContextAPIEnum.MultiwaySwitch))))
             {
                 /*Init context interactions - wait to know which mode to choose*/
                 /*HS - Not enough available devices to work*/
@@ -36,9 +36,9 @@ public enum AppStateEnum implements AppStateEventListener{
             },
 
     MANUAL (new ContextAPIConfig(new HashSet<>(Arrays.asList(
-            ContextAPI.BinaryLight,
-            ContextAPI.PresenceService,
-            ContextAPI.MultiwaySwitch))))
+            ContextAPIEnum.BinaryLight,
+            ContextAPIEnum.PresenceService,
+            ContextAPIEnum.MultiwaySwitch))))
     {
         /*Manual - No presence information available - back up state*/
         /*Wait anyway for presence information*/
@@ -53,7 +53,7 @@ public enum AppStateEnum implements AppStateEventListener{
     },
 
     AUTO_ECO (new ContextAPIConfig(new HashSet<>(Collections.singletonList(
-            ContextAPI.PresenceService))))
+            ContextAPIEnum.PresenceService))))
     {
         @Override public AppStateEnum onEventLights(boolean available){
             return this;
@@ -69,8 +69,8 @@ public enum AppStateEnum implements AppStateEventListener{
     },
 
     AUTO_ACTIVATED (new ContextAPIConfig(new HashSet<>(Arrays.asList(
-            ContextAPI.BinaryLight,
-            ContextAPI.PresenceService))))
+            ContextAPIEnum.BinaryLight,
+            ContextAPIEnum.PresenceService))))
     {
         @Override public AppStateEnum onEventPresenceAvailable(boolean available){
             return available ? this : MODE;

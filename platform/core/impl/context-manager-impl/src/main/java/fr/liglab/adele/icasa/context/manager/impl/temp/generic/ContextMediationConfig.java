@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.temp.generic;
 
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +25,21 @@ import java.util.List;
  * Différentes configurations possibles du contexte pour fournir une API de contexte
  */
 public class ContextMediationConfig {
-    private ContextAPI contextAPI;
+    private ContextAPIEnum contextAPI;
 
     private List<ContextMediationSlice> contextMediationSlices;
 
-    public ContextMediationConfig(ContextAPI contextAPI) {
+    public ContextMediationConfig(ContextAPIEnum contextAPI) {
         this.contextAPI = contextAPI;
         contextMediationSlices = new ArrayList<>();
     }
 
-    public ContextMediationConfig(ContextAPI contextAPI, List<ContextMediationSlice> contextMediationSlices) {
+    public ContextMediationConfig(ContextAPIEnum contextAPI, List<ContextMediationSlice> contextMediationSlices) {
         this(contextAPI);
         setContextMediationSlices(contextMediationSlices);
     }
 
-    public ContextAPI getContextAPI() {
+    public ContextAPIEnum getContextAPI() {
         return contextAPI;
     }
 

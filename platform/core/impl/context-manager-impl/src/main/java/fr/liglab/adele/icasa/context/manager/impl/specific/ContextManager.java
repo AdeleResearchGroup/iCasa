@@ -18,15 +18,18 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.impl.generic.GoalModelAccess;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.*;
 
 /**
@@ -36,7 +39,9 @@ import java.util.concurrent.*;
 @Instantiate
 @Provides
 @CommandProvider(namespace = "AM-ctxt")
-public class ContextManager implements ContextAPIAppRegistration{
+public class ContextManager {
+
+    //TODO Reaction on resource or model event
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
 
@@ -49,7 +54,7 @@ public class ContextManager implements ContextAPIAppRegistration{
     /*Starting configuration of the context model - mandatory goals*/
     /*(includes context components that are useful for RoSe*/
     private static final ContextAPIConfig startingGoalsConfig = new ContextAPIConfig(
-            new HashSet<>(Collections.singletonList(ContextAPI.IOPController)));
+            new HashSet<>(Collections.singletonList(ContextAPIEnum.IOPController)));
 
     /*Environment lookup mode*/
     private static boolean autoLookup = false;
@@ -70,11 +75,22 @@ public class ContextManager implements ContextAPIAppRegistration{
 
 
     /*CONTEXT AM EXTERNAL INTERFACES*/
-    /*Goal management*/
-    private static Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
+    /*Goal Model*/
+    @Requires
+    @SuppressWarnings("unused")
+    private GoalModelAccess goalModel;
+
+    /*Registration of context dependencies*/
+    @Requires
+    @SuppressWarnings("unused")
+    private ContextDependencyRegistration contextDependencyRegistration;
+
+    /*EntityResource Model*/
+//
 
     /*Environment filter - Lookup IOP Controller*/
     @Requires(optional = true)
+    @SuppressWarnings("unused")
     private IOPLookupService iopLookupService;
 
     /*Environment lookup filter*/
@@ -83,7 +99,8 @@ public class ContextManager implements ContextAPIAppRegistration{
 
     /*CONTEXT AM INTERNAL INTERFACES*/
     /*Management sub-parts*/
-    @Requires(optional = false)
+    @Requires
+    @SuppressWarnings("unused")
     private ContextInternalManager contextInternalManager;
 
     /*Resolution machine : calcule et effectue l'adaptation*/
@@ -92,7 +109,7 @@ public class ContextManager implements ContextAPIAppRegistration{
     /*Adaptation*/
     private Runnable contextCompositionAdaptation = () -> {
         /*Passage de l'etat du contexte à un instant t*/
-        contextInternalManager.configureGoals(ContextManager.contextGoalMap);
+        contextInternalManager.configureGoals(goalModel.getGoalsByApp());
         /*Adaptation*/
         resolutionMachine.run();
         /*Lookup filter*/
@@ -101,7 +118,8 @@ public class ContextManager implements ContextAPIAppRegistration{
 
     @Validate
     public void start(){
-        registerContextGoals(ContextManager.class.toGenericString(), startingGoalsConfig);
+
+        contextDependencyRegistration.registerContextDependencies(ContextManager.class.toGenericString(), startingGoalsConfig);
 
         /*Start scheduling*/
         switch (internal_configuration_mode){
@@ -113,8 +131,6 @@ public class ContextManager implements ContextAPIAppRegistration{
             case MODE_EVENT_DRIVEN:
                 break;
         }
-
-
     }
 
     @Invalidate
@@ -147,27 +163,6 @@ public class ContextManager implements ContextAPIAppRegistration{
         }
 
         return modified;
-    }
-
-    @Override
-    public boolean registerContextGoals(String appId, ContextAPIConfig contextAPIConfig) {
-        /*TODO CHECK GOALS*/
-        contextGoalMap.put(appId, contextAPIConfig);
-//        singleExecutorService.submit(contextCompositionAdaptation);
-        /*TODO test*/
-//        scheduledExecutorService.execute(contextCompositionAdaptation);
-        return true;
-    }
-
-    @Override
-    public ContextAPIConfig getRegisteredContextGoals(String appId) {
-        return contextGoalMap.get(appId);
-    }
-
-    @Override
-    public boolean unregisterContextGoals(String appId) {
-        contextGoalMap.remove(appId);
-        return true;
     }
 
     /*Environment interface*/

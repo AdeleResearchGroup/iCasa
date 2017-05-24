@@ -17,7 +17,7 @@ package fr.liglab.adele.icasa.app.test.am;
 
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextDependencyRegistration;
 import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
@@ -85,9 +85,10 @@ public class AppManager {
     private static ComponentInstance appLightMgmtPresence = null;
 
     /*Context state check and App state change*/
-    @Requires(id="manager", optional = true, specification = ContextAPIAppRegistration.class)
+//    @Requires(id="manager", optional = true, specification = ContextDependencyRegistration.class)
+    @Requires(id="manager", optional = false, specification = ContextDependencyRegistration.class)
     @SuppressWarnings("unused")
-    private ContextAPIAppRegistration contextAPIAppRegistration;
+    private ContextDependencyRegistration contextDependencyRegistration;
 
     //TODO QoS REQUIREMENTS
 //    @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
@@ -238,7 +239,7 @@ public class AppManager {
         }
     }
     private void appUnregistration(){
-        contextAPIAppRegistration.unregisterContextGoals(appId);
+        contextDependencyRegistration.unregisterContextDependencies(appId);
         appState = AppStateEnum.INIT;
         appInternalReconfiguration();
         previousAppState = null;
@@ -246,8 +247,8 @@ public class AppManager {
     }
 
     private void contextAPIAppRegistration(){
-        if(contextAPIAppRegistration!=null&&registered){
-                contextAPIAppRegistration.registerContextGoals(appId, appState.getConfigContextAPI());
+        if(contextDependencyRegistration !=null&&registered){
+                contextDependencyRegistration.registerContextDependencies(appId, appState.getConfigContextAPI());
                 LOG.info("APP RECONFIGURATION...");
         }
     }
@@ -294,8 +295,8 @@ public class AppManager {
     /*Debug interface*/
     @Command
     @SuppressWarnings("unused")
-    private void appToggleRegistration() {
-        if(contextAPIAppRegistration!=null){
+    public void appToggleRegistration() {
+        if(contextDependencyRegistration !=null){
             if(!registered){
                 appState = AppStateEnum.INIT;
                 registered = true;

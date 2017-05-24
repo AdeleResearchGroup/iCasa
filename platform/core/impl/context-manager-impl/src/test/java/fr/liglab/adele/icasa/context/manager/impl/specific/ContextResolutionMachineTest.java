@@ -18,7 +18,7 @@
 //import fr.liglab.adele.cream.model.ContextEntity;
 //import fr.liglab.adele.cream.model.introspection.EntityProvider;
 //import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
-//import fr.liglab.adele.icasa.context.manager.impl.specific.ContextResolutionMachine;
+//import fr.liglab.adele.icasa.context.manager.impl.specific.LinkingLogic;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.mockito.Mockito;
@@ -118,7 +118,7 @@
 //
 //        /*Test*/
 //        System.out.println("\n***TEST Algorithme de resolution du contexte***");
-//        ContextResolutionMachine contextResolutionMachine = new ContextResolutionMachine();
+//        LinkingLogic contextResolutionMachine = new LinkingLogic();
 //        Map<String, ContextAPIConfig> contextGoals = new HashMap<>();
 //        ContextEntity[] contextEntities;
 //        EntityProvider[] entityProviders;

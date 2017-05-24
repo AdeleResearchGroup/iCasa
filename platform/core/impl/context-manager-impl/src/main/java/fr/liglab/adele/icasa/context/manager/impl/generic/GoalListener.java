@@ -13,23 +13,16 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.generic;
 
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
- * Interface of context internal manager
+ * Interface to react to changes in the goal model
  */
-public interface ContextInternalManager {
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
+interface GoalListener {
 
-    Runnable getContextResolutionMachine();
-
-    Set<String> getCurrentLookupFilter();
-
-    /*TODO MODIFY*/
-    Set<String> getInstancesByCreator(String creator);
+    void notifyGoalChange(Map<String, ContextAPIConfig> goals);
 }

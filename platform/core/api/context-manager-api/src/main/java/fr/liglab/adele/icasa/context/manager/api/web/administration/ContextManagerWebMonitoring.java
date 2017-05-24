@@ -13,23 +13,26 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.api.web.administration;
 
+import fr.liglab.adele.cream.model.introspection.EntityProvider;
+import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Interface of context internal manager
- */
-public interface ContextInternalManager {
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
 
-    Runnable getContextResolutionMachine();
+public interface ContextManagerWebMonitoring {
+
+    Map<String, ContextAPIConfig> getGoalsByApp();
+
+    Map<EntityProvider, Set<String>> getResourceCreatorsByEntityProvider();
+    Map<RelationProvider, Set<String>> getResourceCreatorsByRelationProvider();
+    Map<EntityProvider, Set<String>> getAbstractionCreatorsByEntityProvider();
+    Map<RelationProvider, Set<String>> getAbstractionCreatorsByRelationProvider();
+
+    Set<String> getInstancesByCreator(String creator);
 
     Set<String> getCurrentLookupFilter();
-
-    /*TODO MODIFY*/
-    Set<String> getInstancesByCreator(String creator);
 }

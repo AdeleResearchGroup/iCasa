@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.api.generic;
 
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 
 import java.util.*;
 
@@ -25,18 +25,18 @@ import java.util.*;
  */
 public class ContextAPIConfig {
     /*Liste des configs ordonnées, la première est la config optimale*/
-    private Set<ContextAPI> config;
+    private Set<ContextAPIEnum> config;
 
     public ContextAPIConfig() {
         this.config = new HashSet<>();
     }
 
-    public ContextAPIConfig(Set<ContextAPI> config) {
+    public ContextAPIConfig(Set<ContextAPIEnum> config) {
         Objects.requireNonNull(config, "config parameter must not be null");
         this.config = new HashSet<>(config);
     }
 
-    public Set<ContextAPI> getConfig() {
+    public Set<ContextAPIEnum> getConfig() {
         return new HashSet<>(config);
     }
 
@@ -45,41 +45,41 @@ public class ContextAPIConfig {
         return config.isEmpty();
     }
 
-    public boolean setConfig(Set<ContextAPI> config) {
+    public boolean setConfig(Set<ContextAPIEnum> config) {
         Objects.requireNonNull(config, "config parameter must not be null");
         this.config = new HashSet<>(config);
         return this.config.containsAll(config);
     }
 
-    public boolean addContextAPI(ContextAPI contextAPI) {
+    public boolean addContextAPI(ContextAPIEnum contextAPI) {
         Objects.requireNonNull(config, "contextAPI parameter must not be null");
         config.add(contextAPI);
         return config.contains(contextAPI);
     }
 
-    public boolean removeContextAPI(ContextAPI contextAPI) {
+    public boolean removeContextAPI(ContextAPIEnum contextAPI) {
         Objects.requireNonNull(config, "contextAPI parameter must not be null");
         config.remove(contextAPI);
         return !config.contains(contextAPI);
     }
 
-    public boolean addContextAPIs(Set<ContextAPI> contextAPI) {
+    public boolean addContextAPIs(Set<ContextAPIEnum> contextAPI) {
         Objects.requireNonNull(config, "contextAPI parameter must not be null");
         config.addAll(contextAPI);
         return config.containsAll(contextAPI);
     }
 
-    public boolean removeContextAPIs(Set<ContextAPI> contextAPI) {
+    public boolean removeContextAPIs(Set<ContextAPIEnum> contextAPI) {
         Objects.requireNonNull(config, "contextAPI parameter must not be null");
         return config.removeAll(contextAPI);
     }
 
 /*POUR LES CONFIG MULTIPLES / ALTERNATIVE (PRIORITE PAR ORDRE)*/
-//    public Set<ContextAPI> getOptimalConfig() {
+//    public Set<ContextAPIEnum> getOptimalConfig() {
 //        return getConfig(0);
 //    }
 //
-//    public Set<ContextAPI> getConfig(int index) {
+//    public Set<ContextAPIEnum> getConfig(int index) {
 //        if(index>=0 && index < configs.size()){
 //            return configs.get(index);
 //        } else {
@@ -87,11 +87,11 @@ public class ContextAPIConfig {
 //        }
 //    }
 //
-//    public List<Set<ContextAPI>> getConfigList() {
+//    public List<Set<ContextAPIEnum>> getConfigList() {
 //        return configs;
 //    }
 //
-//    public boolean setConfigList(List<Set<ContextAPI>> configs) {
+//    public boolean setConfigList(List<Set<ContextAPIEnum>> configs) {
 //        boolean check = true;
 //        try{
 //            this.configs = new ArrayList<>(configs);
@@ -101,7 +101,7 @@ public class ContextAPIConfig {
 //        return check;
 //    }
 //
-//    public boolean addConfigWithLastPriority(Set<ContextAPI> config){
+//    public boolean addConfigWithLastPriority(Set<ContextAPIEnum> config){
 //        boolean check = true;
 //        try{
 //            configs.add(config);
@@ -111,7 +111,7 @@ public class ContextAPIConfig {
 //        return check;
 //    }
 //
-//    public boolean addConfigWithFirstPriority(Set<ContextAPI> config){
+//    public boolean addConfigWithFirstPriority(Set<ContextAPIEnum> config){
 //        boolean check = true;
 //        try{
 //            configs.add(0, config);

@@ -15,16 +15,11 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.specific;
 
-import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
-import fr.liglab.adele.icasa.context.manager.impl.temp.generic.ContextMediationConfig;
-import fr.liglab.adele.icasa.context.manager.impl.temp.generic.ContextMediationSlice;
-import fr.liglab.adele.icasa.context.manager.impl.temp.specific.AbstractContextEntities;
-import fr.liglab.adele.icasa.context.manager.impl.temp.specific.ContextMediationConfigMap;
-import fr.liglab.adele.icasa.context.manager.impl.temp.specific.EnvProxy;
+import fr.liglab.adele.icasa.context.manager.api.generic.Util;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +31,9 @@ import java.util.*;
  * Programmatic context resolution machine
  * Determine the best programmatic context configuration to meet app needs, regarding the current external resources
  */
-final class ContextResolutionMachine implements Runnable {
+final class LinkingLogic implements Runnable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ContextResolutionMachine.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LinkingLogic.class);
 
     private static int i = 0;
 
@@ -54,8 +49,8 @@ final class ContextResolutionMachine implements Runnable {
     private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
     private Set<String> lookupFilter = new HashSet<>();
 
-    protected ContextResolutionMachine(ContextInternalManagerImpl contextInternalManager) {
-        ContextResolutionMachine.contextInternalManager = contextInternalManager;
+    protected LinkingLogic(ContextInternalManagerImpl contextInternalManager) {
+        LinkingLogic.contextInternalManager = contextInternalManager;
     }
 
     @Override
@@ -84,7 +79,7 @@ final class ContextResolutionMachine implements Runnable {
         /*TODO SELECTION DES CONFIGS D'APP ? */
         /*TODO (pour l'instant toutes les app traitées en même temps, avec la meilleure config)*/
         Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
-        Set<ContextAPI> goals = new HashSet<>();
+        Set<ContextAPIEnum> goals = new HashSet<>();
         for (ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet) {
             goals.addAll(contextAPIConfigs.getConfig());
             if(logLevel>=2) {
@@ -109,7 +104,7 @@ final class ContextResolutionMachine implements Runnable {
         /*Services à activer*/
         /*Initialisation des arbres*/
         mediationTrees = new HashMap<>();
-        for (ContextAPI contextAPI : goals) {
+        for (ContextAPIEnum contextAPI : goals) {
             String goalName = contextAPI.getInterfaceName();
             if(logLevel>=2) {
                 LOG.info("CONTEXT API TO ACTIVATE: " + contextAPI + " named: " + goalName);
@@ -167,7 +162,7 @@ final class ContextResolutionMachine implements Runnable {
         /*Désactivation de la création des entities dans les providers non traités*/
         for(EntityProvider entityProvider : entityProviders){
             for(String providedEntity : entityProvider.getProvidedEntities()){
-                String creatorName = eCreatorName(entityProvider, providedEntity);
+                String creatorName = Util.eCreatorName(entityProvider, providedEntity);
                 if(creatorsToActivate.contains(creatorName)) {
                     entityProvider.enable(providedEntity);
                     if(logLevel>=3) {
@@ -185,7 +180,7 @@ final class ContextResolutionMachine implements Runnable {
         /*Vérification*/
         /*Services à activer*/
         BundleContext bundleContext = contextInternalManager.getBundleContext();
-        for (ContextAPI contextAPI : goals) {
+        for (ContextAPIEnum contextAPI : goals) {
             String contextAPIName = contextAPI.getInterfaceName();
             if (bundleContext.getServiceReference(contextAPIName) == null) {
                 if(logLevel>=1) {
@@ -197,18 +192,6 @@ final class ContextResolutionMachine implements Runnable {
                 }
             }
         }
-    }
-
-    String eCreatorName(EntityProvider entityProvider, String providedEntity) {
-        return entityProvider.getName() + ":" + providedEntity;
-    }
-
-    private String getProvidedEntityFromCreatorName(String eCreatorName) {
-        return eCreatorName.split(":")[1];
-    }
-
-    private String getEntityProviderFromCreatorName(String eCreatorName) {
-        return eCreatorName.split(":")[0];
     }
 
     private boolean recursiveCreatorRegistrationTree(Set<DefaultMutableTreeNode> requiredNodes, Set<String> nonActivableServices){
@@ -281,7 +264,8 @@ final class ContextResolutionMachine implements Runnable {
                         try{
                             /*Pour l'instant, activation que des creators où il y a des instances disponibles*/
                             String creator = nextChild.toString();
-                            String entityName = getProvidedEntityFromCreatorName(creator);
+                            /*TODO CHECK*/
+                            String entityName = Util.getProvidedItemFromCreatorName(creator);
                             EntityProvider entityProvider = eProviderByCreatorName.get(creator);
                             creatorsToActivate.add(creator);
 
@@ -366,7 +350,7 @@ final class ContextResolutionMachine implements Runnable {
 //        /*App, set de services en config optimale*/
 //        /*Toutes les app traitées en même temps, avec la meilleure config*/
 //        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
-//        Set<ContextAPI> goals = new HashSet<>();
+//        Set<ContextAPIEnum> goals = new HashSet<>();
 //        for(ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet){
 //            goals.addAll(contextAPIConfigs.getConfig());
 //            LOG.info("GOALS "+ contextAPIConfigs.getConfig().toString());
@@ -374,8 +358,8 @@ final class ContextResolutionMachine implements Runnable {
 //
 //        /*Services à activer*/
 //        Set<String> goalsName = new HashSet<>();
-//        for (ContextAPI contextAPI : goals){
-//            String goalName = contextAPI.getInterfaceName();
+//        for (ContextAPIEnum contextAPI : goals){
+//            String goalName = contextAPI.getRelationName();
 //            LOG.info("CONTEXT API TO ACTIVATE: "+contextAPI+" named: "+goalName);
 //            goalsName.add(goalName);
 //        }
@@ -439,8 +423,8 @@ final class ContextResolutionMachine implements Runnable {
 //
 //        /*Vérification des services à activer*/
 //        BundleContext bundleContext = contextInternalManager.getBundleContext();
-//        for (ContextAPI contextAPI : goals){
-//            String contextAPIName = contextAPI.getInterfaceName();
+//        for (ContextAPIEnum contextAPI : goals){
+//            String contextAPIName = contextAPI.getRelationName();
 //            if(bundleContext.getServiceReference(contextAPIName) == null){
 //                LOG.info("MISSING CONTEXT API: " +contextAPIName);
 //            } else {
@@ -476,13 +460,13 @@ final class ContextResolutionMachine implements Runnable {
 //    }
 //
 //
-//    private Map<ContextAPI, ContextMediationConfig> contextMediationConfigMap = new ContextMediationConfigMap().getContextMediationConfigMap();
+//    private Map<ContextAPIEnum, ContextMediationConfig> contextMediationConfigMap = new ContextMediationConfigMap().getContextMediationConfigMap();
 //    private synchronized void resolutionAlgorithm_config_creators(){
 //        /*Version 0, config en dur, pas de reflexion particulière*/
 //
 //        /*App, set de services en config optimale*/
 //        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
-//        Set<ContextAPI> goals = new HashSet<>();
+//        Set<ContextAPIEnum> goals = new HashSet<>();
 //        for(ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet){
 //            goals.addAll(contextAPIConfigs.getConfig());
 //            LOG.info("GOALS "+ contextAPIConfigs.getConfig().toString());
@@ -492,7 +476,7 @@ final class ContextResolutionMachine implements Runnable {
 //        Set<AbstractContextEntities> entityActivationSet = new HashSet<>();
 //        Set<EnvProxy> proxyActivationSet = new HashSet<>();
 //
-//        for (ContextAPI contextAPI : goals){
+//        for (ContextAPIEnum contextAPI : goals){
 //            LOG.info("CONTEXT API TO ACTIVATE: "+contextAPI);
 //            ContextMediationConfig contextMediationConfig = contextMediationConfigMap.get(contextAPI);
 //            if(contextMediationConfig !=null){

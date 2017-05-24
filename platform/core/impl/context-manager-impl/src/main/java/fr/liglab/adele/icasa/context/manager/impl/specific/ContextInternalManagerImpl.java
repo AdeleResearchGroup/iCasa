@@ -19,6 +19,7 @@ import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.Util;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     private static final Logger LOG = LoggerFactory.getLogger(ContextInternalManagerImpl.class);
 
     /*Resolution machine : calcule et effectue l'adaptation*/
-    private static ContextResolutionMachine resolutionMachine;
+    private static LinkingLogic resolutionMachine;
 
     @Context
     private BundleContext bundleContext;
@@ -58,15 +59,22 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     private RelationProvider[] relationProviders;
 
     /*Maintained set and map for context resolution machine*/
-    private Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
-    private Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
-    private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
+    private Map<String, Set<String>> mEntityCreatorsByService = new HashMap<>();
+    private Map<String, Set<String>> mEntityCreatorsRequirements = new HashMap<>();
+    private Map<String, EntityProvider> mEntityProviderByCreatorName = new HashMap<>();
+    private Map<EntityProvider, Set<String>> mEntitiesByProvider = new HashMap<>();
+
+    private Map<String, Set<String>> mRelationCreatorsByService = new HashMap<>();
+    private Map<String, Set<String>> mRelationCreatorsRequirements = new HashMap<>();
+    private Map<String, RelationProvider> mRelationProviderByCreatorName = new HashMap<>();
+    private Map<RelationProvider, Set<String>> mRelationsByProvider = new HashMap<>();
+
     private Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
     private Set<String> lookupFilter = new HashSet<>();
 
     /*Initialization*/
     public ContextInternalManagerImpl(){
-        resolutionMachine = new ContextResolutionMachine(this);
+        resolutionMachine = new LinkingLogic(this);
     }
 
     @Override
@@ -75,7 +83,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     }
 
     @Override
-    public ContextResolutionMachine getContextResolutionMachine() {
+    public LinkingLogic getContextResolutionMachine() {
         return resolutionMachine;
     }
 
@@ -119,15 +127,15 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     }
 
     Map<String, Set<String>> geteCreatorsByServices() {
-        return eCreatorsByServices;
+        return mEntityCreatorsByService;
     }
 
     Map<String, Set<String>> geteCreatorsRequirements() {
-        return eCreatorsRequirements;
+        return mEntityCreatorsRequirements;
     }
 
     Map<String, EntityProvider> geteProviderByCreatorName() {
-        return eProviderByCreatorName;
+        return mEntityProviderByCreatorName;
     }
 
     Map<String, ContextAPIConfig> getContextGoalMap() {
@@ -139,6 +147,7 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     }
 
     @Bind(id = "entityProviders")
+    @SuppressWarnings("unused")
     private void bindEntityProvider(EntityProvider entityProvider){
         /*LogLevel*/
         int logLevel = ContextManager.logLevel;
@@ -146,8 +155,11 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
             LOG.info("PROVIDER ADDED: "+ entityProvider.getName());
         }
 
-        for(String providedEntity : entityProvider.getProvidedEntities()) {
-            String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
+        Set<String> providedEntities = entityProvider.getProvidedEntities();
+        mEntitiesByProvider.put(entityProvider, providedEntities);
+
+        for(String providedEntity : providedEntities) {
+            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
 
             if(logLevel>=3){
                 LOG.info("ENTITY: "+ providedEntity);
@@ -155,22 +167,23 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
                 LOG.info("WITH REQUIREMENTS: "+ entityProvider.getPotentiallyRequiredServices(providedEntity));
             }
 
-            eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
-            eProviderByCreatorName.put(creatorName, entityProvider);
+            mEntityCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
+            mEntityProviderByCreatorName.put(creatorName, entityProvider);
 
             for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                if (!eCreatorsByServices.containsKey(service)) {
+                if (!mEntityCreatorsByService.containsKey(service)) {
                     Set<String> entityProviderSubSet = new HashSet<>();
                     entityProviderSubSet.add(creatorName);
-                    eCreatorsByServices.put(service, entityProviderSubSet);
+                    mEntityCreatorsByService.put(service, entityProviderSubSet);
                 } else {
-                    eCreatorsByServices.get(service).add(creatorName);
+                    mEntityCreatorsByService.get(service).add(creatorName);
                 }
             }
         }
     }
 
     @Modified(id = "entityProviders")
+    @SuppressWarnings("unused")
     private void modifyEntityProvider(EntityProvider entityProvider){
         /*LogLevel*/
         int logLevel = ContextManager.logLevel;
@@ -178,46 +191,73 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
             LOG.info("PROVIDER MODIFIED: "+ entityProvider.getName());
         }
 
-        for(String providedEntity : entityProvider.getProvidedEntities()) {
-            String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
+        Set<String> newConfig = entityProvider.getProvidedEntities();
+        Set<String> oldConfig = mEntitiesByProvider.get(entityProvider);
 
-            if(!eProviderByCreatorName.containsKey(creatorName)){
+        Set<String> added   = new HashSet<>(newConfig);
+        Set<String> removed = new HashSet<>(oldConfig);
+        added.removeAll(oldConfig);
+        removed.removeAll(newConfig);
 
-                if(logLevel>=3) {
-                    LOG.info("ENTITY: " + providedEntity);
-                    LOG.info("PROVIDING: " + entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
-                    LOG.info("WITH REQUIREMENTS: " + entityProvider.getPotentiallyRequiredServices(providedEntity));
-                }
+        mEntitiesByProvider.put(entityProvider, newConfig);
 
-                eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
-                eProviderByCreatorName.put(creatorName, entityProvider);
+        for(String providedEntity : added){
+            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
 
-                for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                    if (!eCreatorsByServices.containsKey(service)) {
-                        Set<String> entityProviderSubSet = new HashSet<>();
-                        entityProviderSubSet.add(creatorName);
-                        eCreatorsByServices.put(service, entityProviderSubSet);
-                    } else {
-                        eCreatorsByServices.get(service).add(creatorName);
-                    }
+            if(logLevel>=3) {
+                LOG.info("ADDED:");
+                LOG.info("ENTITY: " + providedEntity);
+                LOG.info("PROVIDING: " + entityProvider.getPotentiallyProvidedEntityServices(providedEntity));
+                LOG.info("WITH REQUIREMENTS: " + entityProvider.getPotentiallyRequiredServices(providedEntity));
+            }
+
+            mEntityCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
+            mEntityProviderByCreatorName.put(creatorName, entityProvider);
+
+            for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
+                if (!mEntityCreatorsByService.containsKey(service)) {
+                    Set<String> entityProviderSubSet = new HashSet<>();
+                    entityProviderSubSet.add(creatorName);
+                    mEntityCreatorsByService.put(service, entityProviderSubSet);
+                } else {
+                    mEntityCreatorsByService.get(service).add(creatorName);
                 }
             }
-            /*TODO: does not manage creator deletion*/
+        }
+
+        for(String providedEntity : removed){
+            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
+
+            if(logLevel>=3) {
+                LOG.info("REMOVED:");
+                LOG.info("ENTITY: " + providedEntity);
+            }
+
+            mEntityCreatorsRequirements.remove(creatorName);
+            mEntityProviderByCreatorName.remove(creatorName);
+
+            for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
+                if (mEntityCreatorsByService.containsKey(service)) {
+                    mEntityCreatorsByService.get(service).remove(creatorName);
+                }
+            }
         }
     }
 
-    @Unbind
+    @Unbind(id = "entityProviders")
+    @SuppressWarnings("unused")
     private void unbindEntityProvider(EntityProvider entityProvider){
-        /*TODO Might have been not tested*/
-        for(String providedEntity : entityProvider.getProvidedEntities()) {
-            String creatorName = resolutionMachine.eCreatorName(entityProvider, providedEntity);
+        mEntitiesByProvider.remove(entityProvider);
 
-            eCreatorsRequirements.remove(creatorName);
-            eProviderByCreatorName.remove(creatorName);
+        for(String providedEntity : entityProvider.getProvidedEntities()) {
+            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
+
+            mEntityCreatorsRequirements.remove(creatorName);
+            mEntityProviderByCreatorName.remove(creatorName);
 
             for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                if (eCreatorsByServices.containsKey(service)) {
-                    eCreatorsByServices.get(service).remove(creatorName);
+                if (mEntityCreatorsByService.containsKey(service)) {
+                    mEntityCreatorsByService.get(service).remove(creatorName);
                 }
             }
         }
@@ -225,5 +265,145 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
         if(ContextManager.logLevel>=1) {
             LOG.info("PROVIDER REMOVED: "+ entityProvider.getName());
         }
+    }
+
+    @Bind(id = "relationProviders")
+    @SuppressWarnings("unused")
+    private void bindRelationProvider(RelationProvider relationProvider){
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
+        if(logLevel>=1){
+            LOG.info("PROVIDER ADDED: "+ relationProvider.getName());
+        }
+
+        Set<String> providedRelations = relationProvider.getProvidedRelations();
+        mRelationsByProvider.put(relationProvider, providedRelations);
+
+        for(String providedRelation : providedRelations) {
+            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+
+            if(logLevel>=3){
+                LOG.info("RELATION: "+ providedRelation);
+                LOG.info("PROVIDING: "+ relationProvider.getPotentiallyProvidedRelationServices(providedRelation));
+                LOG.info("WITH REQUIREMENTS: "+ relationProvider.getPotentiallyRequiredServices(providedRelation));
+            }
+
+            mRelationCreatorsRequirements.put(creatorName, relationProvider.getPotentiallyRequiredServices(providedRelation));
+            mRelationProviderByCreatorName.put(creatorName, relationProvider);
+
+            for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
+                if (!mRelationCreatorsByService.containsKey(service)) {
+                    Set<String> relationProviderSubSet = new HashSet<>();
+                    relationProviderSubSet.add(creatorName);
+                    mRelationCreatorsByService.put(service, relationProviderSubSet);
+                } else {
+                    mRelationCreatorsByService.get(service).add(creatorName);
+                }
+            }
+        }
+    }
+
+    @Modified(id = "relationProviders")
+    @SuppressWarnings("unused")
+    private void modifyRelationProvider(RelationProvider relationProvider){
+        /*LogLevel*/
+        int logLevel = ContextManager.logLevel;
+        if(logLevel>=1) {
+            LOG.info("PROVIDER MODIFIED: "+ relationProvider.getName());
+        }
+
+        Set<String> newConfig = relationProvider.getProvidedRelations();
+        Set<String> oldConfig = Collections.emptySet();
+        if(mRelationsByProvider.containsKey(relationProvider)){
+            oldConfig = mRelationsByProvider.get(relationProvider);
+        }
+
+        Set<String> added   = new HashSet<>(newConfig);
+        Set<String> removed = new HashSet<>(oldConfig);
+        added.removeAll(oldConfig);
+        removed.removeAll(newConfig);
+
+        mRelationsByProvider.put(relationProvider, newConfig);
+
+        for(String providedRelation : added){
+            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+
+            if(logLevel>=3) {
+                LOG.info("ADDED:");
+                LOG.info("RELATION: " + providedRelation);
+                LOG.info("PROVIDING: " + relationProvider.getPotentiallyProvidedRelationServices(providedRelation));
+                LOG.info("WITH REQUIREMENTS: " + relationProvider.getPotentiallyRequiredServices(providedRelation));
+            }
+
+            mRelationCreatorsRequirements.put(creatorName, relationProvider.getPotentiallyRequiredServices(providedRelation));
+            mRelationProviderByCreatorName.put(creatorName, relationProvider);
+
+            for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
+                if (!mRelationCreatorsByService.containsKey(service)) {
+                    Set<String> relationProviderSubSet = new HashSet<>();
+                    relationProviderSubSet.add(creatorName);
+                    mRelationCreatorsByService.put(service, relationProviderSubSet);
+                } else {
+                    mRelationCreatorsByService.get(service).add(creatorName);
+                }
+            }
+        }
+
+        for(String providedRelation : removed){
+            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+
+            if(logLevel>=3) {
+                LOG.info("REMOVED:");
+                LOG.info("RELATION: " + providedRelation);
+            }
+
+            mRelationCreatorsRequirements.remove(creatorName);
+            mRelationProviderByCreatorName.remove(creatorName);
+
+            for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
+                if (mRelationCreatorsByService.containsKey(service)) {
+                    mRelationCreatorsByService.get(service).remove(creatorName);
+                }
+            }
+        }
+    }
+
+    @Unbind(id = "relationProviders")
+    @SuppressWarnings("unused")
+    private void unbindRelationProvider(RelationProvider relationProvider){
+        mRelationsByProvider.remove(relationProvider);
+
+        for(String providedRelation : relationProvider.getProvidedRelations()) {
+            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+
+            mRelationCreatorsRequirements.remove(creatorName);
+            mRelationProviderByCreatorName.remove(creatorName);
+
+            for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
+                if (mRelationCreatorsByService.containsKey(service)) {
+                    mRelationCreatorsByService.get(service).remove(creatorName);
+                }
+            }
+        }
+
+        if(ContextManager.logLevel>=1) {
+            LOG.info("PROVIDER REMOVED: "+ relationProvider.getName());
+        }
+    }
+
+    /*TODO MODIFY*/
+    @Override
+    public Set<String> getInstancesByCreator(String creator) {
+        Set<String> result = new HashSet<>();
+
+        if(mEntityProviderByCreatorName.containsKey(creator)){
+            result.addAll(mEntityProviderByCreatorName.get(creator).getInstances(Util.getProvidedItemFromCreatorName(creator),true));
+        }
+
+        if(mRelationProviderByCreatorName.containsKey(creator)){
+            result.addAll(mRelationProviderByCreatorName.get(creator).getInstances(Util.getProvidedItemFromCreatorName(creator),true));
+        }
+
+        return result;
     }
 }

@@ -13,23 +13,20 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.temp.generic;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.temp.generic.Resource;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
- * Interface of context internal manager
+ * Interface to react to changes in the resource model
  */
-public interface ContextInternalManager {
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
+interface ResourceListener {
+    void notifyAddingResources(Set<Resource> resources);
 
-    Runnable getContextResolutionMachine();
+    void notifyRemovingResources(Set<Resource> resources);
 
-    Set<String> getCurrentLookupFilter();
-
-    /*TODO MODIFY*/
-    Set<String> getInstancesByCreator(String creator);
+    /*TODO ADD THIS METHOD?*/
+//    void notifyModifyingResource(Resource resource);
 }

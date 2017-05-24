@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.temp.specific;
 
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPI;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.temp.generic.ContextMediationConfig;
 import fr.liglab.adele.icasa.context.manager.impl.temp.generic.ContextMediationSlice;
 
@@ -26,7 +26,7 @@ import java.util.*;
  */
 public final class ContextMediationConfigMap {
 //final class ContextMediationConfigMap {
-    Map<ContextAPI,ContextMediationConfig> contextMediationConfigMap;
+    Map<ContextAPIEnum,ContextMediationConfig> contextMediationConfigMap;
 
     /*TODO : IL MANQUE DES PARTIES DU SIMULATEUR !!! (Person, PresenceSimulatorModel...)*/
 
@@ -37,35 +37,35 @@ public final class ContextMediationConfigMap {
         ContextMediationSlice ctxtMedSlice;
 
         /*TODO : remplacer par un fichier xml ?*/
-        ContextMediationConfig ctxtMedBinaryLight = new ContextMediationConfig(ContextAPI.BinaryLight);
+        ContextMediationConfig ctxtMedBinaryLight = new ContextMediationConfig(ContextAPIEnum.BinaryLight);
         envProxies = new HashSet<>();
         envProxies.add(EnvProxy.SimulatedBinaryLightImpl);
         ctxtMedSlice = new ContextMediationSlice(null, envProxies);
         ctxtMedBinaryLight.addContextMediationSlice(ctxtMedSlice);
         contextMediationConfigMap.put(ctxtMedBinaryLight.getContextAPI(), ctxtMedBinaryLight);
 
-        ContextMediationConfig ctxtMedDimmerLight = new ContextMediationConfig(ContextAPI.DimmerLight);
+        ContextMediationConfig ctxtMedDimmerLight = new ContextMediationConfig(ContextAPIEnum.DimmerLight);
         envProxies = new HashSet<>();
         envProxies.add(EnvProxy.SimulatedDimmerLightImpl);
         ctxtMedSlice = new ContextMediationSlice(null, envProxies);
         ctxtMedDimmerLight.addContextMediationSlice(ctxtMedSlice);
         contextMediationConfigMap.put(ctxtMedDimmerLight.getContextAPI(), ctxtMedDimmerLight);
 
-        ContextMediationConfig ctxtMedPhotometer = new ContextMediationConfig(ContextAPI.Photometer);
+        ContextMediationConfig ctxtMedPhotometer = new ContextMediationConfig(ContextAPIEnum.Photometer);
         envProxies = new HashSet<>();
         envProxies.add(EnvProxy.SimulatedPhotometerImpl);
         ctxtMedSlice = new ContextMediationSlice(null, envProxies);
         ctxtMedPhotometer.addContextMediationSlice(ctxtMedSlice);
         contextMediationConfigMap.put(ctxtMedPhotometer.getContextAPI(), ctxtMedPhotometer);
 
-        ContextMediationConfig ctxtMedMomentOfTheDay = new ContextMediationConfig(ContextAPI.MomentOfTheDay);
+        ContextMediationConfig ctxtMedMomentOfTheDay = new ContextMediationConfig(ContextAPIEnum.MomentOfTheDay);
         abstractContextEntities = new HashSet<>();
         abstractContextEntities.add(AbstractContextEntities.MomentOfTheDaySimulatedImpl);
         ctxtMedSlice = new ContextMediationSlice(abstractContextEntities, null);
         ctxtMedMomentOfTheDay.addContextMediationSlice(ctxtMedSlice);
         contextMediationConfigMap.put(ctxtMedMomentOfTheDay.getContextAPI(), ctxtMedMomentOfTheDay);
 
-        ContextMediationConfig ctxtMedPresenceService = new ContextMediationConfig(ContextAPI.PresenceService);
+        ContextMediationConfig ctxtMedPresenceService = new ContextMediationConfig(ContextAPIEnum.PresenceService);
         abstractContextEntities = new HashSet<>();
         abstractContextEntities.add(AbstractContextEntities.PresenceServiceImpl);
         abstractContextEntities.add(AbstractContextEntities.ZoneImpl);
@@ -76,7 +76,7 @@ public final class ContextMediationConfigMap {
         contextMediationConfigMap.put(ctxtMedPresenceService.getContextAPI(), ctxtMedPresenceService);
     }
 
-    public Map<ContextAPI, ContextMediationConfig> getContextMediationConfigMap() {
+    public Map<ContextAPIEnum, ContextMediationConfig> getContextMediationConfigMap() {
         return contextMediationConfigMap;
     }
 }

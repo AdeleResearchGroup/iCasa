@@ -13,23 +13,26 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.temp.generic;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.temp.generic.EntityResource;
+import fr.liglab.adele.icasa.context.manager.api.temp.generic.RelationResource;
+import fr.liglab.adele.icasa.context.manager.api.temp.generic.Resource;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
- * Interface of context internal manager
+ * Interface to access and use information from goal model
  */
-public interface ContextInternalManager {
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
+public interface FlatResourceModelAccess {
 
-    Runnable getContextResolutionMachine();
+    Set<Resource> getResources();
 
-    Set<String> getCurrentLookupFilter();
+    Set<EntityResource> getEntitiesOfType(String type);
 
-    /*TODO MODIFY*/
-    Set<String> getInstancesByCreator(String creator);
+    Set<RelationResource> getRelationsOfType(String type);
+
+    Set<EntityResource> getEntities();
+
+    Set<RelationResource> getRelations();
 }

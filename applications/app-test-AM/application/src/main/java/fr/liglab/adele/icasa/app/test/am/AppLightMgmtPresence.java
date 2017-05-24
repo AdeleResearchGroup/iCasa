@@ -15,10 +15,6 @@
  */
 package fr.liglab.adele.icasa.app.test.am;
 
-import fr.liglab.adele.icasa.command.handler.Command;
-import fr.liglab.adele.icasa.command.handler.CommandProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIAppRegistration;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
