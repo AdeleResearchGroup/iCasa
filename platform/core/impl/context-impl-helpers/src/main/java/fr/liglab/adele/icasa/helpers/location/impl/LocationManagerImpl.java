@@ -37,9 +37,9 @@ public class LocationManagerImpl{
     @Requires(id = "locatedObjects",specification = LocatedObject.class,optional = true,proxy = false)
     List<LocatedObject> locatedObjects;
 
-    @Creator.Field(ZoneImpl.RELATION_CONTAINS) 	Creator.Relation<Zone,LocatedObject> containsCreator;
+    @Creator.Field(value = ZoneImpl.RELATION_CONTAINS, remote = true) 	Creator.Relation<Zone,LocatedObject> containsCreator;
 
-    @Creator.Field(LocatedObjectBehaviorProvider.IS_IN_RELATION) 	Creator.Relation<LocatedObject,Zone> isContainsCreator;
+    @Creator.Field(value = LocatedObjectBehaviorProvider.IS_IN_RELATION, remote = true) 	Creator.Relation<LocatedObject,Zone> isContainsCreator;
 
     @Bind(id = "zones")
     public synchronized void bindZone(Zone zone){

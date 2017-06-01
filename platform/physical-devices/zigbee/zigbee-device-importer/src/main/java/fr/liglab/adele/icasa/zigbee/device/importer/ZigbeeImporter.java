@@ -54,19 +54,19 @@ public class ZigbeeImporter extends AbstractImporterComponent {
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
     private String name;
 
-    private @Creator.Field Creator.Entity<ZigbeePhotometer> photometerFactory;
+    private @Creator.Field(remote = true) Creator.Entity<ZigbeePhotometer> photometerFactory;
 
-    private @Creator.Field Creator.Entity<ZigbeeBinaryLight> binaryLightFactory;
+    private @Creator.Field(remote = true) Creator.Entity<ZigbeeBinaryLight> binaryLightFactory;
 
-    private @Creator.Field Creator.Entity<ZigbeeMotionSensor> motionSensorFactory;
+    private @Creator.Field(remote = true) Creator.Entity<ZigbeeMotionSensor> motionSensorFactory;
 
-    private @Creator.Field Creator.Entity<ZigbeePowerSwitch> powerSwitchFactory;
+    private @Creator.Field(remote = true) Creator.Entity<ZigbeePowerSwitch> powerSwitchFactory;
 
-    private @Creator.Field Creator.Entity<ZigbeePushButton> pushButtonFactory;
+    private @Creator.Field(remote = true) Creator.Entity<ZigbeePushButton> pushButtonFactory;
 
-    private @Creator.Field Creator.Entity<ZigbeeThermometer> thermometerFactory;
+    private @Creator.Field(remote = true) Creator.Entity<ZigbeeThermometer> thermometerFactory;
 
-    private @Creator.Field Creator.Entity<ZigbeePresenceSensor> presenceSensorFactory;
+    private @Creator.Field(remote = true) Creator.Entity<ZigbeePresenceSensor> presenceSensorFactory;
 
     private static final Logger logger = LoggerFactory.getLogger(ZigbeeImporter.class);
 

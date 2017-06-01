@@ -55,7 +55,7 @@ final class LinkingLogic implements Runnable {
 
     @Override
     public void run() {
-        /*Attention aux multiples acces*/
+        /*Attention aux multiples access*/
 
         /*LogLevel*/
         int logLevel = ContextManager.logLevel;

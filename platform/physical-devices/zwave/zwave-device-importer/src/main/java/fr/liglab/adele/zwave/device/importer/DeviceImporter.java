@@ -224,29 +224,29 @@ public class DeviceImporter extends AbstractImporterComponent  {
 
 	private final Map<SupportedDeviceType, Creator.Entity<?>> openhabCreators;
 	
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroMotionSensor> 		openhabMotionSensorCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroMotionSensor> 		openhabMotionSensorCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroWallPlug> 			openhabWallPlugCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroWallPlug> 			openhabWallPlugCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroSmokeSensor> 		openhabSmokeSensorCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroSmokeSensor> 		openhabSmokeSensorCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroDoorWindowSensor> 	openhabDoorWindowSensorCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.FibaroDoorWindowSensor> 	openhabDoorWindowSensorCreator;
 
 
 	
 	private final Map<SupportedDeviceType, Creator.Entity<?>> zwave4jCreators;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroDoorWindowSensor>	zwave4jDoorWindowSensorCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroDoorWindowSensor>	zwave4jDoorWindowSensorCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroWallPlug> 			zwave4jWallPlugCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroWallPlug> 			zwave4jWallPlugCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroMotionSensor> 			zwave4jFibaroMotionSensorCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroMotionSensor> 			zwave4jFibaroMotionSensorCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroSmokeSensor> 			zwave4jFibaroSmokeSensorCreator;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroSmokeSensor> 			zwave4jFibaroSmokeSensorCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonRepeaterSlave> 			zwave4jAeonRepeaterSlave;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonRepeaterSlave> 			zwave4jAeonRepeaterSlave;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonMultiSensor> 			zwave4jAeonMultiSensor;
+	@Creator.Field(remote = true) Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonMultiSensor> 			zwave4jAeonMultiSensor;
 
 
 	@ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)

@@ -35,7 +35,7 @@ import java.util.Set;
 @Instantiate
 public class PersonProviderImpl implements PersonProvider {
 
-    @Creator.Field Creator.Entity<PersonImpl> personCreator;
+    @Creator.Field(remote = true) Creator.Entity<PersonImpl> personCreator;
 
     @Override
     public void createPerson(String personName, String personType) {

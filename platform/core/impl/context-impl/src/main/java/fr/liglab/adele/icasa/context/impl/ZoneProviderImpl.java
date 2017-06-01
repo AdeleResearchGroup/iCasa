@@ -35,7 +35,7 @@ import java.util.Set;
 @Instantiate(name = "ZoneProvider-0")
 public class ZoneProviderImpl implements ZoneProvider {
 
-	private @Creator.Field 	 Creator.Entity<ZoneImpl> creator;
+	private @Creator.Field(remote = true) 	 Creator.Entity<ZoneImpl> creator;
 
 	@Override
 	public void createZone(String id, int leftX, int topY, int bottomZ, int width, int height, int depth) {
