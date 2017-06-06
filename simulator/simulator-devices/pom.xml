@@ -67,6 +67,11 @@
 			<groupId>fr.liglab.adele.cream</groupId>
 			<artifactId>cream.core</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.freshness</groupId>
+            <artifactId>freshness.core</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -93,6 +98,11 @@
 						<artifactId>cream.ipojo.module</artifactId>
 						<version>${context.socm.version}</version>
 					</dependency>
+                    <dependency>
+                        <groupId>fr.liglab.adele.freshness</groupId>
+                        <artifactId>freshness.ipojo.module</artifactId>
+                        <version>${constraints.reactor.version}</version>
+                    </dependency>
 				</dependencies>
 				<executions>
 					<execution>

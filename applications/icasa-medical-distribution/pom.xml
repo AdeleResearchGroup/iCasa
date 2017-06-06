@@ -108,6 +108,11 @@
 			<artifactId>cream.runtime.facilities</artifactId>
 		</dependency>
 
+        <dependency>
+            <groupId>fr.liglab.adele.freshness</groupId>
+            <artifactId>freshness.runtime.facilities</artifactId>
+        </dependency>
+
 		<dependency>
 			<groupId>fr.liglab.adele.icasa.apps</groupId>
 			<artifactId>battery.monitoring</artifactId>

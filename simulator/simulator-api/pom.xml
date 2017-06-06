@@ -32,6 +32,10 @@
       <groupId>fr.liglab.adele.cream</groupId>
       <artifactId>cream.core</artifactId>
     </dependency>
+      <dependency>
+          <groupId>fr.liglab.adele.freshness</groupId>
+          <artifactId>freshness.core</artifactId>
+      </dependency>
   </dependencies>
 
   <build>

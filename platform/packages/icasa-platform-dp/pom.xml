@@ -26,6 +26,16 @@
         </dependency>
 
         <dependency>
+            <groupId>fr.liglab.adele.freshness</groupId>
+            <artifactId>freshness.core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.freshness</groupId>
+            <artifactId>freshness.model.runtime</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>

@@ -50,6 +50,7 @@ See the License for the specific language governing permissions and
         <jackson.version>2.4.4</jackson.version>
 
         <context.socm.version>0.1-SNAPSHOT</context.socm.version>
+        <constraints.reactor.version>0.1-SNAPSHOT</constraints.reactor.version>
     </properties>
 
     <developers>
@@ -430,6 +431,29 @@ See the License for the specific language governing permissions and
                 <groupId>fr.liglab.adele.cream</groupId>
                 <artifactId>cream.runtime.facilities</artifactId>
                 <version>${context.socm.version}</version>
+            </dependency>
+
+
+
+            <dependency>
+                <groupId>fr.liglab.adele.freshness</groupId>
+                <artifactId>freshness.core</artifactId>
+                <version>${constraints.reactor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.liglab.adele.freshness</groupId>
+                <artifactId>freshness.model.runtime</artifactId>
+                <version>${constraints.reactor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.liglab.adele.freshness</groupId>
+                <artifactId>freshness.ipojo.module</artifactId>
+                <version>${constraints.reactor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.liglab.adele.freshness</groupId>
+                <artifactId>freshness.runtime.facilities</artifactId>
+                <version>${constraints.reactor.version}</version>
             </dependency>
 
 

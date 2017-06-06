@@ -43,6 +43,10 @@
      <artifactId>cream.runtime.facilities</artifactId>
      </dependency>
        <dependency>
+           <groupId>fr.liglab.adele.freshness</groupId>
+           <artifactId>freshness.runtime.facilities</artifactId>
+       </dependency>
+       <dependency>
            <groupId>fr.liglab.adele.icasa</groupId>
            <artifactId>command.handler</artifactId>
            <version>${project.version}</version>
