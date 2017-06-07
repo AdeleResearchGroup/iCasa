@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.binary.light.follow.me;
+package fr.liglab.adele.icasa.freshness.scenario.application1;
 
 import fr.liglab.adele.freshness.facilities.ipojo.annotation.Freshness;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
@@ -28,16 +28,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component(name="LightFollowMeApplication")
+@Component(name="FreshnessApplication1")
 
 @Provides(properties= {
-        @StaticServiceProperty(name="icasa.application", type="String", value="Light.Follow.Me.Application", immutable=true)
+        @StaticServiceProperty(name="icasa.application", type="String", value="Freshness.Scenario.Application1", immutable=true)
 })
 
 @Instantiate
-public class LightFollowMeApplication {
+public class FreshnessApplication1 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LightFollowMeApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FreshnessApplication1.class);
 
     /** Component Lifecycle Method */
     @Invalidate

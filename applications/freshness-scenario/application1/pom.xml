@@ -12,7 +12,7 @@
   <modelVersion>4.0.0</modelVersion>
   <packaging>bundle</packaging>
   <groupId>fr.liglab.adele.icasa.apps</groupId>
-  <artifactId>binary.light.follow.me.application</artifactId>
+  <artifactId>freshness.scenario.application1</artifactId>
   <name>${productName} :: ${projectName}</name>
 
    <dependencies>
@@ -48,7 +48,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Private-Package>fr.liglab.adele.icasa.binary.light.follow.me</Private-Package>
+            <Private-Package>fr.liglab.adele.icasa.freshness.scenario.application1</Private-Package>
             <Export-Package></Export-Package>
           </instructions>
         </configuration>

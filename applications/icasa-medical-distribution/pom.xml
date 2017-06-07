@@ -118,6 +118,26 @@
 			<artifactId>battery.monitoring</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>binary.light.follow.me.application</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>freshness.scenario.application1</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>freshness.scenario.application2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
 	</dependencies>
 
 	<build>
