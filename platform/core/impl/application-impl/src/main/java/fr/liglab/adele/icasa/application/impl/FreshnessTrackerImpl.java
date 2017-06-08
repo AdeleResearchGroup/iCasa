@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.application.impl;
 
+import fr.liglab.adele.freshness.utils.FreshnessMapping;
 import fr.liglab.adele.icasa.Constants;
 import fr.liglab.adele.icasa.application.*;
 import fr.liglab.adele.icasa.service.scheduler.PeriodicRunnable;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,9 +42,9 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
     private final Object m_lock = new Object();
 
     public FreshnessTrackerImpl() {
-        logger.debug("Caching demands: verifying application status");
+        System.out.println("Caching demands: verifying application status");
         for (Application app : manager.getApplications()) {
-            logger.debug(app.getName() + ":" + app.getState());
+            System.out.println(app.getName() + ":" + app.getState());
         }
     }
 
@@ -51,7 +53,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
      */
     @Invalidate
     public void stop() {
-        logger.debug("Component cachingDemands is stopping... " + manager.getApplications().size());
+        System.out.println("Component cachingDemands is stopping... " + manager.getApplications().size());
     }
 
     /**
@@ -59,25 +61,25 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
      */
     @Validate
     public void start() {
-        logger.debug("Component cachingDemands is starting..." + manager.getApplications().size());
+        System.out.println("Component cachingDemands is starting..." + manager.getApplications().size());
         manager.addApplicationListener(this);
     }
 
     //listener que importa
     @Override
     public void addApplication(Application app) {
-        logger.debug("Caching demands: add application - " + app.getName() + " size: " + manager.getApplications().size());
+        System.out.println("Caching demands: add application - " + app.getName() + " size: " + manager.getApplications().size());
         computeDemands(manager.getApplications());
     }
 
     //listener que importa
     @Override
     public void removeApplication(Application app) {
-        logger.debug("Caching demands: rem application - " + app.getName() + " size: " + manager.getApplications().size());
+        System.out.println("Caching demands: rem application - " + app.getName() + " size: " + manager.getApplications().size());
         computeDemands(manager.getApplications());
     }
 
-//    @Override
+    @Override
     public void computeDemands(List<Application> applications) {
 
         //identify when an application is activate/deactivated
@@ -85,8 +87,13 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
                 .filter(app -> app.getState().equals(ApplicationState.STARTED))
                 .collect(Collectors.toList());
 
+        System.out.println(FreshnessMapping.applicationToDevices);
 
+    }
 
+    @Override
+    public Map<String, Map<String, Long>> demands() {
+        return FreshnessMapping.applicationToDevices;
     }
 
     @Override
@@ -105,7 +112,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
      */
     @Override
     public void run() {
-        logger.debug("Caching demands: verifying application status");
+        System.out.println("Caching demands: verifying application status");
         computeDemands(manager.getApplications());
     }
 

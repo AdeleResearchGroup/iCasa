@@ -34,6 +34,10 @@
           <artifactId>technical.services.api</artifactId>
           <version>${project.version}</version>
       </dependency>
+      <dependency>
+          <groupId>fr.liglab.adele.freshness</groupId>
+          <artifactId>freshness.core</artifactId>
+      </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.gogo.runtime</artifactId>

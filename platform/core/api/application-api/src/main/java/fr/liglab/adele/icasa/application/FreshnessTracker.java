@@ -16,6 +16,7 @@
 package fr.liglab.adele.icasa.application;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jhonnymertz on 06/06/17.
@@ -23,4 +24,6 @@ import java.util.List;
 public interface FreshnessTracker {
 
     void computeDemands(List<Application> applications);
+
+    Map<String, Map<String, Long>> demands();
 }
