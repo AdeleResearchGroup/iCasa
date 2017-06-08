@@ -21,7 +21,6 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
-import org.json.JSONArray;
 import org.wisdom.api.DefaultController;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
@@ -43,52 +42,39 @@ public class FreshnessController extends DefaultController {
     private FreshnessTracker freshnessTracker;
 
 
-    @Route(method = HttpMethod.GET, uri = "/freshness")
+    @Route(method = HttpMethod.GET, uri = "/")
     public Result applications() {
         return ok(getApplications()).as(MimeTypes.JSON);
     }
 
     /**
-     * Retrieves a zone.
+     * Retrieves an application demand.
      *
      * @param appId The ID of the zone to retrieve
      * @return The required zone
      */
-    @Route(method = HttpMethod.GET, uri = "/freshness/{appId}")
+    @Route(method = HttpMethod.GET, uri = "/{appId}")
     public Result getApplication(@Parameter("appId") String appId) {
         if (appId == null || appId.length() < 1) {
             return badRequest();
         }
 
-//        Application app = _applicationMgr.getApplication(appId);
-//
-//        if (app == null) {
+        for (String bundleApp : freshnessTracker.demands().keySet()) {
+            if (_applicationMgr.getApplicationOfBundle(bundleApp).getName().equals(appId)) {
+                return ok(freshnessTracker.demands().get(bundleApp));
+            }
+        }
         return notFound();
-//        } else {
-//            JSONObject appJSON = ApplicationJSONUtil.getApplicationJSON(app);
-//            return ok(appJSON.toString()).as(MimeTypes.JSON);
-//        }
     }
 
     /**
-     * Returns a JSON array containing all applications.
+     * Returns a JSON array containing all application demands.
      *
-     * @return a JSON array containing all applications.
+     * @return a JSON array containing all application demands.
      */
     private String getApplications() {
-        JSONArray currentApps = new JSONArray();
 
         return freshnessTracker.demands().toString();
 
-//        List<Application> apps = _applicationMgr.getApplications();
-//        currentApps.put(ApplicationJSONUtil.getEmptyApplication());//add at least one application: with NONE
-//        for (Application app : apps) {
-//            JSONObject appJSON = ApplicationJSONUtil.getApplicationJSON(app);
-//            if (appJSON==null) {
-//                continue;
-//            }
-//            currentApps.put(appJSON);
-//        }
-//        return currentApps.toString();
     }
 }
