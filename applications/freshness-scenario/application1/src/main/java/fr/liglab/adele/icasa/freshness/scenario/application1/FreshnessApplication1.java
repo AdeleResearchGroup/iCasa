@@ -16,126 +16,215 @@
 package fr.liglab.adele.icasa.freshness.scenario.application1;
 
 import fr.liglab.adele.freshness.facilities.ipojo.annotation.Freshness;
-import fr.liglab.adele.icasa.device.light.BinaryLight;
+import fr.liglab.adele.icasa.device.temperature.Cooler;
+import fr.liglab.adele.icasa.device.temperature.Heater;
+import fr.liglab.adele.icasa.device.temperature.Thermometer;
 import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
+import fr.liglab.adele.icasa.service.scheduler.PeriodicRunnable;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import javax.measure.Quantity;
+import javax.measure.quantity.Temperature;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
-@Component(name="FreshnessApplication1")
+@Component(name = "FreshnessApplication1")
 
-@Provides(properties= {
-        @StaticServiceProperty(name="icasa.application", type="String", value="Freshness.Scenario.Application1", immutable=true)
-})
-
+@Provides(properties = {
+        @StaticServiceProperty(name = "icasa.application", type = "String", value = "Freshness.Scenario.Application1", immutable = true)
+}, specifications = {PeriodicRunnable.class})
 @Instantiate
-public class FreshnessApplication1 {
+public class FreshnessApplication1 implements PeriodicRunnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(FreshnessApplication1.class);
 
-    /** Component Lifecycle Method */
+    /**
+     * The name of the LOCATION property
+     */
+    public static final String LOCATION_PROPERTY_NAME = "Location";
+
+    /**
+     * The name of the location for unknown value
+     */
+    public static final String LOCATION_UNKNOWN = "unknown";
+
+
+    private Map<String, Double> mapTemperatureTarget;
+
+    private Map<String, Boolean> mapManagementAuto;
+
+    private final Object m_lock;
+
+    private final Object m_Energylock;
+
+    private double maximumEnergyAllowed = 1;
+
+    public FreshnessApplication1() {
+        m_lock = new Object();
+        m_Energylock = new Object();
+        mapTemperatureTarget = new HashMap<String, Double>();
+        mapManagementAuto = new HashMap<String, Boolean>();
+
+        mapTemperatureTarget.put("kitchen", 288.15);
+        mapTemperatureTarget.put("livingroom", 291.15);
+        mapTemperatureTarget.put("bedroom", 293.15);
+        mapTemperatureTarget.put("bathroom", 296.15);
+
+        mapManagementAuto.put("kitchen", true);
+        mapManagementAuto.put("livingroom", true);
+        mapManagementAuto.put("bedroom", true);
+        mapManagementAuto.put("bathroom", true);
+    }
+
+    /**
+     * Component Lifecycle Method
+     */
     @Invalidate
     public void stop() {
 
     }
 
-    /** Component Lifecycle Method */
+    /**
+     * Component Lifecycle Method
+     */
     @Validate
     public void start() {
-        // do nothing
-    }
-
-    @Freshness(time=40)
-    @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
-    private List<BinaryLight> binaryLights;
-
-    @Freshness(time=35)
-    @Requires(id="presence",optional = false,specification = PresenceService.class)
-    private List<PresenceService> presenceServices;
-
-    @Bind(id="lights")
-    public void bindBinaryLight(BinaryLight binaryLight){
-        if (computePresenceInZone(getPresenceService(((LocatedObject)binaryLight).getZone()))){
-            binaryLight.turnOn();
-        }else {
-            binaryLight.turnOff();
-        }
 
     }
 
-    @Modified(id="lights")
-    public void modifiedBinaryLight(BinaryLight binaryLight){
-        if (computePresenceInZone(getPresenceService(((LocatedObject)binaryLight).getZone()))){
-            binaryLight.turnOn();
-        }else {
-            binaryLight.turnOff();
-        }
+    @Freshness(time = 40)
+    @Requires(id = "thermometers", optional = true, specification = Thermometer.class, filter = "(!(locatedobject.object.zone=" + LocatedObject.LOCATION_UNKNOWN + "))", proxy = false)
+    private List<Thermometer> thermometers;
+
+    @Freshness(time = 35)
+    @Requires(id = "heaters", optional = true, specification = Heater.class, filter = "(!(locatedobject.object.zone=" + LocatedObject.LOCATION_UNKNOWN + "))", proxy = false)
+    private List<Heater> heaters;
+
+    @Freshness(time = 35)
+    @Requires(id = "coolers", optional = true, specification = Cooler.class, filter = "(!(locatedobject.object.zone=" + LocatedObject.LOCATION_UNKNOWN + "))", proxy = false)
+    private List<Cooler> coolers;
+
+    @Override
+    public long getPeriod() {
+        return 1;
     }
 
-
-    @Unbind(id="lights")
-    public void unbindBinaryLight(BinaryLight binaryLight){
-        binaryLight.turnOff();
+    @Override
+    public TimeUnit getUnit() {
+        return TimeUnit.MINUTES;
     }
 
-    @Bind(id="presence")
-    public void bindPresenceService(PresenceService presenceService){
-        managelight(presenceService);
-    }
-
-    @Modified(id="presence")
-    public void modifiedPresenceService(PresenceService presenceService){
-        managelight(presenceService);
-    }
-
-    @Unbind(id="presence")
-    public void unbindPresenceService(PresenceService presenceService){
-        String zoneName = presenceService.sensePresenceIn();
-        Set<BinaryLight> lightInZone = getLightInZone(zoneName);
-        lightInZone.stream().forEach((light) ->light.turnOff() );
-    }
-
-    private void managelight(PresenceService presenceService){
-        String zoneName = presenceService.sensePresenceIn();
-        Set<BinaryLight> lightInZone = getLightInZone(zoneName);
-        if (presenceService.havePresenceInZone().equals(PresenceService.PresenceSensing.YES)){
-            lightInZone.stream().forEach((light) ->light.turnOn() );
-        }else {
-            lightInZone.stream().forEach((light) ->light.turnOff() );
-        }
-    }
-
-    private boolean computePresenceInZone(PresenceService service){
-        if (service == null)return false;
-        return service.havePresenceInZone().equals(PresenceService.PresenceSensing.YES);
-    }
-
-    private PresenceService getPresenceService(String zone){
-        if (zone == null)return null;
-        for (PresenceService service : presenceServices){
-            if (zone.equals(service.sensePresenceIn())){
-                return service;
+    @Override
+    public void run() {
+        synchronized (m_lock) {
+            Map<String, Double> temperatureMap = new HashMap<String, Double>();
+            temperatureMap = temperatureAverageInAllZone();
+            for (String zoneId : temperatureMap.keySet()) {
+                if (mapManagementAuto.get(zoneId)) {
+                    double tempInZone = temperatureMap.get(zoneId);
+                    synchronized (m_Energylock) {
+                        if (tempInZone > mapTemperatureTarget.get(zoneId) + 1) {
+                            Set<Cooler> coolerSet = coolerInZone(zoneId);
+                            for (Cooler cooler : coolerSet) {
+                                cooler.setPowerLevel(maximumEnergyAllowed);
+                            }
+                            Set<Heater> heaterSet = heaterInZone(zoneId);
+                            for (Heater heater : heaterSet) {
+                                heater.setPowerLevel(0);
+                            }
+                        } else if (tempInZone < mapTemperatureTarget.get(zoneId) - 1) {
+                            Set<Heater> heaterSet = heaterInZone(zoneId);
+                            for (Heater heater : heaterSet) {
+                                heater.setPowerLevel(maximumEnergyAllowed);
+                            }
+                            Set<Cooler> coolerSet = coolerInZone(zoneId);
+                            for (Cooler cooler : coolerSet) {
+                                cooler.setPowerLevel(0);
+                            }
+                        } else if (tempInZone < mapTemperatureTarget.get(zoneId) - 0.5) {
+                            Set<Heater> heaterSet = heaterInZone(zoneId);
+                            for (Heater heater : heaterSet) {
+                                heater.setPowerLevel(0.03);
+                            }
+                            Set<Cooler> coolerSet = coolerInZone(zoneId);
+                            for (Cooler cooler : coolerSet) {
+                                cooler.setPowerLevel(0);
+                            }
+                        } else if (tempInZone > mapTemperatureTarget.get(zoneId) + 0.5) {
+                            Set<Cooler> coolerSet = coolerInZone(zoneId);
+                            for (Cooler cooler : coolerSet) {
+                                cooler.setPowerLevel(0.03);
+                            }
+                            Set<Heater> heaterSet = heaterInZone(zoneId);
+                            for (Heater heater : heaterSet) {
+                                heater.setPowerLevel(0);
+                            }
+                        } else {
+                            Set<Heater> heaterSet = heaterInZone(zoneId);
+                            Set<Cooler> coolerSet = coolerInZone(zoneId);
+                            for (Heater heater : heaterSet) {
+                                heater.setPowerLevel(0);
+                            }
+                            for (Cooler cooler : coolerSet) {
+                                cooler.setPowerLevel(0);
+                            }
+                        }
+                    }
+                }
             }
         }
-        return null;
     }
 
-    private Set<BinaryLight> getLightInZone(String zone){
-
-        Set<BinaryLight> lightInZone = new HashSet<>();
-        if (zone == null){
-            return lightInZone;
+    private Map<String, Double> temperatureAverageInAllZone() {
+        Map<String, Double> returnMap = new HashMap<String, Double>();
+        Map<String, Integer> countMap = new HashMap<String, Integer>();
+        for (Thermometer thermometer : thermometers) {
+            Quantity<Temperature> tempValue = thermometer.getTemperature();
+            String thermometerLocation = ((LocatedObject) thermometer).getZone();
+            if (!thermometerLocation.equals(LOCATION_UNKNOWN)) {
+                if (returnMap.containsKey(thermometerLocation)) {
+                    double tempSum = returnMap.get(thermometerLocation) + tempValue.getValue().doubleValue();
+                    returnMap.put(thermometerLocation, tempSum);
+                    int count = countMap.get(thermometerLocation);
+                    count += 1;
+                    countMap.put(thermometerLocation, count);
+                } else {
+                    returnMap.put(thermometerLocation, tempValue.getValue().doubleValue());
+                    countMap.put(thermometerLocation, 1);
+                }
+            }
         }
-        lightInZone = binaryLights.stream().filter((light) ->
-                zone.equals(((LocatedObject)light).getZone())
-        ).collect(Collectors.toSet());
-        return lightInZone;
+
+        for (String location : returnMap.keySet()) {
+            double tempSum = returnMap.get(location);
+            int count = countMap.get(location);
+            returnMap.put(location, (tempSum / count));
+        }
+        return returnMap;
+    }
+
+    private Set<Cooler> coolerInZone(String zoneId) {
+        Set<Cooler> coolerSet = new HashSet<Cooler>();
+        for (Cooler cooler : coolers) {
+            String coolerLocation = ((LocatedObject) cooler).getZone();
+            if (coolerLocation.equals(zoneId)) {
+                coolerSet.add(cooler);
+            }
+        }
+        return coolerSet;
+    }
+
+    private Set<Heater> heaterInZone(String zoneId) {
+        Set<Heater> heaterSet = new HashSet<Heater>();
+        for (Heater heater : heaters) {
+            String heaterLocation = ((LocatedObject) heater).getZone();
+            if (heaterLocation.equals(zoneId)) {
+                heaterSet.add(heater);
+            }
+        }
+        return heaterSet;
     }
 
 }
