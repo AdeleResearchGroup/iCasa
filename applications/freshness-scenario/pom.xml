@@ -31,7 +31,6 @@
 
 	<modules>
 		<module>application1</module>
-        <module>application2</module>
 	</modules>
    <build>
       <plugins>
