@@ -51,11 +51,11 @@ public class FreshnessApplication2 {
         // do nothing
     }
 
-    @Freshness(time=40)
+    @Freshness(time=60)
     @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
     private List<BinaryLight> binaryLights;
 
-    @Freshness(time=35)
+    @Freshness(time=65)
     @Requires(id="presence",optional = false,specification = PresenceService.class)
     private List<PresenceService> presenceServices;
 

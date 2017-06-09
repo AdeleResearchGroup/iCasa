@@ -59,12 +59,10 @@ public class FreshnessController extends DefaultController {
             return badRequest();
         }
 
-        for (String bundleApp : freshnessTracker.demands().keySet()) {
-            if (_applicationMgr.getApplicationOfBundle(bundleApp).getName().equals(appId)) {
-                return ok(freshnessTracker.demands().get(bundleApp));
-            }
-        }
-        return notFound();
+        Object result = freshnessTracker.getApplicationDemands(appId);
+        if (result == null)
+            return notFound();
+        else return ok();
     }
 
     /**
@@ -74,7 +72,7 @@ public class FreshnessController extends DefaultController {
      */
     private String getApplications() {
 
-        return freshnessTracker.demands().toString();
+        return freshnessTracker.getDemands().toString();
 
     }
 }

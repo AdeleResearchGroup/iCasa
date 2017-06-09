@@ -15,15 +15,11 @@
  */
 package fr.liglab.adele.icasa.application;
 
-import java.util.List;
 import java.util.Map;
 
-/**
- * Created by jhonnymertz on 06/06/17.
- */
 public interface FreshnessTracker {
 
-    void computeDemands(List<Application> applications);
+    Map<String, Long> getDemands();
 
-    Map<String, Map<String, Long>> demands();
+    Map<String, Long> getApplicationDemands(String appId);
 }

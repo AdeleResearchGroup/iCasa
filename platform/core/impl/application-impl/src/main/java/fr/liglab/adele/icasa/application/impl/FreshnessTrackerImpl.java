@@ -23,11 +23,11 @@ import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component(name = "Caching-Demand-Impl")
 @Provides
@@ -41,8 +41,12 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 
     private final Object m_lock = new Object();
 
+    private Map<String, Long> demands;
+
     public FreshnessTrackerImpl() {
-        System.out.println("Caching demands: verifying application status");
+        System.out.println("Caching appsToDevices: verifying application status");
+
+        demands = new HashMap<>();
         for (Application app : manager.getApplications()) {
             System.out.println(app.getName() + ":" + app.getState());
         }
@@ -68,31 +72,106 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
     //listener que importa
     @Override
     public void addApplication(Application app) {
-        System.out.println("Caching demands: add application - " + app.getName() + " size: " + manager.getApplications().size());
-        computeDemands(manager.getApplications());
+        System.out.println("Caching appsToDevices: add application - " + app.getName() + " size: " + manager.getApplications().size());
+        computeDemands();
     }
 
     //listener que importa
     @Override
     public void removeApplication(Application app) {
-        System.out.println("Caching demands: rem application - " + app.getName() + " size: " + manager.getApplications().size());
-        computeDemands(manager.getApplications());
+        System.out.println("Caching appsToDevices: rem application - " + app.getName() + " size: " + manager.getApplications().size());
+
+        FreshnessMapping.applicationToDevices.keySet()
+                .stream().filter(bundleApp -> manager.getApplicationOfBundle(bundleApp).getId().equals(app.getId()))
+                .forEach(FreshnessMapping.applicationToDevices::remove);
+
+        computeDemands();
+    }
+
+    private void computeDemands() {
+
+        synchronized (m_lock) {
+//TODO applications sometimes are load but not listed as applications,
+// such apps are load into pom.xml and not via bundle in applications folder
+//            demands = new HashMap<>();
+//            for (Application app : getActiveApplications()) {
+//
+//                Map<String, Long> appDemands = getApplicationDemands(app.getId());
+//                for (String device : appDemands.keySet()) {
+//                    Long deviceDemand = appDemands.get(device);
+//
+//                    //if device not mapped, create an entry
+//                    if (demands.get(device) == null) {
+//                        demands.put(device, deviceDemand);
+//                    } else {
+//
+//                        //if already exists a device demand, updates with the most critical freshness
+//                        if (demands.get(device) > deviceDemand) {
+//                            demands.put(device, deviceDemand);
+//                        }
+//                    }
+//                }
+//            }
+
+            demands = new HashMap<>();
+            for (String app : getAllApplicationDemands().keySet()) {
+
+                Map<String, Long> appDemands = getApplicationDemands(app);
+                for (String device : appDemands.keySet()) {
+                    Long deviceDemand = appDemands.get(device);
+
+                    //if device not mapped, create an entry
+                    if (demands.get(device) == null) {
+                        demands.put(device, deviceDemand);
+                    } else {
+
+                        //if already exists a device demand, updates with the most critical freshness
+                        if (demands.get(device) > deviceDemand) {
+                            demands.put(device, deviceDemand);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
-    public void computeDemands(List<Application> applications) {
+    public Map<String, Long> getDemands() {
+        computeDemands();
+        return demands;
+    }
 
+
+    //not tested
+    private List<Application> getActiveApplications() {
         //identify when an application is activate/deactivated
-        List<Application> activeApplications = applications.stream()
+        List<Application> activeApplications = manager.getApplications().stream()
                 .filter(app -> app.getState().equals(ApplicationState.STARTED))
                 .collect(Collectors.toList());
 
-        System.out.println(FreshnessMapping.applicationToDevices);
-
+        //TODO not return the active applicaitons
+        return manager.getApplications();
     }
 
+
+    //not tested
     @Override
-    public Map<String, Map<String, Long>> demands() {
+    public Map<String, Long> getApplicationDemands(String appIdOrBundle) {
+
+        //searching for bundle
+        if (FreshnessMapping.applicationToDevices.get(appIdOrBundle) != null)
+            return FreshnessMapping.applicationToDevices.get(appIdOrBundle);
+
+        //searching for app id
+        for (String bundleApp : FreshnessMapping.applicationToDevices.keySet()) {
+            if (manager.getApplicationOfBundle(bundleApp).getId().equals(appIdOrBundle)) {
+                return FreshnessMapping.applicationToDevices.get(bundleApp);
+            }
+        }
+        return null;
+    }
+
+    public Map<String, Map<String, Long>> getAllApplicationDemands() {
         return FreshnessMapping.applicationToDevices;
     }
 
@@ -103,7 +182,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 
     @Override
     public TimeUnit getUnit() {
-        return TimeUnit.SECONDS;
+        return TimeUnit.MINUTES;
     }
 
     /**
@@ -112,8 +191,8 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
      */
     @Override
     public void run() {
-        System.out.println("Caching demands: verifying application status");
-        computeDemands(manager.getApplications());
+        System.out.println("Caching appsToDevices: verifying application status");
+        computeDemands();
     }
 
     @Override
