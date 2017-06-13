@@ -42,37 +42,49 @@ public class FreshnessController extends DefaultController {
     private FreshnessTracker freshnessTracker;
 
 
-    @Route(method = HttpMethod.GET, uri = "/")
+    @Route(method = HttpMethod.GET, uri = "/applications")
     public Result applications() {
-        return ok(getApplications()).as(MimeTypes.JSON);
+        return ok(freshnessTracker.getApplicationDemands()).as(MimeTypes.JSON);
     }
 
     /**
      * Retrieves an application demand.
      *
-     * @param appId The ID of the zone to retrieve
-     * @return The required zone
+     * @param appId The ID of the application to retrieve
+     * @return The required application
      */
-    @Route(method = HttpMethod.GET, uri = "/{appId}")
+    @Route(method = HttpMethod.GET, uri = "/applications/{appId}")
     public Result getApplication(@Parameter("appId") String appId) {
         if (appId == null || appId.length() < 1) {
             return badRequest();
         }
 
-        Object result = freshnessTracker.getApplicationDemands(appId);
+        Object result = freshnessTracker.getApplicationDemand(appId);
         if (result == null)
             return notFound();
         else return ok();
     }
 
+    @Route(method = HttpMethod.GET, uri = "/devices")
+    public Result devices() {
+        return ok(freshnessTracker.getDeviceDemands()).as(MimeTypes.JSON);
+    }
+
     /**
-     * Returns a JSON array containing all application demands.
+     * Retrieves an application demand.
      *
-     * @return a JSON array containing all application demands.
+     * @param deviceId The ID of the device to retrieve
+     * @return The required device
      */
-    private String getApplications() {
+    @Route(method = HttpMethod.GET, uri = "/devices/{deviceId}")
+    public Result getDevice(@Parameter("deviceId") String deviceId) {
+        if (deviceId == null || deviceId.length() < 1) {
+            return badRequest();
+        }
 
-        return freshnessTracker.getDemands().toString();
-
+        Object result = freshnessTracker.getDeviceDemand(deviceId);
+        if (result == null)
+            return notFound();
+        else return ok();
     }
 }
