@@ -20,6 +20,7 @@ import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
+import fr.liglab.adele.icasa.context.manager.impl.generic.GoalListener;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ import java.util.*;
 @Component (immediate = true, publicFactory = false)
 @Instantiate
 @Provides
-public class ContextInternalManagerImpl implements ContextInternalManager {
+public class ContextInternalManagerImpl implements ContextInternalManager, GoalListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextInternalManagerImpl.class);
 
@@ -75,6 +76,13 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
     /*Initialization*/
     public ContextInternalManagerImpl(){
         resolutionMachine = new LinkingLogic(this);
+    }
+
+    @Override
+    public void notifyGoalChange(Map<String, ContextAPIConfig> goals) {
+        /*TODO does not work on event: interlock problem*/
+//        configureGoals(goals);
+//        resolutionMachine.run();
     }
 
     @Override
@@ -406,4 +414,6 @@ public class ContextInternalManagerImpl implements ContextInternalManager {
 
         return result;
     }
+
+
 }

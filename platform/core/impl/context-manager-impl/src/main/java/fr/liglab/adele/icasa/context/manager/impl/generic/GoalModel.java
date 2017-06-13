@@ -32,6 +32,7 @@ public class GoalModel implements ContextDependencyRegistration, GoalModelAccess
     private static Map<String, ContextAPIConfig> contextGoalByApp = new HashMap<>();
 
     //TODO A VERIFIER / A COMPLETER (PARCEQUEFRANCHEMENTCESTPASASSEZREFLECHI)
+    /*UNUSED*/
     private Map<UUID, Goal> goals = new HashMap<>();
 
     /*EVENT LISTENERS*/

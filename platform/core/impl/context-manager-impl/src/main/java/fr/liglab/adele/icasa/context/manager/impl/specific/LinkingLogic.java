@@ -49,19 +49,16 @@ final class LinkingLogic implements Runnable {
     /*Models to context internal manager*/
     private Set<String> lookupFilter = new HashSet<>();
 
-
-
     /*Linking Logic models*/
     private Set<ContextAPIEnum> goals = new HashSet<>();
+    private Set<String> nonActivableGoals = new HashSet<>();
+    private boolean mediationTreesOk = false;
     private static Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
     private Set<String> creatorsToActivate = new HashSet<>();
     private Set<String> nonActivableServices = new HashSet<>();
-    private Set<String> nonActivableGoals = new HashSet<>();
-    private boolean mediationTreesOk = false;
 
 
-
-    /*Initialization*/
+    /*Constructor: binds to other objects*/
     protected LinkingLogic(ContextInternalManagerImpl contextInternalManager) {
         LinkingLogic.contextInternalManager = contextInternalManager;
     }
@@ -79,6 +76,7 @@ final class LinkingLogic implements Runnable {
         contextInternalManager.setLookupFilter(lookupFilter);
     }
 
+    /*TODO trigger on events (for now it doesn't work because of interlocked callbacks)*/
     private synchronized void resolutionAlgorithm() {
         /*Update goal model*/
         updateGoals();
@@ -104,8 +102,6 @@ final class LinkingLogic implements Runnable {
         /*Verification*/
         goalServicesAvailabilityCheck();
     }
-
-
 
     private void updateGoals(){
         /*App, set de services en config optimale*/
@@ -157,8 +153,6 @@ final class LinkingLogic implements Runnable {
         eCreatorsRequirements = contextInternalManager.geteCreatorsRequirements();
         eProviderByCreatorName = contextInternalManager.geteProviderByCreatorName();
     }
-
-
 
     private void buildMediationTree(){
         nonActivableServices = new HashSet<>();

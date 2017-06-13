@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Interface to react to changes in the goal model
  */
-interface GoalListener {
+public interface GoalListener {
 
     void notifyGoalChange(Map<String, ContextAPIConfig> goals);
 }
