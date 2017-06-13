@@ -44,8 +44,11 @@ public class AppManager {
     private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);
 
     /*App state*/
+    /*TODO*/
     private static AppStateEnum appState = AppStateEnum.INIT;
     private static AppStateEnum previousAppState = null;
+    private boolean isReconfiguring = false;
+    private boolean needToBeReconfigured = true;
 
     /*Interaction with context*/
     private static boolean registered;
@@ -230,13 +233,27 @@ public class AppManager {
     }
 
     /*App state change with context reconfiguration*/
+    /*TODO (ORDER)*/
     private void appReconfiguration(){
+        /*TODO lock system doesn't work*/
+//        if(isReconfiguring){
+//            needToBeReconfigured = true;
+//            return;
+//        }
+//
+//        isReconfiguring = true;
         if (appState != previousAppState){
-            contextAPIAppRegistration();
-            appInternalReconfiguration();
             previousAppState = appState;
+            appInternalReconfiguration();
             LOG.info("APP STATE: "+appState.toString());
+            contextAPIAppRegistration();
         }
+//        isReconfiguring = false;
+//
+//        if(needToBeReconfigured){
+//            needToBeReconfigured = false;
+//            appReconfiguration();
+//        }
     }
     private void appUnregistration(){
         contextDependencyRegistration.unregisterContextDependencies(appId);
