@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<behavior startdate="25/12/2012-00:00:00" factor="1440">
+
+	<!-- Zone Section -->
+
+    <create-zone id="kitchen"  leftX="410" topY="370" X-Length="245" Y-Length="210" />
+    <create-zone id="livingroom" leftX="410" topY="28" X-Length="245" Y-Length="350" />
+    <create-zone id="bedroom"  leftX="55" topY="370" X-Length="259" Y-Length="210" />
+    <create-zone id="bathroom"  leftX="55" topY="20" X-Length="260" Y-Length="350" />
+
+    <create-device id="Pres-B1255D-S" type="iCasa.PresenceSensor" />
+    <create-device id="Pres-B1255D-A" type="iCasa.PresenceSensor" />
+    <create-device id="Pres-B1255D-B" type="iCasa.PresenceSensor" />
+    <create-device id="Pres-B1255D-C" type="iCasa.PresenceSensor" />
+
+    <move-device-zone deviceId="Pres-B1255D-S" zoneId="livingroom" />
+    <move-device-zone deviceId="Pres-B1255D-A" zoneId="bedroom" />
+    <move-device-zone deviceId="Pres-B1255D-B" zoneId="bathroom" />
+    <move-device-zone deviceId="Pres-B1255D-C" zoneId="kitchen" />
+
+	<!-- Person Section -->
+
+	<create-person id="Aurelie" type="Grandmother" />
+
+
+	<create-person id="Paul" type="Man" />
+	
+	<move-person-zone  personId="Aurelie" zoneId="bedroom"/>
+	<move-person-zone  personId="Paul" zoneId="bedroom"/>
+	<delay value="8" unit="h" />
+	
+    <move-person-zone  personId="Aurelie" zoneId="bathroom"/>
+    <move-person-zone  personId="Paul" zoneId="livingroom"/>
+	<delay value="30" unit="m" />
+
+    <move-person-zone  personId="Aurelie" zoneId="kitchen"/>
+    <move-person-zone  personId="Paul" zoneId="kitchen"/>
+	<delay value="30" unit="m" />
+
+	<move-person-zone  personId="Aurelie" zoneId="livingroom"/>
+	<move-person-zone  personId="Paul" zoneId="livingroom"/>
+    <delay value="11" unit="h" />
+
+    <move-person-zone  personId="Aurelie" zoneId="kitchen"/>
+    <move-person-zone  personId="Paul" zoneId="kitchen"/>
+
+    <delay value="1" unit="h" />
+
+     <move-person-zone  personId="Aurelie" zoneId="livingroom"/>
+     <move-person-zone  personId="Paul" zoneId="bathroom"/>
+     <delay value="1" unit="h" />
+
+     <move-person-zone  personId="Aurelie" zoneId="bedroom"/>
+     <move-person-zone  personId="Paul" zoneId="bedroom"/>
+     <delay value="2" unit="h" />
+
+
+      <!-- Creating a Thermometer, a Heater and a Cooler-->
+      <create-device id="Ther-A3654Q-S" type="iCasa.Thermometer" />
+      <create-device id="Heat-A4894S-S" type="iCasa.Heater" />
+      <create-device id="Cool-A7496W-S" type="iCasa.Cooler" />
+
+      <!-- Moving the devices to a given room-->
+      <move-device-zone deviceId="Heat-A4894S-S" zoneId="livingroom" />
+      <move-device-zone deviceId="Ther-A3654Q-S" zoneId="livingroom" />
+      <move-device-zone deviceId="Cool-A7496W-S" zoneId="livingroom" />
+
+      <!-- Creating a Thermometer, a Heater and a Cooler-->
+      <create-device id="Ther-A3654Q-A" type="iCasa.Thermometer" />
+      <create-device id="Heat-A4894S-A" type="iCasa.Heater" />
+      <create-device id="Cool-A7496W-A" type="iCasa.Cooler" />
+
+      <!-- Moving the devices to a given room-->
+      <move-device-zone deviceId="Heat-A4894S-A" zoneId="bedroom" />
+      <move-device-zone deviceId="Ther-A3654Q-A" zoneId="bedroom" />
+      <move-device-zone deviceId="Cool-A7496W-A" zoneId="bedroom" />
+
+
+      <!-- Creating a Thermometer, a Heater and a Cooler-->
+      <create-device id="Ther-A3654Q-B" type="iCasa.Thermometer" />
+      <create-device id="Heat-A4894S-B" type="iCasa.Heater" />
+      <create-device id="Cool-A7496W-B" type="iCasa.Cooler" />
+
+      <!-- Moving the devices to a given room-->
+      <move-device-zone deviceId="Heat-A4894S-B" zoneId="bathroom" />
+      <move-device-zone deviceId="Ther-A3654Q-B" zoneId="bathroom" />
+      <move-device-zone deviceId="Cool-A7496W-B" zoneId="bathroom" />
+
+      <!-- Creating a Thermometer, a Heater and a Cooler-->
+      <create-device id="Ther-A3654Q-C" type="iCasa.Thermometer" />
+      <create-device id="Heat-A4894S-C" type="iCasa.Heater" />
+      <create-device id="Cool-A7496W-C" type="iCasa.Cooler" />
+
+      <!-- Moving the devices to a given room-->
+      <move-device-zone deviceId="Heat-A4894S-C" zoneId="kitchen" />
+      <move-device-zone deviceId="Ther-A3654Q-C" zoneId="kitchen" />
+      <move-device-zone deviceId="Cool-A7496W-C" zoneId="kitchen" />
+
+
+</behavior>

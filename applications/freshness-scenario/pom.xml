@@ -31,6 +31,11 @@
 
 	<modules>
 		<module>application1</module>
+        <module>application2</module>
+        <!--<module>application3</module>-->
+        <module>packages1</module>
+        <module>packages2</module>
+        <!--<module>packages3</module>-->
 	</modules>
    <build>
       <plugins>

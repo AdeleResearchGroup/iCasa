@@ -30,15 +30,15 @@ import javax.measure.quantity.Temperature;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Component(name = "FreshnessApplication1")
+@Component(name = "FreshnessApplication2")
 
 @Provides(properties = {
-        @StaticServiceProperty(name = "icasa.application", type = "String", value = "Freshness.Scenario.Application1", immutable = true)
+        @StaticServiceProperty(name = "icasa.application", type = "String", value = "Freshness.Scenario.Application2", immutable = true)
 }, specifications = {PeriodicRunnable.class})
 @Instantiate
-public class FreshnessApplication1 implements PeriodicRunnable {
+public class FreshnessApplication2 implements PeriodicRunnable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FreshnessApplication1.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FreshnessApplication2.class);
 
     /**
      * The name of the LOCATION property
@@ -61,7 +61,7 @@ public class FreshnessApplication1 implements PeriodicRunnable {
 
     private double maximumEnergyAllowed = 1;
 
-    public FreshnessApplication1() {
+    public FreshnessApplication2() {
         m_lock = new Object();
         m_Energylock = new Object();
         mapTemperatureTarget = new HashMap<String, Double>();
@@ -135,6 +135,7 @@ public class FreshnessApplication1 implements PeriodicRunnable {
     public void unbindCooler(Cooler cooler) {
 
     }
+
 
     @Override
     public long getPeriod() {
