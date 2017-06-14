@@ -41,10 +41,14 @@ public class FreshnessController extends DefaultController {
     @Requires
     private FreshnessTracker freshnessTracker;
 
-
     @Route(method = HttpMethod.GET, uri = "/applications")
     public Result applications() {
         return ok(freshnessTracker.getApplicationDemands()).as(MimeTypes.JSON);
+    }
+
+    @Route(method = HttpMethod.GET, uri = "/annotations")
+    public Result annotations() {
+        return ok(freshnessTracker.getAllApplicationDemandsMapped()).as(MimeTypes.JSON);
     }
 
     /**

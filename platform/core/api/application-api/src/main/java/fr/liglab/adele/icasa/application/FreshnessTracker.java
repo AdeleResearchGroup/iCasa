@@ -25,4 +25,6 @@ public interface FreshnessTracker {
 
     DeviceFreshnessDemand getDeviceDemand(String deviceSerialNumber);
     List<DeviceFreshnessDemand> getDeviceDemands();
+
+    Map<String, Map<String, Long>> getAllApplicationDemandsMapped();
 }
