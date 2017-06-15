@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<behavior factor="1">
+
+    <set-app-property applicationId="actimetrics" name="Username" value="Aurelie" type="String" />
+
+</behavior>

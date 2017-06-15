@@ -13,13 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.freshness.scenario.application1;
+package fr.liglab.adele.icasa.freshness.scenario.application2;
 
 import fr.liglab.adele.freshness.facilities.ipojo.annotation.Freshness;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
 import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
-import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.service.scheduler.PeriodicRunnable;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Temperature;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component(name = "FreshnessApplication2")
@@ -40,20 +39,7 @@ public class FreshnessApplication2 implements PeriodicRunnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(FreshnessApplication2.class);
 
-    /**
-     * The name of the LOCATION property
-     */
-    public static final String LOCATION_PROPERTY_NAME = "Location";
-
-    /**
-     * The name of the location for unknown value
-     */
-    public static final String LOCATION_UNKNOWN = "unknown";
-
-
-    private Map<String, Double> mapTemperatureTarget;
-
-    private Map<String, Boolean> mapManagementAuto;
+    private final double temperatureTarget;
 
     private final Object m_lock;
 
@@ -64,18 +50,8 @@ public class FreshnessApplication2 implements PeriodicRunnable {
     public FreshnessApplication2() {
         m_lock = new Object();
         m_Energylock = new Object();
-        mapTemperatureTarget = new HashMap<String, Double>();
-        mapManagementAuto = new HashMap<String, Boolean>();
 
-        mapTemperatureTarget.put("kitchen", 288.15);
-        mapTemperatureTarget.put("livingroom", 291.15);
-        mapTemperatureTarget.put("bedroom", 293.15);
-        mapTemperatureTarget.put("bathroom", 296.15);
-
-        mapManagementAuto.put("kitchen", true);
-        mapManagementAuto.put("livingroom", true);
-        mapManagementAuto.put("bedroom", true);
-        mapManagementAuto.put("bathroom", true);
+        temperatureTarget = 288.15;
     }
 
     /**
@@ -94,52 +70,43 @@ public class FreshnessApplication2 implements PeriodicRunnable {
 
     }
 
-    @Freshness(time = 40)
-    @Requires(id = "thermometers", optional = true, specification = Thermometer.class, filter = "(!(locatedobject.object.zone=" + LocatedObject.LOCATION_UNKNOWN + "))", proxy = false)
+    @Freshness(time = 600)
+    @Requires(id = "thermometers", optional = true, specification = Thermometer.class, filter = "(locatedobject.object.zone=wineHouse)", proxy = false)
     private List<Thermometer> thermometers;
 
-    @Freshness(time = 35)
-    @Requires(id = "heaters", optional = true, specification = Heater.class, filter = "(!(locatedobject.object.zone=" + LocatedObject.LOCATION_UNKNOWN + "))", proxy = false)
+    @Requires(id = "heaters", optional = true, specification = Heater.class, filter = "(locatedobject.object.zone=wineHouse)", proxy = false)
     private List<Heater> heaters;
 
-    @Freshness(time = 35)
-    @Requires(id = "coolers", optional = true, specification = Cooler.class, filter = "(!(locatedobject.object.zone=" + LocatedObject.LOCATION_UNKNOWN + "))", proxy = false)
+    @Requires(id = "coolers", optional = true, specification = Cooler.class, filter = "(locatedobject.object.zone=wineHouse)", proxy = false)
     private List<Cooler> coolers;
 
     @Bind(id = "thermometers")
     public void bindThermometer(Thermometer thermometer) {
-
     }
 
     @Unbind(id = "thermometers")
     public void unbindThermometer(Thermometer thermometer) {
-
     }
 
     @Bind(id = "heaters")
     public void bindHeater(Heater heater) {
-
     }
 
     @Unbind(id = "heaters")
     public void unbindHeater(Heater heater) {
-
     }
 
     @Bind(id = "coolers")
     public void bindCooler(Cooler cooler) {
-
     }
 
     @Unbind(id = "coolers")
     public void unbindCooler(Cooler cooler) {
-
     }
-
 
     @Override
     public long getPeriod() {
-        return 1;
+        return 10;
     }
 
     @Override
@@ -150,112 +117,54 @@ public class FreshnessApplication2 implements PeriodicRunnable {
     @Override
     public void run() {
         synchronized (m_lock) {
-            Map<String, Double> temperatureMap = new HashMap<String, Double>();
-            temperatureMap = temperatureAverageInAllZone();
-            for (String zoneId : temperatureMap.keySet()) {
-                if (mapManagementAuto.get(zoneId)) {
-                    double tempInZone = temperatureMap.get(zoneId);
-                    synchronized (m_Energylock) {
-                        if (tempInZone > mapTemperatureTarget.get(zoneId) + 1) {
-                            Set<Cooler> coolerSet = coolerInZone(zoneId);
-                            for (Cooler cooler : coolerSet) {
-                                cooler.setPowerLevel(maximumEnergyAllowed);
-                            }
-                            Set<Heater> heaterSet = heaterInZone(zoneId);
-                            for (Heater heater : heaterSet) {
-                                heater.setPowerLevel(0);
-                            }
-                        } else if (tempInZone < mapTemperatureTarget.get(zoneId) - 1) {
-                            Set<Heater> heaterSet = heaterInZone(zoneId);
-                            for (Heater heater : heaterSet) {
-                                heater.setPowerLevel(maximumEnergyAllowed);
-                            }
-                            Set<Cooler> coolerSet = coolerInZone(zoneId);
-                            for (Cooler cooler : coolerSet) {
-                                cooler.setPowerLevel(0);
-                            }
-                        } else if (tempInZone < mapTemperatureTarget.get(zoneId) - 0.5) {
-                            Set<Heater> heaterSet = heaterInZone(zoneId);
-                            for (Heater heater : heaterSet) {
-                                heater.setPowerLevel(0.03);
-                            }
-                            Set<Cooler> coolerSet = coolerInZone(zoneId);
-                            for (Cooler cooler : coolerSet) {
-                                cooler.setPowerLevel(0);
-                            }
-                        } else if (tempInZone > mapTemperatureTarget.get(zoneId) + 0.5) {
-                            Set<Cooler> coolerSet = coolerInZone(zoneId);
-                            for (Cooler cooler : coolerSet) {
-                                cooler.setPowerLevel(0.03);
-                            }
-                            Set<Heater> heaterSet = heaterInZone(zoneId);
-                            for (Heater heater : heaterSet) {
-                                heater.setPowerLevel(0);
-                            }
-                        } else {
-                            Set<Heater> heaterSet = heaterInZone(zoneId);
-                            Set<Cooler> coolerSet = coolerInZone(zoneId);
-                            for (Heater heater : heaterSet) {
-                                heater.setPowerLevel(0);
-                            }
-                            for (Cooler cooler : coolerSet) {
-                                cooler.setPowerLevel(0);
-                            }
-                        }
+            double tempInZone = getAverageTemperature();
+            synchronized (m_Energylock) {
+                if (tempInZone > temperatureTarget + 1) {
+                    for (Cooler cooler : coolers) {
+                        cooler.setPowerLevel(maximumEnergyAllowed);
+                    }
+                    for (Heater heater : heaters) {
+                        heater.setPowerLevel(0);
+                    }
+                } else if (tempInZone < temperatureTarget - 1) {
+                    for (Heater heater : heaters) {
+                        heater.setPowerLevel(maximumEnergyAllowed);
+                    }
+                    for (Cooler cooler : coolers) {
+                        cooler.setPowerLevel(0);
+                    }
+                } else if (tempInZone < temperatureTarget - 0.5) {
+                    for (Heater heater : heaters) {
+                        heater.setPowerLevel(0.03);
+                    }
+                    for (Cooler cooler : coolers) {
+                        cooler.setPowerLevel(0);
+                    }
+                } else if (tempInZone > temperatureTarget + 0.5) {
+                    for (Cooler cooler : coolers) {
+                        cooler.setPowerLevel(0.03);
+                    }
+                    for (Heater heater : heaters) {
+                        heater.setPowerLevel(0);
+                    }
+                } else {
+                    for (Heater heater : heaters) {
+                        heater.setPowerLevel(0);
+                    }
+                    for (Cooler cooler : coolers) {
+                        cooler.setPowerLevel(0);
                     }
                 }
             }
         }
     }
 
-    private Map<String, Double> temperatureAverageInAllZone() {
-        Map<String, Double> returnMap = new HashMap<String, Double>();
-        Map<String, Integer> countMap = new HashMap<String, Integer>();
+    public double getAverageTemperature() {
+        double tempSum = 0;
         for (Thermometer thermometer : thermometers) {
             Quantity<Temperature> tempValue = thermometer.getTemperature();
-            String thermometerLocation = ((LocatedObject) thermometer).getZone();
-            if (!thermometerLocation.equals(LOCATION_UNKNOWN)) {
-                if (returnMap.containsKey(thermometerLocation)) {
-                    double tempSum = returnMap.get(thermometerLocation) + tempValue.getValue().doubleValue();
-                    returnMap.put(thermometerLocation, tempSum);
-                    int count = countMap.get(thermometerLocation);
-                    count += 1;
-                    countMap.put(thermometerLocation, count);
-                } else {
-                    returnMap.put(thermometerLocation, tempValue.getValue().doubleValue());
-                    countMap.put(thermometerLocation, 1);
-                }
-            }
+            tempSum += tempValue.getValue().doubleValue();
         }
-
-        for (String location : returnMap.keySet()) {
-            double tempSum = returnMap.get(location);
-            int count = countMap.get(location);
-            returnMap.put(location, (tempSum / count));
-        }
-        return returnMap;
+        return tempSum / thermometers.size();
     }
-
-    private Set<Cooler> coolerInZone(String zoneId) {
-        Set<Cooler> coolerSet = new HashSet<Cooler>();
-        for (Cooler cooler : coolers) {
-            String coolerLocation = ((LocatedObject) cooler).getZone();
-            if (coolerLocation.equals(zoneId)) {
-                coolerSet.add(cooler);
-            }
-        }
-        return coolerSet;
-    }
-
-    private Set<Heater> heaterInZone(String zoneId) {
-        Set<Heater> heaterSet = new HashSet<Heater>();
-        for (Heater heater : heaters) {
-            String heaterLocation = ((LocatedObject) heater).getZone();
-            if (heaterLocation.equals(zoneId)) {
-                heaterSet.add(heater);
-            }
-        }
-        return heaterSet;
-    }
-
 }

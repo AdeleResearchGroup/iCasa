@@ -48,6 +48,11 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>command.handler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -58,7 +63,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Private-Package>fr.liglab.adele.icasa.freshness.scenario.application1</Private-Package>
+                        <!--<Private-Package>fr.liglab.adele.icasa.freshness.scenario.application1</Private-Package>-->
                         <Export-Package>{local-packages}</Export-Package>
                     </instructions>
                 </configuration>

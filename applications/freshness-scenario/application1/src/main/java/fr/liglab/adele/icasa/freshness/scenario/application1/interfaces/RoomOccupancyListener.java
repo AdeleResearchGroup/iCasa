@@ -1,4 +1,4 @@
-package fr.liglab.adele.icasa.freshness.scenario.application1.occupancy;
+package fr.liglab.adele.icasa.freshness.scenario.application1.interfaces;
 
 /**
  *
@@ -11,7 +11,7 @@ public interface RoomOccupancyListener {
      * @param room
      *           room where it happened
      */
-    void occupancyCrossDownThreshold(String room, String user);
+    void occupancyCrossDownThreshold(String room);
 
     /**
      * Notify the listener that roomOccupancy cross up the threshold
@@ -19,5 +19,5 @@ public interface RoomOccupancyListener {
      * @param room
      *           room where it happened
      */
-    void occupancyCrossUpThreshold(String room, String user);
+    void occupancyCrossUpThreshold(String room);
 }

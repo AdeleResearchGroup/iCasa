@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<behavior factor="1">
+
+	<!-- Zone Section -->
+	
+	<create-zone  id ="corridor" leftX="333" topY="137" bottomZ="0" X-Length="146" Y-Length="40" Z-Length="100"/>
+
+    <create-zone  id="toilets" leftX="430" topY="14" bottomZ="0" X-Length="49" Y-Length="117" Z-Length="100"/>
+
+    <create-zone  id ="livingroom" leftX ="239" topY ="182" bottomZ ="0" X-Length ="211" Y-Length ="183" Z-Length ="100"/>
+
+    <create-zone  id="bathroom" leftX="334" topY="15" bottomZ="0" X-Length="88" Y-Length="115" Z-Length="100"/>
+
+    <create-zone  id="bedroom" leftX="45" topY="181" bottomZ="0" X-Length="187" Y-Length="184" Z-Length="100"/>
+
+    <create-zone  id="hall" leftX="485" topY="16" bottomZ="0" X-Length="125" Y-Length="161" Z-Length="100"/>
+
+    <create-zone  id="kitchen" leftX="456" topY="183" bottomZ="0" X-Length="152" Y-Length="182" Z-Length="100"/>
+
+    <create-zone  id="office" leftX="189" topY="16" bottomZ="0" X-Length="136" Y-Length="161" Z-Length="100"/>
+
+	<!-- Device Section -->
+	
+	<create-device id="PresenceSensor-21e626cc4a" type="iCasa.PresenceSensor" />
+	<move-device-zone deviceId="PresenceSensor-21e626cc4a" zoneId="kitchen" />
+	<set-access-right applicationId="habits.monitoring" deviceId="PresenceSensor-21e626cc4a" value="total" />
+
+	<create-device id="PushButton-900e4c1add" type="iCasa.PushButton" />
+	<move-device-zone deviceId="PushButton-900e4c1add" zoneId="toilets" />
+	<set-access-right applicationId="habits.monitoring" deviceId="PushButton-900e4c1add" value="total" />
+
+	<create-device id="PresenceSensor-a0cf45951e" type="iCasa.PresenceSensor" />
+	<move-device-zone deviceId="PresenceSensor-a0cf45951e" zoneId="livingroom" />
+	<set-access-right applicationId="habits.monitoring" deviceId="PresenceSensor-a0cf45951e" value="total" />
+
+	<create-device id="PushButton-406533ab33" type="iCasa.PushButton" />
+	<move-device-zone deviceId="PushButton-406533ab33" zoneId="office" />
+	<set-access-right applicationId="habits.monitoring" deviceId="PushButton-406533ab33" value="total" />
+
+	<create-device id="MotionSensor-6a194f2754" type="iCasa.MotionSensor" />
+	<move-device-zone deviceId="MotionSensor-6a194f2754" zoneId="bedroom" />
+	<set-access-right applicationId="habits.monitoring" deviceId="MotionSensor-6a194f2754" value="total" />
+
+	<create-device id="MotionSensor-28bb0ff25c" type="iCasa.MotionSensor" />
+	<move-device-zone deviceId="MotionSensor-28bb0ff25c" zoneId="livingroom" />
+	<set-access-right applicationId="habits.monitoring" deviceId="MotionSensor-28bb0ff25c" value="total" />
+
+	<create-device id="PushButton-9bfa4666cf" type="iCasa.PushButton" />
+	<move-device-zone deviceId="PushButton-9bfa4666cf" zoneId="bathroom" />
+	<set-access-right applicationId="habits.monitoring" deviceId="PushButton-9bfa4666cf" value="total" />
+
+	<create-device id="MotionSensor-21dc5f4b69" type="iCasa.MotionSensor" />
+	<move-device-zone deviceId="MotionSensor-21dc5f4b69" zoneId="kitchen" />
+	<set-access-right applicationId="habits.monitoring" deviceId="MotionSensor-21dc5f4b69" value="total"/>
+
+	<!-- Person Section -->
+
+	<create-person id="Aurelie" type="Grandmother" />
+	
+	<delay value="3" unit="s" />
+    <move-person-zone  personId="Aurelie" zoneId="bedroom"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="livingroom"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="kitchen"/>
+	<delay value="4" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="corridor"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="toilets"/>
+	<set-device-property deviceId="PushButton-900e4c1add" property="pushButton.pushAndHold" value="true" type="B" />
+	<delay value="2" unit="s" />
+	<set-device-property deviceId="PushButton-900e4c1add" property="pushButton.pushAndHold" value="false" type="B" />
+	<delay value="4" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="bathroom"/>
+	<set-device-property deviceId="PushButton-9bfa4666cf" property="pushButton.pushAndHold" value="true" type="B" />
+	<delay value="2" unit="s" />
+	<set-device-property deviceId="PushButton-9bfa4666cf" property="pushButton.pushAndHold" value="false" type="B" />
+	<delay value="4" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="corridor"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="hall"/>
+    <delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="corridor"/>
+	<delay value="2" unit="s" />
+    <move-person-zone  personId="Aurelie" zoneId="livingroom"/>
+	<delay value="4" unit="s" />
+    <move-person-zone  personId="Aurelie" zoneId="bedroom"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="livingroom"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="corridor"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="hall"/>
+    <delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="corridor"/>
+	<delay value="2" unit="s" />
+    <move-person-zone  personId="Aurelie" zoneId="office"/>
+	<set-device-property deviceId="PushButton-406533ab33" property="pushButton.pushAndHold" value="true" type="B" />
+	<delay value="2" unit="s" />
+	<set-device-property deviceId="PushButton-406533ab33" property="pushButton.pushAndHold" value="false" type="B" />
+	<delay value="4" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="corridor"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="livingroom"/>
+	<delay value="2" unit="s" />
+	<move-person-zone  personId="Aurelie" zoneId="bedroom"/>
+	<delay value="4" unit="s" />
+	
+	<!-- cleanup -->
+	<reset-context />
+	
+</behavior>

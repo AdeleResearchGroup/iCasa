@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<list>
+   <map>
+      <string name="id">Aurelie</string>
+      <string name="name">Aurelie</string>
+      <string name="description">Aurelie House</string>
+      <string name="gatewayURL">http://localhost:9000</string>
+      <string name="imgFile">aurelie.png</string>
+      <string name="libs">default</string>
+   </map>
+</list>
+

@@ -47,7 +47,7 @@
         <module>self-star</module>
         <module>homeLive</module>
         <module>icasa-teaching-distribution-with-apps</module>-->
-        <module>icasa-medical-distribution</module>
+        <module>icasa-freshness-distribution</module>
     </modules>
 
     <build>

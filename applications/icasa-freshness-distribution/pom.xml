@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2010-2011 Université Joseph Fourier Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Project parent -->
+	<parent>
+		<groupId>fr.liglab.adele.icasa</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.2.7-SNAPSHOT</version>
+		<relativePath>../../parent</relativePath>
+	</parent>
+
+	<!-- Project coordinates -->
+	<artifactId>icasa.freshness.distribution</artifactId>
+	<packaging>osgi-distribution</packaging>
+	<name>${productName} :: ${projectName}</name>
+
+	<!-- Project dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>icasa.dashboard.distribution</artifactId>
+			<version>${project.version}</version>
+			<type>osgi-distribution</type>
+		</dependency>
+		<!--<dependency> <groupId>fr.liglab.adele.icasa.apps</groupId> <artifactId>actimetrics.dashboard</artifactId> 
+			<version>${project.version}</version> <type>osgi-distribution</type> </dependency> 
+			<dependency> <groupId>fr.liglab.adele.icasa.apps</groupId> <artifactId>light.follow.me.with.photometer.dp</artifactId> 
+			<version>${project.version}</version> <type>deployment-package</type> </dependency> 
+			<dependency> <groupId>fr.liglab.adele.icasa</groupId> <artifactId>philips.hue.dp</artifactId> 
+			<version>${project.version}</version> <type>deployment-package</type> </dependency> -->
+
+		<!--Fuschia Dep -->
+		<dependency>
+			<groupId>org.ow2.chameleon.fuchsia</groupId>
+			<artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
+			<version>0.0.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+			<artifactId>fuchsia-proxies-utils</artifactId>
+			<version>0.0.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+			<artifactId>org.ow2.chameleon.fuchsia.discovery.filebased</artifactId>
+			<version>0.0.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+			<artifactId>fuchsia-gogo-shell</artifactId>
+			<version>0.0.5-SNAPSHOT</version>
+		</dependency>
+
+		<!-- PORT COM -->
+		<dependency>
+			<groupId>com.neuronrobotics</groupId>
+			<artifactId>nrjavaserial</artifactId>
+			<version>3.12.1</version>
+		</dependency>
+
+		<!--ZIGBEE <dependency> <groupId>fr.liglab.adele.icasa</groupId> <artifactId>zigbee.driver.api</artifactId> 
+			<version>${project.version}</version> </dependency> <dependency> <groupId>fr.liglab.adele.icasa</groupId> 
+			<artifactId>zigbee.driver.impl</artifactId> <version>${project.version}</version> 
+			</dependency> <dependency> <groupId>fr.liglab.adele.icasa</groupId> <artifactId>zigbee.device.discovery</artifactId> 
+			<version>${project.version}</version> </dependency> <dependency> <groupId>fr.liglab.adele.icasa</groupId> 
+			<artifactId>zigbee.device.importer</artifactId> <version>${project.version}</version> 
+			</dependency> <dependency> <groupId>fr.liglab.adele.icasa</groupId> <artifactId>zigbee.device.fuchsia.set.up</artifactId> 
+			<version>${project.version}</version> </dependency> -->
+
+		<!--ZWAVE -->
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>zwave-device-importer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.zgmnkv</groupId>
+			<artifactId>zwave4j.osgi</artifactId>
+			<version>0.3</version>
+		</dependency>
+
+		<!--SIMULATOR -->
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>simulator.web.instance</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!--ORange Remote -->
+		<dependency>
+			<groupId>fr.liglab.adele.icasa.apps</groupId>
+			<artifactId>orange.webcom.remote</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.liglab.adele.cream</groupId>
+			<artifactId>cream.runtime.facilities</artifactId>
+		</dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.freshness</groupId>
+            <artifactId>freshness.runtime.facilities</artifactId>
+        </dependency>
+
+		<dependency>
+			<groupId>fr.liglab.adele.icasa.apps</groupId>
+			<artifactId>battery.monitoring</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>binary.light.follow.me.application</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>freshness.scenario.application1</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.icasa.apps</groupId>
+            <artifactId>freshness.scenario.application2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+	</dependencies>
+
+	<build>
+	
+		<resources>
+			<resource>
+				<directory>zwave</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		
+		<plugins>
+
+			<plugin>
+				<groupId>fr.liglab.adele.common</groupId>
+				<artifactId>maven-osgi-distribution-plugin</artifactId>
+				<configuration>
+					<flattenDP>false</flattenDP>
+					<defaultOutputDirectory>applications</defaultOutputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.github.zgmnkv</groupId>
+									<artifactId>zwave4j</artifactId>
+									<version>0.3</version>
+									<type>zip</type>
+									<classifier>ozw_config</classifier>
+									<outputDirectory>zwave/conf/zwave4j</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>zwave</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>all</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>upload-snapshot</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>upload-single</goal>
+								</goals>
+								<configuration>
+									<serverId>icasa-deploy-cloudbees-snapshot</serverId>
+									<fromFile>${project.build.directory}/${project.artifactId}-${project.version}.zip</fromFile>
+									<url>https://repository-icasa.forge.cloudbees.com/snapshot</url>
+									<toFile>fr/liglab/adele/icasa/${project.artifactId}/${project.version}/${project.artifactId}-${project.version}.zip</toFile>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+</project>
