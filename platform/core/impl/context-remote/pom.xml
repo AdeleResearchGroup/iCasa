@@ -31,6 +31,11 @@
       <artifactId>context.api</artifactId>
       <version>${project.version}</version>
     </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>application.api</artifactId>
+          <version>${project.version}</version>
+      </dependency>
     <dependency>
         <groupId>org.wisdom-framework</groupId>
         <artifactId>wisdom-api</artifactId>

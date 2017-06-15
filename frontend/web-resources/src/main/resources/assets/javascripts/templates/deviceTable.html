@@ -48,6 +48,9 @@
             <th>
                 <span data-bind="text: $root.getLocaleMessage('Location')"></span>
             </th>
+            <th>
+                <span data-bind="text: $root.getLocaleMessage('Freshness')"></span>
+            </th>
         </tr>
     </thead>
     <tbody id="filteredDevicesTable" data-bind="foreach: $root.filteredDevices()">
@@ -56,6 +59,7 @@
             <td><img class="deviceIcon" data-bind="attr: { src: imgSrc }, click: $root.showDeviceWindow "></img></td>
             <td><a data-bind="text: name, click: $root.showDeviceWindow"/></td>
             <td data-bind="text: location"></td>
+            <td data-bind="text: freshness"></td>
         </tr>
     </tbody>
 </table>

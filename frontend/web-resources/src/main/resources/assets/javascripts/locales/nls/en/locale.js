@@ -70,6 +70,7 @@ define({
     "Grant.access":"Grant Access",
     "Type":"Type",
     "Location":"Location",
+    "Freshness":"Freshness",
     "Denied":"Denied",
     "Granted":"Granted",
     "Map":"Map",

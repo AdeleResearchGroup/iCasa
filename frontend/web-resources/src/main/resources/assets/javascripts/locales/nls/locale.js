@@ -70,6 +70,7 @@ define({
         "Grant.access":"Autoriser l'accès",
         "Type":"Catégorie",
         "Location":"Emplacement",
+        "Freshness":"Fraîcheur",
         "Denied":"Refusé",
         "Granted":"Autorisé",
         "Map":"Plan",

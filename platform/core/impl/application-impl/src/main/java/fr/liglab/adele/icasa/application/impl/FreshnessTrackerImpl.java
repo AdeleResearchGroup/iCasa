@@ -28,7 +28,6 @@ import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
 import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
-import fr.liglab.adele.icasa.service.scheduler.PeriodicRunnable;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -40,15 +39,13 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
-@Component(name = "Caching-Demand-Impl")
+@Component(name = "Freshness-Demand-Impl")
 @Provides
-@Instantiate(name = "Caching-Demand-Impl-0")
-public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracker, PeriodicRunnable {
+@Instantiate(name = "Freshness-Demand-Impl-0")
+public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracker { //, PeriodicRunnable {
 
-    protected static Logger logger = LoggerFactory.getLogger(Constants.ICASA_LOG + ".caching");
+    protected static Logger logger = LoggerFactory.getLogger(Constants.ICASA_LOG + ".freshness");
 
     @Requires
     ApplicationManager manager;
@@ -89,14 +86,11 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 
     public FreshnessTrackerImpl(BundleContext context) {
         _context = context;
-
-        System.out.println("Caching appsToDevices: verifying application status");
-
         appDemands = new ArrayList<>();
         deviceDemands = new ArrayList<>();
-        for (Application app : manager.getApplications()) {
-            System.out.println(app.getName() + ":" + app.getState());
-        }
+//        for (Application app : manager.getApplications()) {
+//            System.out.println(app.getName() + ":" + app.getState());
+//        }
     }
 
     /**
@@ -104,7 +98,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
      */
     @Invalidate
     public void stop() {
-        System.out.println("Component cachingDemands is stopping... " + manager.getApplications().size());
+        System.out.println("Component freshnessDemands is stopping... ");
     }
 
     /**
@@ -112,26 +106,8 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
      */
     @Validate
     public void start() {
-        System.out.println("Component cachingDemands is starting..." + manager.getApplications().size());
+        System.out.println("Component freshnessDemands is starting...");
         manager.addApplicationListener(this);
-    }
-
-    //listener que importa
-    @Override
-    public void addApplication(Application app) {
-        System.out.println("Caching appsToDevices: add application - " + app.getName() + " size: " + manager.getApplications().size());
-        computeDemands();
-    }
-
-    //listener que importa
-    @Override
-    public void removeApplication(Application app) {
-        System.out.println("Caching appsToDevices: rem application - " + app.getName() + " size: " + manager.getApplications().size());
-
-        FreshnessMapping.applicationToDevices.keySet()
-                .stream().filter(bundleApp -> manager.getApplicationOfBundle(bundleApp).getId().equals(app.getId()))
-                .forEach(FreshnessMapping.applicationToDevices::remove);
-
         computeDemands();
     }
 
@@ -179,6 +155,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
             }
 
             //logic to get devices that are not being used by any application:
+            //TODO identify devices that are not used and those which do not have freshness constraints
 
             List<GenericDevice> devices = new ArrayList<>();
             devices.addAll(binaryLights);
@@ -274,8 +251,6 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
                         if (scr.getProperty("genericdevice.device.serialNumber") == null)
                             continue;
 
-                        System.out.println("Serial: " + scr.getProperty("genericdevice.device.serialNumber"));
-
                         //available properties: [batteryobservable.batteryLevel, context.entity.id, factory.context.entity.spec, factory.name, genericdevice.device.serialNumber, instance.name, locatedobject.object.position.x, locatedobject.object.position.y, locatedobject.object.zone, objectClass, service.bundleid, service.id, service.scope, simulateddevice.simulated.device.type]
                         DeviceFreshnessDemand deviceDemand = new DeviceFreshnessDemand(device,
                                 scr.getProperty("genericdevice.device.serialNumber").toString(),
@@ -317,7 +292,9 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
     //not tested
     @Override
     public ApplicationFreshnessDemand getApplicationDemand(String appIdOrBundle) {
-        computeDemands();
+        if (appDemands.isEmpty())
+            computeDemands();
+
         for (ApplicationFreshnessDemand appDemand : appDemands) {
             if (appDemand.getAppBundle().equals(appIdOrBundle) || manager.getApplicationOfBundle(appDemand.getAppBundle()).getId().equals(appIdOrBundle))
                 return appDemand;
@@ -333,7 +310,9 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 
     @Override
     public DeviceFreshnessDemand getDeviceDemand(String deviceSerialNumber) {
-        computeDemands();
+        if (deviceDemands.isEmpty())
+            computeDemands();
+
         for (DeviceFreshnessDemand deviceDemand : deviceDemands) {
             if (deviceDemand.getDeviceSerial().equals(deviceSerialNumber)) return deviceDemand;
         }
@@ -347,63 +326,87 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
     }
 
     //not tested, additional bundles are not always conveyed as applications
-    private List<Application> getActiveApplications() {
-        //identify when an application is activate/deactivated
-        List<Application> activeApplications = manager.getApplications().stream()
-                .filter(app -> app.getState().equals(ApplicationState.STARTED))
-                .collect(Collectors.toList());
-
-        //TODO not returning the active applications
-        return manager.getApplications();
-    }
+//    private List<Application> getActiveApplications() {
+//        //identify when an application is activate/deactivated
+//        List<Application> activeApplications = manager.getApplications().stream()
+//                .filter(app -> app.getState().equals(ApplicationState.STARTED))
+//                .collect(Collectors.toList());
+//
+//        //TODO not returning the active applications
+//        return manager.getApplications();
+//    }
 
     @Override
     public Map<String, Map<String, Long>> getAllApplicationDemandsMapped() {
         return FreshnessMapping.applicationToDevices;
     }
 
-    @Override
-    public long getPeriod() {
-        return 1;
-    }
+//    @Override
+//    public long getPeriod() {
+//        return 1;
+//    }
+//
+//    @Override
+//    public TimeUnit getUnit() {
+//        return TimeUnit.MINUTES;
+//    }
+//
+//    /**
+//     * From time to time, check whether an application was enabled or disabled
+//     * TODO: a better solution would be tracking application status changes in an event listener
+//     */
+//    @Override
+//    public void run() {
+//        System.out.println("Caching appsToDevices: verifying application status");
+//        computeDemands();
+//    }
 
-    @Override
-    public TimeUnit getUnit() {
-        return TimeUnit.MINUTES;
-    }
-
-    /**
-     * From time to time, check whether an application was enabled or disabled
-     * TODO: a better solution would be tracking application status changes in an event listener
+    /*
+     * Listeners to important changes in the context
      */
+
+
     @Override
-    public void run() {
-        System.out.println("Caching appsToDevices: verifying application status");
+    public void addApplication(Application app) {
+//        System.out.println("Freshness appsToDevices: add application - " + app.getName() + " size: " + manager.getApplications().size());
+        computeDemands();
+    }
+
+    @Override
+    public void removeApplication(Application app) {
+//        System.out.println("Caching appsToDevices: rem application - " + app.getName() + " size: " + manager.getApplications().size());
+
+        for (Bundle bundle : app.getBundles()) {
+            cleanBundleMapped(bundle.getSymbolicName());
+        }
         computeDemands();
     }
 
     @Override
     public void deploymentPackageAdded(Application app, String symbolicName) {
-
+        computeDemands();
     }
 
     @Override
     public void deploymentPackageRemoved(Application app, String symbolicName) {
-
+        cleanBundleMapped(symbolicName);
+        computeDemands();
     }
 
     @Override
     public void bundleAdded(Application app, String symbolicName) {
-
+        computeDemands();
     }
 
-    //TODO test it
     @Override
     public void bundleRemoved(Application app, String symbolicName) {
-        FreshnessMapping.applicationToDevices.keySet()
-                .stream().filter(bundleApp -> manager.getApplicationOfBundle(bundleApp).getId().equals(app.getId()))
-                .forEach(FreshnessMapping.applicationToDevices::remove);
-
+        cleanBundleMapped(symbolicName);
         computeDemands();
+    }
+
+    private void cleanBundleMapped(String bundleSymbolicName) {
+        FreshnessMapping.applicationToDevices.keySet()
+                .stream().filter(bundleApp -> bundleApp.equals(bundleSymbolicName))
+                .forEach(FreshnessMapping.applicationToDevices::remove);
     }
 }

@@ -693,6 +693,7 @@ define(['jquery',
            @propertiesModel = new DataModel.Models.Properties(model.get('properties'));
            @type = kb.observable(model, 'type');
            @location = kb.observable(model, 'location');
+           @freshness = kb.observable(model, 'freshness');
            @services = kb.observable(model, 'services');
            @showNameInMap = ko.observable(false);
            @deviceWidget = ko.observable();

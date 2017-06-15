@@ -19,6 +19,8 @@
 package fr.liglab.adele.icasa.remote.wisdom.impl;
 
 import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextRequirement;
+import fr.liglab.adele.icasa.application.DeviceFreshnessDemand;
+import fr.liglab.adele.icasa.application.FreshnessTracker;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
@@ -101,6 +103,9 @@ public class DeviceREST extends DefaultController {
     @ContextRequirement(spec = {LocatedObject.class})
     List<Heater> heaters;
 
+    @Requires
+    private FreshnessTracker freshnessTracker;
+
     @Route(method = HttpMethod.GET, uri = "/devices")
     public Result devices() {
         try {
@@ -120,7 +125,7 @@ public class DeviceREST extends DefaultController {
      * @throws java.text.ParseException
      */
     @Route(method = HttpMethod.GET, uri = "/device/{deviceId}")
-    public synchronized Result device(@Parameter("deviceId") String deviceId) {
+    public synchronized Result device(@Parameter("deviceId") String deviceId) throws JSONException {
         if (deviceId == null || deviceId.length()<1){
             return devices();
         }
@@ -202,6 +207,10 @@ public class DeviceREST extends DefaultController {
                     return internalServerError(e);
                 }
             }
+
+            if(deviceJSON != null)
+                deviceJSON.putOnce("freshness", getFreshness(foundDevice.getSerialNumber()));
+
             return ok(deviceJSON.toString()).as(MimeTypes.JSON);
         }
     }
@@ -270,6 +279,16 @@ public class DeviceREST extends DefaultController {
         return null;
     }
 
+    private String getFreshness(String serialNumber){
+        DeviceFreshnessDemand dfd = freshnessTracker.getDeviceDemand(serialNumber);
+        if(dfd != null) {
+            if(dfd.getFreshness() != null)
+                return dfd.getFreshness().toString();
+            else return "N/A";
+        }
+        else return "N/A";
+    }
+
     /**
      * Returns a JSON array containing all devices.
      *
@@ -279,26 +298,32 @@ public class DeviceREST extends DefaultController {
         JSONArray currentDevices = new JSONArray();
         for (Heater heater:heaters){
             JSONObject deviceJSON =  IcasaJSONUtil.getHeaterJSON(heater);
+            deviceJSON.putOnce("freshness", getFreshness(heater.getSerialNumber()));
             currentDevices.put(deviceJSON);
         }
         for (DimmerLight light:dimmerLights){
             JSONObject deviceJSON =  IcasaJSONUtil.getDimmerLightJSON(light);
+            deviceJSON.putOnce("freshness", getFreshness(light.getSerialNumber()));
             currentDevices.put(deviceJSON);
         }
         for (Cooler cooler:coolers){
             JSONObject deviceJSON =  IcasaJSONUtil.getCoolerJSON(cooler);
+            deviceJSON.putOnce("freshness", getFreshness(cooler.getSerialNumber()));
             currentDevices.put(deviceJSON);
         }
         for (Thermometer thermometer:thermometers){
             JSONObject deviceJSON =  IcasaJSONUtil.getThermometerJSON(thermometer);
+            deviceJSON.putOnce("freshness", getFreshness(thermometer.getSerialNumber()));
             currentDevices.put(deviceJSON);
         }
         for (BinaryLight binaryLight:binaryLights){
             JSONObject deviceJSON =  IcasaJSONUtil.getBinaryLightJSON(binaryLight);
+            deviceJSON.putOnce("freshness", getFreshness(binaryLight.getSerialNumber()));
             currentDevices.put(deviceJSON);
         }
         for (PresenceSensor presenceSensor:presenceSensors){
             JSONObject deviceJSON =  IcasaJSONUtil.getPresenceSensorJSON(presenceSensor);
+            deviceJSON.putOnce("freshness", getFreshness(presenceSensor.getSerialNumber()));
             currentDevices.put(deviceJSON);
         }
         for (MotionSensor motionSensor:motionSensors){
@@ -311,6 +336,7 @@ public class DeviceREST extends DefaultController {
         }
         for (Photometer photometer : photometers){
             JSONObject deviceJSON =  IcasaJSONUtil.getPhotometerJSON(photometer);
+            deviceJSON.putOnce("freshness", getFreshness(photometer.getSerialNumber()));
             currentDevices.put(deviceJSON);
         }
         return currentDevices.toString();
