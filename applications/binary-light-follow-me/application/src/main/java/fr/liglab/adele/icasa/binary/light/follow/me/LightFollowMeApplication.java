@@ -15,7 +15,6 @@
  */
 package fr.liglab.adele.icasa.binary.light.follow.me;
 
-import fr.liglab.adele.freshness.facilities.ipojo.annotation.Freshness;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
@@ -51,11 +50,9 @@ public class LightFollowMeApplication {
         // do nothing
     }
 
-    @Freshness(time=20)
     @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
     private List<BinaryLight> binaryLights;
 
-    @Freshness(time=15)
     @Requires(id="presence",optional = false,specification = PresenceService.class)
     private List<PresenceService> presenceServices;
 

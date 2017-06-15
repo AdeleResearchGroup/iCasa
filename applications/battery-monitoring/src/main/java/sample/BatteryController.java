@@ -22,7 +22,6 @@ package sample;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextRequirement;
 import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextUpdate;
-import fr.liglab.adele.freshness.facilities.ipojo.annotation.Freshness;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.battery.BatteryObservable;
 import org.apache.felix.ipojo.annotations.Bind;
@@ -46,7 +45,7 @@ public class BatteryController extends DefaultController {
 
     public final static String BATTERY_WEB_SOCKET = "/battery/ws";
 
-    @Freshness(time=30)
+
     @Requires(id="battery",specification = BatteryObservable.class,optional = true)
     @ContextRequirement(spec = GenericDevice.class)
     List<BatteryObservable> observableDevices;
