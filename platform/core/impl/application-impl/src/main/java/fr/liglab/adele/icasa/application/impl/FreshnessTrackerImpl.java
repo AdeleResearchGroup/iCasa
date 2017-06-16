@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.application.impl;
 
+import fr.liglab.adele.freshness.utils.Freshness;
 import fr.liglab.adele.freshness.utils.FreshnessMapping;
 import fr.liglab.adele.icasa.Constants;
 import fr.liglab.adele.icasa.application.*;
@@ -39,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component(name = "Freshness-Demand-Impl")
 @Provides
@@ -88,9 +90,6 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
         _context = context;
         appDemands = new ArrayList<>();
         deviceDemands = new ArrayList<>();
-//        for (Application app : manager.getApplications()) {
-//            System.out.println(app.getName() + ":" + app.getState());
-//        }
     }
 
     /**
@@ -114,48 +113,8 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
     private void computeDemands() {
 
         synchronized (m_lock) {
-//TODO applications sometimes are loaded but not listed as applications,
-// such apps are load into pom.xml and not via bundle in applications folder
-//            demands = new HashMap<>();
-//            for (Application app : getActiveApplications()) {
-//
-//                Map<String, Long> appDemands = getApplicationDemands(app.getId());
-//                for (String device : appDemands.keySet()) {
-//                    Long deviceDemand = appDemands.get(device);
-//
-//                    //if device not mapped, create an entry
-//                    if (demands.get(device) == null) {
-//                        demands.put(device, deviceDemand);
-//                    } else {
-//
-//                        //if already exists a device demand, updates with the most critical freshness
-//                        if (demands.get(device) > deviceDemand) {
-//                            demands.put(device, deviceDemand);
-//                        }
-//                    }
-//                }
-//            }
-
             appDemands = handlerToContextDemands();
             deviceDemands.clear();
-
-            //create a list of device demands
-            for (ApplicationFreshnessDemand appDemand : appDemands) {
-                for (DeviceFreshnessDemand deviceDemand : appDemand.getDevices()) {
-                    //if device not mapped, create an entry
-                    if (!deviceDemands.contains(deviceDemand)) {
-                        deviceDemands.add(deviceDemand);
-                    } else {
-                        //if already exists a device demand, updates with the most critical freshness
-                        if (deviceDemands.get(deviceDemands.indexOf(deviceDemand)).getFreshness() > deviceDemand.getFreshness()) {
-                            deviceDemands.get(deviceDemands.indexOf(deviceDemand)).setFreshness(deviceDemand.getFreshness());
-                        }
-                    }
-                }
-            }
-
-            //logic to get devices that are not being used by any application:
-            //TODO identify devices that are not used and those which do not have freshness constraints
 
             List<GenericDevice> devices = new ArrayList<>();
             devices.addAll(binaryLights);
@@ -168,22 +127,13 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
             devices.addAll(coolers);
             devices.addAll(heaters);
 
-            for (GenericDevice d : devices) {
-                String serialNumber = d.getSerialNumber();
+            for (ApplicationFreshnessDemand app : appDemands) {
 
-                if (serialNumber == null)
-                    continue;
+                for (GenericDevice d : devices) {
+                    String serialNumber = d.getSerialNumber();
+                    if (serialNumber == null)
+                        continue;
 
-                //check if it is not being used by any app
-                boolean listed = false;
-                for (DeviceFreshnessDemand deviceDemand : deviceDemands) {
-                    //if device not mapped, create an entry
-                    if (deviceDemand.getDeviceSerial().equals(serialNumber)) {
-                        listed = true;
-                        break;
-                    }
-                }
-                if (!listed) {
                     Class dClass = null;
                     if (d instanceof Heater)
                         dClass = Heater.class;
@@ -204,12 +154,82 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
                     if (d instanceof PushButton)
                         dClass = PushButton.class;
 
-                    deviceDemands.add(new DeviceFreshnessDemand(
-                            dClass.getCanonicalName(),
-                            d.getSerialNumber(),
-                            null,
-                            null
-                    ));
+                    ServiceReference<?>[] serviceReferences = new ServiceReference<?>[0];
+                    try {
+                        //available properties: [batteryobservable.batteryLevel, context.entity.id, factory.context.entity.spec, factory.name, genericdevice.device.serialNumber, instance.name, locatedobject.object.position.x, locatedobject.object.position.y, locatedobject.object.zone, objectClass, service.bundleid, service.id, service.scope, simulateddevice.simulated.device.type]
+                        serviceReferences = _context.getServiceReferences(dClass.getCanonicalName(), "(genericdevice.device.serialNumber=" + serialNumber + ")");
+                    } catch (InvalidSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    if (serviceReferences == null)
+                        continue;
+
+                    ServiceReference scr = serviceReferences[0];
+
+                    //in case there were the freshness annotation
+                    //the relation is all declared: app-device-freshness
+                    boolean used = false;
+                    for (Bundle b : scr.getUsingBundles()) {
+                        if (app.hasBundle(b.getSymbolicName())) {
+                            Map<String, Freshness> appFreshnessMap = null;
+                            for (String appBund : app.getAppBundles()) {
+                                if (getAllApplicationDemandsMapped().get(appBund) != null)
+                                    appFreshnessMap = getAllApplicationDemandsMapped().get(appBund);
+                            }
+
+                            if (appFreshnessMap != null) {
+                                Freshness deviceFreshness = appFreshnessMap.get(dClass.getCanonicalName());
+                                if (deviceFreshness != null) {
+                                    //its a relation between device and app and the annotation is available
+                                    DeviceFreshnessDemand deviceDemand = new DeviceFreshnessDemand(dClass.getCanonicalName(),
+                                            scr.getProperty("genericdevice.device.serialNumber").toString(),
+                                            scr.getProperty("locatedobject.object.zone").toString(),
+                                            deviceFreshness);
+
+                                    addDeviceDemandToList(deviceDemand);
+                                    app.addDeviceDemand(deviceDemand);
+                                    used = true;
+                                    break;
+                                }
+                            }
+
+                            //its a relation between device and app, but has no annotations, freshness is 0
+                            DeviceFreshnessDemand deviceDemand = new DeviceFreshnessDemand(dClass.getCanonicalName(),
+                                    scr.getProperty("genericdevice.device.serialNumber").toString(),
+                                    scr.getProperty("locatedobject.object.zone").toString(),
+                                    new Freshness(0l, TimeUnit.SECONDS));
+
+                            addDeviceDemandToList(deviceDemand);
+                            app.addDeviceDemand(deviceDemand);
+                            used = true;
+                            break;
+                        }
+                    }
+                    //device is not used by any application
+                    if (!used) {
+                        addDeviceDemandToList(new DeviceFreshnessDemand(dClass.getCanonicalName(),
+                                scr.getProperty("genericdevice.device.serialNumber").toString(),
+                                scr.getProperty("locatedobject.object.zone").toString(),
+                                null));
+                    }
+                }
+            }
+        }
+    }
+
+    private void addDeviceDemandToList(DeviceFreshnessDemand deviceDemand) {
+        if (!deviceDemands.contains(deviceDemand)) {
+            deviceDemands.add(deviceDemand);
+        } else {
+            //if already exists a device demand, updates with the most critical freshness
+            DeviceFreshnessDemand freshnessDemand = deviceDemands.get(deviceDemands.indexOf(deviceDemand));
+            if (freshnessDemand.getFreshness() == null)
+                freshnessDemand.setFreshness(deviceDemand.getFreshness());
+            else if (deviceDemand.getFreshness() == null)
+                return;
+            else {
+                if (freshnessDemand.getFreshness().compareTo(deviceDemand.getFreshness()) > 0) {
+                    freshnessDemand.setFreshness(deviceDemand.getFreshness());
                 }
             }
         }
@@ -218,11 +238,18 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
     private List<ApplicationFreshnessDemand> handlerToContextDemands() {
 
         List<ApplicationFreshnessDemand> appDevicesDemands = new ArrayList<>();
-        for (String app : getAllApplicationDemandsMapped().keySet()) {
+        for (String appBundle : getAllApplicationDemandsMapped().keySet()) {
 
-            ApplicationFreshnessDemand appDemand = new ApplicationFreshnessDemand(app);
+            Application application = manager.getApplicationOfBundle(appBundle);
+            ApplicationFreshnessDemand appDemand = null;
+            if (application == null)
+                appDemand = new ApplicationFreshnessDemand(appBundle);
+            else appDemand = new ApplicationFreshnessDemand(application.getBundles());
 
-            for (String device : getAllApplicationDemandsMapped().get(app).keySet()) {
+            if (appDevicesDemands.contains(appDemand))
+                appDemand = appDevicesDemands.get(appDevicesDemands.indexOf(appDemand));
+
+            for (String device : getAllApplicationDemandsMapped().get(appBundle).keySet()) {
                 //check if the application is indeed using the device
                 try {
 
@@ -233,11 +260,10 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
                     //it gives all the services (devices) which implements a class
                     for (ServiceReference scr : serviceReferences) {
 
-
                         //it gives all the applications which uses the devices
                         boolean uses = false;
                         for (Bundle b : scr.getUsingBundles()) {
-                            if (b.getSymbolicName().equals(app)) {
+                            if (b.getSymbolicName().equals(appBundle)) {
                                 uses = true;
                                 break;
                             }
@@ -251,41 +277,41 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
                         if (scr.getProperty("genericdevice.device.serialNumber") == null)
                             continue;
 
+                        getAllApplicationDemandsMapped().get(appBundle).get(device);
+
                         //available properties: [batteryobservable.batteryLevel, context.entity.id, factory.context.entity.spec, factory.name, genericdevice.device.serialNumber, instance.name, locatedobject.object.position.x, locatedobject.object.position.y, locatedobject.object.zone, objectClass, service.bundleid, service.id, service.scope, simulateddevice.simulated.device.type]
                         DeviceFreshnessDemand deviceDemand = new DeviceFreshnessDemand(device,
                                 scr.getProperty("genericdevice.device.serialNumber").toString(),
                                 scr.getProperty("locatedobject.object.zone").toString(),
-                                getAllApplicationDemandsMapped().get(app).get(device));
+                                getAllApplicationDemandsMapped().get(appBundle).get(device));
 
                         appDemand.addDeviceDemand(deviceDemand);
-
-//                            try {
-
-
-//                            for(String b : scr.getPropertyKeys()){
-//                                System.out.println("Service keys: " + b);
-//                            }
-
-
-//                                serv = Class.forName(device).cast(scr);
-//                                System.out.println("Serial number of device: " + serv.getClass().getMethod("getSerialNumber").invoke(serv));
-//                            } catch (ClassNotFoundException e) {
-//                                e.printStackTrace();
-//                            } catch (InvocationTargetException e) {
-//                                e.printStackTrace();
-//                            } catch (NoSuchMethodException e) {
-//                                e.printStackTrace();
-//                            } catch (IllegalAccessException e) {
-//                                e.printStackTrace();
-//                            }
                     }
                 } catch (InvalidSyntaxException e) {
                     e.printStackTrace();
                 }
-//                    ScrService scrService = (ScrService) _context.getService(scrServiceRef);
             }
             appDevicesDemands.add(appDemand);
         }
+
+
+        //getting applications which has no freshness annotations
+        //and removing apps that are not active
+        for (Application application : manager.getApplications()) {
+
+            //TODO the state of an app is not working
+//            if (application.getState().equals(ApplicationState.STOPED)) {
+//                System.out.println("removed due to state: " + application.getName() + application.getState());
+//                appDevicesDemands.remove(new ApplicationFreshnessDemand(application.getId()));
+//                continue;
+//            }
+
+            ApplicationFreshnessDemand appDemand = new ApplicationFreshnessDemand(application.getBundles());
+            if (!appDevicesDemands.contains(appDemand)) {
+                appDevicesDemands.add(appDemand);
+            }
+        }
+
         return appDevicesDemands;
     }
 
@@ -296,7 +322,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
             computeDemands();
 
         for (ApplicationFreshnessDemand appDemand : appDemands) {
-            if (appDemand.getAppBundle().equals(appIdOrBundle) || manager.getApplicationOfBundle(appDemand.getAppBundle()).getId().equals(appIdOrBundle))
+            if (appDemand.hasBundle(appIdOrBundle))
                 return appDemand;
         }
         return null;
@@ -325,7 +351,8 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
         return deviceDemands;
     }
 
-    //not tested, additional bundles are not always conveyed as applications
+    //not working state
+    //also additional bundles are not always conveyed as applications
 //    private List<Application> getActiveApplications() {
 //        //identify when an application is activate/deactivated
 //        List<Application> activeApplications = manager.getApplications().stream()
@@ -337,7 +364,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 //    }
 
     @Override
-    public Map<String, Map<String, Long>> getAllApplicationDemandsMapped() {
+    public Map<String, Map<String, Freshness>> getAllApplicationDemandsMapped() {
         return FreshnessMapping.applicationToDevices;
     }
 
@@ -368,7 +395,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 
     @Override
     public void addApplication(Application app) {
-//        System.out.println("Freshness appsToDevices: add application - " + app.getName() + " size: " + manager.getApplications().size());
+        System.out.println("Freshness appsToDevices: add application - " + app.getName() + " size: " + manager.getApplications().size());
         computeDemands();
     }
 
@@ -384,29 +411,29 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 
     @Override
     public void deploymentPackageAdded(Application app, String symbolicName) {
-        computeDemands();
+//        System.out.println("Freshness appsToDevices: add package - " + app.getName() + " size: " + manager.getApplications().size());
+//        computeDemands();
     }
 
     @Override
     public void deploymentPackageRemoved(Application app, String symbolicName) {
-        cleanBundleMapped(symbolicName);
-        computeDemands();
+//        cleanBundleMapped(symbolicName);
+//        computeDemands();
     }
 
     @Override
     public void bundleAdded(Application app, String symbolicName) {
-        computeDemands();
+//        System.out.println("Freshness appsToDevices: add bundle - " + app.getName() + " size: " + manager.getApplications().size());
+//        computeDemands();
     }
 
     @Override
     public void bundleRemoved(Application app, String symbolicName) {
-        cleanBundleMapped(symbolicName);
-        computeDemands();
+//        cleanBundleMapped(symbolicName);
+//        computeDemands();
     }
 
     private void cleanBundleMapped(String bundleSymbolicName) {
-        FreshnessMapping.applicationToDevices.keySet()
-                .stream().filter(bundleApp -> bundleApp.equals(bundleSymbolicName))
-                .forEach(FreshnessMapping.applicationToDevices::remove);
+        FreshnessMapping.applicationToDevices.remove(bundleSymbolicName);
     }
 }

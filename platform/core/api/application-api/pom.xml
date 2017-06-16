@@ -28,6 +28,10 @@
 			<artifactId>common</artifactId>
          <version>${project.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>fr.liglab.adele.freshness</groupId>
+            <artifactId>freshness.core</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>

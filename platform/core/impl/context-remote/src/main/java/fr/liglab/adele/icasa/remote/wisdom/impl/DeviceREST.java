@@ -279,14 +279,15 @@ public class DeviceREST extends DefaultController {
         return null;
     }
 
+    //TODO change to i18n
     private String getFreshness(String serialNumber){
         DeviceFreshnessDemand dfd = freshnessTracker.getDeviceDemand(serialNumber);
         if(dfd != null) {
             if(dfd.getFreshness() != null)
                 return dfd.getFreshness().toString();
-            else return "N/A";
+            else return "Not used";
         }
-        else return "N/A";
+        else return "Not used";
     }
 
     /**

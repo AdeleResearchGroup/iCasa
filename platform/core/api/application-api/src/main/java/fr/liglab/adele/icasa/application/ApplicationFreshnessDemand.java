@@ -15,35 +15,53 @@
  */
 package fr.liglab.adele.icasa.application;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.osgi.framework.Bundle;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ApplicationFreshnessDemand {
 
-    private String appBundle;
+    private Set<String> appBundles;
 
-    public String getAppBundle() {
-        return appBundle;
+    public ApplicationFreshnessDemand(Set<Bundle> bundles) {
+        appBundles = new HashSet<>();
+        appBundles.addAll(bundles.stream().map(Bundle::getSymbolicName).collect(Collectors.toList()));
+        this.devices = new HashSet<>();
     }
 
-    public void setAppBundle(String appBundle) {
-        this.appBundle = appBundle;
+    public ApplicationFreshnessDemand(String bundle) {
+        appBundles = new HashSet<>();
+        appBundles.add(bundle);
+        this.devices = new HashSet<>();
     }
 
-    private List<DeviceFreshnessDemand> devices;
-
-    public List<DeviceFreshnessDemand> getDevices() {
-        return devices;
-    }
-
-    public ApplicationFreshnessDemand(String appBundle, List<DeviceFreshnessDemand> devices) {
-        this.appBundle = appBundle;
+    public ApplicationFreshnessDemand(Set<String> appBundles, Set<DeviceFreshnessDemand> devices) {
+        this.appBundles = appBundles;
         this.devices = devices;
     }
 
-    public ApplicationFreshnessDemand(String appBundle) {
-        this.appBundle = appBundle;
-        this.devices = new ArrayList<>();
+    public Set<String> getAppBundles() {
+        return appBundles;
+    }
+
+    public void setAppBundles(Set<String> appBundles) {
+        this.appBundles = appBundles;
+    }
+
+    private Set<DeviceFreshnessDemand> devices;
+
+    public Set<DeviceFreshnessDemand> getDevices() {
+        return devices;
+    }
+
+    public boolean hasBundle(String bundle){
+        for(String appBundle : appBundles){
+            if(appBundle.equals(bundle))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -53,25 +71,14 @@ public class ApplicationFreshnessDemand {
 
         ApplicationFreshnessDemand that = (ApplicationFreshnessDemand) o;
 
-        if (appBundle != null ? !appBundle.equals(that.appBundle) : that.appBundle != null) return false;
-        if (devices != null ? !devices.equals(that.devices) : that.devices != null) return false;
+        if (appBundles != null ? !appBundles.equals(that.appBundles) : that.appBundles != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = appBundle != null ? appBundle.hashCode() : 0;
-        result = 31 * result + (devices != null ? devices.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "ApplicationFreshnessDemand{" +
-                "appBundle='" + appBundle + '\'' +
-                ", devices=" + devices +
-                '}';
+        return appBundles != null ? appBundles.hashCode() : 0;
     }
 
     public void addDeviceDemand(DeviceFreshnessDemand demand) {

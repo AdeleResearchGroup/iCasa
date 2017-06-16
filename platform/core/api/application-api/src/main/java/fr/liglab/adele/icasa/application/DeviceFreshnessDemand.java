@@ -16,6 +16,8 @@
 package fr.liglab.adele.icasa.application;
 
 
+import fr.liglab.adele.freshness.utils.Freshness;
+
 public class DeviceFreshnessDemand {
     private String deviceClass;
 
@@ -23,13 +25,13 @@ public class DeviceFreshnessDemand {
 
     private String deviceZone;
 
-    private Long freshness;
+    private Freshness freshness;
 
-    public Long getFreshness() {
+    public Freshness getFreshness() {
         return freshness;
     }
 
-    public void setFreshness(Long freshness) {
+    public void setFreshness(Freshness freshness) {
         this.freshness = freshness;
     }
 
@@ -67,7 +69,6 @@ public class DeviceFreshnessDemand {
         if (deviceClass != null ? !deviceClass.equals(that.deviceClass) : that.deviceClass != null) return false;
         if (deviceSerial != null ? !deviceSerial.equals(that.deviceSerial) : that.deviceSerial != null) return false;
         if (deviceZone != null ? !deviceZone.equals(that.deviceZone) : that.deviceZone != null) return false;
-        if (freshness != null ? !freshness.equals(that.freshness) : that.freshness != null) return false;
 
         return true;
     }
@@ -77,7 +78,6 @@ public class DeviceFreshnessDemand {
         int result = deviceClass != null ? deviceClass.hashCode() : 0;
         result = 31 * result + (deviceSerial != null ? deviceSerial.hashCode() : 0);
         result = 31 * result + (deviceZone != null ? deviceZone.hashCode() : 0);
-        result = 31 * result + (freshness != null ? freshness.hashCode() : 0);
         return result;
     }
 
@@ -91,7 +91,7 @@ public class DeviceFreshnessDemand {
                 '}';
     }
 
-    public DeviceFreshnessDemand(String deviceClass, String deviceSerial, String deviceZone, Long freshness) {
+    public DeviceFreshnessDemand(String deviceClass, String deviceSerial, String deviceZone, Freshness freshness) {
         this.deviceClass = deviceClass;
         this.deviceSerial = deviceSerial;
         this.deviceZone = deviceZone;

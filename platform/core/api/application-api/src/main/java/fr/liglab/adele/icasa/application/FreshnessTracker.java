@@ -15,6 +15,8 @@
  */
 package fr.liglab.adele.icasa.application;
 
+import fr.liglab.adele.freshness.utils.Freshness;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,5 +28,5 @@ public interface FreshnessTracker {
     DeviceFreshnessDemand getDeviceDemand(String deviceSerialNumber);
     List<DeviceFreshnessDemand> getDeviceDemands();
 
-    Map<String, Map<String, Long>> getAllApplicationDemandsMapped();
+    Map<String, Map<String, Freshness>> getAllApplicationDemandsMapped();
 }
