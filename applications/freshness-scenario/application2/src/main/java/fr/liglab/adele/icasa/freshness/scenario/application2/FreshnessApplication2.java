@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.freshness.scenario.application2;
 
-import fr.liglab.adele.freshness.facilities.ipojo.annotation.Freshness;
+import fr.liglab.adele.freshness.facilities.ipojo.annotation.Caching;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
 import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
@@ -70,7 +70,7 @@ public class FreshnessApplication2 implements PeriodicRunnable {
 
     }
 
-    @Freshness(time = 600)
+    @Caching(time = 600)
     @Requires(id = "thermometers", optional = true, specification = Thermometer.class, filter = "(locatedobject.object.zone=wineHouse)", proxy = false)
     private List<Thermometer> thermometers;
 

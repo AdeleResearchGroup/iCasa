@@ -15,7 +15,7 @@
  */
 package fr.liglab.adele.icasa.freshness.scenario.application1;
 
-import fr.liglab.adele.freshness.facilities.ipojo.annotation.Freshness;
+import fr.liglab.adele.freshness.facilities.ipojo.annotation.Caching;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
 import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 @Provides(properties = {
         @StaticServiceProperty(name = "icasa.application", type = "String", value = "Freshness.Scenario.Application1", immutable = true)
-}, specifications = {PeriodicRunnable.class,TemperatureConfiguration.class})
+}, specifications = {PeriodicRunnable.class, TemperatureConfiguration.class})
 @Instantiate
 public class FreshnessApplication1 implements PeriodicRunnable, TemperatureConfiguration {
 
@@ -95,7 +95,7 @@ public class FreshnessApplication1 implements PeriodicRunnable, TemperatureConfi
 
     }
 
-    @Freshness(time = 300)
+    @Caching(time = 300)
     @Requires(id = "thermometers", optional = true, specification = Thermometer.class, filter = "(!(locatedobject.object.zone=" + LocatedObject.LOCATION_UNKNOWN + "))", proxy = false)
     private List<Thermometer> thermometers;
 
