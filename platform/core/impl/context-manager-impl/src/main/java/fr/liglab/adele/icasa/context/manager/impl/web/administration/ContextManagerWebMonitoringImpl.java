@@ -17,10 +17,10 @@ package fr.liglab.adele.icasa.context.manager.impl.web.administration;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
+import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.web.administration.ContextManagerWebMonitoring;
-import fr.liglab.adele.icasa.context.manager.impl.generic.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.web.administration.GoalsByAppMonitoring;
 import fr.liglab.adele.icasa.context.manager.impl.specific.ContextInternalManager;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -53,12 +53,23 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
     @SuppressWarnings("all")
     private RelationProvider[] relationProviders;
 
+
     @Override
-    public Map<String, ContextAPIConfig> getGoalsByApp() {
-        Map<String, ContextAPIConfig> result = new HashMap<>();
-        if(goalModel != null){
-            result.putAll(goalModel.getGoalsByApp());
+    public Set<GoalsByAppMonitoring> getGoalsByApp() {
+        Set<GoalsByAppMonitoring> result = new HashSet<>();
+
+        try{
+            if(goalModel != null){
+                for (String app: goalModel.getManagedApps()){
+                    GoalsByAppMonitoring goalsByAppMonitoring
+                            = new GoalsByAppMonitoring(app, goalModel.getGoalsStateForApp(app));
+                    result.add(goalsByAppMonitoring);
+                }
+            }
+        } catch (NullPointerException ne){
+            ne.printStackTrace();
         }
+
         return result;
     }
 

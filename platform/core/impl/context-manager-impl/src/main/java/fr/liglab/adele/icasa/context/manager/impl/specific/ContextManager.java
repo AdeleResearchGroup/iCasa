@@ -18,10 +18,10 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextDependencyRegistration;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
-import fr.liglab.adele.icasa.context.manager.impl.generic.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelAccess;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;

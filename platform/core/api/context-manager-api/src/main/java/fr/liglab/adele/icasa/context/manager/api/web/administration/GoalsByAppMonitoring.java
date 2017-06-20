@@ -13,23 +13,26 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.api.web.administration;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 
 import java.util.Map;
-import java.util.Set;
 
-/**
- * Interface of context internal manager
- */
-public interface ContextInternalManager {
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
+public class GoalsByAppMonitoring {
+    private String app;
+    private Map<ContextAPIEnum, Boolean> goals;
 
-    Runnable getContextResolutionMachine();
+    public GoalsByAppMonitoring(String app, Map<ContextAPIEnum, Boolean> goals) {
+        this.app = app;
+        this.goals = goals;
+    }
 
-    Set<String> getCurrentLookupFilter();
+    public String getApp() {
+        return app;
+    }
 
-    /*TODO MODIFY*/
-    Set<String> getInstancesByCreator(String creator);
+    public Map<ContextAPIEnum, Boolean> getGoals() {
+        return goals;
+    }
 }

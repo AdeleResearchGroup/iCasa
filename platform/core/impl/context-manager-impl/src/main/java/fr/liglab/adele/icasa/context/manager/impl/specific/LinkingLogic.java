@@ -17,7 +17,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import org.osgi.framework.BundleContext;
@@ -372,6 +372,7 @@ final class LinkingLogic implements Runnable {
 
     private void goalServicesAvailabilityCheck(){
         /*Vérification*/
+        /*TODO MODIFY GOAL MODEL*/
         /*Services à activer*/
         BundleContext bundleContext = contextInternalManager.getBundleContext();
         for (ContextAPIEnum contextAPI : goals) {

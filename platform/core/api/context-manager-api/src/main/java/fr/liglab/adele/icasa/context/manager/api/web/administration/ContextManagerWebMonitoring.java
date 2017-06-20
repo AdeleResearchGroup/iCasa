@@ -17,7 +17,6 @@ package fr.liglab.adele.icasa.context.manager.api.web.administration;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
 
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +24,7 @@ import java.util.Set;
 
 public interface ContextManagerWebMonitoring {
 
-    Map<String, ContextAPIConfig> getGoalsByApp();
+    Set<GoalsByAppMonitoring> getGoalsByApp();
 
     Map<EntityProvider, Set<String>> getResourceCreatorsByEntityProvider();
     Map<RelationProvider, Set<String>> getResourceCreatorsByRelationProvider();

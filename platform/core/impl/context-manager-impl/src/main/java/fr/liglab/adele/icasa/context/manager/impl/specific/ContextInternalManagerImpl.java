@@ -18,9 +18,10 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
-import fr.liglab.adele.icasa.context.manager.impl.generic.GoalListener;
+import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelListener;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ import java.util.*;
 @Component (immediate = true, publicFactory = false)
 @Instantiate
 @Provides
-public class ContextInternalManagerImpl implements ContextInternalManager, GoalListener {
+public class ContextInternalManagerImpl implements ContextInternalManager, GoalModelListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextInternalManagerImpl.class);
 
@@ -78,11 +79,17 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalL
         resolutionMachine = new LinkingLogic(this);
     }
 
+    /*ToDo react to event*/
     @Override
-    public void notifyGoalChange(Map<String, ContextAPIConfig> goals) {
+    public void notifyGoalSetChange(Set<ContextAPIEnum> goals) {
         /*TODO does not work on event: interlock problem*/
 //        configureGoals(goals);
 //        resolutionMachine.run();
+    }
+
+    @Override
+    public void notifyGoalStateChange(ContextAPIEnum goal, Boolean state) {
+        //DO NOTHING
     }
 
     @Override
@@ -414,6 +421,4 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalL
 
         return result;
     }
-
-
 }

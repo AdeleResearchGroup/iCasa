@@ -32,7 +32,7 @@ public enum ContextAPIEnum {
 
     private String interfaceName;
 
-    private ContextAPIEnum(String s) {
+    ContextAPIEnum(String s) {
         interfaceName = s;
     }
 
