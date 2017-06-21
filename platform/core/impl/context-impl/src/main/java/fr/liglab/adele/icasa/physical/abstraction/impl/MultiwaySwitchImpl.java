@@ -27,7 +27,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 import java.util.List;
 import java.util.function.Supplier;
 
-@ContextEntity(services = MultiwaySwitch.class)
+@ContextEntity(coreServices = MultiwaySwitch.class)
 public class MultiwaySwitchImpl implements MultiwaySwitch {
 
     @ContextEntity.State.Field(service = MultiwaySwitch.class,state = MultiwaySwitch.GLOBAL_SWITCH_STATE, value = "NOT_MEASURED")
