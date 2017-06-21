@@ -57,9 +57,9 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
     @SuppressWarnings("unused")
     private CapabilityModelAccess capabilityModelAccess;
 
-    @Requires
-    @SuppressWarnings("unused")
-    private CapabilityModelUpdate capabilityModelUpdate;
+//    @Requires
+//    @SuppressWarnings("unused")
+//    private CapabilityModelUpdate capabilityModelUpdate;
 
     /*Lookup filter*/
     @Requires
@@ -181,39 +181,39 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
         return capabilityModelAccess.getmEntityProviderByCreatorName();
     }
 
-    @Bind(id = "entityProviders")
-    @SuppressWarnings("unused")
-    private void bindEntityProvider(EntityProvider entityProvider){
-        capabilityModelUpdate.addEntityProvider(entityProvider);
-    }
-
-    @Modified(id = "entityProviders")
-    @SuppressWarnings("unused")
-    private void modifyEntityProvider(EntityProvider entityProvider){
-        capabilityModelUpdate.modifyEntityProvider(entityProvider);
-    }
-
-    @Unbind(id = "entityProviders")
-    @SuppressWarnings("unused")
-    private void unbindEntityProvider(EntityProvider entityProvider){
-        capabilityModelUpdate.removeEntityProvider(entityProvider);
-    }
-
-    @Bind(id = "relationProviders")
-    @SuppressWarnings("unused")
-    private void bindRelationProvider(RelationProvider relationProvider){
-        capabilityModelUpdate.addRelationProvider(relationProvider);
-    }
-
-    @Modified(id = "relationProviders")
-    @SuppressWarnings("unused")
-    private void modifyRelationProvider(RelationProvider relationProvider){
-        capabilityModelUpdate.modifyRelationProvider(relationProvider);
-    }
-
-    @Unbind(id = "relationProviders")
-    @SuppressWarnings("unused")
-    private void unbindRelationProvider(RelationProvider relationProvider){
-        capabilityModelUpdate.removeRelationProvider(relationProvider);
-    }
+//    @Bind(id = "entityProviders")
+//    @SuppressWarnings("unused")
+//    private void bindEntityProvider(EntityProvider entityProvider){
+//        capabilityModelUpdate.addEntityProvider(entityProvider);
+//    }
+//
+//    @Modified(id = "entityProviders")
+//    @SuppressWarnings("unused")
+//    private void modifyEntityProvider(EntityProvider entityProvider){
+//        capabilityModelUpdate.modifyEntityProvider(entityProvider);
+//    }
+//
+//    @Unbind(id = "entityProviders")
+//    @SuppressWarnings("unused")
+//    private void unbindEntityProvider(EntityProvider entityProvider){
+//        capabilityModelUpdate.removeEntityProvider(entityProvider);
+//    }
+//
+//    @Bind(id = "relationProviders")
+//    @SuppressWarnings("unused")
+//    private void bindRelationProvider(RelationProvider relationProvider){
+//        capabilityModelUpdate.addRelationProvider(relationProvider);
+//    }
+//
+//    @Modified(id = "relationProviders")
+//    @SuppressWarnings("unused")
+//    private void modifyRelationProvider(RelationProvider relationProvider){
+//        capabilityModelUpdate.modifyRelationProvider(relationProvider);
+//    }
+//
+//    @Unbind(id = "relationProviders")
+//    @SuppressWarnings("unused")
+//    private void unbindRelationProvider(RelationProvider relationProvider){
+//        capabilityModelUpdate.removeRelationProvider(relationProvider);
+//    }
 }

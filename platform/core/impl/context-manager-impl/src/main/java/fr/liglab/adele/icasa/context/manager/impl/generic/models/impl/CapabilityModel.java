@@ -38,9 +38,6 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
 
     private static final Logger LOG = LoggerFactory.getLogger(CapabilityModel.class);
 
-    /*ToDo remove*/
-    /*Maintained set and map for context resolution machine*/
-
     /*Entity creator model*/
     private Map<String, Set<String>> mEntityCreatorsByService = new HashMap<>();
     private Map<String, Set<String>> mEntityCreatorsRequirements = new HashMap<>();
