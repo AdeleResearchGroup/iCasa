@@ -30,7 +30,7 @@ import org.zwave4j.Notification;
 import org.zwave4j.ValueId;
 
 
-@ContextEntity(services = {Zwave4jDevice.class})
+@ContextEntity(coreServices = {Zwave4jDevice.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 @FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)

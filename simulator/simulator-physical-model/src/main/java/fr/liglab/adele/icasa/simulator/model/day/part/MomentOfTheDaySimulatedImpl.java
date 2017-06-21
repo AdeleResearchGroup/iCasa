@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 /**
  *
  */
-@ContextEntity(services = MomentOfTheDay.class)
+@ContextEntity(coreServices = MomentOfTheDay.class)
 public class MomentOfTheDaySimulatedImpl implements MomentOfTheDay {
 
     @ContextEntity.State.Field(service = MomentOfTheDay.class,state = MomentOfTheDay.CURRENT_MOMENT_OF_THE_DAY)

@@ -37,7 +37,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-@ContextEntity(services = {Thermometer.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
+@ContextEntity(coreServices = {Thermometer.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class ZigbeeThermometer implements Thermometer, ZigbeeDevice, ZigbeeDeviceTracker,GenericDevice,BatteryObservable {
 

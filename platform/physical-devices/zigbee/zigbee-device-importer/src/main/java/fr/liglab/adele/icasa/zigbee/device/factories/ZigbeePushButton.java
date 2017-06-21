@@ -29,7 +29,7 @@ import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.zigbee.device.api.ZigbeeDevice;
 import org.apache.felix.ipojo.annotations.Requires;
 
-@ContextEntity(services = {PushButton.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
+@ContextEntity(coreServices = {PushButton.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class ZigbeePushButton implements PushButton, ZigbeeDevice, ZigbeeDeviceTracker,GenericDevice,BatteryObservable {

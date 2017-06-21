@@ -27,7 +27,7 @@ import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
  * Implementation of a simulated binary light device.
  *
  */
-@ContextEntity(services = {BinaryLight.class,SimulatedDevice.class})
+@ContextEntity(coreServices = {BinaryLight.class,SimulatedDevice.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class SimulatedBinaryLightImpl implements BinaryLight, SimulatedDevice,GenericDevice{
 

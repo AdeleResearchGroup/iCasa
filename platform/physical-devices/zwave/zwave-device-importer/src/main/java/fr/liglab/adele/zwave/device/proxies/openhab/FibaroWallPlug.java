@@ -35,7 +35,7 @@ import org.openhab.binding.zwave.internal.protocol.event.ZWaveEvent;
 
 import java.math.BigDecimal;
 
-@ContextEntity(services = {SmartPlug.class})
+@ContextEntity(coreServices = {SmartPlug.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 @FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
 public class FibaroWallPlug implements  ZWaveEventListener, SmartPlug {

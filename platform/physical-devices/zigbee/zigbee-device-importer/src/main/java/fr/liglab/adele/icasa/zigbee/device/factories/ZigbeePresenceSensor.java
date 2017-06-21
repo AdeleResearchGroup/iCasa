@@ -30,7 +30,7 @@ import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.zigbee.device.api.ZigbeeDevice;
 import org.apache.felix.ipojo.annotations.Requires;
 
-@ContextEntity(services = {PresenceSensor.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
+@ContextEntity(coreServices = {PresenceSensor.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class ZigbeePresenceSensor  implements PresenceSensor, ZigbeeDevice, ZigbeeDeviceTracker,GenericDevice,BatteryObservable {

@@ -40,7 +40,7 @@ import javax.measure.quantity.Illuminance;
 import javax.measure.quantity.Temperature;
 
 
-@ContextEntity(services = {PresenceSensor.class,Thermometer.class,Photometer.class,Zwave4jDevice.class,HumiditySensor.class})
+@ContextEntity(coreServices = {PresenceSensor.class,Thermometer.class,Photometer.class,Zwave4jDevice.class,HumiditySensor.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 @FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)

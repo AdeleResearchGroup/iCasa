@@ -30,7 +30,7 @@ import org.apache.felix.ipojo.annotations.Validate;
 import java.util.List;
 import java.util.function.Supplier;
 
-@ContextEntity(services = TemperatureModel.class)
+@ContextEntity(coreServices = TemperatureModel.class)
 public class SimulatedTemperatureModel implements TemperatureModel {
 
     public static final String RELATION_IS_ATTACHED="model.attached.to";

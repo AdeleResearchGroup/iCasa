@@ -34,7 +34,7 @@ import org.zwave4j.Notification;
 import org.zwave4j.ValueId;
 
 
-@ContextEntity(services = {DoorWindowSensor.class,Zwave4jDevice.class})
+@ContextEntity(coreServices = {DoorWindowSensor.class,Zwave4jDevice.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 @FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)

@@ -27,7 +27,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 
 import java.util.List;
 
-@ContextEntity(services = PresenceModel.class)
+@ContextEntity(coreServices = PresenceModel.class)
 public class SimulatedPresenceModel implements PresenceModel {
 
     @State.Field(service = PresenceModel.class, state = CURRENT_PRESENCE, value = "false")

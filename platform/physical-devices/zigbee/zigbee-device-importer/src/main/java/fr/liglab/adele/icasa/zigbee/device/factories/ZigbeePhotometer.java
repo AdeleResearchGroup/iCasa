@@ -35,7 +35,7 @@ import javax.measure.Quantity;
 import javax.measure.quantity.Illuminance;
 import java.text.DecimalFormat;
 
-@ContextEntity(services = {Photometer.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
+@ContextEntity(coreServices = {Photometer.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 
