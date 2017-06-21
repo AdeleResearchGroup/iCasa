@@ -95,10 +95,8 @@ public class ContextManager {
         contextInternalManager.configureGoals(goalModel.getGoalsByApp());
         /*Adaptation*/
         resolutionMachine.run();
-        /*ToDo*/
         /*Lookup filter*/
         externalInteractionsManager.updateLookupFilter();
-//        modifyLookupFilter(externalFilterModelAccess.getLookupFilter());
     };
 
     @Validate
@@ -133,59 +131,8 @@ public class ContextManager {
             ContextManagerAdmin.setDelay(delay);
             ContextManagerAdmin.setTimeUnit(timeUnit);
             scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, ContextManagerAdmin.getDelay(), ContextManagerAdmin.getTimeUnit());
-//            ContextManagerAdmin.setDelay(scheduledFuture.getDelay(ContextManager.timeUnit));
         }
 
         return modified;
-    }
-
-    /*Environment interface*/
-    private void modifyLookupFilter(Set<String> filter) {
-        if(ContextManagerAdmin.getAutoLookup()) {
-
-            Set<String> toConsider = new HashSet<>();
-            Set<String> toDiscard  = new HashSet<>();
-
-            /*To consider list*/
-            for (String service : filter) {
-                if (!lookupFilter.contains(service)) {
-                    toConsider.add(service);
-                }
-            }
-            lookupFilter.addAll(toConsider);
-
-            /*To discard list*/
-            for (String service : lookupFilter) {
-                if (!filter.contains(service)) {
-                    toDiscard.add(service);
-                }
-            }
-            lookupFilter.removeAll(toDiscard);
-
-            /*Environment lookup*/
-            if (iopLookupService != null) {
-                if(!toConsider.isEmpty()){
-                    String[] c = new String[toConsider.size()];
-                    c = toConsider.toArray(c);
-                    iopLookupService.consider(c);
-                }
-
-                if(!toDiscard.isEmpty()){
-                    String[] d = new String[toDiscard.size()];
-                    d = toDiscard.toArray(d);
-                    iopLookupService.discard(d);
-                }
-
-                int logLevel = ContextManagerAdmin.getLogLevel();
-                if(logLevel>=3) {
-                    LOG.info("AUTO LOOKUP FILTER CONSIDER: " + toConsider);
-                    LOG.info("AUTO LOOKUP FILTER DISCARD: " + toDiscard);
-                }
-                if(logLevel>=1) {
-                    LOG.info("AUTO LOOKUP FILTER: " + lookupFilter);
-                }
-            }
-
-        }
     }
 }
