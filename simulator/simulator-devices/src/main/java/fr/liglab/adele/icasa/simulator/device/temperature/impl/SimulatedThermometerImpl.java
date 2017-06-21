@@ -54,7 +54,7 @@ import javax.measure.quantity.Temperature;
  * Implementation of a simulated thermometer device.
  *
  */
-@ContextEntity(services = {Thermometer.class, SimulatedDevice.class,BatteryObservable.class})
+@ContextEntity(coreServices = {Thermometer.class, SimulatedDevice.class,BatteryObservable.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,GenericDevice,BatteryObservable {

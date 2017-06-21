@@ -27,7 +27,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 import java.util.List;
 import java.util.function.Supplier;
 
-@ContextEntity(services = PresenceService.class)
+@ContextEntity(coreServices = PresenceService.class)
 public class PresenceServiceImpl implements PresenceService {
 
     @ContextEntity.State.Field(service = PresenceService.class,state = PresenceService.PRESENCE_SENSED)

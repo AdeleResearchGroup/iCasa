@@ -27,7 +27,7 @@ import org.apache.felix.ipojo.annotations.Validate;
 import java.util.List;
 import java.util.Map;
 
-@ContextEntity(services = Zone.class)
+@ContextEntity(coreServices = Zone.class)
 public class ZoneImpl implements Zone {
 
 	@ContextEntity.State.Field(service=Zone.class,state=Zone.NAME)

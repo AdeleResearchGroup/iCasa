@@ -44,7 +44,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 
-@ContextEntity(services = { ZwaveController.class, ZwaveDevice.class})
+@ContextEntity(coreServices = { ZwaveController.class, ZwaveDevice.class})
 @Provides(specifications = { DiscoveryService.class, DiscoveryIntrospection.class })
 
 public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveDevice, ZwaveController, NotificationWatcher, ControllerCallback {

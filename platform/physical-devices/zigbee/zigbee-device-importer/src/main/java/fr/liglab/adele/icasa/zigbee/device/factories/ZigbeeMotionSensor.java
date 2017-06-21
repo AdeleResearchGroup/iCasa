@@ -30,7 +30,7 @@ import fr.liglab.adele.icasa.zigbee.device.api.ZigbeeDevice;
 /**
  *
  */
-@ContextEntity(services = {MotionSensor.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
+@ContextEntity(coreServices = {MotionSensor.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class ZigbeeMotionSensor implements MotionSensor, ZigbeeDevice, ZigbeeDeviceTracker,GenericDevice,BatteryObservable {
 

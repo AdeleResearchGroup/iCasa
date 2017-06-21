@@ -27,7 +27,7 @@ import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
  * Implementation of a simulated heater device.
  *
  */
-@ContextEntity(services = {Heater.class,SimulatedDevice.class})
+@ContextEntity(coreServices = {Heater.class,SimulatedDevice.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class SimulatedHeaterImpl implements Heater,SimulatedDevice,GenericDevice{
 

@@ -67,7 +67,7 @@ import fr.liglab.adele.zwave.device.api.ZwaveController;
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
 import fr.liglab.adele.zwave.device.importer.DeviceDeclaration;
 
-@ContextEntity(services = {OpenhabController.class,ZwaveController.class,ZwaveDevice.class})
+@ContextEntity(coreServices = {OpenhabController.class,ZwaveController.class,ZwaveDevice.class})
 @Provides(specifications = {DiscoveryService.class, DiscoveryIntrospection.class})
 
 public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveDevice, ZwaveController, OpenhabController {

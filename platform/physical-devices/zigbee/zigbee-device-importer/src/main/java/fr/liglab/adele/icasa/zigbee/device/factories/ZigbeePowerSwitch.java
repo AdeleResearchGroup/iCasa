@@ -35,7 +35,7 @@ import org.apache.felix.ipojo.annotations.Requires;
 /**
  * Zigbee power switch factory.
  */
-@ContextEntity(services = {PowerSwitch.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
+@ContextEntity(coreServices = {PowerSwitch.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class ZigbeePowerSwitch implements PowerSwitch, ZigbeeDevice, ZigbeeDeviceTracker,GenericDevice,BatteryObservable {
 

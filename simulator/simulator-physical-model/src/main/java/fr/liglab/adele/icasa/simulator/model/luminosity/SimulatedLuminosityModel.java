@@ -45,7 +45,7 @@ import org.apache.felix.ipojo.annotations.Validate;
 import java.util.List;
 import java.util.function.Supplier;
 
-@ContextEntity(services = {LuminosityModel.class})
+@ContextEntity(coreServices = {LuminosityModel.class})
 public class SimulatedLuminosityModel implements LuminosityModel{
 
     /**

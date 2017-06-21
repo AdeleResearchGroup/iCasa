@@ -23,7 +23,7 @@ import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.simulator.person.Person;
 import fr.liglab.adele.icasa.simulator.person.PersonType;
 
-@ContextEntity(services={Person.class})
+@ContextEntity(coreServices={Person.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class PersonImpl implements Person{
 

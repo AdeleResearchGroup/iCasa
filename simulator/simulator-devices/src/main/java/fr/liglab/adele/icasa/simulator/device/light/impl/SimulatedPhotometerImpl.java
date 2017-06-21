@@ -36,7 +36,7 @@ import javax.measure.quantity.Illuminance;
  * Implementation of a simulated photometer device.
  *
  */
-@ContextEntity(services = {Photometer.class, SimulatedDevice.class})
+@ContextEntity(coreServices = {Photometer.class, SimulatedDevice.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class SimulatedPhotometerImpl implements Photometer, SimulatedDevice,GenericDevice {
 

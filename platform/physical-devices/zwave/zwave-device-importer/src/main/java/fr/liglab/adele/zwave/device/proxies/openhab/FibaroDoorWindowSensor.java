@@ -32,7 +32,7 @@ import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveBinarySenso
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveCommandClass;
 import org.openhab.binding.zwave.internal.protocol.event.ZWaveEvent;
 
-@ContextEntity(services = {DoorWindowSensor.class})
+@ContextEntity(coreServices = {DoorWindowSensor.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 @FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
 
