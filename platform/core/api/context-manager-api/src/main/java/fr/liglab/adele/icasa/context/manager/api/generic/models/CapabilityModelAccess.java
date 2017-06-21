@@ -15,13 +15,22 @@
  */
 package fr.liglab.adele.icasa.context.manager.api.generic.models;
 
+import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public interface CapabilityModelAccess {
+
+    /*ToDo REMOVE ?*/
+    Set<EntityProvider> getEntityProviders();
+
+    Set<RelationProvider> getRelationProviders();
+
     /*TODO MODIFY*/
     Set<String> getInstancesByCreator(String creator);
 

@@ -13,11 +13,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic.models;
+package fr.liglab.adele.icasa.context.manager.impl.generic.models.updater;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
 import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.CapabilityModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 

@@ -23,7 +23,6 @@ import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterMo
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
-import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.CapabilityModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.ExternalFilterModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -127,46 +126,54 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
 
     /*ToDo REMOVE?*/
     /*Managed elements*/
-    @Requires(optional = true)
-    @SuppressWarnings("all")
-    private ContextEntity[] contextEntities;
+//    @Requires(optional = true)
+//    @SuppressWarnings("all")
+//    private ContextEntity[] contextEntities;
 
-    @Requires(id = "entityProviders", optional = true)
-    @SuppressWarnings("all")
-    private EntityProvider[] entityProviders;
+//    @Requires(id = "entityProviders", optional = true)
+//    @SuppressWarnings("all")
+//    private EntityProvider[] entityProviders;
+//
+//    @Requires(optional = true)
+//    @SuppressWarnings("all")
+//    private RelationProvider[] relationProviders;
 
-    @Requires(optional = true)
-    @SuppressWarnings("all")
-    private RelationProvider[] relationProviders;
+//    Set<ContextEntity> getContextEntities() {
+//        Set<ContextEntity> contextEntities;
+//        try{
+//            contextEntities  = new HashSet<>(Arrays.asList(this.contextEntities));
+//        } catch (NullPointerException ne){
+//            contextEntities = new HashSet<>();
+//        }
+//        return contextEntities;
+//    }
 
-    Set<ContextEntity> getContextEntities() {
-        Set<ContextEntity> contextEntities;
-        try{
-            contextEntities  = new HashSet<>(Arrays.asList(this.contextEntities));
-        } catch (NullPointerException ne){
-            contextEntities = new HashSet<>();
-        }
-        return contextEntities;
+//    Set<EntityProvider> getEntityProviders() {
+//        Set<EntityProvider> entityProviders;
+//        try{
+//            entityProviders  = new HashSet<>(Arrays.asList(this.entityProviders));
+//        } catch (NullPointerException ne){
+//            entityProviders = new HashSet<>();
+//        }
+//        return entityProviders;
+//    }
+//
+//    Set<RelationProvider> getRelationProviders() {
+//        Set<RelationProvider> relationProviders;
+//        try{
+//            relationProviders  = new HashSet<>(Arrays.asList(this.relationProviders));
+//        } catch (NullPointerException ne){
+//            relationProviders = new HashSet<>();
+//        }
+//        return relationProviders;
+//    }
+
+    Set<EntityProvider> getEntityProviders(){
+        return capabilityModelAccess.getEntityProviders();
     }
 
-    Set<EntityProvider> getEntityProviders() {
-        Set<EntityProvider> entityProviders;
-        try{
-            entityProviders  = new HashSet<>(Arrays.asList(this.entityProviders));
-        } catch (NullPointerException ne){
-            entityProviders = new HashSet<>();
-        }
-        return entityProviders;
-    }
-
-    Set<RelationProvider> getRelationProviders() {
-        Set<RelationProvider> relationProviders;
-        try{
-            relationProviders  = new HashSet<>(Arrays.asList(this.relationProviders));
-        } catch (NullPointerException ne){
-            relationProviders = new HashSet<>();
-        }
-        return relationProviders;
+    Set<RelationProvider> getRelationProviders(){
+        return capabilityModelAccess.getRelationProviders();
     }
 
     Map<String, Set<String>> geteCreatorsByServices() {

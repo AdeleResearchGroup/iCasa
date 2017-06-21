@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
 
+import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
@@ -49,6 +50,16 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
     private Map<String, Set<String>> mRelationCreatorsRequirements = new HashMap<>();
     private Map<String, RelationProvider> mRelationProviderByCreatorName = new HashMap<>();
     private Map<RelationProvider, Set<String>> mRelationsByProvider = new HashMap<>();
+
+    @Override
+    public Set<EntityProvider> getEntityProviders() {
+        return mEntitiesByProvider.keySet();
+    }
+
+    @Override
+    public Set<RelationProvider> getRelationProviders() {
+        return mRelationsByProvider.keySet();
+    }
 
     @Override
     public Map<String, Set<String>> getmEntityCreatorsByService() {
