@@ -318,7 +318,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
     //not tested
     @Override
     public ApplicationFreshnessDemand getApplicationDemand(String appIdOrBundle) {
-        if (appDemands.isEmpty())
+//        if (appDemands.isEmpty())
             computeDemands();
 
         for (ApplicationFreshnessDemand appDemand : appDemands) {
@@ -336,7 +336,7 @@ public class FreshnessTrackerImpl implements FreshnessTracker, ApplicationTracke
 
     @Override
     public DeviceFreshnessDemand getDeviceDemand(String deviceSerialNumber) {
-        if (deviceDemands.isEmpty())
+//        if (deviceDemands.isEmpty())
             computeDemands();
 
         for (DeviceFreshnessDemand deviceDemand : deviceDemands) {

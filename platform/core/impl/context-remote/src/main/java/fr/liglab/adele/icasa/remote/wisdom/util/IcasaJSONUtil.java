@@ -168,7 +168,7 @@ public class IcasaJSONUtil {
             LocatedObject object = (LocatedObject) device;
             jsonObject.put(DeviceJSON.POSITION_X_PROP, object.getPosition().x);
             jsonObject.put(DeviceJSON.POSITION_Y_PROP, object.getPosition().y);
-            jsonObject.put(DeviceJSON.LOCATION_PROP, NO_UNIT); //TODO change
+            jsonObject.put(DeviceJSON.LOCATION_PROP, object.getZone());
         }
     }
 

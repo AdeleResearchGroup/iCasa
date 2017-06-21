@@ -16,6 +16,8 @@
 package fr.liglab.adele.icasa.remote.wisdom.impl;
 
 import fr.liglab.adele.icasa.Constants;
+import fr.liglab.adele.icasa.application.DeviceFreshnessDemand;
+import fr.liglab.adele.icasa.application.FreshnessTracker;
 import fr.liglab.adele.icasa.clockservice.Clock;
 import fr.liglab.adele.icasa.clockservice.ClockListener;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
@@ -27,6 +29,7 @@ import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
 import fr.liglab.adele.icasa.location.Zone;
 import fr.liglab.adele.icasa.remote.wisdom.RemoteEventBroadcast;
+import fr.liglab.adele.icasa.remote.wisdom.util.DeviceJSON;
 import fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil;
 import org.apache.felix.ipojo.annotations.*;
 import org.json.JSONException;
@@ -63,7 +66,8 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 
 	private ClockEventListener _clockListener;
 
-
+    @Requires
+    private FreshnessTracker freshnessTracker;
 
 	@Validate
 	protected void start() {
@@ -122,11 +126,32 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 			event.put("eventType", eventType);
 			event.put("id", generateUUID());
 			event.put("time", new Date().getTime());
+
+            //TODO decouple from here
+            if (event.has(DeviceJSON.ID_PROP) && event.has("device")) {
+                event.getJSONObject("device").put(DeviceJSON.FRESHNESS, getFreshness(event.getString(DeviceJSON.DEVICE_ID_PROP)));
+            } else if (event.has(DeviceJSON.DEVICE_ID_PROP) && event.has("device")) {
+                event.getJSONObject("device").put(DeviceJSON.FRESHNESS, getFreshness(event.getString(DeviceJSON.DEVICE_ID_PROP)));
+            }
+
             publisher.publish(url, event.toString());
 		} catch (JSONException e) {
             logger.error("Building message error" + eventType, e);
 		}
 	}
+
+    //TODO change to i18n
+    //TODO decouple
+    //TODO same come on deviceRest
+    private String getFreshness(String serialNumber){
+        DeviceFreshnessDemand dfd = freshnessTracker.getDeviceDemand(serialNumber);
+        if(dfd != null) {
+            if(dfd.getFreshness() != null)
+                return dfd.getFreshness().toString();
+            else return "Not used";
+        }
+        else return "Not used";
+    }
 
 	@Bind(id="zones",specification = Zone.class,optional = true,aggregate = true)
 	public synchronized void bindZone(Zone zone){
