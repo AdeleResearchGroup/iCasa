@@ -18,13 +18,13 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.CapabilityModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.generic.Util;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelListener;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
-import fr.liglab.adele.icasa.context.manager.impl.generic.CapabilityModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.CapabilityModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.ExternalFilterModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -72,6 +72,16 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
     @SuppressWarnings("unused")
     private CapabilityModelUpdate capabilityModelUpdate;
 
+    /*Lookup filter*/
+    @Requires
+    @SuppressWarnings("unused")
+    private ExternalFilterModelAccess externalFilterModelAccess;
+
+    @Requires
+    @SuppressWarnings("unused")
+    private ExternalFilterModelUpdate externalFilterModelUpdate;
+
+
     private Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
     private Set<String> lookupFilter = new HashSet<>();
 
@@ -101,11 +111,6 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
     @Override
     public LinkingLogic getContextResolutionMachine() {
         return resolutionMachine;
-    }
-
-    @Override
-    public Set<String> getCurrentLookupFilter() {
-        return lookupFilter;
     }
 
     BundleContext getBundleContext() {
@@ -158,8 +163,10 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
         return contextGoalMap;
     }
 
+    /*ToDo*/
     void setLookupFilter(Set<String> filter){
         lookupFilter = new HashSet<>(filter);
+        externalFilterModelUpdate.setLookupFilter(filter);
     }
 
     @Bind(id = "entityProviders")
@@ -196,11 +203,5 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
     @SuppressWarnings("unused")
     private void unbindRelationProvider(RelationProvider relationProvider){
         capabilityModelUpdate.removeRelationProvider(relationProvider);
-    }
-
-    /*TODO MODIFY*/
-    @Override
-    public Set<String> getInstancesByCreator(String creator) {
-        return capabilityModelAccess.getInstancesByCreator(creator);
     }
 }

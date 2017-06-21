@@ -18,7 +18,9 @@ package fr.liglab.adele.icasa.context.manager.impl.web.administration;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.web.administration.ContextManagerWebMonitoring;
 import fr.liglab.adele.icasa.context.manager.api.web.administration.GoalsByAppMonitoring;
 import fr.liglab.adele.icasa.context.manager.impl.specific.ContextInternalManager;
@@ -44,6 +46,15 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
     @Requires(optional = true)
     @SuppressWarnings("all")
     private ContextInternalManager contextInternalManager;
+
+    @Requires(optional = true)
+    @SuppressWarnings("all")
+    private CapabilityModelAccess capabilityModel;
+
+    @Requires(optional = true)
+    @SuppressWarnings("all")
+    private ExternalFilterModelAccess externalFilterModel;
+
 
     @Requires(id = "entityProviders", optional = true)
     @SuppressWarnings("all")
@@ -73,6 +84,7 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
         return result;
     }
 
+    /*ToDo*/
     private Map<EntityProvider, Set<String>> getCreatorsByEntityProvider(boolean remote){
         Map<EntityProvider, Set<String>> result = new HashMap<>();
         for(EntityProvider entityProvider : entityProviders){
@@ -88,6 +100,7 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
         return result;
     }
 
+    /*ToDo*/
     private Map<RelationProvider, Set<String>> getCreatorsByRelationProvider(boolean remote){
         Map<RelationProvider, Set<String>> result = new HashMap<>();
         for(RelationProvider relationProvider : relationProviders){
@@ -103,21 +116,25 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
         return result;
     }
 
+    /*ToDo*/
     @Override
     public Map<EntityProvider, Set<String>> getResourceCreatorsByEntityProvider() {
         return getCreatorsByEntityProvider(true);
     }
 
+    /*ToDo*/
     @Override
     public Map<RelationProvider, Set<String>> getResourceCreatorsByRelationProvider() {
         return getCreatorsByRelationProvider(true);
     }
 
+    /*ToDo*/
     @Override
     public Map<EntityProvider, Set<String>> getAbstractionCreatorsByEntityProvider() {
         return getCreatorsByEntityProvider(false);
     }
 
+    /*ToDo*/
     @Override
     public Map<RelationProvider, Set<String>> getAbstractionCreatorsByRelationProvider() {
         return getCreatorsByRelationProvider(false);
@@ -126,8 +143,8 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
     @Override
     public Set<String> getInstancesByCreator(String creator) {
         Set<String> result = new HashSet<>();
-        if(contextInternalManager != null){
-            result.addAll(contextInternalManager.getInstancesByCreator(creator));
+        if(capabilityModel != null){
+            result.addAll(capabilityModel.getInstancesByCreator(creator));
         }
         return result;
     }
@@ -135,8 +152,8 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
     @Override
     public Set<String> getCurrentLookupFilter() {
         Set<String> result = new HashSet<>();
-        if(contextInternalManager != null){
-            result.addAll(contextInternalManager.getCurrentLookupFilter());
+        if(externalFilterModel != null){
+            result.addAll(externalFilterModel.getLookupFilter());
         }
         return result;
     }

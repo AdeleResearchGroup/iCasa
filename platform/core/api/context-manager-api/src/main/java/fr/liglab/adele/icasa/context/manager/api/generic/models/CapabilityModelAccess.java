@@ -13,23 +13,31 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic;
-
+package fr.liglab.adele.icasa.context.manager.api.generic.models;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 
-public interface CapabilityModelUpdate {
+import java.util.Map;
+import java.util.Set;
 
-    void addEntityProvider (EntityProvider entityProvider);
+public interface CapabilityModelAccess {
+    /*TODO MODIFY*/
+    Set<String> getInstancesByCreator(String creator);
 
-    void modifyEntityProvider (EntityProvider entityProvider);
+    Map<String, Set<String>> getmEntityCreatorsByService();
 
-    void removeEntityProvider(EntityProvider entityProvider);
+    Map<String, Set<String>> getmEntityCreatorsRequirements();
 
-    void addRelationProvider(RelationProvider relationProvider);
+    Map<String, EntityProvider> getmEntityProviderByCreatorName();
 
-    void modifyRelationProvider(RelationProvider relationProvider);
+    Map<EntityProvider, Set<String>> getmEntitiesByProvider();
 
-    void removeRelationProvider(RelationProvider relationProvider);
+    Map<String, Set<String>> getmRelationCreatorsByService();
+
+    Map<String, Set<String>> getmRelationCreatorsRequirements();
+
+    Map<String, RelationProvider> getmRelationProviderByCreatorName();
+
+    Map<RelationProvider, Set<String>> getmRelationsByProvider();
 }

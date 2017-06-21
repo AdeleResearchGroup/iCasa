@@ -13,18 +13,28 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic.goals;
+package fr.liglab.adele.icasa.context.manager.api.generic.models.goals;
+
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
- * TEMP
- * Les applications enregistrent leurs besoins au gestionnaire de contexte
- * Ces besoins représentent un but sur l'API à fournir
+ * Interface to access and use information from goal model
  */
-public interface ContextDependencyRegistration {
+public interface GoalModelAccess {
 
-    boolean registerContextDependencies(String id, ContextAPIConfig contextAPIConfig);
+    Set<String> getManagedApps();
 
-    ContextAPIConfig getRegisteredContextDependencies(String id);
+    Set<ContextAPIEnum> getGoals();
 
-    boolean unregisterContextDependencies(String id);
+    Map<String, ContextAPIConfig> getGoalsByApp();
+
+    Map<ContextAPIEnum, Boolean> getGoalsState();
+
+    Map<ContextAPIEnum, Boolean> getGoalsStateForApp(String app);
+
+    Boolean getGoalState(ContextAPIEnum goal);
+
 }

@@ -13,16 +13,18 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic;
+package fr.liglab.adele.icasa.context.manager.api.generic.models.goals;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
+/**
+ * TEMP
+ * Les applications enregistrent leurs besoins au gestionnaire de contexte
+ * Ces besoins représentent un but sur l'API à fournir
+ */
+public interface ContextDependencyRegistration {
 
-/*ToDo*/
-@Component(immediate = true, publicFactory = false)
-@Instantiate
-@Provides
-@SuppressWarnings("unused")
-public class ResourceModel {
+    boolean registerContextDependencies(String id, ContextAPIConfig contextAPIConfig);
+
+    ContextAPIConfig getRegisteredContextDependencies(String id);
+
+    boolean unregisterContextDependencies(String id);
 }

@@ -17,8 +17,9 @@
 package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextDependencyRegistration;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
@@ -60,6 +61,11 @@ public class ContextManager {
     private ContextDependencyRegistration contextDependencyRegistration;
 
 
+    /*Lookup filter*/
+    @Requires
+    @SuppressWarnings("unused")
+    private ExternalFilterModelAccess externalFilterModelAccess;
+
     /*Environment filter - Lookup IOP Controller*/
     @Requires(optional = true)
     @SuppressWarnings("unused")
@@ -84,8 +90,10 @@ public class ContextManager {
         contextInternalManager.configureGoals(goalModel.getGoalsByApp());
         /*Adaptation*/
         resolutionMachine.run();
+        /*ToDo*/
         /*Lookup filter*/
-        modifyLookupFilter(contextInternalManager.getCurrentLookupFilter());
+//        modifyLookupFilter(contextInternalManager.getCurrentLookupFilter());
+        modifyLookupFilter(externalFilterModelAccess.getLookupFilter());
     };
 
     @Validate

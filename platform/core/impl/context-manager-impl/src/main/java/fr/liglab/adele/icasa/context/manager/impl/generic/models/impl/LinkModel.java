@@ -13,19 +13,22 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic.goals;
+package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
 
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
 
-import java.util.Set;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Interface to react to changes in the goal model
- */
-public interface GoalModelListener {
+/*ToDo*/
+@Component(immediate = true, publicFactory = false)
+@Instantiate
+@Provides
+@SuppressWarnings("unused")
+public class LinkModel {
 
-    void notifyGoalSetChange(Set<ContextAPIEnum> goals);
-
-    /*ToDo UNUSED*/
-    void notifyGoalStateChange(ContextAPIEnum goal, Boolean state);
+    private static Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
 }

@@ -13,19 +13,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.generic.models.api;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
-
-import java.util.Map;
 import java.util.Set;
 
-/**
- * Interface of context internal manager
- */
-public interface ContextInternalManager {
-
-    void configureGoals(Map<String, ContextAPIConfig> contextGoalMap);
-
-    Runnable getContextResolutionMachine();
+public interface ExternalFilterModelUpdate {
+    void setLookupFilter(Set<String> filter);
 }

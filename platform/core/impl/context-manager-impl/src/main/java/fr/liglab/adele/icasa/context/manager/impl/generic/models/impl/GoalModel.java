@@ -13,12 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic;
+package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextDependencyRegistration;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelListener;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;

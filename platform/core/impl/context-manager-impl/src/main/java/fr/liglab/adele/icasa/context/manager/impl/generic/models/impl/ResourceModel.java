@@ -13,22 +13,16 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic;
+package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.FilterModelAccess;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /*ToDo*/
 @Component(immediate = true, publicFactory = false)
 @Instantiate
 @Provides
 @SuppressWarnings("unused")
-public class FilterModel implements FilterModelAccess{
-
-    private Set<String> lookupFilter = new HashSet<>();
+public class ResourceModel {
 }

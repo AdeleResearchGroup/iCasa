@@ -18,7 +18,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import org.osgi.framework.BundleContext;
@@ -74,6 +74,7 @@ final class LinkingLogic implements Runnable {
         logLevel = ContextManagerAdmin.getLogLevel();
 
         resolutionAlgorithm();
+        /*ToDo MODIFY LOOKUP FILTER IN THE MODEL ToDo*/
         contextInternalManager.setLookupFilter(lookupFilter);
     }
 
@@ -159,6 +160,7 @@ final class LinkingLogic implements Runnable {
         nonActivableServices = new HashSet<>();
 
         /*Mediation tree build*/
+        lookupFilter = new HashSet<>();
         mediationTreesOk = recursivelyBuildMediationTree(new HashSet<>(mediationTrees.values()), nonActivableServices);
 
         if(!mediationTreesOk){
@@ -185,7 +187,6 @@ final class LinkingLogic implements Runnable {
 
             /*TODO LOOKUP FILTER*/
             /*Add all services of the tree*/
-            lookupFilter = new HashSet<>();
             lookupFilter.add(requiredService);
 
             /*Find corresponding creators*/
