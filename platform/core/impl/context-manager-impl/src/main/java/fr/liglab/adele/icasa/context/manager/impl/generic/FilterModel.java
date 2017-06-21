@@ -15,20 +15,20 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.generic;
 
+import fr.liglab.adele.icasa.context.manager.api.generic.FilterModelAccess;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /*ToDo*/
 @Component(immediate = true, publicFactory = false)
 @Instantiate
 @Provides
 @SuppressWarnings("unused")
-public class LinkModel {
+public class FilterModel implements FilterModelAccess{
 
-    private static Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
+    private Set<String> lookupFilter = new HashSet<>();
 }

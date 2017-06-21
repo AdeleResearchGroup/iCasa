@@ -37,6 +37,13 @@
             <groupId>fr.liglab.adele.cream</groupId>
             <artifactId>cream.runtime.facilities</artifactId>
         </dependency>
+
+        <!--INTERNAL PLATFORM-->
+        <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>command.handler</artifactId>
+            <version>1.2.7-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

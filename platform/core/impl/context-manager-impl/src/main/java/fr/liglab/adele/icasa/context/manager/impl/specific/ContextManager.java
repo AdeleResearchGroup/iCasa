@@ -16,18 +16,14 @@
 
 package fr.liglab.adele.icasa.context.manager.impl.specific;
 
-import fr.liglab.adele.icasa.command.handler.Command;
-import fr.liglab.adele.icasa.command.handler.CommandProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextDependencyRegistration;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.api.generic.goals.GoalModelAccess;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.*;
@@ -38,37 +34,15 @@ import java.util.concurrent.*;
 @Component(immediate = true, publicFactory = false)
 @Instantiate
 @Provides
-@CommandProvider(namespace = "AM-ctxt")
 public class ContextManager {
 
     //TODO Reaction on resource or model event
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
 
-    /*DEBUG*/
-    /*Log level - 0: nothing, 3: all*/
-    private static final int logLevelMax = 3;
-    static int logLevel = 2;
-
-    /*CONFIGURATION (TEMPORARY)*/
-    /*Starting configuration of the context model - mandatory goals*/
-    /*(includes context components that are useful for RoSe*/
-    private static final ContextAPIConfig startingGoalsConfig = new ContextAPIConfig(
-            new HashSet<>(Collections.singletonList(ContextAPIEnum.IOPController)));
-
-    /*Environment lookup mode*/
-    private static boolean autoLookup = false;
-
-    /*Internal configuration mode*/
-    private static final int MODE_SCHEDULED = 0;
-    private static final int MODE_EVENT_DRIVEN = 1;
-    private static final int internal_configuration_mode = MODE_SCHEDULED;
-
     /*Only scheduled mode - Thread management*/
     private static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture scheduledFuture = null;
-    private static long delay = 10L;
-    private static TimeUnit timeUnit = TimeUnit.SECONDS;
 
     /*Event-driven mode*/
     private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
@@ -85,8 +59,6 @@ public class ContextManager {
     @SuppressWarnings("unused")
     private ContextDependencyRegistration contextDependencyRegistration;
 
-    /*EntityResource Model*/
-//
 
     /*Environment filter - Lookup IOP Controller*/
     @Requires(optional = true)
@@ -118,34 +90,23 @@ public class ContextManager {
 
     @Validate
     public void start(){
-
-        contextDependencyRegistration.registerContextDependencies(ContextManager.class.toGenericString(), startingGoalsConfig);
-
         /*Start scheduling*/
-        switch (internal_configuration_mode){
-            case MODE_SCHEDULED:
+        switch (ContextManagerAdmin.INTERNAL_CONFIGURATION_MODE){
+            case ContextManagerAdmin.MODE_SCHEDULED:
                 resolutionMachine = contextInternalManager.getContextResolutionMachine();
                 scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
-                        contextCompositionAdaptation, 0, delay, TimeUnit.SECONDS);
+                        contextCompositionAdaptation, 0, ContextManagerAdmin.getDelay(), ContextManagerAdmin.getTimeUnit());
                 break;
-            case MODE_EVENT_DRIVEN:
+            case ContextManagerAdmin.MODE_EVENT_DRIVEN:
                 break;
         }
     }
 
     @Invalidate
     public void stop(){
-        /*TODO bug de stop/start*/
+        /*ToDo bug de stop/start*/
         scheduledExecutorService.shutdown();
         singleExecutorService.shutdown();
-    }
-
-    public TimeUnit getTimeUnit() {
-        return timeUnit;
-    }
-
-    public long getDelay() {
-        return delay;
     }
 
     public boolean setDelay(long delay, TimeUnit timeUnit){
@@ -156,10 +117,10 @@ public class ContextManager {
         }
 
         if(modified){
-            scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, delay, timeUnit);
-            ContextManager.timeUnit = timeUnit;
-            ContextManager.delay = delay;
-//            ContextManager.delay = scheduledFuture.getDelay(ContextManager.timeUnit);
+            ContextManagerAdmin.setDelay(delay);
+            ContextManagerAdmin.setTimeUnit(timeUnit);
+            scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation, 0, ContextManagerAdmin.getDelay(), ContextManagerAdmin.getTimeUnit());
+//            ContextManagerAdmin.setDelay(scheduledFuture.getDelay(ContextManager.timeUnit));
         }
 
         return modified;
@@ -167,7 +128,7 @@ public class ContextManager {
 
     /*Environment interface*/
     private void modifyLookupFilter(Set<String> filter) {
-        if(autoLookup) {
+        if(ContextManagerAdmin.getAutoLookup()) {
             Set<String> toConsider = new HashSet<>();
             Set<String> toDiscard  = new HashSet<>();
 
@@ -201,6 +162,7 @@ public class ContextManager {
                     iopLookupService.discard(d);
                 }
 
+                int logLevel = ContextManagerAdmin.getLogLevel();
                 if(logLevel>=3) {
                     LOG.info("AUTO LOOKUP FILTER CONSIDER: " + toConsider);
                     LOG.info("AUTO LOOKUP FILTER DISCARD: " + toDiscard);
@@ -211,26 +173,5 @@ public class ContextManager {
             }
 
         }
-    }
-
-    /*Context manager debug interface*/
-    @Command
-    @SuppressWarnings("unused")
-    public void ctxtAmLogLevel(int level){
-        if(level<0) level = 0;
-        if(level>logLevelMax) level = logLevelMax;
-        logLevel = level;
-    }
-
-    @Command
-    @SuppressWarnings("unused")
-    public void ctxtAmAutoLookup(){
-        autoLookup = true;
-    }
-
-    @Command
-    @SuppressWarnings("unused")
-    public void ctxtAmManualLookup(){
-        autoLookup = false;
     }
 }

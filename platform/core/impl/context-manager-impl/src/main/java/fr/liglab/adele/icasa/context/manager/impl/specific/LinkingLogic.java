@@ -17,6 +17,7 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
@@ -33,7 +34,7 @@ import java.util.*;
  */
 final class LinkingLogic implements Runnable {
     /*Log*/
-    private int logLevel = ContextManager.logLevel;
+    private int logLevel = ContextManagerAdmin.getLogLevel();
     private static final Logger LOG = LoggerFactory.getLogger(LinkingLogic.class);
     private static int executionNumber = 0;
 
@@ -70,7 +71,7 @@ final class LinkingLogic implements Runnable {
             LOG.info("CONTEXT RESOLUTION MACHINE - Execution " + executionNumber++);
         }
         /*Update LogLevel*/
-        logLevel = ContextManager.logLevel;
+        logLevel = ContextManagerAdmin.getLogLevel();
 
         resolutionAlgorithm();
         contextInternalManager.setLookupFilter(lookupFilter);
@@ -172,7 +173,7 @@ final class LinkingLogic implements Runnable {
 
     private boolean recursivelyBuildMediationTree(Set<DefaultMutableTreeNode> requiredNodes, Set<String> servicesWithoutCreator){
         /*Update LogLevel*/
-        logLevel = ContextManager.logLevel;
+        logLevel = ContextManagerAdmin.getLogLevel();
 
         Set<DefaultMutableTreeNode> stepRequiredNodes = new HashSet<>();
 
@@ -263,7 +264,7 @@ final class LinkingLogic implements Runnable {
     /*TODO PBM*/
     private boolean mediationCalculationByGoal(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
         /*Update LogLevel*/
-        logLevel = ContextManager.logLevel;
+        logLevel = ContextManagerAdmin.getLogLevel();
 
         if(goal.getDepth()>0){
 
