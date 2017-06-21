@@ -113,60 +113,10 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
     }
 
 
-
     /*External Filter Model*/
-    /*ToDo REMOVE?*/
     void setLookupFilter(Set<String> filter){
         externalFilterModelUpdate.setLookupFilter(filter);
     }
-
-
-
-    /*Capacity model*/
-
-    /*ToDo REMOVE?*/
-    /*Managed elements*/
-//    @Requires(optional = true)
-//    @SuppressWarnings("all")
-//    private ContextEntity[] contextEntities;
-
-//    @Requires(id = "entityProviders", optional = true)
-//    @SuppressWarnings("all")
-//    private EntityProvider[] entityProviders;
-//
-//    @Requires(optional = true)
-//    @SuppressWarnings("all")
-//    private RelationProvider[] relationProviders;
-
-//    Set<ContextEntity> getContextEntities() {
-//        Set<ContextEntity> contextEntities;
-//        try{
-//            contextEntities  = new HashSet<>(Arrays.asList(this.contextEntities));
-//        } catch (NullPointerException ne){
-//            contextEntities = new HashSet<>();
-//        }
-//        return contextEntities;
-//    }
-
-//    Set<EntityProvider> getEntityProviders() {
-//        Set<EntityProvider> entityProviders;
-//        try{
-//            entityProviders  = new HashSet<>(Arrays.asList(this.entityProviders));
-//        } catch (NullPointerException ne){
-//            entityProviders = new HashSet<>();
-//        }
-//        return entityProviders;
-//    }
-//
-//    Set<RelationProvider> getRelationProviders() {
-//        Set<RelationProvider> relationProviders;
-//        try{
-//            relationProviders  = new HashSet<>(Arrays.asList(this.relationProviders));
-//        } catch (NullPointerException ne){
-//            relationProviders = new HashSet<>();
-//        }
-//        return relationProviders;
-//    }
 
     Set<EntityProvider> getEntityProviders(){
         return capabilityModelAccess.getEntityProviders();
