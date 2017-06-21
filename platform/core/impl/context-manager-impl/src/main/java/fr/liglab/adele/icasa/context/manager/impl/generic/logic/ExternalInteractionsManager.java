@@ -13,11 +13,11 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic.models.api;
+package fr.liglab.adele.icasa.context.manager.impl.generic.logic;
 
 import java.util.Set;
 
-public interface ExternalFilterModelUpdate {
+public interface ExternalInteractionsManager {
 
-    void setLookupFilter(Set<String> filter);
+    public void updateLookupFilter();
 }

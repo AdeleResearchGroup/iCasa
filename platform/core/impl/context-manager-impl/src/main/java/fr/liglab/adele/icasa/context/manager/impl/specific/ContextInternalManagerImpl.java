@@ -50,19 +50,8 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
     @SuppressWarnings("unused")
     private BundleContext bundleContext;
 
-    /*Managed elements*/
-    @Requires(optional = true)
-    @SuppressWarnings("all")
-    private ContextEntity[] contextEntities;
 
-    @Requires(id = "entityProviders", optional = true)
-    @SuppressWarnings("all")
-    private EntityProvider[] entityProviders;
-
-    @Requires(optional = true)
-    @SuppressWarnings("all")
-    private RelationProvider[] relationProviders;
-
+    /*MODELS*/
     /*Capability model(providers and creators)*/
     @Requires
     @SuppressWarnings("unused")
@@ -82,12 +71,27 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
     private ExternalFilterModelUpdate externalFilterModelUpdate;
 
 
-    private Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
-    private Set<String> lookupFilter = new HashSet<>();
-
     /*Initialization*/
     public ContextInternalManagerImpl(){
         resolutionMachine = new LinkingLogic(this);
+    }
+
+    @Override
+    public LinkingLogic getContextResolutionMachine() {
+        return resolutionMachine;
+    }
+
+    BundleContext getBundleContext() {
+        return bundleContext;
+    }
+
+
+
+    /*Goal model*/
+    private Map<String, ContextAPIConfig> contextGoalMap = new HashMap<>();
+
+    Map<String, ContextAPIConfig> getContextGoalMap() {
+        return contextGoalMap;
     }
 
     /*ToDo react to event*/
@@ -103,19 +107,37 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
         //DO NOTHING
     }
 
+    /*ToDo REMOVE?*/
     @Override
     public void configureGoals(Map<String, ContextAPIConfig> contextGoalMap) {
         this.contextGoalMap = new HashMap<>(contextGoalMap);
     }
 
-    @Override
-    public LinkingLogic getContextResolutionMachine() {
-        return resolutionMachine;
+
+
+    /*External Filter Model*/
+    /*ToDo REMOVE?*/
+    void setLookupFilter(Set<String> filter){
+        externalFilterModelUpdate.setLookupFilter(filter);
     }
 
-    BundleContext getBundleContext() {
-        return bundleContext;
-    }
+
+
+    /*Capacity model*/
+
+    /*ToDo REMOVE?*/
+    /*Managed elements*/
+    @Requires(optional = true)
+    @SuppressWarnings("all")
+    private ContextEntity[] contextEntities;
+
+    @Requires(id = "entityProviders", optional = true)
+    @SuppressWarnings("all")
+    private EntityProvider[] entityProviders;
+
+    @Requires(optional = true)
+    @SuppressWarnings("all")
+    private RelationProvider[] relationProviders;
 
     Set<ContextEntity> getContextEntities() {
         Set<ContextEntity> contextEntities;
@@ -157,16 +179,6 @@ public class ContextInternalManagerImpl implements ContextInternalManager, GoalM
 
     Map<String, EntityProvider> geteProviderByCreatorName() {
         return capabilityModelAccess.getmEntityProviderByCreatorName();
-    }
-
-    Map<String, ContextAPIConfig> getContextGoalMap() {
-        return contextGoalMap;
-    }
-
-    /*ToDo*/
-    void setLookupFilter(Set<String> filter){
-        lookupFilter = new HashSet<>(filter);
-        externalFilterModelUpdate.setLookupFilter(filter);
     }
 
     @Bind(id = "entityProviders")

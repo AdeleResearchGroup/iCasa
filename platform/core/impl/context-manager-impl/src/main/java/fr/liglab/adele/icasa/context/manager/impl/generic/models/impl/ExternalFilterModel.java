@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
 
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
 import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.ExternalFilterModelUpdate;
 import org.apache.felix.ipojo.annotations.Component;
@@ -40,6 +41,7 @@ public class ExternalFilterModel implements ExternalFilterModelAccess, ExternalF
 
     @Override
     public void setLookupFilter(Set<String> filter) {
-        lookupFilter = new HashSet<>(filter);
+        lookupFilter.clear();
+        lookupFilter.addAll(filter);
     }
 }

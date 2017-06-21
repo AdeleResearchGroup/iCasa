@@ -78,12 +78,12 @@ final class LinkingLogic implements Runnable {
         contextInternalManager.setLookupFilter(lookupFilter);
     }
 
-    /*TODO trigger on events (for now it doesn't work because of interlocked callbacks)*/
+    /*ToDo trigger on events (for now it doesn't work because of interlocked callbacks)*/
     private synchronized void resolutionAlgorithm() {
         /*Update goal model*/
         updateGoals();
 
-        /*TO CHANGE*/
+        /*ToDo CHANGE THAT!!!*/
         enableAllRelations();
 
         /*Initialization*/
