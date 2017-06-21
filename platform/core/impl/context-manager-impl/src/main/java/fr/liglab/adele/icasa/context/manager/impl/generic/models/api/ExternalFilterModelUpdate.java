@@ -20,4 +20,8 @@ import java.util.Set;
 public interface ExternalFilterModelUpdate {
 
     void setLookupFilter(Set<String> filter);
+
+    void addServiceToLookupFilter(String service);
+
+    void removeServiceToLookupFilter(String service);
 }

@@ -19,5 +19,5 @@ import java.util.Set;
 
 public interface ExternalInteractionsManager {
 
-    public void updateLookupFilter();
+    void updateLookupFilter();
 }

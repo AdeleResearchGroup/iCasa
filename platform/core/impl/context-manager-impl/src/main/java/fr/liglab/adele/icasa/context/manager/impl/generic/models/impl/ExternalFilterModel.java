@@ -41,7 +41,29 @@ public class ExternalFilterModel implements ExternalFilterModelAccess, ExternalF
 
     @Override
     public void setLookupFilter(Set<String> filter) {
-        lookupFilter.clear();
-        lookupFilter.addAll(filter);
+        try{
+            lookupFilter.clear();
+            lookupFilter.addAll(filter);
+        } catch (NullPointerException ne){
+            ne.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addServiceToLookupFilter(String service) {
+        try{
+            lookupFilter.add(service);
+        } catch (NullPointerException ne){
+            ne.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeServiceToLookupFilter(String service) {
+        try{
+            lookupFilter.remove(service);
+        } catch (NullPointerException ne){
+            ne.printStackTrace();
+        }
     }
 }
