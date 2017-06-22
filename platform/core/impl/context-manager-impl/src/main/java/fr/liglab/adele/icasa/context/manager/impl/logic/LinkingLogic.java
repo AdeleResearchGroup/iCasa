@@ -27,7 +27,6 @@ import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +47,7 @@ final class LinkingLogic implements Runnable {
     /*MODELS*/
     private static GoalModelAccess goalModelAccess;
     private static GoalModelUpdate goalModelUpdate;
-    private static CapabilityModelAccess capabilityModel;
-    private static BundleContext bundleContext;
+    private static CapabilityModelAccess capabilityModelAccess;
     private static LinkModelAccess linkModelAccess;
     private static LinkModelUpdate linkModelUpdate;
     private static ExternalFilterModelAccess externalFilterModelAccess;
@@ -65,14 +63,13 @@ final class LinkingLogic implements Runnable {
 
     /*Constructor: binds to models*/
     protected LinkingLogic(GoalModelAccess goalModelAccess, GoalModelUpdate goalModelUpdate,
-                           CapabilityModelAccess capabilityModel, BundleContext bundleContext,
+                           CapabilityModelAccess capabilityModelAccess,
                            LinkModelAccess linkModelAccess, LinkModelUpdate linkModelUpdate,
                            ExternalFilterModelAccess externalFilterModelAccess, ExternalFilterModelUpdate externalFilterModelUpdate){
 
         LinkingLogic.goalModelAccess = goalModelAccess;
         LinkingLogic.goalModelUpdate = goalModelUpdate;
-        LinkingLogic.capabilityModel = capabilityModel;
-        LinkingLogic.bundleContext = bundleContext;
+        LinkingLogic.capabilityModelAccess = capabilityModelAccess;
         LinkingLogic.linkModelAccess = linkModelAccess;
         LinkingLogic.linkModelUpdate = linkModelUpdate;
         LinkingLogic.externalFilterModelAccess = externalFilterModelAccess;
@@ -109,7 +106,6 @@ final class LinkingLogic implements Runnable {
         /*Tree calculation*/
         buildMediationTree();
 
-
         /*Activation calculation by goal*/
         mediationCalculation();
 
@@ -132,7 +128,7 @@ final class LinkingLogic implements Runnable {
     }
 
     private void enableAllRelations(){
-        Set<RelationProvider> relationProviders = capabilityModel.getRelationProviders();
+        Set<RelationProvider> relationProviders = capabilityModelAccess.getRelationProviders();
 
         /*ToDO CHANGE THAT*/
         /*Depends on 1 service + 1 implem - activate only if this 2 are present?*/
@@ -166,10 +162,10 @@ final class LinkingLogic implements Runnable {
 
     private void updateExternalProviderModels(){
 
-        entityProviders = capabilityModel.getEntityProviders();
-        eCreatorsByServices = capabilityModel.getmEntityCreatorsByService();
-        eCreatorsRequirements = capabilityModel.getmEntityCreatorsRequirements();
-        eProviderByCreatorName = capabilityModel.getmEntityProviderByCreatorName();
+        entityProviders = capabilityModelAccess.getEntityProviders();
+        eCreatorsByServices = capabilityModelAccess.getmEntityCreatorsByService();
+        eCreatorsRequirements = capabilityModelAccess.getmEntityCreatorsRequirements();
+        eProviderByCreatorName = capabilityModelAccess.getmEntityProviderByCreatorName();
     }
 
     private void buildMediationTree(){
@@ -412,19 +408,13 @@ final class LinkingLogic implements Runnable {
 
     private void goalServicesAvailabilityCheck(){
         /*Verification*/
-        /*ToDo Modify goal model - state*/
-
         /*Check availability of requested goals*/
-        for (ContextAPIEnum contextAPI : goalModelAccess.getGoals()) {
-            String contextAPIName = contextAPI.getInterfaceName();
-            if (bundleContext.getServiceReference(contextAPIName) == null) {
-                if(logLevel>=1) {
-                    LOG.info("MISSING CONTEXT API: " + contextAPIName);
-                }
-            } else {
-                if(logLevel>=1) {
-                    LOG.info("PROVIDING CONTEXT API: " + contextAPIName);
-                }
+        for (Map.Entry<ContextAPIEnum, Boolean> goalState :goalModelAccess.getGoalsState().entrySet()){
+            String goal = goalState.getKey().getInterfaceName();
+            String state = goalState.getValue()?"PROVIDING":"MISSING";
+
+            if(logLevel>=1) {
+                LOG.info(state + " CONTEXT API: " + goal);
             }
         }
     }

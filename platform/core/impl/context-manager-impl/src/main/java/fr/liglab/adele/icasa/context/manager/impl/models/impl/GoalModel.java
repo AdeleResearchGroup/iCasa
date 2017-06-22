@@ -41,9 +41,6 @@ public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDepen
     /*GOALS*/
     private static Map<String, ContextAPIConfig> contextGoalsByApp = new HashMap<>();
     private static Map<ContextAPIEnum, Boolean> contextGoalsActivability = new HashMap<>();
-
-
-
     private static Map<ContextAPIEnum, Boolean> contextGoalsState = new HashMap<>();
 
 
@@ -188,9 +185,8 @@ public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDepen
     }
 
     /*GOAL MODEL STATE UPDATE*/
-    /*ToDo Event update*/
     private void goalServicesAvailabilityCheck(){
-        /*Vérification*/
+        /*Verification*/
         contextGoalsState = new HashMap<>();
         /*Services à activer*/
         for (ContextAPIEnum contextAPI : getGoals()) {

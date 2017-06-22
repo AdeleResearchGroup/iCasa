@@ -77,15 +77,10 @@ public class ContextManager implements GoalModelListener {
 
 
     /*INTERNAL MODELS*/
-    /*Capabilities model*/
+    /*Capability model - access*/
     @Requires
     @SuppressWarnings("unused")
     private CapabilityModelAccess capabilityModelAccess;
-
-    /*Registry*/
-    @Context
-    @SuppressWarnings("unused")
-    private BundleContext bundleContext;
 
     /*Link model - access*/
     @Requires
@@ -128,7 +123,7 @@ public class ContextManager implements GoalModelListener {
 
         /*Initialization of algorithms sub-parts*/
         resolutionMachine = new LinkingLogic(goalModelAccess, goalModelUpdate,
-                capabilityModelAccess, bundleContext,
+                capabilityModelAccess,
                 linkModelAccess, linkModelUpdate,
                 externalFilterModelAccess, externalFilterModelUpdate);
         /*Start scheduling*/
@@ -180,4 +175,6 @@ public class ContextManager implements GoalModelListener {
     public void notifyGoalStateChange(ContextAPIEnum goal, Boolean state) {
 
     }
+
+    /*ToDo CHECK GOALS AVAILABILITY REGULARLY*/
 }

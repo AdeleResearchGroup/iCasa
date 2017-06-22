@@ -22,7 +22,6 @@ import org.apache.felix.ipojo.annotations.*;
 
 @Component(immediate = true, publicFactory = false)
 @Instantiate
-@Provides
 @SuppressWarnings("unused")
 public class CapabilityModelUpdater {
 
