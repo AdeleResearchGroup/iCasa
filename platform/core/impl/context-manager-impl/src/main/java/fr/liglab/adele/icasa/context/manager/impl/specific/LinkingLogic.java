@@ -18,9 +18,13 @@ package fr.liglab.adele.icasa.context.manager.impl.specific;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.ExternalFilterModelUpdate;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +43,13 @@ final class LinkingLogic implements Runnable {
     private static int executionNumber = 0;
 
     /*ContextInternalManagerImpl*/
-    private static ContextInternalManagerImpl contextInternalManager;
+//    private static ContextInternalManagerImpl contextInternalManager;
+
+    /*ToDo*/
+    private static GoalModelAccess goalModel;
+    private static CapabilityModelAccess capabilityModel;
+    private static ExternalFilterModelUpdate externalFilterModel;
+    private static BundleContext bundleContext;
 
     /*Models from context internal manager*/
     private Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
@@ -60,8 +70,16 @@ final class LinkingLogic implements Runnable {
 
 
     /*Constructor: binds to other objects*/
-    protected LinkingLogic(ContextInternalManagerImpl contextInternalManager) {
-        LinkingLogic.contextInternalManager = contextInternalManager;
+//    protected LinkingLogic(ContextInternalManagerImpl contextInternalManager) {
+//        LinkingLogic.contextInternalManager = contextInternalManager;
+//    }
+
+    protected LinkingLogic(GoalModelAccess goalModel, CapabilityModelAccess capabilityModel,
+                           ExternalFilterModelUpdate externalFilterModel, BundleContext bundleContext){
+        LinkingLogic.goalModel = goalModel;
+        LinkingLogic.capabilityModel = capabilityModel;
+        LinkingLogic.externalFilterModel = externalFilterModel;
+        LinkingLogic.bundleContext = bundleContext;
     }
 
     @Override
@@ -75,7 +93,8 @@ final class LinkingLogic implements Runnable {
 
         resolutionAlgorithm();
         /*ToDo MODIFY LOOKUP FILTER IN THE MODEL ToDo*/
-        contextInternalManager.setLookupFilter(lookupFilter);
+//        contextInternalManager.setLookupFilter(lookupFilter);
+        externalFilterModel.setLookupFilter(lookupFilter);
     }
 
     /*ToDo trigger on events (for now it doesn't work because of interlocked callbacks)*/
@@ -109,18 +128,27 @@ final class LinkingLogic implements Runnable {
         /*App, set de services en config optimale*/
         /*TODO SELECTION DES CONFIGS D'APP ? */
         /*TODO (pour l'instant toutes les app traitées en même temps)*/
-        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
-        goals = new HashSet<>();
-        for (ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet) {
-            goals.addAll(contextAPIConfigs.getConfig());
+//        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
+//        goals = new HashSet<>();
+//        for (ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet) {
+//            goals.addAll(contextAPIConfigs.getConfig());
+//            if(logLevel>=2) {
+//                LOG.info("GOALS " + contextAPIConfigs.getConfig().toString());
+//            }
+//        }
+
+        goals = goalModel.getGoals();
+        for (ContextAPIEnum contextAPIEnum : goals) {
             if(logLevel>=2) {
-                LOG.info("GOALS " + contextAPIConfigs.getConfig().toString());
+                LOG.info("GOAL " + contextAPIEnum.getInterfaceName());
             }
         }
     }
 
     private void enableAllRelations(){
-        Set<RelationProvider> relationProviders = contextInternalManager.getRelationProviders();
+//        Set<RelationProvider> relationProviders = contextInternalManager.getRelationProviders();
+        Set<RelationProvider> relationProviders = capabilityModel.getRelationProviders();
+
         /*TODO Modifier (difficile de déduire les relations depuis le service -> requises par les implementations)*/
         /*TODO Dépend d'un service et d'une implem*/
         /*TODO Activer si les 2 sont présents*/
@@ -150,10 +178,15 @@ final class LinkingLogic implements Runnable {
     }
 
     private void updateExternalProviderModels(){
-        entityProviders = contextInternalManager.getEntityProviders();
-        eCreatorsByServices = contextInternalManager.geteCreatorsByServices();
-        eCreatorsRequirements = contextInternalManager.geteCreatorsRequirements();
-        eProviderByCreatorName = contextInternalManager.geteProviderByCreatorName();
+//        entityProviders = contextInternalManager.getEntityProviders();
+//        eCreatorsByServices = contextInternalManager.geteCreatorsByServices();
+//        eCreatorsRequirements = contextInternalManager.geteCreatorsRequirements();
+//        eProviderByCreatorName = contextInternalManager.geteProviderByCreatorName();
+
+        entityProviders = capabilityModel.getEntityProviders();
+        eCreatorsByServices = capabilityModel.getmEntityCreatorsByService();
+        eCreatorsRequirements = capabilityModel.getmEntityCreatorsRequirements();
+        eProviderByCreatorName = capabilityModel.getmEntityProviderByCreatorName();
     }
 
     private void buildMediationTree(){
@@ -376,7 +409,8 @@ final class LinkingLogic implements Runnable {
         /*Vérification*/
         /*TODO MODIFY GOAL MODEL*/
         /*Services à activer*/
-        BundleContext bundleContext = contextInternalManager.getBundleContext();
+//        BundleContext bundleContext = contextInternalManager.getBundleContext();
+
         for (ContextAPIEnum contextAPI : goals) {
             String contextAPIName = contextAPI.getInterfaceName();
             if (bundleContext.getServiceReference(contextAPIName) == null) {

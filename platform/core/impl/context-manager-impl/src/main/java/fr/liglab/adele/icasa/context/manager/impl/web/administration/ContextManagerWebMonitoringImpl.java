@@ -23,7 +23,6 @@ import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterMo
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.web.administration.ContextManagerWebMonitoring;
 import fr.liglab.adele.icasa.context.manager.api.web.administration.GoalsByAppMonitoring;
-import fr.liglab.adele.icasa.context.manager.impl.specific.ContextInternalManager;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -42,10 +41,6 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
     @Requires(optional = true)
     @SuppressWarnings("all")
     private GoalModelAccess goalModel;
-
-    @Requires(optional = true)
-    @SuppressWarnings("all")
-    private ContextInternalManager contextInternalManager;
 
     @Requires(optional = true)
     @SuppressWarnings("all")

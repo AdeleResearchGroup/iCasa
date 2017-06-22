@@ -17,12 +17,17 @@
 package fr.liglab.adele.icasa.context.manager.impl.specific;
 
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
+import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.generic.logic.ExternalInteractionsManager;
+import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.ExternalFilterModelUpdate;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.*;
+import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,12 +41,11 @@ import java.util.concurrent.*;
 @Component(immediate = true, publicFactory = false)
 @Instantiate
 @Provides
-public class ContextManager {
-
-    //TODO Reaction on resource or model event
+public class ContextManager implements GoalModelListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
 
+    /*SCHEDULING*/
     /*Only scheduled mode - Thread management*/
     private static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture scheduledFuture = null;
@@ -50,65 +54,73 @@ public class ContextManager {
     private static ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
 
 
-    /*CONTEXT AM EXTERNAL INTERFACES*/
-    /*Goal Model*/
+    /*EXTERNAL MODELS*/
+    /*Goal model*/
     @Requires
     @SuppressWarnings("unused")
-    private GoalModelAccess goalModel;
+    private GoalModelAccess goalModelAccess;
 
-    /*Registration of context dependencies*/
-    @Requires
-    @SuppressWarnings("unused")
-    private ContextDependencyRegistration contextDependencyRegistration;
-
-
-    /*Lookup filter*/
+    /*Lookup filter model - access*/
     @Requires
     @SuppressWarnings("unused")
     private ExternalFilterModelAccess externalFilterModelAccess;
 
+    /*Lookup filter model - update*/
+    @Requires
+    @SuppressWarnings("unused")
+    private ExternalFilterModelUpdate externalFilterModelUpdate;
+
+
+    /*INTERNAL MODELS*/
+    /*Registry*/
+    @Context
+    @SuppressWarnings("unused")
+    private BundleContext bundleContext;
+
+    /*Capabilities model*/
+    @Requires
+    @SuppressWarnings("unused")
+    private CapabilityModelAccess capabilityModelAccess;
+
+
+    /*EXTERNAL INTERFACES*/
+    /*Applications - registration of context dependencies*/
+    @Requires
+    @SuppressWarnings("unused")
+    private ContextDependencyRegistration contextDependencyRegistration;
+
+    /*RoSe/X-Ware - Interaction with remote systems*/
     @Requires
     @SuppressWarnings("unused")
     private ExternalInteractionsManager externalInteractionsManager;
 
-    /*Environment filter - Lookup IOP Controller*/
-    @Requires(optional = true)
-    @SuppressWarnings("unused")
-    private IOPLookupService iopLookupService;
 
-    /*Environment lookup filter*/
-    private static Set<String> lookupFilter = new HashSet<>();
-
-
-    /*CONTEXT AM INTERNAL INTERFACES*/
-    /*Management sub-parts*/
-    @Requires
-    @SuppressWarnings("unused")
-    private ContextInternalManager contextInternalManager;
-
+    /*INTERNAL INTERFACES*/
     /*Resolution machine : calcule et effectue l'adaptation*/
     private Runnable resolutionMachine;
 
     /*Adaptation*/
     private Runnable contextCompositionAdaptation = () -> {
-        /*Passage de l'etat du contexte à un instant t*/
-        contextInternalManager.configureGoals(goalModel.getGoalsByApp());
         /*Adaptation*/
         resolutionMachine.run();
         /*Lookup filter*/
         externalInteractionsManager.updateLookupFilter();
     };
 
+
     @Validate
     public void start(){
+
+        /*Initialization of algorithms sub-parts*/
+        resolutionMachine = new LinkingLogic(goalModelAccess, capabilityModelAccess, externalFilterModelUpdate, bundleContext);
         /*Start scheduling*/
         switch (ContextManagerAdmin.INTERNAL_CONFIGURATION_MODE){
             case ContextManagerAdmin.MODE_SCHEDULED:
-                resolutionMachine = contextInternalManager.getContextResolutionMachine();
                 scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
                         contextCompositionAdaptation, 0, ContextManagerAdmin.getDelay(), ContextManagerAdmin.getTimeUnit());
                 break;
             case ContextManagerAdmin.MODE_EVENT_DRIVEN:
+                /*ToDo*/
                 break;
         }
     }
@@ -120,6 +132,8 @@ public class ContextManager {
         singleExecutorService.shutdown();
     }
 
+
+    /*SCHEDULING CONFIGURATION*/
     public boolean setDelay(long delay, TimeUnit timeUnit){
         boolean modified = true;
 
@@ -134,5 +148,18 @@ public class ContextManager {
         }
 
         return modified;
+    }
+
+    /*EVENT HANDLER*/
+    @Override
+    public void notifyGoalSetChange(Set<ContextAPIEnum> goals) {
+          /*ToDo does not work on event: interlock problem*/
+          /*ToDo manage with schedule - try to avoid interlock*/
+//        resolutionMachine.run();
+    }
+
+    @Override
+    public void notifyGoalStateChange(ContextAPIEnum goal, Boolean state) {
+
     }
 }
