@@ -25,6 +25,7 @@ import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelA
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -54,10 +55,15 @@ public class ContextManager implements GoalModelListener {
 
 
     /*EXTERNAL MODELS*/
-    /*Goal model*/
+    /*Goal model - access*/
     @Requires
     @SuppressWarnings("unused")
     private GoalModelAccess goalModelAccess;
+
+    /*Goal model - update*/
+    @Requires
+    @SuppressWarnings("unused")
+    private GoalModelUpdate goalModelUpdate;
 
     /*Lookup filter model - access*/
     @Requires
@@ -121,8 +127,10 @@ public class ContextManager implements GoalModelListener {
     public void start(){
 
         /*Initialization of algorithms sub-parts*/
-        resolutionMachine = new LinkingLogic(goalModelAccess, capabilityModelAccess, bundleContext,
-                linkModelAccess, linkModelUpdate, externalFilterModelAccess, externalFilterModelUpdate);
+        resolutionMachine = new LinkingLogic(goalModelAccess, goalModelUpdate,
+                capabilityModelAccess, bundleContext,
+                linkModelAccess, linkModelUpdate,
+                externalFilterModelAccess, externalFilterModelUpdate);
         /*Start scheduling*/
         switch (ContextManagerAdmin.INTERNAL_CONFIGURATION_MODE){
             case ContextManagerAdmin.MODE_SCHEDULED:

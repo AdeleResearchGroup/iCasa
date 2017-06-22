@@ -25,6 +25,7 @@ import fr.liglab.adele.icasa.context.manager.api.generic.models.LinkModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -45,7 +46,8 @@ final class LinkingLogic implements Runnable {
 
 
     /*MODELS*/
-    private static GoalModelAccess goalModel;
+    private static GoalModelAccess goalModelAccess;
+    private static GoalModelUpdate goalModelUpdate;
     private static CapabilityModelAccess capabilityModel;
     private static BundleContext bundleContext;
     private static LinkModelAccess linkModelAccess;
@@ -54,23 +56,21 @@ final class LinkingLogic implements Runnable {
     private static ExternalFilterModelUpdate externalFilterModelUpdate;
 
 
-    /*Models from context internal manager*/
+    /*Internal models*/ /*Check information consistency*/
     private Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
     private Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
     private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
     private Set<EntityProvider> entityProviders = new HashSet<>();
 
 
-    /*Linking Logic models*/
-    private Set<String> nonActivableGoals = new HashSet<>();
-
-
     /*Constructor: binds to models*/
-    protected LinkingLogic(GoalModelAccess goalModel, CapabilityModelAccess capabilityModel, BundleContext bundleContext,
+    protected LinkingLogic(GoalModelAccess goalModelAccess, GoalModelUpdate goalModelUpdate,
+                           CapabilityModelAccess capabilityModel, BundleContext bundleContext,
                            LinkModelAccess linkModelAccess, LinkModelUpdate linkModelUpdate,
                            ExternalFilterModelAccess externalFilterModelAccess, ExternalFilterModelUpdate externalFilterModelUpdate){
 
-        LinkingLogic.goalModel = goalModel;
+        LinkingLogic.goalModelAccess = goalModelAccess;
+        LinkingLogic.goalModelUpdate = goalModelUpdate;
         LinkingLogic.capabilityModel = capabilityModel;
         LinkingLogic.bundleContext = bundleContext;
         LinkingLogic.linkModelAccess = linkModelAccess;
@@ -123,7 +123,7 @@ final class LinkingLogic implements Runnable {
     private void updateGoals(){
         /*App goals - calculation by context API*/
 
-        Set<ContextAPIEnum> goals = goalModel.getGoals();
+        Set<ContextAPIEnum> goals = goalModelAccess.getGoals();
         for (ContextAPIEnum contextAPIEnum : goals) {
             if(logLevel>=2) {
                 LOG.info("GOAL " + contextAPIEnum.getInterfaceName());
@@ -152,7 +152,7 @@ final class LinkingLogic implements Runnable {
     private void mediationTreeInitializationWithGoals(){
         /*Services to activate*/
         Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
-        for (ContextAPIEnum contextAPI : goalModel.getGoals()) {
+        for (ContextAPIEnum contextAPI : goalModelAccess.getGoals()) {
             String goalName = contextAPI.getInterfaceName();
             if(logLevel>=2) {
                 LOG.info("CONTEXT API TO ACTIVATE: " + contextAPI + " named: " + goalName);
@@ -252,7 +252,7 @@ final class LinkingLogic implements Runnable {
         Set<String> nonActivableServices = linkModelAccess.getNonActivableServices();
 
         if(linkModelAccess.isMediationTreesOk()){
-            nonActivableGoals = new HashSet<>();
+            Map<ContextAPIEnum, Boolean> goalsActivability = new HashMap<>();
 
             for (Map.Entry<String, DefaultMutableTreeNode> mediationTree : linkModelAccess.getMediationTrees().entrySet()) {
                 String goalName = mediationTree.getKey();
@@ -265,10 +265,11 @@ final class LinkingLogic implements Runnable {
                     }
                 }
 
-            /*To activate for this goal*/
+                /*To activate for this goal*/
                 Set<String> creatorsToActivateSubSet = new HashSet<>();
 
-                if(mediationCalculationByGoal(goalNode, creatorsToActivateSubSet, nonActivableServices)){
+                boolean activable = mediationCalculationByGoal(goalNode, creatorsToActivateSubSet, nonActivableServices);
+                if(activable){
                     if(logLevel>=2) {
                         LOG.info("ACTIVATION POSSIBLE FOR GOAL: " + goalName);
                     }
@@ -277,10 +278,23 @@ final class LinkingLogic implements Runnable {
                     if(logLevel>=2) {
                         LOG.info("ACTIVATION NOT POSSIBLE FOR GOAL: " + goalName);
                     }
-                    nonActivableGoals.add(goalName);
                     /*ToDo Modification of configuration? How to handle it?*/
                 }
+                /*ToDo*/
+                try{
+                    goalsActivability.put(ContextAPIEnum.containsInterface(goalName), activable);
+                } catch(NullPointerException ne){
+                    ne.printStackTrace();
+                }
             }
+            goalModelUpdate.setContextGoalsActivability(goalsActivability);
+        } else {
+            /*ToDo MODIFY*/
+            Map<ContextAPIEnum, Boolean> goalsActivability = new HashMap<>();
+            for(ContextAPIEnum contextAPIEnum : goalModelAccess.getGoals()){
+                goalsActivability.put(contextAPIEnum, false);
+            }
+            goalModelUpdate.setContextGoalsActivability(goalsActivability);
         }
 
         linkModelUpdate.setCreatorsToActivate(creatorsToActivate);
@@ -401,7 +415,7 @@ final class LinkingLogic implements Runnable {
         /*ToDo Modify goal model - state*/
 
         /*Check availability of requested goals*/
-        for (ContextAPIEnum contextAPI : goalModel.getGoals()) {
+        for (ContextAPIEnum contextAPI : goalModelAccess.getGoals()) {
             String contextAPIName = contextAPI.getInterfaceName();
             if (bundleContext.getServiceReference(contextAPIName) == null) {
                 if(logLevel>=1) {

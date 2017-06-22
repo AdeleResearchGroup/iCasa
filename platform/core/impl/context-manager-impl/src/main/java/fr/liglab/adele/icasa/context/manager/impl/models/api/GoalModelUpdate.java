@@ -13,30 +13,13 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic.models.goals;
+package fr.liglab.adele.icasa.context.manager.impl.models.api;
 
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 
 import java.util.Map;
-import java.util.Set;
 
-/**
- * Interface to access and use information from goal model
- */
-public interface GoalModelAccess {
+public interface GoalModelUpdate {
 
-    Set<String> getManagedApps();
-
-    Set<ContextAPIEnum> getGoals();
-
-    Map<String, ContextAPIConfig> getGoalsByApp();
-
-    Map<ContextAPIEnum, Boolean> getGoalsState();
-
-    Map<ContextAPIEnum, Boolean> getGoalsStateForApp(String app);
-
-    Map<ContextAPIEnum, Boolean> getContextGoalsActivability();
-
-    Boolean getGoalState(ContextAPIEnum goal);
-
+    void setContextGoalsActivability(Map<ContextAPIEnum, Boolean> contextGoalsActivability);
 }

@@ -20,6 +20,7 @@ import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDep
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 
@@ -32,13 +33,17 @@ import java.util.Set;
 @Instantiate
 @Provides
 @SuppressWarnings("unused")
-public class GoalModel implements ContextDependencyRegistration, GoalModelAccess {
+public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDependencyRegistration {
 
     @Context
     private BundleContext bundleContext;
 
     /*GOALS*/
     private static Map<String, ContextAPIConfig> contextGoalsByApp = new HashMap<>();
+    private static Map<ContextAPIEnum, Boolean> contextGoalsActivability = new HashMap<>();
+
+
+
     private static Map<ContextAPIEnum, Boolean> contextGoalsState = new HashMap<>();
 
 
@@ -142,6 +147,16 @@ public class GoalModel implements ContextDependencyRegistration, GoalModelAccess
     @Override
     public Map<String, ContextAPIConfig> getGoalsByApp() {
         return new HashMap<>(contextGoalsByApp);
+    }
+
+    @Override
+    public Map<ContextAPIEnum, Boolean> getContextGoalsActivability() {
+        return new HashMap<>(contextGoalsActivability);
+    }
+
+    @Override
+    public void setContextGoalsActivability(Map<ContextAPIEnum, Boolean> contextGoalsActivability) {
+        GoalModel.contextGoalsActivability = new HashMap<>(contextGoalsActivability);
     }
 
     @Override
