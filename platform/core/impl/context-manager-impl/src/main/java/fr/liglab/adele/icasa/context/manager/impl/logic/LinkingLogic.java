@@ -43,10 +43,8 @@ final class LinkingLogic implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(LinkingLogic.class);
     private static int executionNumber = 0;
 
-    /*ContextInternalManagerImpl*/
-//    private static ContextInternalManagerImpl contextInternalManager;
 
-    /*ToDo*/
+    /*MODELS*/
     private static GoalModelAccess goalModel;
     private static CapabilityModelAccess capabilityModel;
     private static BundleContext bundleContext;
@@ -62,16 +60,9 @@ final class LinkingLogic implements Runnable {
     private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
     private Set<EntityProvider> entityProviders = new HashSet<>();
 
-    /*Models to context internal manager*/
-    private Set<String> lookupFilter = new HashSet<>();
 
     /*Linking Logic models*/
-    private Set<ContextAPIEnum> goals = new HashSet<>();
     private Set<String> nonActivableGoals = new HashSet<>();
-    private boolean mediationTreesOk = false;
-    private static Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
-    private Set<String> creatorsToActivate = new HashSet<>();
-    private Set<String> nonActivableServices = new HashSet<>();
 
 
     /*Constructor: binds to models*/
@@ -99,9 +90,6 @@ final class LinkingLogic implements Runnable {
 
         /*Context adaptation*/
         resolutionAlgorithm();
-
-        /*External request adaptation*/
-        externalFilterModelUpdate.setLookupFilter(lookupFilter);
     }
 
     /*ToDo trigger on events (for now it doesn't work because of interlocked callbacks)*/
@@ -120,16 +108,13 @@ final class LinkingLogic implements Runnable {
 
         /*Tree calculation*/
         buildMediationTree();
-        linkModelUpdate.setMediationTreesOk(mediationTreesOk);
-        linkModelUpdate.setMediationTrees(mediationTrees);
+
 
         /*Activation calculation by goal*/
-        mediationCalculation(nonActivableServices);
-        linkModelUpdate.setCreatorsToActivate(creatorsToActivate);
-        linkModelUpdate.setNonActivableServices(nonActivableServices);
+        mediationCalculation();
 
         /*Activation by creator*/
-        enablingCreators(creatorsToActivate);
+        enablingCreators();
 
         /*Verification*/
         goalServicesAvailabilityCheck();
@@ -138,7 +123,7 @@ final class LinkingLogic implements Runnable {
     private void updateGoals(){
         /*App goals - calculation by context API*/
 
-        goals = goalModel.getGoals();
+        Set<ContextAPIEnum> goals = goalModel.getGoals();
         for (ContextAPIEnum contextAPIEnum : goals) {
             if(logLevel>=2) {
                 LOG.info("GOAL " + contextAPIEnum.getInterfaceName());
@@ -166,8 +151,8 @@ final class LinkingLogic implements Runnable {
 
     private void mediationTreeInitializationWithGoals(){
         /*Services to activate*/
-        mediationTrees = new HashMap<>();
-        for (ContextAPIEnum contextAPI : goals) {
+        Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
+        for (ContextAPIEnum contextAPI : goalModel.getGoals()) {
             String goalName = contextAPI.getInterfaceName();
             if(logLevel>=2) {
                 LOG.info("CONTEXT API TO ACTIVATE: " + contextAPI + " named: " + goalName);
@@ -176,6 +161,7 @@ final class LinkingLogic implements Runnable {
             DefaultMutableTreeNode goalNode = new DefaultMutableTreeNode(goalName);
             mediationTrees.put(goalName, goalNode);
         }
+        linkModelUpdate.setMediationTrees(mediationTrees);
     }
 
     private void updateExternalProviderModels(){
@@ -187,11 +173,17 @@ final class LinkingLogic implements Runnable {
     }
 
     private void buildMediationTree(){
-        nonActivableServices = new HashSet<>();
+        Set<String> nonActivableServices = new HashSet<>();
 
         /*Mediation tree build*/
-        lookupFilter = new HashSet<>();
-        mediationTreesOk = recursivelyBuildMediationTree(new HashSet<>(mediationTrees.values()), nonActivableServices);
+        Set<String> lookupFilter = new HashSet<>();
+        boolean mediationTreesOk = recursivelyBuildMediationTree(
+                new HashSet<>(linkModelAccess.getMediationTrees().values()), nonActivableServices, lookupFilter);
+        linkModelUpdate.setMediationTreesOk(mediationTreesOk);
+        linkModelUpdate.setNonActivableServices(nonActivableServices);
+
+        /*External request adaptation*/
+        externalFilterModelUpdate.setLookupFilter(lookupFilter);
 
         if(!mediationTreesOk){
             if(logLevel>=2) {
@@ -203,7 +195,7 @@ final class LinkingLogic implements Runnable {
         }
     }
 
-    private boolean recursivelyBuildMediationTree(Set<DefaultMutableTreeNode> requiredNodes, Set<String> servicesWithoutCreator){
+    private boolean recursivelyBuildMediationTree(Set<DefaultMutableTreeNode> requiredNodes, Set<String> servicesWithoutCreator, Set<String> lookupFilter){
         /*Update LogLevel*/
         logLevel = ContextManagerAdmin.getLogLevel();
 
@@ -248,20 +240,21 @@ final class LinkingLogic implements Runnable {
             }
         }
 
-        return stepRequiredNodes.isEmpty() || recursivelyBuildMediationTree(stepRequiredNodes, servicesWithoutCreator);
+        return stepRequiredNodes.isEmpty() || recursivelyBuildMediationTree(stepRequiredNodes, servicesWithoutCreator, lookupFilter);
     }
 
-    private void mediationCalculation(Set<String> nonActivableServices){
+    private void mediationCalculation(){
         /*Si activation possible --> activation*/
         /*Dans tous les cas query*/
 
         /*To activate by goal*/
-        creatorsToActivate = new HashSet<>();
+        Set<String> creatorsToActivate = new HashSet<>();
+        Set<String> nonActivableServices = linkModelAccess.getNonActivableServices();
 
-        if(mediationTreesOk){
+        if(linkModelAccess.isMediationTreesOk()){
             nonActivableGoals = new HashSet<>();
 
-            for (Map.Entry<String, DefaultMutableTreeNode> mediationTree : mediationTrees.entrySet()) {
+            for (Map.Entry<String, DefaultMutableTreeNode> mediationTree : linkModelAccess.getMediationTrees().entrySet()) {
                 String goalName = mediationTree.getKey();
                 DefaultMutableTreeNode goalNode = mediationTree.getValue();
                 if(logLevel>=3) {
@@ -289,7 +282,8 @@ final class LinkingLogic implements Runnable {
                 }
             }
         }
-//        return creatorsToActivate;
+
+        linkModelUpdate.setCreatorsToActivate(creatorsToActivate);
     }
 
     private boolean mediationCalculationByGoal(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
@@ -380,7 +374,8 @@ final class LinkingLogic implements Runnable {
         return false;
     }
 
-    private void enablingCreators(Set<String> creatorsToActivate){
+    private void enablingCreators(){
+        Set<String> creatorsToActivate = linkModelAccess.getCreatorsToActivate();
         /*Activate creation for needed entities*/
         /*Deactivate others*/
         for(EntityProvider entityProvider : entityProviders){
@@ -406,7 +401,7 @@ final class LinkingLogic implements Runnable {
         /*ToDo Modify goal model - state*/
 
         /*Check availability of requested goals*/
-        for (ContextAPIEnum contextAPI : goals) {
+        for (ContextAPIEnum contextAPI : goalModel.getGoals()) {
             String contextAPIName = contextAPI.getInterfaceName();
             if (bundleContext.getServiceReference(contextAPIName) == null) {
                 if(logLevel>=1) {
