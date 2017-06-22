@@ -38,9 +38,9 @@ import java.util.*;
  * Determine the best programmatic context configuration to meet app needs, regarding the current external resources
  */
 final class LinkingLogic implements Runnable {
-    /*Log*/
-    private int logLevel = ContextManagerAdmin.getLogLevel();
+    /*LOG*/
     private static final Logger LOG = LoggerFactory.getLogger(LinkingLogic.class);
+    private static final String LOG_PREFIX = "LINKING LOGIC - ";
     private static int executionNumber = 0;
 
 
@@ -79,11 +79,9 @@ final class LinkingLogic implements Runnable {
     @Override
     public void run() {
         /*TODO Check multiple accesses and coordination*/
-        if(logLevel>=1) {
-            LOG.info("CONTEXT RESOLUTION MACHINE - Execution " + executionNumber++);
+        if(ContextManagerAdmin.getLogLevel()>=1) {
+            LOG.info(LOG_PREFIX + "Execution " + executionNumber++);
         }
-        /*Update LogLevel*/
-        logLevel = ContextManagerAdmin.getLogLevel();
 
         /*Context adaptation*/
         resolutionAlgorithm();
@@ -91,9 +89,6 @@ final class LinkingLogic implements Runnable {
 
     /*ToDo trigger on events (for now it doesn't work because of interlocked callbacks)*/
     private synchronized void resolutionAlgorithm() {
-        /*Update goal model*/
-        updateGoals();
-
         /*ToDo CHANGE THAT!!!*/
         enableAllRelations();
 
@@ -116,18 +111,10 @@ final class LinkingLogic implements Runnable {
         goalServicesAvailabilityCheck();
     }
 
-    private void updateGoals(){
-        /*App goals - calculation by context API*/
-
-        Set<ContextAPIEnum> goals = goalModelAccess.getGoals();
-        for (ContextAPIEnum contextAPIEnum : goals) {
-            if(logLevel>=2) {
-                LOG.info("GOAL " + contextAPIEnum.getInterfaceName());
-            }
-        }
-    }
-
     private void enableAllRelations(){
+        /*Update LogLevel*/
+        int logLevel = ContextManagerAdmin.getLogLevel();
+
         Set<RelationProvider> relationProviders = capabilityModelAccess.getRelationProviders();
 
         /*ToDO CHANGE THAT*/
@@ -139,19 +126,22 @@ final class LinkingLogic implements Runnable {
             for(String relation : relationProvider.getProvidedRelations()){
                 relationProvider.enable(relation);
                 if(logLevel>=3) {
-                    LOG.info("PROVIDER "+relationProvider.getName()+" ENABLE RELATION "+relation);
+                    LOG.info(LOG_PREFIX + "PROVIDER "+relationProvider.getName()+" ENABLE RELATION "+relation);
                 }
             }
         }
     }
 
     private void mediationTreeInitializationWithGoals(){
+        /*Update LogLevel*/
+        int logLevel = ContextManagerAdmin.getLogLevel();
+
         /*Services to activate*/
         Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
-        for (ContextAPIEnum contextAPI : goalModelAccess.getGoals()) {
-            String goalName = contextAPI.getInterfaceName();
+        for (ContextAPIEnum goal : goalModelAccess.getGoals()) {
+            String goalName = goal.getInterfaceName();
             if(logLevel>=2) {
-                LOG.info("CONTEXT API TO ACTIVATE: " + contextAPI + " named: " + goalName);
+                LOG.info(LOG_PREFIX + "GOAL : " + goal.getInterfaceName());
             }
 
             DefaultMutableTreeNode goalNode = new DefaultMutableTreeNode(goalName);
@@ -182,10 +172,10 @@ final class LinkingLogic implements Runnable {
         externalFilterModelUpdate.setLookupFilter(lookupFilter);
 
         if(!mediationTreesOk){
-            if(logLevel>=2) {
+            if(ContextManagerAdmin.getLogLevel()>=2) {
                 /*Provided services are always linked to a creator to be available*/
                 /*ToDo Erase that branch instead of stopping everything?*/
-                LOG.info("ERROR: MISSING PROVIDER");
+                LOG.info(LOG_PREFIX + "ERROR: MISSING PROVIDER");
 
             }
         }
@@ -193,14 +183,14 @@ final class LinkingLogic implements Runnable {
 
     private boolean recursivelyBuildMediationTree(Set<DefaultMutableTreeNode> requiredNodes, Set<String> servicesWithoutCreator, Set<String> lookupFilter){
         /*Update LogLevel*/
-        logLevel = ContextManagerAdmin.getLogLevel();
+        int logLevel = ContextManagerAdmin.getLogLevel();
 
         Set<DefaultMutableTreeNode> stepRequiredNodes = new HashSet<>();
 
         for(DefaultMutableTreeNode requiredNode : requiredNodes){
             String requiredService = (String) requiredNode.getUserObject();
             if(logLevel>=3) {
-                LOG.info("REQUIRED SERVICE: "+requiredService);
+                LOG.info(LOG_PREFIX + "REQUIRED SERVICE: "+requiredService);
             }
 
             /*ToDo Change strategy for lookup filter?*/
@@ -212,7 +202,7 @@ final class LinkingLogic implements Runnable {
             if(creators == null){
                 if(logLevel>=3) {
                     /*Services without creators at this point <=> non providable service*/
-                    LOG.info("NO CREATORS FOUND");
+                    LOG.info(LOG_PREFIX + "NO CREATORS FOUND");
                 }
                 servicesWithoutCreator.add(requiredService);
                 return false;
@@ -229,8 +219,8 @@ final class LinkingLogic implements Runnable {
                     }
 
                     if(logLevel>=3) {
-                        LOG.info("CREATOR FOUND: "+creator);
-                        LOG.info("ASSOCIATED REQUIRED SERVICES: "+reqSet);
+                        LOG.info(LOG_PREFIX + "CREATOR FOUND: "+creator);
+                        LOG.info(LOG_PREFIX + "ASSOCIATED REQUIRED SERVICES: "+reqSet);
                     }
                 }
             }
@@ -240,6 +230,8 @@ final class LinkingLogic implements Runnable {
     }
 
     private void mediationCalculation(){
+        /*Update LogLevel*/
+        int logLevel = ContextManagerAdmin.getLogLevel();
         /*Si activation possible --> activation*/
         /*Dans tous les cas query*/
 
@@ -255,9 +247,9 @@ final class LinkingLogic implements Runnable {
                 DefaultMutableTreeNode goalNode = mediationTree.getValue();
                 if(logLevel>=3) {
                     if (goalNode != null) {
-                        LOG.info("TREE OK FOR GOAL: " + goalName);
+                        LOG.info(LOG_PREFIX + "TREE OK FOR GOAL: " + goalName);
                     } else {
-                        LOG.info("TREE KO FOR GOAL: " + goalName);
+                        LOG.info(LOG_PREFIX + "TREE KO FOR GOAL: " + goalName);
                     }
                 }
 
@@ -267,12 +259,12 @@ final class LinkingLogic implements Runnable {
                 boolean activable = mediationCalculationByGoal(goalNode, creatorsToActivateSubSet, nonActivableServices);
                 if(activable){
                     if(logLevel>=2) {
-                        LOG.info("ACTIVATION POSSIBLE FOR GOAL: " + goalName);
+                        LOG.info(LOG_PREFIX + "ACTIVATION POSSIBLE FOR GOAL: " + goalName);
                     }
                     creatorsToActivate.addAll(creatorsToActivateSubSet);
                 } else {
                     if(logLevel>=2) {
-                        LOG.info("ACTIVATION NOT POSSIBLE FOR GOAL: " + goalName);
+                        LOG.info(LOG_PREFIX + "ACTIVATION NOT POSSIBLE FOR GOAL: " + goalName);
                     }
                     /*ToDo Modification of configuration? How to handle it?*/
                 }
@@ -298,7 +290,7 @@ final class LinkingLogic implements Runnable {
 
     private boolean mediationCalculationByGoal(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
         /*Update LogLevel*/
-        logLevel = ContextManagerAdmin.getLogLevel();
+        int logLevel = ContextManagerAdmin.getLogLevel();
 
         if(goal.getDepth()>0){
 
@@ -322,22 +314,22 @@ final class LinkingLogic implements Runnable {
                             creatorsToActivate.add(creator);
 
                             if(logLevel>=3) {
-                                LOG.info("CREATOR TO ACTIVATE: "+creator);
+                                LOG.info(LOG_PREFIX + "CREATOR TO ACTIVATE: "+creator);
                             }
 
                             if(entityProvider.getInstances(entityName, true).isEmpty()){
                                 if(logLevel>=3) {
-                                    LOG.info("KO CREATOR: "+creator);
+                                    LOG.info(LOG_PREFIX + "KO CREATOR: "+creator);
                                 }
                             } else {
                                 providableService = true;
                                 if(logLevel>=3) {
-                                    LOG.info("OK CREATOR: "+creator);
+                                    LOG.info(LOG_PREFIX + "OK CREATOR: "+creator);
                                 }
                             }
                         } catch (NullPointerException ne){
                             if(logLevel>=3) {
-                                LOG.info("ERROR IN PROCESSING CREATOR: " +nextChild.toString());
+                                LOG.info(LOG_PREFIX + "ERROR IN PROCESSING CREATOR: " +nextChild.toString());
                             }
                         }
                         nextChild = nextChild.getNextSibling();
@@ -348,7 +340,7 @@ final class LinkingLogic implements Runnable {
                         nonActivableServices.add(service.toString());
                         providableGoal = false;
                         if(logLevel>=2) {
-                            LOG.info("MISSING INSTANCES FOR SERVICE: " +service.toString());
+                            LOG.info(LOG_PREFIX + "MISSING INSTANCES FOR SERVICE: " +service.toString());
                         }
                     }
                 }
@@ -358,6 +350,7 @@ final class LinkingLogic implements Runnable {
             /*If providable goal*/
             if(!providableGoal) {
                 creatorsToActivate = Collections.emptySet();
+
             } else {
                 for(DefaultMutableTreeNode service : serviceSet){
                     /*Until service .isRoot()*/
@@ -367,7 +360,7 @@ final class LinkingLogic implements Runnable {
                         creatorsToActivate.add(creator);
 
                         if(logLevel>=3) {
-                            LOG.info("CREATOR TO ACTIVATE: "+creator);
+                            LOG.info(LOG_PREFIX + "CREATOR TO ACTIVATE: "+creator);
                         }
 
                         nextParent = ((DefaultMutableTreeNode)nextParent.getParent());
@@ -385,6 +378,9 @@ final class LinkingLogic implements Runnable {
     }
 
     private void enablingCreators(){
+        /*Update LogLevel*/
+        int logLevel = ContextManagerAdmin.getLogLevel();
+
         Set<String> creatorsToActivate = linkModelAccess.getCreatorsToActivate();
         /*Activate creation for needed entities*/
         /*Deactivate others*/
@@ -394,12 +390,12 @@ final class LinkingLogic implements Runnable {
                 if(creatorsToActivate.contains(creatorName)) {
                     entityProvider.enable(providedEntity);
                     if(logLevel>=3) {
-                        LOG.info("PROVIDER " + entityProvider.getName() + " ENABLE ENTITY " + providedEntity);
+                        LOG.info(LOG_PREFIX + "PROVIDER " + entityProvider.getName() + " ENABLE ENTITY " + providedEntity);
                     }
                 } else {
                     entityProvider.disable(providedEntity);
                     if(logLevel>=3) {
-                        LOG.info("PROVIDER " + entityProvider.getName() + " DISABLE ENTITY " + providedEntity);
+                        LOG.info(LOG_PREFIX + "PROVIDER " + entityProvider.getName() + " DISABLE ENTITY " + providedEntity);
                     }
                 }
             }
@@ -407,6 +403,9 @@ final class LinkingLogic implements Runnable {
     }
 
     private void goalServicesAvailabilityCheck(){
+        /*Update LogLevel*/
+        int logLevel = ContextManagerAdmin.getLogLevel();
+
         /*Verification*/
         /*Check availability of requested goals*/
         for (Map.Entry<ContextAPIEnum, Boolean> goalState :goalModelAccess.getGoalsState().entrySet()){
@@ -414,7 +413,7 @@ final class LinkingLogic implements Runnable {
             String state = goalState.getValue()?"PROVIDING":"MISSING";
 
             if(logLevel>=1) {
-                LOG.info(state + " CONTEXT API: " + goal);
+                LOG.info(LOG_PREFIX + state + " CONTEXT API: " + goal);
             }
         }
     }
