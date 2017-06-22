@@ -19,11 +19,13 @@ package fr.liglab.adele.icasa.context.manager.impl.logic;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.LinkModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -69,15 +71,25 @@ public class ContextManager implements GoalModelListener {
 
 
     /*INTERNAL MODELS*/
+    /*Capabilities model*/
+    @Requires
+    @SuppressWarnings("unused")
+    private CapabilityModelAccess capabilityModelAccess;
+
     /*Registry*/
     @Context
     @SuppressWarnings("unused")
     private BundleContext bundleContext;
 
-    /*Capabilities model*/
+    /*Link model - access*/
     @Requires
     @SuppressWarnings("unused")
-    private CapabilityModelAccess capabilityModelAccess;
+    private LinkModelAccess linkModelAccess;
+
+    /*Link model - update*/
+    @Requires
+    @SuppressWarnings("unused")
+    private LinkModelUpdate linkModelUpdate;
 
 
     /*EXTERNAL INTERFACES*/
@@ -109,12 +121,13 @@ public class ContextManager implements GoalModelListener {
     public void start(){
 
         /*Initialization of algorithms sub-parts*/
-        resolutionMachine = new LinkingLogic(goalModelAccess, capabilityModelAccess, externalFilterModelUpdate, bundleContext);
+        resolutionMachine = new LinkingLogic(goalModelAccess, capabilityModelAccess, bundleContext,
+                linkModelAccess, linkModelUpdate, externalFilterModelAccess, externalFilterModelUpdate);
         /*Start scheduling*/
         switch (ContextManagerAdmin.INTERNAL_CONFIGURATION_MODE){
             case ContextManagerAdmin.MODE_SCHEDULED:
-                scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
-                        contextCompositionAdaptation, 0, ContextManagerAdmin.getDelay(), ContextManagerAdmin.getTimeUnit());
+                scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(contextCompositionAdaptation,
+                        0, ContextManagerAdmin.getDelay(), ContextManagerAdmin.getTimeUnit());
                 break;
             case ContextManagerAdmin.MODE_EVENT_DRIVEN:
                 /*ToDo*/
