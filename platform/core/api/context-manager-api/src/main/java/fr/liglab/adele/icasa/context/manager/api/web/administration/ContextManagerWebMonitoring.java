@@ -24,8 +24,6 @@ import java.util.Set;
 
 public interface ContextManagerWebMonitoring {
 
-    Set<GoalsByAppMonitoring> getGoalsByApp();
-
     Map<EntityProvider, Set<String>> getResourceCreatorsByEntityProvider();
     Map<RelationProvider, Set<String>> getResourceCreatorsByRelationProvider();
     Map<EntityProvider, Set<String>> getAbstractionCreatorsByEntityProvider();

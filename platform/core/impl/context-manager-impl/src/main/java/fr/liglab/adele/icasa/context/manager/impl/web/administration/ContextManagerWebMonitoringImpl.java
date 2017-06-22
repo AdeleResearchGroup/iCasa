@@ -22,7 +22,6 @@ import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelA
 import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.web.administration.ContextManagerWebMonitoring;
-import fr.liglab.adele.icasa.context.manager.api.web.administration.GoalsByAppMonitoring;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -58,26 +57,6 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
     @Requires(id = "relationProviders", optional = true)
     @SuppressWarnings("all")
     private RelationProvider[] relationProviders;
-
-
-    @Override
-    public Set<GoalsByAppMonitoring> getGoalsByApp() {
-        Set<GoalsByAppMonitoring> result = new HashSet<>();
-
-        try{
-            if(goalModel != null){
-                for (String app: goalModel.getManagedApps()){
-                    GoalsByAppMonitoring goalsByAppMonitoring
-                            = new GoalsByAppMonitoring(app, goalModel.getGoalsStateForApp(app));
-                    result.add(goalsByAppMonitoring);
-                }
-            }
-        } catch (NullPointerException ne){
-            ne.printStackTrace();
-        }
-
-        return result;
-    }
 
     /*ToDo*/
     private Map<EntityProvider, Set<String>> getCreatorsByEntityProvider(boolean remote){
