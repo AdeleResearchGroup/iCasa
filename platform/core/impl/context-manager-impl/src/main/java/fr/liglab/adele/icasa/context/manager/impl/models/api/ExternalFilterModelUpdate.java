@@ -13,16 +13,15 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
+package fr.liglab.adele.icasa.context.manager.impl.models.api;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
+import java.util.Set;
 
-/*ToDo*/
-@Component(immediate = true, publicFactory = false)
-@Instantiate
-@Provides
-@SuppressWarnings("unused")
-public class ResourceModel {
+public interface ExternalFilterModelUpdate {
+
+    void setLookupFilter(Set<String> filter);
+
+    void addServiceToLookupFilter(String service);
+
+    void removeServiceToLookupFilter(String service);
 }

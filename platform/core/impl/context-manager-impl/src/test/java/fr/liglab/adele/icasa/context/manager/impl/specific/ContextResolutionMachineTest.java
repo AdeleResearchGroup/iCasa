@@ -18,7 +18,7 @@
 //import fr.liglab.adele.cream.model.ContextEntity;
 //import fr.liglab.adele.cream.model.introspection.EntityProvider;
 //import fr.liglab.adele.icasa.context.manager.api.generic.ContextAPIConfig;
-//import fr.liglab.adele.icasa.context.manager.impl.specific.LinkingLogic;
+//import fr.liglab.adele.icasa.context.manager.impl.logic.LinkingLogic;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.mockito.Mockito;

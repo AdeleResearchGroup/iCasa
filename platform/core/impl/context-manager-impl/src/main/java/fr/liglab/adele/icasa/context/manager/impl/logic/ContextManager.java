@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.logic;
 
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
@@ -23,15 +23,12 @@ import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDep
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
-import fr.liglab.adele.icasa.context.manager.impl.generic.logic.ExternalInteractionsManager;
-import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.ExternalFilterModelUpdate;
-import fr.liglab.adele.iop.device.api.IOPLookupService;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.*;
 

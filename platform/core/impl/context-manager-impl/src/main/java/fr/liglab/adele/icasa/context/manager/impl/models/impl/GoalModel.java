@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
+package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;

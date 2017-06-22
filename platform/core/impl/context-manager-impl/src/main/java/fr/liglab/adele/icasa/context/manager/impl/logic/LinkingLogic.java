@@ -13,18 +13,16 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.specific;
+package fr.liglab.adele.icasa.context.manager.impl.logic;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
-import fr.liglab.adele.icasa.context.manager.impl.generic.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

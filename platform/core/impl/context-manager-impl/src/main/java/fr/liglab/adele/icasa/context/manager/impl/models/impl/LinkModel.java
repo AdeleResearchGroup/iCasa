@@ -13,15 +13,22 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic.models.api;
+package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
-import java.util.Set;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
 
-public interface ExternalFilterModelUpdate {
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.HashMap;
+import java.util.Map;
 
-    void setLookupFilter(Set<String> filter);
+/*ToDo*/
+@Component(immediate = true, publicFactory = false)
+@Instantiate
+@Provides
+@SuppressWarnings("unused")
+public class LinkModel {
 
-    void addServiceToLookupFilter(String service);
-
-    void removeServiceToLookupFilter(String service);
+    private static Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
 }

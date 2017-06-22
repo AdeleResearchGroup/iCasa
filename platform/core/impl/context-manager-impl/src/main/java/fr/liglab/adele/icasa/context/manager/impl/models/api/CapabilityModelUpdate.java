@@ -13,22 +13,23 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic.models.impl;
+package fr.liglab.adele.icasa.context.manager.impl.models.api;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.util.HashMap;
-import java.util.Map;
+import fr.liglab.adele.cream.model.introspection.EntityProvider;
+import fr.liglab.adele.cream.model.introspection.RelationProvider;
 
-/*ToDo*/
-@Component(immediate = true, publicFactory = false)
-@Instantiate
-@Provides
-@SuppressWarnings("unused")
-public class LinkModel {
+public interface CapabilityModelUpdate {
 
-    private static Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();
+    void addEntityProvider (EntityProvider entityProvider);
+
+    void modifyEntityProvider (EntityProvider entityProvider);
+
+    void removeEntityProvider(EntityProvider entityProvider);
+
+    void addRelationProvider(RelationProvider relationProvider);
+
+    void modifyRelationProvider(RelationProvider relationProvider);
+
+    void removeRelationProvider(RelationProvider relationProvider);
 }

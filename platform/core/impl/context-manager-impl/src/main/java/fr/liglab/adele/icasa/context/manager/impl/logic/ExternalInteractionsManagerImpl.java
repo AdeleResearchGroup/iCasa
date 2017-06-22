@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.generic.logic;
+package fr.liglab.adele.icasa.context.manager.impl.logic;
 
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
