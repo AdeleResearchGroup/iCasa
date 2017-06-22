@@ -22,4 +22,6 @@ import java.util.Map;
 public interface GoalModelUpdate {
 
     void setContextGoalsActivability(Map<ContextAPIEnum, Boolean> contextGoalsActivability);
+
+    void setContextGoalActivability(ContextAPIEnum goal, Boolean activable);
 }

@@ -26,6 +26,5 @@ public interface GoalModelListener {
 
     void notifyGoalSetChange(Set<ContextAPIEnum> goals);
 
-    /*ToDo UNUSED*/
     void notifyGoalStateChange(ContextAPIEnum goal, Boolean state);
 }

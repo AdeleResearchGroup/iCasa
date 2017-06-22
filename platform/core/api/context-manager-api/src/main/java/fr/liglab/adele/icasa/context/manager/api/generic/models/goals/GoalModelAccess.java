@@ -31,12 +31,15 @@ public interface GoalModelAccess {
 
     Map<String, ContextAPIConfig> getGoalsByApp();
 
+    Set<ContextAPIEnum> getGoalsForApp(String app);
+
+    Map<ContextAPIEnum, Boolean> getGoalsActivability();
+
+    boolean getGoalActivability(ContextAPIEnum goal);
+
     Map<ContextAPIEnum, Boolean> getGoalsState();
 
     Map<ContextAPIEnum, Boolean> getGoalsStateForApp(String app);
 
-    Map<ContextAPIEnum, Boolean> getContextGoalsActivability();
-
-    Boolean getGoalState(ContextAPIEnum goal);
-
+    boolean getGoalState(ContextAPIEnum goal);
 }

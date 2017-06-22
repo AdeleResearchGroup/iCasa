@@ -42,7 +42,7 @@ import java.util.concurrent.*;
 @Instantiate
 @Provides
 public class ContextManager implements GoalModelListener {
-
+    /*LOG*/
     private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
 
     /*SCHEDULING*/

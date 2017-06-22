@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
+import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
@@ -23,17 +24,19 @@ import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component (immediate = true, publicFactory = false)
 @Instantiate
 @Provides
 @SuppressWarnings("unused")
 public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDependencyRegistration {
+    /*LOG*/
+    private static final Logger LOG = LoggerFactory.getLogger(GoalModel.class);
+    private static final String LOG_PREFIX = "GOAL MODEL - ";
 
     @Context
     private BundleContext bundleContext;
@@ -49,6 +52,7 @@ public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDepen
     @SuppressWarnings("all")
     private GoalModelListener[] listeners;
 
+    /*ToDo no event for now use this*/
     private void notifyGoalSetChange(){
         Set<ContextAPIEnum> goals = getGoals();
         for (GoalModelListener goalModelListener : listeners){
@@ -63,35 +67,18 @@ public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDepen
         }
     }
 
-    @Validate
-    private void start(){
-        /*Goal model initialization*/
-    }
-
     /*CONTEXT DEPENDENCIES REGISTRATION*/
     @Override
     public synchronized boolean registerContextDependencies(String id, ContextAPIConfig contextAPIConfig) {
         boolean results = true;
         try{
-            /*ToDo useful for event changes*/
-//            Set<ContextAPIEnum> newConfig = contextAPIConfig.getConfig();
-//            Set<ContextAPIEnum> oldConfig = Collections.emptySet();
-//            if(contextGoalsByApp.containsKey(id)){
-//                oldConfig = contextGoalsByApp.get(id).getConfig();
-//            }
-//
-//            Set<ContextAPIEnum> addedContextAPI = new HashSet<>(newConfig);
-//            Set<ContextAPIEnum> removedContextAPI = new HashSet<>(oldConfig);
-//
-//            addedContextAPI.removeAll(oldConfig);
-//            removedContextAPI.removeAll(newConfig);
-
-
             /*Modifying goal by app map*/
             contextGoalsByApp.put(id, contextAPIConfig);
-//            if(logLevel>=2) {
-//                LOG.info("GOALS " + contextAPIConfigs.getConfig().toString());
-//            }
+            if(ContextManagerAdmin.getLogLevel()>=2) {
+                LOG.info(LOG_PREFIX + "APP REGISTERING : " + id);
+                LOG.info(LOG_PREFIX + "GOALS : " + contextAPIConfig.getConfig().toString());
+            }
+
             notifyGoalSetChange();
         } catch (NullPointerException ne){
             results = false;
@@ -111,13 +98,12 @@ public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDepen
     public synchronized boolean unregisterContextDependencies(String id) {
         boolean results = true;
         try{
-            Set<ContextAPIEnum> oldConfig = contextGoalsByApp.get(id).getConfig();
-
             /*Modifying goal by app map*/
             contextGoalsByApp.remove(id);
-//            if(logLevel>=2) {
-//                LOG.info("GOALS REMOVED" + contextAPIConfigs.getConfig().toString());
-//            }
+            if(ContextManagerAdmin.getLogLevel()>=2) {
+                LOG.info(LOG_PREFIX + "APP UNREGISTERING : " + id);
+            }
+
             notifyGoalSetChange();
         } catch (NullPointerException ne){
             results = false;
@@ -125,11 +111,29 @@ public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDepen
         return results;
     }
 
+    /*GOAL MODEL UPDATE*/
+    @Override
+    public synchronized void setContextGoalsActivability(Map<ContextAPIEnum, Boolean> contextGoalsActivability) {
+        GoalModel.contextGoalsActivability.clear();
+        for (ContextAPIEnum goal : getGoals()) {
+            GoalModel.contextGoalsActivability.put(goal, Boolean.TRUE.equals(contextGoalsActivability.get(goal)));
+        }
+    }
+
+    @Override
+    public synchronized void setContextGoalActivability(ContextAPIEnum goal, Boolean activable) {
+        if(getGoals().contains(goal)) {
+            contextGoalsActivability.put(goal, Boolean.TRUE.equals(activable));
+        } else {
+            contextGoalsActivability.remove(goal);
+        }
+    }
+
 
     /*GOAL MODEL ACCESS*/
     @Override
     public Set<String> getManagedApps() {
-        return contextGoalsByApp.keySet();
+        return Collections.unmodifiableSet(contextGoalsByApp.keySet());
     }
 
     @Override
@@ -138,60 +142,80 @@ public class GoalModel implements GoalModelAccess, GoalModelUpdate, ContextDepen
         for (ContextAPIConfig contextAPIConfigs : contextGoalsByApp.values()) {
             goals.addAll(contextAPIConfigs.getConfig());
         }
-        return goals;
+        return Collections.unmodifiableSet(goals);
     }
 
     @Override
     public Map<String, ContextAPIConfig> getGoalsByApp() {
-        return new HashMap<>(contextGoalsByApp);
+        return Collections.unmodifiableMap(contextGoalsByApp);
     }
 
     @Override
-    public Map<ContextAPIEnum, Boolean> getContextGoalsActivability() {
-        return new HashMap<>(contextGoalsActivability);
+    public Set<ContextAPIEnum> getGoalsForApp(String app) {
+        if(getManagedApps().contains(app)){
+            return Collections.unmodifiableSet(contextGoalsByApp.get(app).getConfig());
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     @Override
-    public void setContextGoalsActivability(Map<ContextAPIEnum, Boolean> contextGoalsActivability) {
-        GoalModel.contextGoalsActivability = new HashMap<>(contextGoalsActivability);
+    /*May be outdated*/
+    public Map<ContextAPIEnum, Boolean> getGoalsActivability() {
+        return Collections.unmodifiableMap(contextGoalsActivability);
+    }
+
+    @Override
+    /*May be outdated*/
+    public boolean getGoalActivability(ContextAPIEnum goal) {
+        return contextGoalsActivability.getOrDefault(goal, false);
     }
 
     @Override
     public Map<ContextAPIEnum, Boolean> getGoalsState() {
-        goalServicesAvailabilityCheck();
 
-        return new HashMap<>(contextGoalsState);
+        updateGoalStateSet();
+        return Collections.unmodifiableMap(contextGoalsState);
     }
 
     @Override
     public Map<ContextAPIEnum, Boolean> getGoalsStateForApp(String app) {
-        goalServicesAvailabilityCheck();
+
+        updateGoalStateSet();
 
         Map<ContextAPIEnum, Boolean> result = new HashMap<>();
         try {
-            ContextAPIConfig config = contextGoalsByApp.get(app);
-            for (ContextAPIEnum goal : config.getConfig()) {
-                result.put(goal, contextGoalsState.get(goal));
+            for (ContextAPIEnum goal : getGoalsForApp(app)) {
+                result.put(goal, contextGoalsState.getOrDefault(goal, false));
             }
         } catch (NullPointerException ne){
             ne.printStackTrace();
         }
-        return result;
+        return Collections.unmodifiableMap(result);
     }
 
     @Override
-    public Boolean getGoalState(ContextAPIEnum goal) {
-        return contextGoalsState.get(goal);
+    public boolean getGoalState(ContextAPIEnum goal) {
+
+        updateGoalState(goal);
+        return contextGoalsState.getOrDefault(goal, false);
     }
 
-    /*GOAL MODEL STATE UPDATE*/
-    private void goalServicesAvailabilityCheck(){
-        /*Verification*/
-        contextGoalsState = new HashMap<>();
-        /*Services à activer*/
-        for (ContextAPIEnum contextAPI : getGoals()) {
-            contextGoalsState.put(contextAPI,
-                    (bundleContext.getServiceReference(contextAPI.getInterfaceName()) != null));
+
+    /*PRIVATE METHODS*/
+    /*Update goals state*/
+    private synchronized void updateGoalStateSet(){
+        contextGoalsState.clear();
+        for (ContextAPIEnum goal : getGoals()) {
+            contextGoalsState.put(goal, (bundleContext.getServiceReference(goal.getInterfaceName()) != null));
+        }
+    }
+
+    private synchronized void updateGoalState(ContextAPIEnum goal){
+        if(getGoals().contains(goal)) {
+            contextGoalsState.put(goal, (bundleContext.getServiceReference(goal.getInterfaceName()) != null));
+        } else {
+            contextGoalsState.remove(goal);
         }
     }
 }
