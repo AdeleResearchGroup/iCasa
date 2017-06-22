@@ -18,11 +18,14 @@ package fr.liglab.adele.icasa.context.manager.impl.logic;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.generic.models.LinkModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +49,12 @@ final class LinkingLogic implements Runnable {
     /*ToDo*/
     private static GoalModelAccess goalModel;
     private static CapabilityModelAccess capabilityModel;
-    private static ExternalFilterModelUpdate externalFilterModel;
     private static BundleContext bundleContext;
+    private static LinkModelAccess linkModelAccess;
+    private static LinkModelUpdate linkModelUpdate;
+    private static ExternalFilterModelAccess externalFilterModelAccess;
+    private static ExternalFilterModelUpdate externalFilterModelUpdate;
+
 
     /*Models from context internal manager*/
     private Map<String, Set<String>> eCreatorsByServices = new HashMap<>();
@@ -67,17 +74,18 @@ final class LinkingLogic implements Runnable {
     private Set<String> nonActivableServices = new HashSet<>();
 
 
-    /*Constructor: binds to other objects*/
-//    protected LinkingLogic(ContextInternalManagerImpl contextInternalManager) {
-//        LinkingLogic.contextInternalManager = contextInternalManager;
-//    }
+    /*Constructor: binds to models*/
+    protected LinkingLogic(GoalModelAccess goalModel, CapabilityModelAccess capabilityModel, BundleContext bundleContext,
+                           LinkModelAccess linkModelAccess, LinkModelUpdate linkModelUpdate,
+                           ExternalFilterModelAccess externalFilterModelAccess, ExternalFilterModelUpdate externalFilterModelUpdate){
 
-    protected LinkingLogic(GoalModelAccess goalModel, CapabilityModelAccess capabilityModel,
-                           ExternalFilterModelUpdate externalFilterModel, BundleContext bundleContext){
         LinkingLogic.goalModel = goalModel;
         LinkingLogic.capabilityModel = capabilityModel;
-        LinkingLogic.externalFilterModel = externalFilterModel;
         LinkingLogic.bundleContext = bundleContext;
+        LinkingLogic.linkModelAccess = linkModelAccess;
+        LinkingLogic.linkModelUpdate = linkModelUpdate;
+        LinkingLogic.externalFilterModelAccess = externalFilterModelAccess;
+        LinkingLogic.externalFilterModelUpdate = externalFilterModelUpdate;
     }
 
     @Override
@@ -89,10 +97,11 @@ final class LinkingLogic implements Runnable {
         /*Update LogLevel*/
         logLevel = ContextManagerAdmin.getLogLevel();
 
+        /*Context adaptation*/
         resolutionAlgorithm();
-        /*ToDo MODIFY LOOKUP FILTER IN THE MODEL ToDo*/
-//        contextInternalManager.setLookupFilter(lookupFilter);
-        externalFilterModel.setLookupFilter(lookupFilter);
+
+        /*External request adaptation*/
+        externalFilterModelUpdate.setLookupFilter(lookupFilter);
     }
 
     /*ToDo trigger on events (for now it doesn't work because of interlocked callbacks)*/
@@ -111,9 +120,13 @@ final class LinkingLogic implements Runnable {
 
         /*Tree calculation*/
         buildMediationTree();
+        linkModelUpdate.setMediationTreesOk(mediationTreesOk);
+        linkModelUpdate.setMediationTrees(mediationTrees);
 
         /*Activation calculation by goal*/
         mediationCalculation(nonActivableServices);
+        linkModelUpdate.setCreatorsToActivate(creatorsToActivate);
+        linkModelUpdate.setNonActivableServices(nonActivableServices);
 
         /*Activation by creator*/
         enablingCreators(creatorsToActivate);
@@ -123,17 +136,7 @@ final class LinkingLogic implements Runnable {
     }
 
     private void updateGoals(){
-        /*App, set de services en config optimale*/
-        /*TODO SELECTION DES CONFIGS D'APP ? */
-        /*TODO (pour l'instant toutes les app traitées en même temps)*/
-//        Set<ContextAPIConfig> contextAPIConfigsSet = new HashSet<>(contextInternalManager.getContextGoalMap().values());
-//        goals = new HashSet<>();
-//        for (ContextAPIConfig contextAPIConfigs : contextAPIConfigsSet) {
-//            goals.addAll(contextAPIConfigs.getConfig());
-//            if(logLevel>=2) {
-//                LOG.info("GOALS " + contextAPIConfigs.getConfig().toString());
-//            }
-//        }
+        /*App goals - calculation by context API*/
 
         goals = goalModel.getGoals();
         for (ContextAPIEnum contextAPIEnum : goals) {
@@ -144,13 +147,13 @@ final class LinkingLogic implements Runnable {
     }
 
     private void enableAllRelations(){
-//        Set<RelationProvider> relationProviders = contextInternalManager.getRelationProviders();
         Set<RelationProvider> relationProviders = capabilityModel.getRelationProviders();
 
-        /*TODO Modifier (difficile de déduire les relations depuis le service -> requises par les implementations)*/
-        /*TODO Dépend d'un service et d'une implem*/
-        /*TODO Activer si les 2 sont présents*/
-        /*Activation de toutes les relations*/
+        /*ToDO CHANGE THAT*/
+        /*Depends on 1 service + 1 implem - activate only if this 2 are present?*/
+        /*Difficult to know from service*/
+
+        /*Activate all relations*/
         for(RelationProvider relationProvider : relationProviders){
             for(String relation : relationProvider.getProvidedRelations()){
                 relationProvider.enable(relation);
@@ -176,10 +179,6 @@ final class LinkingLogic implements Runnable {
     }
 
     private void updateExternalProviderModels(){
-//        entityProviders = contextInternalManager.getEntityProviders();
-//        eCreatorsByServices = contextInternalManager.geteCreatorsByServices();
-//        eCreatorsRequirements = contextInternalManager.geteCreatorsRequirements();
-//        eProviderByCreatorName = contextInternalManager.geteProviderByCreatorName();
 
         entityProviders = capabilityModel.getEntityProviders();
         eCreatorsByServices = capabilityModel.getmEntityCreatorsByService();
@@ -197,7 +196,7 @@ final class LinkingLogic implements Runnable {
         if(!mediationTreesOk){
             if(logLevel>=2) {
                 /*Provided services are always linked to a creator to be available*/
-                /*TODO Erase that branch instead of stopping everything?*/
+                /*ToDo Erase that branch instead of stopping everything?*/
                 LOG.info("ERROR: MISSING PROVIDER");
 
             }
@@ -216,7 +215,7 @@ final class LinkingLogic implements Runnable {
                 LOG.info("REQUIRED SERVICE: "+requiredService);
             }
 
-            /*TODO LOOKUP FILTER*/
+            /*ToDo Change strategy for lookup filter?*/
             /*Add all services of the tree*/
             lookupFilter.add(requiredService);
 
@@ -286,14 +285,13 @@ final class LinkingLogic implements Runnable {
                         LOG.info("ACTIVATION NOT POSSIBLE FOR GOAL: " + goalName);
                     }
                     nonActivableGoals.add(goalName);
-                /*TODO : TRAITER LE CHANGEMENT DE CONFIG ET LES CAS OU LA CONFIG COMPLETE N'EST PAS RESOLUE*/
+                    /*ToDo Modification of configuration? How to handle it?*/
                 }
             }
         }
 //        return creatorsToActivate;
     }
 
-    /*TODO PBM*/
     private boolean mediationCalculationByGoal(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
         /*Update LogLevel*/
         logLevel = ContextManagerAdmin.getLogLevel();
@@ -342,7 +340,7 @@ final class LinkingLogic implements Runnable {
                     }
 
                     if(!providableService){
-                        /*TODO LOOKUP FILTER*/
+                        /*ToDo Change startegy for lookup filter?*/
                         nonActivableServices.add(service.toString());
                         providableGoal = false;
                         if(logLevel>=2) {
@@ -383,8 +381,8 @@ final class LinkingLogic implements Runnable {
     }
 
     private void enablingCreators(Set<String> creatorsToActivate){
-        /*Activation de la création des entities*/
-        /*Désactivation de la création des entities dans les providers non traités*/
+        /*Activate creation for needed entities*/
+        /*Deactivate others*/
         for(EntityProvider entityProvider : entityProviders){
             for(String providedEntity : entityProvider.getProvidedEntities()){
                 String creatorName = Util.eCreatorName(entityProvider, providedEntity);
@@ -404,11 +402,10 @@ final class LinkingLogic implements Runnable {
     }
 
     private void goalServicesAvailabilityCheck(){
-        /*Vérification*/
-        /*TODO MODIFY GOAL MODEL*/
-        /*Services à activer*/
-//        BundleContext bundleContext = contextInternalManager.getBundleContext();
+        /*Verification*/
+        /*ToDo Modify goal model - state*/
 
+        /*Check availability of requested goals*/
         for (ContextAPIEnum contextAPI : goals) {
             String contextAPIName = contextAPI.getInterfaceName();
             if (bundleContext.getServiceReference(contextAPIName) == null) {
