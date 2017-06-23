@@ -47,7 +47,6 @@
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
             <artifactId>iop-device-importer</artifactId>
-            <version>1.2.7-SNAPSHOT</version>
         </dependency>
 
         <!--TESTS-->

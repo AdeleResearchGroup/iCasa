@@ -50,6 +50,7 @@ See the License for the specific language governing permissions and
         <jackson.version>2.4.4</jackson.version>
 
         <context.socm.version>0.1-SNAPSHOT</context.socm.version>
+        <xware.iop.version>0.2.0-SNAPSHOT</xware.iop.version>
     </properties>
 
     <developers>
@@ -406,8 +407,7 @@ See the License for the specific language governing permissions and
             </dependency>
 
 
-            <!--CONTEXT - SOCM
-            -->
+            <!--CONTEXT - SOCM-->
             <dependency>
                 <groupId>fr.liglab.adele.cream</groupId>
                 <artifactId>cream.core</artifactId>
@@ -430,6 +430,13 @@ See the License for the specific language governing permissions and
                 <groupId>fr.liglab.adele.cream</groupId>
                 <artifactId>cream.runtime.facilities</artifactId>
                 <version>${context.socm.version}</version>
+            </dependency>
+
+            <!--X-Ware-->
+            <dependency>
+                <groupId>fr.liglab.adele.icasa</groupId>
+                <artifactId>iop-device-importer</artifactId>
+                <version>${xware.iop.version}</version>
             </dependency>
 
 
