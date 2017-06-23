@@ -16,6 +16,7 @@
 package fr.liglab.adele.zwave.device.importer;
 
 
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Property;
@@ -61,8 +62,10 @@ public class ControllerImporter extends AbstractImporterComponent  {
 
 	private final  	Creator.Entity<? extends ZwaveController> contextCreator;
 	
-	@Creator.Field  Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.ControllerImpl> openhabCreator;
-	@Creator.Field  Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.ControllerImpl> zwave4jCreator;
+	@Creator.Field(origin = OriginEnum.internal)
+	Creator.Entity<fr.liglab.adele.zwave.device.proxies.openhab.ControllerImpl> openhabCreator;
+	@Creator.Field(origin = OriginEnum.internal)
+	Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.ControllerImpl> zwave4jCreator;
 
 	/**
 	 * The properties used to match the proxy factory

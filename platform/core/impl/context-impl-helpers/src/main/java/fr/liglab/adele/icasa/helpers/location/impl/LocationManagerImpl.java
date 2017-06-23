@@ -17,6 +17,7 @@ package fr.liglab.adele.icasa.helpers.location.impl;
 
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.cream.model.Relation;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
@@ -37,9 +38,11 @@ public class LocationManagerImpl{
     @Requires(id = "locatedObjects",specification = LocatedObject.class,optional = true,proxy = false)
     List<LocatedObject> locatedObjects;
 
-    @Creator.Field(value = ZoneImpl.RELATION_CONTAINS, remote = true) 	Creator.Relation<Zone,LocatedObject> containsCreator;
+    @Creator.Field(origin = OriginEnum.local, value = ZoneImpl.RELATION_CONTAINS)
+    Creator.Relation<Zone,LocatedObject> containsCreator;
 
-    @Creator.Field(value = LocatedObjectBehaviorProvider.IS_IN_RELATION, remote = true) 	Creator.Relation<LocatedObject,Zone> isContainsCreator;
+    @Creator.Field(origin = OriginEnum.local, value = LocatedObjectBehaviorProvider.IS_IN_RELATION)
+    Creator.Relation<LocatedObject,Zone> isContainsCreator;
 
     @Bind(id = "zones")
     public synchronized void bindZone(Zone zone){

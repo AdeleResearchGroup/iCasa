@@ -16,6 +16,7 @@
 package fr.liglab.adele.icasa.simulator.model.temperature;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.icasa.location.Zone;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
@@ -26,9 +27,11 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class SimulatedTemperatureProvider {
 
-    @Creator.Field(requirements = Zone.class) Creator.Entity<SimulatedTemperatureModel> creator;
+    @Creator.Field(origin = OriginEnum.internal, requirements = Zone.class)
+    Creator.Entity<SimulatedTemperatureModel> creator;
 
-    @Creator.Field(SimulatedTemperatureModel.RELATION_IS_ATTACHED) Creator.Relation<SimulatedTemperatureModel,Zone> attachedTempModelCreator;
+    @Creator.Field(origin = OriginEnum.internal, value = SimulatedTemperatureModel.RELATION_IS_ATTACHED, requirements = Zone.class)
+    Creator.Relation<SimulatedTemperatureModel,Zone> attachedTempModelCreator;
 
     @Bind(id = "zones",specification = Zone.class,aggregate = true,optional = true)
     public void bindZone(Zone zone){

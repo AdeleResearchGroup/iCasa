@@ -16,6 +16,7 @@
 package fr.liglab.adele.icasa.physical.abstraction.impl;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.location.Zone;
 import org.apache.felix.ipojo.annotations.Bind;
@@ -27,9 +28,11 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class MultiwaySwitchProvider {
 
-    @Creator.Field(requirements = {Zone.class, PushButton.class}) Creator.Entity<MultiwaySwitchImpl> creator;
+    @Creator.Field(origin = OriginEnum.internal, requirements = {Zone.class, PushButton.class})
+    Creator.Entity<MultiwaySwitchImpl> creator;
 
-    @Creator.Field(value = MultiwaySwitchImpl.RELATION_IS_ATTACHED, requirements = Zone.class) Creator.Relation<MultiwaySwitchImpl,Zone> attachedMultiSwitchModelCreator;
+    @Creator.Field(origin = OriginEnum.internal, value = MultiwaySwitchImpl.RELATION_IS_ATTACHED, requirements = Zone.class)
+    Creator.Relation<MultiwaySwitchImpl,Zone> attachedMultiSwitchModelCreator;
 
     @Bind(id = "zones",specification = Zone.class,aggregate = true,optional = true)
     public void bindZone(Zone zone){

@@ -13,10 +13,11 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.impl;
+package fr.liglab.adele.icasa.location.impl;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.icasa.ZoneProvider;
 //import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.icasa.location.Zone;
@@ -35,7 +36,7 @@ import java.util.Set;
 @Instantiate(name = "ZoneProvider-0")
 public class ZoneProviderImpl implements ZoneProvider {
 
-	private @Creator.Field(remote = true) 	 Creator.Entity<ZoneImpl> creator;
+	private @Creator.Field(origin = OriginEnum.local) 	 Creator.Entity<ZoneImpl> creator;
 
 	@Override
 	public void createZone(String id, int leftX, int topY, int bottomZ, int width, int height, int depth) {

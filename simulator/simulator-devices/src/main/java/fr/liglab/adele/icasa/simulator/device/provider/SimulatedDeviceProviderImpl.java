@@ -47,6 +47,7 @@ package fr.liglab.adele.icasa.simulator.device.provider;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
@@ -79,21 +80,24 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
     @Requires(specification = SimulatedDevice.class,optional = true)
     List<SimulatedDevice> simulatedDevices;
 
-    @Creator.Field(remote = true) Creator.Entity<SimulatedBinaryLightImpl> simulatedBinaryLightCreator;
+    @Creator.Field(origin = OriginEnum.local) Creator.Entity<SimulatedBinaryLightImpl> simulatedBinaryLightCreator;
 
-    @Creator.Field(remote = true) Creator.Entity<SimulatedDimmerLightImpl> simulatedDimmerLightCreator;
+    @Creator.Field(origin = OriginEnum.local) Creator.Entity<SimulatedDimmerLightImpl> simulatedDimmerLightCreator;
 
-    @Creator.Field(requirements = {LuminosityModel.class}, remote = true) Creator.Entity<SimulatedPhotometerImpl> simulatedPhotometerCreator;
+    @Creator.Field(origin = OriginEnum.local, requirements = {LuminosityModel.class})
+    Creator.Entity<SimulatedPhotometerImpl> simulatedPhotometerCreator;
 
-    @Creator.Field(remote = true) Creator.Entity<SimulatedCoolerImpl> simulatedCoolerCreator;
+    @Creator.Field(origin = OriginEnum.local) Creator.Entity<SimulatedCoolerImpl> simulatedCoolerCreator;
 
-    @Creator.Field(remote = true) Creator.Entity<SimulatedHeaterImpl> simulatedHeaterCreator;
+    @Creator.Field(origin = OriginEnum.local) Creator.Entity<SimulatedHeaterImpl> simulatedHeaterCreator;
 
-    @Creator.Field(requirements = {TemperatureModel.class}, remote = true) Creator.Entity<SimulatedThermometerImpl> simulatedThermometerCreator;
+    @Creator.Field(origin = OriginEnum.local, requirements = {TemperatureModel.class})
+    Creator.Entity<SimulatedThermometerImpl> simulatedThermometerCreator;
 
-    @Creator.Field(requirements = {PresenceModel.class}, remote = true) Creator.Entity<SimulatedPresenceSensorImpl> simulatedPresenceSensorCreator;
+    @Creator.Field(origin = OriginEnum.local, requirements = {PresenceModel.class})
+    Creator.Entity<SimulatedPresenceSensorImpl> simulatedPresenceSensorCreator;
 
-    @Creator.Field(remote = true) Creator.Entity<SimulatedPushButtonImpl> simulatedPushButtonCreator;
+    @Creator.Field(origin = OriginEnum.local) Creator.Entity<SimulatedPushButtonImpl> simulatedPushButtonCreator;
 
     @Validate
     public void start(){

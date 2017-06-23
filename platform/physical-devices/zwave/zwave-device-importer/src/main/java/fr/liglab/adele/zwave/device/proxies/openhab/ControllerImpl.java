@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -118,7 +119,7 @@ public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveD
     /**
      * Relation to the neighbor devices 
      */
-    @Creator.Field("isZwaveNeighbor") 	Creator.Relation<ZwaveDevice,ZwaveDevice> neighborsRelationCreator;
+    @Creator.Field(origin = OriginEnum.local, value = "isZwaveNeighbor") 	Creator.Relation<ZwaveDevice,ZwaveDevice> neighborsRelationCreator;
     
     /**
      * The identifiers of neighbor devices

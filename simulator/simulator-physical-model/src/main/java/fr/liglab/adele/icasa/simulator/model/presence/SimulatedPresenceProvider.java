@@ -16,6 +16,7 @@
 package fr.liglab.adele.icasa.simulator.model.presence;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.icasa.location.Zone;
 import fr.liglab.adele.icasa.simulator.person.Person;
 import org.apache.felix.ipojo.annotations.Bind;
@@ -27,9 +28,11 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class SimulatedPresenceProvider {
 
-    @Creator.Field(requirements = {Zone.class, Person.class}) Creator.Entity<SimulatedPresenceModel> creator;
+    @Creator.Field(origin = OriginEnum.internal, requirements = {Zone.class, Person.class})
+    Creator.Entity<SimulatedPresenceModel> creator;
 
-    @Creator.Field(SimulatedPresenceModel.RELATION_IS_ATTACHED) Creator.Relation<SimulatedPresenceModel,Zone> attachedPresModelCreator;
+    @Creator.Field(origin = OriginEnum.internal, value = SimulatedPresenceModel.RELATION_IS_ATTACHED, requirements = Zone.class)
+    Creator.Relation<SimulatedPresenceModel,Zone> attachedPresModelCreator;
 
     @Bind(id = "zones",specification = Zone.class, aggregate = true, optional = true)
     public void bindZone(Zone zone){

@@ -16,6 +16,7 @@
 package fr.liglab.adele.icasa.simulator.model.day.part;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
@@ -25,7 +26,7 @@ import org.apache.felix.ipojo.annotations.Validate;
 @Instantiate
 public class PartOfTheDayProvider {
 
-    @Creator.Field Creator.Entity<MomentOfTheDaySimulatedImpl> creator;
+    @Creator.Field(origin = OriginEnum.internal) Creator.Entity<MomentOfTheDaySimulatedImpl> creator;
 
     @Validate
     public void start(){

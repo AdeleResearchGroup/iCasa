@@ -56,5 +56,6 @@ public enum ContextAPIEnum {
     @Override
     public String toString() {
         return "CtxtAPI{" + interfaceName + '}';
+//        return "CtxtAPI{" + interfaceName.substring(interfaceName.lastIndexOf(".")+1) + '}';
     }
 }

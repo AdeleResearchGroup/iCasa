@@ -20,6 +20,7 @@ package fr.liglab.adele.icasa.zigbee.device.importer;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.zigbee.driver.TypeCode;
 import fr.liglab.adele.icasa.zigbee.device.api.ZigbeeDevice;
@@ -54,19 +55,19 @@ public class ZigbeeImporter extends AbstractImporterComponent {
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
     private String name;
 
-    private @Creator.Field(remote = true) Creator.Entity<ZigbeePhotometer> photometerFactory;
+    private @Creator.Field(origin = OriginEnum.local) Creator.Entity<ZigbeePhotometer> photometerFactory;
 
-    private @Creator.Field(remote = true) Creator.Entity<ZigbeeBinaryLight> binaryLightFactory;
+    private @Creator.Field(origin = OriginEnum.local) Creator.Entity<ZigbeeBinaryLight> binaryLightFactory;
 
-    private @Creator.Field(remote = true) Creator.Entity<ZigbeeMotionSensor> motionSensorFactory;
+    private @Creator.Field(origin = OriginEnum.local) Creator.Entity<ZigbeeMotionSensor> motionSensorFactory;
 
-    private @Creator.Field(remote = true) Creator.Entity<ZigbeePowerSwitch> powerSwitchFactory;
+    private @Creator.Field(origin = OriginEnum.local) Creator.Entity<ZigbeePowerSwitch> powerSwitchFactory;
 
-    private @Creator.Field(remote = true) Creator.Entity<ZigbeePushButton> pushButtonFactory;
+    private @Creator.Field(origin = OriginEnum.local) Creator.Entity<ZigbeePushButton> pushButtonFactory;
 
-    private @Creator.Field(remote = true) Creator.Entity<ZigbeeThermometer> thermometerFactory;
+    private @Creator.Field(origin = OriginEnum.local) Creator.Entity<ZigbeeThermometer> thermometerFactory;
 
-    private @Creator.Field(remote = true) Creator.Entity<ZigbeePresenceSensor> presenceSensorFactory;
+    private @Creator.Field(origin = OriginEnum.local) Creator.Entity<ZigbeePresenceSensor> presenceSensorFactory;
 
     private static final Logger logger = LoggerFactory.getLogger(ZigbeeImporter.class);
 

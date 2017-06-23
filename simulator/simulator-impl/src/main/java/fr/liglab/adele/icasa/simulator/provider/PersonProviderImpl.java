@@ -17,6 +17,7 @@ package fr.liglab.adele.icasa.simulator.provider;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity.State;
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.icasa.simulator.impl.PersonImpl;
 import fr.liglab.adele.icasa.simulator.person.Person;
 import fr.liglab.adele.icasa.simulator.person.PersonProvider;
@@ -35,7 +36,7 @@ import java.util.Set;
 @Instantiate
 public class PersonProviderImpl implements PersonProvider {
 
-    @Creator.Field(remote = true) Creator.Entity<PersonImpl> personCreator;
+    @Creator.Field(origin = OriginEnum.local) Creator.Entity<PersonImpl> personCreator;
 
     @Override
     public void createPerson(String personName, String personType) {

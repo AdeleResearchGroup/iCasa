@@ -17,6 +17,7 @@ package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.provider.Creator;
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextRequirement;
 import fr.liglab.adele.cream.model.Relation;
 import fr.liglab.adele.zwave.device.api.ZwaveController;
@@ -129,7 +130,7 @@ public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveD
 	 * Relation to the neighbor devices
 	 */
 
-	@Creator.Field("isZwaveNeighbor")
+	@Creator.Field(origin = OriginEnum.local, value = "isZwaveNeighbor")
 	Creator.Relation<ZwaveDevice, ZwaveDevice> neighborsRelationCreator;
 
 	/**

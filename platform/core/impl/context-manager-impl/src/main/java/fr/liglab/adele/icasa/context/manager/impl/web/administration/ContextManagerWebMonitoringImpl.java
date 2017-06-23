@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.web.administration;
 
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.Util;
@@ -27,10 +28,7 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component(immediate = true, publicFactory = false)
 @Instantiate
@@ -51,59 +49,67 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
     private RelationProvider[] relationProviders;
 
     /*ToDo*/
-    private Map<EntityProvider, Set<String>> getCreatorsByEntityProvider(boolean remote){
+    private Map<EntityProvider, Set<String>> getCreatorsByEntityProvider(OriginEnum originEnum){
         Map<EntityProvider, Set<String>> result = new HashMap<>();
         for(EntityProvider entityProvider : entityProviders){
             Set<String> remoteEntities = new HashSet<>();
             for(String providedEntity : entityProvider.getProvidedEntities()){
-                if(entityProvider.isRemote(providedEntity) == remote){
+                if(originEnum.equals(entityProvider.getOrigin(providedEntity))){
                     String creatorName = Util.eCreatorName(entityProvider, providedEntity);
                     remoteEntities.add(creatorName);
                 }
             }
             result.put(entityProvider, remoteEntities);
         }
-        return result;
+        return Collections.unmodifiableMap(result);
     }
 
     /*ToDo*/
-    private Map<RelationProvider, Set<String>> getCreatorsByRelationProvider(boolean remote){
+    private Map<RelationProvider, Set<String>> getCreatorsByRelationProvider(OriginEnum originEnum){
         Map<RelationProvider, Set<String>> result = new HashMap<>();
         for(RelationProvider relationProvider : relationProviders){
             Set<String> remoteRelations = new HashSet<>();
             for(String providedRelation : relationProvider.getProvidedRelations()){
-                if(relationProvider.isRemote(providedRelation) == remote){
+                if(originEnum.equals(relationProvider.getOrigin(providedRelation))){
                     String creatorName = Util.eCreatorName(relationProvider, providedRelation);
                     remoteRelations.add(creatorName);
                 }
             }
             result.put(relationProvider, remoteRelations);
         }
-        return result;
+        return Collections.unmodifiableMap(result);
     }
 
     /*ToDo*/
     @Override
     public Map<EntityProvider, Set<String>> getResourceCreatorsByEntityProvider() {
-        return getCreatorsByEntityProvider(true);
+//        Map<EntityProvider, Set<String>> result = new HashMap<>();
+//        result.putAll(getCreatorsByEntityProvider(OriginEnum.local));
+//        result.putAll(getCreatorsByEntityProvider(OriginEnum.remote));
+//        return result;
+        return getCreatorsByEntityProvider(OriginEnum.local);
     }
 
     /*ToDo*/
     @Override
     public Map<RelationProvider, Set<String>> getResourceCreatorsByRelationProvider() {
-        return getCreatorsByRelationProvider(true);
+//        Map<RelationProvider, Set<String>> result = new HashMap<>();
+//        result.putAll(getCreatorsByRelationProvider(OriginEnum.local));
+//        result.putAll(getCreatorsByRelationProvider(OriginEnum.remote));
+//        return result;
+        return getCreatorsByRelationProvider(OriginEnum.local);
     }
 
     /*ToDo*/
     @Override
     public Map<EntityProvider, Set<String>> getAbstractionCreatorsByEntityProvider() {
-        return getCreatorsByEntityProvider(false);
+        return getCreatorsByEntityProvider(OriginEnum.internal);
     }
 
     /*ToDo*/
     @Override
     public Map<RelationProvider, Set<String>> getAbstractionCreatorsByRelationProvider() {
-        return getCreatorsByRelationProvider(false);
+        return getCreatorsByRelationProvider(OriginEnum.internal);
     }
 
     @Override
