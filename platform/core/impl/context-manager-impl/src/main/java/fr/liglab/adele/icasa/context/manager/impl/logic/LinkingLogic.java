@@ -153,9 +153,9 @@ final class LinkingLogic implements Runnable {
     private void updateExternalProviderModels(){
 
         entityProviders = capabilityModelAccess.getEntityProviders();
-        eCreatorsByServices = capabilityModelAccess.getmEntityCreatorsByService();
-        eCreatorsRequirements = capabilityModelAccess.getmEntityCreatorsRequirements();
-        eProviderByCreatorName = capabilityModelAccess.getmEntityProviderByCreatorName();
+        eCreatorsByServices = capabilityModelAccess.getEntityCreatorsByService();
+        eCreatorsRequirements = capabilityModelAccess.getEntityCreatorsRequirements();
+        eProviderByCreatorName = capabilityModelAccess.getEntityProviderByCreatorName();
     }
 
     private void buildMediationTree(){
@@ -386,7 +386,7 @@ final class LinkingLogic implements Runnable {
         /*Deactivate others*/
         for(EntityProvider entityProvider : entityProviders){
             for(String providedEntity : entityProvider.getProvidedEntities()){
-                String creatorName = Util.eCreatorName(entityProvider, providedEntity);
+                String creatorName = Util.creatorName(entityProvider, providedEntity);
                 if(creatorsToActivate.contains(creatorName)) {
                     entityProvider.enable(providedEntity);
                     if(logLevel>=3) {

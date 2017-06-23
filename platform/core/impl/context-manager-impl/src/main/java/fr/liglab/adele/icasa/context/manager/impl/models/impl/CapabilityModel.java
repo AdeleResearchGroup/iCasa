@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
@@ -39,67 +40,121 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
     private static final Logger LOG = LoggerFactory.getLogger(CapabilityModel.class);
 
     /*Entity creator model*/
-    private Map<String, Set<String>> mEntityCreatorsByService = new HashMap<>();
-    private Map<String, Set<String>> mEntityCreatorsRequirements = new HashMap<>();
-    private Map<String, EntityProvider> mEntityProviderByCreatorName = new HashMap<>();
-    private Map<EntityProvider, Set<String>> mEntitiesByProvider = new HashMap<>();
+    private Map<String, Set<String>> eCreatorsByService = new HashMap<>();
+    private Map<String, Set<String>> eCreatorsRequirements = new HashMap<>();
+    private Map<String, EntityProvider> eProviderByCreatorName = new HashMap<>();
+    private Map<EntityProvider, Set<String>> entitiesByProvider = new HashMap<>();
 
     /*Relation creator model*/
-    private Map<String, Set<String>> mRelationCreatorsByService = new HashMap<>();
-    private Map<String, Set<String>> mRelationCreatorsRequirements = new HashMap<>();
-    private Map<String, RelationProvider> mRelationProviderByCreatorName = new HashMap<>();
-    private Map<RelationProvider, Set<String>> mRelationsByProvider = new HashMap<>();
+    private Map<String, Set<String>> rCreatorsByService = new HashMap<>();
+    private Map<String, Set<String>> rCreatorsRequirements = new HashMap<>();
+    private Map<String, RelationProvider> rProviderByCreatorName = new HashMap<>();
+    private Map<RelationProvider, Set<String>> relationsByProvider = new HashMap<>();
 
+    /*MODEL ACCESS*/
     @Override
     public Set<EntityProvider> getEntityProviders() {
-        return mEntitiesByProvider.keySet();
+        return entitiesByProvider.keySet();
     }
 
     @Override
     public Set<RelationProvider> getRelationProviders() {
-        return mRelationsByProvider.keySet();
+        return relationsByProvider.keySet();
     }
 
     @Override
-    public Map<String, Set<String>> getmEntityCreatorsByService() {
-        return mEntityCreatorsByService;
+    public Map<String, Set<String>> getEntityCreatorsByService() {
+        return eCreatorsByService;
     }
 
     @Override
-    public Map<String, Set<String>> getmEntityCreatorsRequirements() {
-        return mEntityCreatorsRequirements;
+    public Map<String, Set<String>> getEntityCreatorsRequirements() {
+        return eCreatorsRequirements;
     }
 
     @Override
-    public Map<String, EntityProvider> getmEntityProviderByCreatorName() {
-        return mEntityProviderByCreatorName;
+    public Map<String, EntityProvider> getEntityProviderByCreatorName() {
+        return eProviderByCreatorName;
     }
 
     @Override
-    public Map<EntityProvider, Set<String>> getmEntitiesByProvider() {
-        return mEntitiesByProvider;
+    public Map<EntityProvider, Set<String>> getEntitiesByProvider() {
+        return entitiesByProvider;
+    }
+
+
+    /*ToDo CHECK*/
+    @Override
+    public Map<EntityProvider, Set<String>> getEntitiesByProvider(OriginEnum originEnum){
+        Map<EntityProvider, Set<String>> result = new HashMap<>();
+        for(EntityProvider entityProvider : getEntityProviders()){
+            Set<String> creators = new HashSet<>();
+            for(String providedEntity : entityProvider.getProvidedEntities()){
+                if(originEnum.equals(entityProvider.getOrigin(providedEntity))){
+                    creators.add(providedEntity);
+                }
+            }
+            if(!creators.isEmpty())
+                result.put(entityProvider, creators);
+        }
+        return Collections.unmodifiableMap(result);
     }
 
     @Override
-    public Map<String, Set<String>> getmRelationCreatorsByService() {
-        return mRelationCreatorsByService;
+    public Map<String, Set<String>> getRelationCreatorsByService() {
+        return rCreatorsByService;
     }
 
     @Override
-    public Map<String, Set<String>> getmRelationCreatorsRequirements() {
-        return mRelationCreatorsRequirements;
+    public Map<String, Set<String>> getRelationCreatorsRequirements() {
+        return rCreatorsRequirements;
     }
 
     @Override
-    public Map<String, RelationProvider> getmRelationProviderByCreatorName() {
-        return mRelationProviderByCreatorName;
+    public Map<String, RelationProvider> getRelationProviderByCreatorName() {
+        return rProviderByCreatorName;
     }
 
     @Override
-    public Map<RelationProvider, Set<String>> getmRelationsByProvider() {
-        return mRelationsByProvider;
+    public Map<RelationProvider, Set<String>> getRelationsByProvider() {
+        return relationsByProvider;
     }
 
+    @Override
+    public Set<String> getInstancesByCreator(String creator) {
+        Set<String> result = new HashSet<>();
+
+        if(eProviderByCreatorName.containsKey(creator)){
+            result.addAll(eProviderByCreatorName.get(creator).getInstances(Util.getProvidedItemFromCreatorName(creator),true));
+        }
+
+        if(rProviderByCreatorName.containsKey(creator)){
+            result.addAll(rProviderByCreatorName.get(creator).getInstances(Util.getProvidedItemFromCreatorName(creator),true));
+        }
+
+        return result;
+    }
+
+
+    /*ToDo CHECK*/
+    @Override
+    public Map<RelationProvider, Set<String>> getRelationsByProvider(OriginEnum originEnum){
+        Map<RelationProvider, Set<String>> result = new HashMap<>();
+        for(RelationProvider relationProvider : getRelationProviders()){
+            Set<String> creators = new HashSet<>();
+            for(String providedRelation : relationProvider.getProvidedRelations()){
+                if(originEnum.equals(relationProvider.getOrigin(providedRelation))){
+                    creators.add(providedRelation);
+                }
+            }
+            if(!creators.isEmpty())
+                result.put(relationProvider, creators);
+        }
+        return Collections.unmodifiableMap(result);
+    }
+
+
+    /*MODEL UPDATE*/
     @Override
     public void addEntityProvider (EntityProvider entityProvider){
         /*LogLevel*/
@@ -109,10 +164,10 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
         }
 
         Set<String> providedEntities = entityProvider.getProvidedEntities();
-        mEntitiesByProvider.put(entityProvider, providedEntities);
+        entitiesByProvider.put(entityProvider, providedEntities);
 
         for(String providedEntity : providedEntities) {
-            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
+            String creatorName = Util.creatorName(entityProvider, providedEntity);
 
             if(logLevel>=3){
                 LOG.info("ENTITY: "+ providedEntity);
@@ -120,16 +175,16 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
                 LOG.info("WITH REQUIREMENTS: "+ entityProvider.getPotentiallyRequiredServices(providedEntity));
             }
 
-            mEntityCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
-            mEntityProviderByCreatorName.put(creatorName, entityProvider);
+            eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
+            eProviderByCreatorName.put(creatorName, entityProvider);
 
             for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                if (!mEntityCreatorsByService.containsKey(service)) {
+                if (!eCreatorsByService.containsKey(service)) {
                     Set<String> entityProviderSubSet = new HashSet<>();
                     entityProviderSubSet.add(creatorName);
-                    mEntityCreatorsByService.put(service, entityProviderSubSet);
+                    eCreatorsByService.put(service, entityProviderSubSet);
                 } else {
-                    mEntityCreatorsByService.get(service).add(creatorName);
+                    eCreatorsByService.get(service).add(creatorName);
                 }
             }
         }
@@ -144,17 +199,17 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
         }
 
         Set<String> newConfig = entityProvider.getProvidedEntities();
-        Set<String> oldConfig = mEntitiesByProvider.get(entityProvider);
+        Set<String> oldConfig = entitiesByProvider.get(entityProvider);
 
         Set<String> added   = new HashSet<>(newConfig);
         Set<String> removed = new HashSet<>(oldConfig);
         added.removeAll(oldConfig);
         removed.removeAll(newConfig);
 
-        mEntitiesByProvider.put(entityProvider, newConfig);
+        entitiesByProvider.put(entityProvider, newConfig);
 
         for(String providedEntity : added){
-            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
+            String creatorName = Util.creatorName(entityProvider, providedEntity);
 
             if(logLevel>=3) {
                 LOG.info("ADDED:");
@@ -163,34 +218,34 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
                 LOG.info("WITH REQUIREMENTS: " + entityProvider.getPotentiallyRequiredServices(providedEntity));
             }
 
-            mEntityCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
-            mEntityProviderByCreatorName.put(creatorName, entityProvider);
+            eCreatorsRequirements.put(creatorName, entityProvider.getPotentiallyRequiredServices(providedEntity));
+            eProviderByCreatorName.put(creatorName, entityProvider);
 
             for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                if (!mEntityCreatorsByService.containsKey(service)) {
+                if (!eCreatorsByService.containsKey(service)) {
                     Set<String> entityProviderSubSet = new HashSet<>();
                     entityProviderSubSet.add(creatorName);
-                    mEntityCreatorsByService.put(service, entityProviderSubSet);
+                    eCreatorsByService.put(service, entityProviderSubSet);
                 } else {
-                    mEntityCreatorsByService.get(service).add(creatorName);
+                    eCreatorsByService.get(service).add(creatorName);
                 }
             }
         }
 
         for(String providedEntity : removed){
-            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
+            String creatorName = Util.creatorName(entityProvider, providedEntity);
 
             if(logLevel>=3) {
                 LOG.info("REMOVED:");
                 LOG.info("ENTITY: " + providedEntity);
             }
 
-            mEntityCreatorsRequirements.remove(creatorName);
-            mEntityProviderByCreatorName.remove(creatorName);
+            eCreatorsRequirements.remove(creatorName);
+            eProviderByCreatorName.remove(creatorName);
 
             for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                if (mEntityCreatorsByService.containsKey(service)) {
-                    mEntityCreatorsByService.get(service).remove(creatorName);
+                if (eCreatorsByService.containsKey(service)) {
+                    eCreatorsByService.get(service).remove(creatorName);
                 }
             }
         }
@@ -198,17 +253,17 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
 
     @Override
     public void removeEntityProvider(EntityProvider entityProvider){
-        mEntitiesByProvider.remove(entityProvider);
+        entitiesByProvider.remove(entityProvider);
 
         for(String providedEntity : entityProvider.getProvidedEntities()) {
-            String creatorName = Util.eCreatorName(entityProvider, providedEntity);
+            String creatorName = Util.creatorName(entityProvider, providedEntity);
 
-            mEntityCreatorsRequirements.remove(creatorName);
-            mEntityProviderByCreatorName.remove(creatorName);
+            eCreatorsRequirements.remove(creatorName);
+            eProviderByCreatorName.remove(creatorName);
 
             for (String service : entityProvider.getPotentiallyProvidedEntityServices(providedEntity)) {
-                if (mEntityCreatorsByService.containsKey(service)) {
-                    mEntityCreatorsByService.get(service).remove(creatorName);
+                if (eCreatorsByService.containsKey(service)) {
+                    eCreatorsByService.get(service).remove(creatorName);
                 }
             }
         }
@@ -227,10 +282,10 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
         }
 
         Set<String> providedRelations = relationProvider.getProvidedRelations();
-        mRelationsByProvider.put(relationProvider, providedRelations);
+        relationsByProvider.put(relationProvider, providedRelations);
 
         for(String providedRelation : providedRelations) {
-            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+            String creatorName = Util.creatorName(relationProvider, providedRelation);
 
             if(logLevel>=3){
                 LOG.info("RELATION: "+ providedRelation);
@@ -238,16 +293,16 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
                 LOG.info("WITH REQUIREMENTS: "+ relationProvider.getPotentiallyRequiredServices(providedRelation));
             }
 
-            mRelationCreatorsRequirements.put(creatorName, relationProvider.getPotentiallyRequiredServices(providedRelation));
-            mRelationProviderByCreatorName.put(creatorName, relationProvider);
+            rCreatorsRequirements.put(creatorName, relationProvider.getPotentiallyRequiredServices(providedRelation));
+            rProviderByCreatorName.put(creatorName, relationProvider);
 
             for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
-                if (!mRelationCreatorsByService.containsKey(service)) {
+                if (!rCreatorsByService.containsKey(service)) {
                     Set<String> relationProviderSubSet = new HashSet<>();
                     relationProviderSubSet.add(creatorName);
-                    mRelationCreatorsByService.put(service, relationProviderSubSet);
+                    rCreatorsByService.put(service, relationProviderSubSet);
                 } else {
-                    mRelationCreatorsByService.get(service).add(creatorName);
+                    rCreatorsByService.get(service).add(creatorName);
                 }
             }
         }
@@ -263,8 +318,8 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
 
         Set<String> newConfig = relationProvider.getProvidedRelations();
         Set<String> oldConfig = Collections.emptySet();
-        if(mRelationsByProvider.containsKey(relationProvider)){
-            oldConfig = mRelationsByProvider.get(relationProvider);
+        if(relationsByProvider.containsKey(relationProvider)){
+            oldConfig = relationsByProvider.get(relationProvider);
         }
 
         Set<String> added   = new HashSet<>(newConfig);
@@ -272,10 +327,10 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
         added.removeAll(oldConfig);
         removed.removeAll(newConfig);
 
-        mRelationsByProvider.put(relationProvider, newConfig);
+        relationsByProvider.put(relationProvider, newConfig);
 
         for(String providedRelation : added){
-            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+            String creatorName = Util.creatorName(relationProvider, providedRelation);
 
             if(logLevel>=3) {
                 LOG.info("ADDED:");
@@ -284,34 +339,34 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
                 LOG.info("WITH REQUIREMENTS: " + relationProvider.getPotentiallyRequiredServices(providedRelation));
             }
 
-            mRelationCreatorsRequirements.put(creatorName, relationProvider.getPotentiallyRequiredServices(providedRelation));
-            mRelationProviderByCreatorName.put(creatorName, relationProvider);
+            rCreatorsRequirements.put(creatorName, relationProvider.getPotentiallyRequiredServices(providedRelation));
+            rProviderByCreatorName.put(creatorName, relationProvider);
 
             for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
-                if (!mRelationCreatorsByService.containsKey(service)) {
+                if (!rCreatorsByService.containsKey(service)) {
                     Set<String> relationProviderSubSet = new HashSet<>();
                     relationProviderSubSet.add(creatorName);
-                    mRelationCreatorsByService.put(service, relationProviderSubSet);
+                    rCreatorsByService.put(service, relationProviderSubSet);
                 } else {
-                    mRelationCreatorsByService.get(service).add(creatorName);
+                    rCreatorsByService.get(service).add(creatorName);
                 }
             }
         }
 
         for(String providedRelation : removed){
-            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+            String creatorName = Util.creatorName(relationProvider, providedRelation);
 
             if(logLevel>=3) {
                 LOG.info("REMOVED:");
                 LOG.info("RELATION: " + providedRelation);
             }
 
-            mRelationCreatorsRequirements.remove(creatorName);
-            mRelationProviderByCreatorName.remove(creatorName);
+            rCreatorsRequirements.remove(creatorName);
+            rProviderByCreatorName.remove(creatorName);
 
             for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
-                if (mRelationCreatorsByService.containsKey(service)) {
-                    mRelationCreatorsByService.get(service).remove(creatorName);
+                if (rCreatorsByService.containsKey(service)) {
+                    rCreatorsByService.get(service).remove(creatorName);
                 }
             }
         }
@@ -319,17 +374,17 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
 
     @Override
     public void removeRelationProvider(RelationProvider relationProvider){
-        mRelationsByProvider.remove(relationProvider);
+        relationsByProvider.remove(relationProvider);
 
         for(String providedRelation : relationProvider.getProvidedRelations()) {
-            String creatorName = Util.eCreatorName(relationProvider, providedRelation);
+            String creatorName = Util.creatorName(relationProvider, providedRelation);
 
-            mRelationCreatorsRequirements.remove(creatorName);
-            mRelationProviderByCreatorName.remove(creatorName);
+            rCreatorsRequirements.remove(creatorName);
+            rProviderByCreatorName.remove(creatorName);
 
             for (String service : relationProvider.getPotentiallyProvidedRelationServices(providedRelation)) {
-                if (mRelationCreatorsByService.containsKey(service)) {
-                    mRelationCreatorsByService.get(service).remove(creatorName);
+                if (rCreatorsByService.containsKey(service)) {
+                    rCreatorsByService.get(service).remove(creatorName);
                 }
             }
         }
@@ -339,18 +394,5 @@ public class CapabilityModel implements CapabilityModelAccess, CapabilityModelUp
         }
     }
 
-    @Override
-    public Set<String> getInstancesByCreator(String creator) {
-        Set<String> result = new HashSet<>();
 
-        if(mEntityProviderByCreatorName.containsKey(creator)){
-            result.addAll(mEntityProviderByCreatorName.get(creator).getInstances(Util.getProvidedItemFromCreatorName(creator),true));
-        }
-
-        if(mRelationProviderByCreatorName.containsKey(creator)){
-            result.addAll(mRelationProviderByCreatorName.get(creator).getInstances(Util.getProvidedItemFromCreatorName(creator),true));
-        }
-
-        return result;
-    }
 }

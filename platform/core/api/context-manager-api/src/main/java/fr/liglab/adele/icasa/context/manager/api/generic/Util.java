@@ -21,11 +21,11 @@ import fr.liglab.adele.cream.model.introspection.RelationProvider;
 
 public final class Util {
 
-    public static String eCreatorName(EntityProvider entityProvider, String providedEntity) {
+    public static String creatorName(EntityProvider entityProvider, String providedEntity) {
         return "ENTITY:" + entityProvider.getName() + ":" + providedEntity;
     }
 
-    public static String eCreatorName(RelationProvider relationProvider, String providedRelation) {
+    public static String creatorName(RelationProvider relationProvider, String providedRelation) {
         return "RELATION:" + relationProvider.getName() + ":" + providedRelation;
     }
 

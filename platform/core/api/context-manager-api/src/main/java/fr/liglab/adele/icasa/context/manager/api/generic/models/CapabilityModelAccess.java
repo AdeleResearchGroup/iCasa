@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.api.generic.models;
 
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.cream.model.ContextEntity;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
@@ -26,27 +27,30 @@ import java.util.Set;
 
 public interface CapabilityModelAccess {
 
-    /*ToDo REMOVE ?*/
+    /*TODO MODIFY*/
     Set<EntityProvider> getEntityProviders();
+
+    Set<String> getInstancesByCreator(String creator);
+
+    Map<String, Set<String>> getEntityCreatorsByService();
+
+    Map<String, Set<String>> getEntityCreatorsRequirements();
+
+    Map<String, EntityProvider> getEntityProviderByCreatorName();
+
+    Map<EntityProvider, Set<String>> getEntitiesByProvider();
+
+    Map<EntityProvider, Set<String>> getEntitiesByProvider(OriginEnum originEnum);
 
     Set<RelationProvider> getRelationProviders();
 
-    /*TODO MODIFY*/
-    Set<String> getInstancesByCreator(String creator);
+    Map<String, Set<String>> getRelationCreatorsByService();
 
-    Map<String, Set<String>> getmEntityCreatorsByService();
+    Map<String, Set<String>> getRelationCreatorsRequirements();
 
-    Map<String, Set<String>> getmEntityCreatorsRequirements();
+    Map<String, RelationProvider> getRelationProviderByCreatorName();
 
-    Map<String, EntityProvider> getmEntityProviderByCreatorName();
+    Map<RelationProvider, Set<String>> getRelationsByProvider();
 
-    Map<EntityProvider, Set<String>> getmEntitiesByProvider();
-
-    Map<String, Set<String>> getmRelationCreatorsByService();
-
-    Map<String, Set<String>> getmRelationCreatorsRequirements();
-
-    Map<String, RelationProvider> getmRelationProviderByCreatorName();
-
-    Map<RelationProvider, Set<String>> getmRelationsByProvider();
+    Map<RelationProvider, Set<String>> getRelationsByProvider(OriginEnum originEnum);
 }
