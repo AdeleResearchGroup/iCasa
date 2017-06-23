@@ -21,6 +21,7 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class ExternalFilterModel implements ExternalFilterModelAccess, ExternalF
 
     @Override
     public Set<String> getLookupFilter() {
-        return new HashSet<>(lookupFilter);
+        return Collections.unmodifiableSet(lookupFilter);
     }
 
     @Override

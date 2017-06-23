@@ -37,18 +37,10 @@ import java.util.Set;
 @Provides
 public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitoring {
     /*Monitored elements*/
-    @Requires(optional = true)
-    @SuppressWarnings("all")
-    private GoalModelAccess goalModel;
 
     @Requires(optional = true)
     @SuppressWarnings("all")
     private CapabilityModelAccess capabilityModel;
-
-    @Requires(optional = true)
-    @SuppressWarnings("all")
-    private ExternalFilterModelAccess externalFilterModel;
-
 
     @Requires(id = "entityProviders", optional = true)
     @SuppressWarnings("all")
@@ -119,15 +111,6 @@ public class ContextManagerWebMonitoringImpl implements ContextManagerWebMonitor
         Set<String> result = new HashSet<>();
         if(capabilityModel != null){
             result.addAll(capabilityModel.getInstancesByCreator(creator));
-        }
-        return result;
-    }
-
-    @Override
-    public Set<String> getCurrentLookupFilter() {
-        Set<String> result = new HashSet<>();
-        if(externalFilterModel != null){
-            result.addAll(externalFilterModel.getLookupFilter());
         }
         return result;
     }

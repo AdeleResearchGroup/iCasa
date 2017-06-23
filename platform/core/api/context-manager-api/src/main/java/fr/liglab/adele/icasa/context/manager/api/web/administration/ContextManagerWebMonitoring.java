@@ -30,6 +30,4 @@ public interface ContextManagerWebMonitoring {
     Map<RelationProvider, Set<String>> getAbstractionCreatorsByRelationProvider();
 
     Set<String> getInstancesByCreator(String creator);
-
-    Set<String> getCurrentLookupFilter();
 }
