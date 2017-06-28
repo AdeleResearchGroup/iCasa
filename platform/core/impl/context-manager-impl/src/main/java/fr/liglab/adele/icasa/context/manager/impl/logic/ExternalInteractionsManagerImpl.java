@@ -15,8 +15,8 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.logic;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
+import fr.liglab.adele.icasa.context.manager.api.models.ExternalFilterModelAccess;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;

@@ -85,7 +85,7 @@
 //
 //        /*Test*/
 //        System.out.println("\n***TEST Context Schedule (Verification manuelle à faire : nombre d'executions par config)***");
-//        ContextManager contextManager = new ContextManager();
+//        SupervisorManager contextManager = new SupervisorManager();
 //        contextManager.start();
 //
 //

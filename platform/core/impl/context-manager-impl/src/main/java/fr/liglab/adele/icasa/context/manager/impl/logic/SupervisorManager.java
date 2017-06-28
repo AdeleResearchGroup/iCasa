@@ -16,19 +16,18 @@
 
 package fr.liglab.adele.icasa.context.manager.impl.logic;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.LinkModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
+import fr.liglab.adele.icasa.context.manager.api.models.CapabilityModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.TargetLinkModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelListener;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
-import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.TargetLinkModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +40,9 @@ import java.util.concurrent.*;
 @Component(immediate = true, publicFactory = false)
 @Instantiate
 @Provides
-public class ContextManager implements GoalModelListener {
+public class SupervisorManager implements GoalModelListener {
     /*LOG*/
-    private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SupervisorManager.class);
 
     /*SCHEDULING*/
     /*Only scheduled mode - Thread management*/
@@ -85,12 +84,12 @@ public class ContextManager implements GoalModelListener {
     /*Link model - access*/
     @Requires
     @SuppressWarnings("unused")
-    private LinkModelAccess linkModelAccess;
+    private TargetLinkModelAccess targetLinkModelAccess;
 
     /*Link model - update*/
     @Requires
     @SuppressWarnings("unused")
-    private LinkModelUpdate linkModelUpdate;
+    private TargetLinkModelUpdate targetLinkModelUpdate;
 
 
     /*EXTERNAL INTERFACES*/
@@ -124,7 +123,7 @@ public class ContextManager implements GoalModelListener {
         /*Initialization of algorithms sub-parts*/
         resolutionMachine = new LinkingLogic(goalModelAccess, goalModelUpdate,
                 capabilityModelAccess,
-                linkModelAccess, linkModelUpdate,
+                targetLinkModelAccess, targetLinkModelUpdate,
                 externalFilterModelAccess, externalFilterModelUpdate);
         /*Start scheduling*/
         switch (ContextManagerAdmin.INTERNAL_CONFIGURATION_MODE){

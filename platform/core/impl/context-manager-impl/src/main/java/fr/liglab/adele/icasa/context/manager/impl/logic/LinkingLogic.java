@@ -17,16 +17,16 @@ package fr.liglab.adele.icasa.context.manager.impl.logic;
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.Util;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.CapabilityModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.ExternalFilterModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.LinkModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
+import fr.liglab.adele.icasa.context.manager.api.Util;
+import fr.liglab.adele.icasa.context.manager.api.models.CapabilityModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.TargetLinkModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
-import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.TargetLinkModelUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +48,8 @@ final class LinkingLogic implements Runnable {
     private static GoalModelAccess goalModelAccess;
     private static GoalModelUpdate goalModelUpdate;
     private static CapabilityModelAccess capabilityModelAccess;
-    private static LinkModelAccess linkModelAccess;
-    private static LinkModelUpdate linkModelUpdate;
+    private static TargetLinkModelAccess targetLinkModelAccess;
+    private static TargetLinkModelUpdate targetLinkModelUpdate;
     private static ExternalFilterModelAccess externalFilterModelAccess;
     private static ExternalFilterModelUpdate externalFilterModelUpdate;
 
@@ -64,14 +64,14 @@ final class LinkingLogic implements Runnable {
     /*Constructor: binds to models*/
     protected LinkingLogic(GoalModelAccess goalModelAccess, GoalModelUpdate goalModelUpdate,
                            CapabilityModelAccess capabilityModelAccess,
-                           LinkModelAccess linkModelAccess, LinkModelUpdate linkModelUpdate,
+                           TargetLinkModelAccess targetLinkModelAccess, TargetLinkModelUpdate targetLinkModelUpdate,
                            ExternalFilterModelAccess externalFilterModelAccess, ExternalFilterModelUpdate externalFilterModelUpdate){
 
         LinkingLogic.goalModelAccess = goalModelAccess;
         LinkingLogic.goalModelUpdate = goalModelUpdate;
         LinkingLogic.capabilityModelAccess = capabilityModelAccess;
-        LinkingLogic.linkModelAccess = linkModelAccess;
-        LinkingLogic.linkModelUpdate = linkModelUpdate;
+        LinkingLogic.targetLinkModelAccess = targetLinkModelAccess;
+        LinkingLogic.targetLinkModelUpdate = targetLinkModelUpdate;
         LinkingLogic.externalFilterModelAccess = externalFilterModelAccess;
         LinkingLogic.externalFilterModelUpdate = externalFilterModelUpdate;
     }
@@ -147,7 +147,7 @@ final class LinkingLogic implements Runnable {
             DefaultMutableTreeNode goalNode = new DefaultMutableTreeNode(goalName);
             mediationTrees.put(goalName, goalNode);
         }
-        linkModelUpdate.setMediationTrees(mediationTrees);
+        targetLinkModelUpdate.setMediationTrees(mediationTrees);
     }
 
     private void updateExternalProviderModels(){
@@ -164,9 +164,9 @@ final class LinkingLogic implements Runnable {
         /*Mediation tree build*/
         Set<String> lookupFilter = new HashSet<>();
         boolean mediationTreesOk = recursivelyBuildMediationTree(
-                new HashSet<>(linkModelAccess.getMediationTrees().values()), nonActivableServices, lookupFilter);
-        linkModelUpdate.setMediationTreesOk(mediationTreesOk);
-        linkModelUpdate.setNonActivableServices(nonActivableServices);
+                new HashSet<>(targetLinkModelAccess.getMediationTrees().values()), nonActivableServices, lookupFilter);
+        targetLinkModelUpdate.setMediationTreesOk(mediationTreesOk);
+        targetLinkModelUpdate.setNonActivableServices(nonActivableServices);
 
         /*External request adaptation*/
         externalFilterModelUpdate.setLookupFilter(lookupFilter);
@@ -237,12 +237,12 @@ final class LinkingLogic implements Runnable {
 
         /*To activate by goal*/
         Set<String> creatorsToActivate = new HashSet<>();
-        Set<String> nonActivableServices = linkModelAccess.getNonActivableServices();
+        Set<String> nonActivableServices = targetLinkModelAccess.getNonActivableServices();
 
-        if(linkModelAccess.isMediationTreesOk()){
+        if(targetLinkModelAccess.isMediationTreesOk()){
             Map<ContextAPIEnum, Boolean> goalsActivability = new HashMap<>();
 
-            for (Map.Entry<String, DefaultMutableTreeNode> mediationTree : linkModelAccess.getMediationTrees().entrySet()) {
+            for (Map.Entry<String, DefaultMutableTreeNode> mediationTree : targetLinkModelAccess.getMediationTrees().entrySet()) {
                 String goalName = mediationTree.getKey();
                 DefaultMutableTreeNode goalNode = mediationTree.getValue();
                 if(logLevel>=3) {
@@ -285,7 +285,7 @@ final class LinkingLogic implements Runnable {
             goalModelUpdate.setContextGoalsActivability(goalsActivability);
         }
 
-        linkModelUpdate.setCreatorsToActivate(creatorsToActivate);
+        targetLinkModelUpdate.setCreatorsToActivate(creatorsToActivate);
     }
 
     private boolean mediationCalculationByGoal(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
@@ -381,7 +381,7 @@ final class LinkingLogic implements Runnable {
         /*Update LogLevel*/
         int logLevel = ContextManagerAdmin.getLogLevel();
 
-        Set<String> creatorsToActivate = linkModelAccess.getCreatorsToActivate();
+        Set<String> creatorsToActivate = targetLinkModelAccess.getCreatorsToActivate();
         /*Activate creation for needed entities*/
         /*Deactivate others*/
         for(EntityProvider entityProvider : entityProviders){

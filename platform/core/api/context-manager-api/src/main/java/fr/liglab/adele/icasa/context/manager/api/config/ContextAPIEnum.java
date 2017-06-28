@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.specific;
+package fr.liglab.adele.icasa.context.manager.api.config;
 
 /**
  * Context API, services that can be provided to applications

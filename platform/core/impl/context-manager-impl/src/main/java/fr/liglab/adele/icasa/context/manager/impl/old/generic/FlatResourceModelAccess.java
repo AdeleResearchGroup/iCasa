@@ -13,19 +13,26 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.models.api;
+package fr.liglab.adele.icasa.context.manager.impl.old.generic;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.util.Map;
+import fr.liglab.adele.icasa.context.manager.api.old.generic.EntityResource;
+import fr.liglab.adele.icasa.context.manager.api.old.generic.RelationResource;
+import fr.liglab.adele.icasa.context.manager.api.old.generic.Resource;
+
 import java.util.Set;
 
-public interface LinkModelUpdate {
+/**
+ * Interface to access and use information from goal model
+ */
+public interface FlatResourceModelAccess {
 
-    void setMediationTreesOk(boolean mediationTreesOk);
+    Set<Resource> getResources();
 
-    void setMediationTrees(Map<String, DefaultMutableTreeNode> mediationTrees);
+    Set<EntityResource> getEntitiesOfType(String type);
 
-    void setCreatorsToActivate(Set<String> creatorsToActivate);
+    Set<RelationResource> getRelationsOfType(String type);
 
-    void setNonActivableServices(Set<String> nonActivableServices);
+    Set<EntityResource> getEntities();
+
+    Set<RelationResource> getRelations();
 }

@@ -1,7 +1,7 @@
 package fr.liglab.adele.icasa.app.test.am;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -13,18 +13,19 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic.models.goals;
+package fr.liglab.adele.icasa.context.manager.api.models;
 
-/**
- * TEMP
- * Les applications enregistrent leurs besoins au gestionnaire de contexte
- * Ces besoins représentent un but sur l'API à fournir
- */
-public interface ContextDependencyRegistration {
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.Map;
+import java.util.Set;
 
-    boolean registerContextDependencies(String id, ContextAPIConfig contextAPIConfig);
+public interface TargetLinkModelAccess {
 
-    ContextAPIConfig getRegisteredContextDependencies(String id);
+    boolean isMediationTreesOk();
 
-    boolean unregisterContextDependencies(String id);
+    Map<String, DefaultMutableTreeNode> getMediationTrees();
+
+    Set<String> getCreatorsToActivate();
+
+    Set<String> getNonActivableServices();
 }

@@ -17,7 +17,7 @@ package fr.liglab.adele.icasa.app.test.am;
 
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextDependencyRegistration;
 import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;

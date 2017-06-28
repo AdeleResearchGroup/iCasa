@@ -13,26 +13,18 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.temp.generic;
-
-import fr.liglab.adele.icasa.context.manager.api.temp.generic.EntityResource;
-import fr.liglab.adele.icasa.context.manager.api.temp.generic.RelationResource;
-import fr.liglab.adele.icasa.context.manager.api.temp.generic.Resource;
-
-import java.util.Set;
+package fr.liglab.adele.icasa.context.manager.api.models.goals;
 
 /**
- * Interface to access and use information from goal model
+ * TEMP
+ * Les applications enregistrent leurs besoins au gestionnaire de contexte
+ * Ces besoins représentent un but sur l'API à fournir
  */
-public interface FlatResourceModelAccess {
+public interface ContextDependencyRegistration {
 
-    Set<Resource> getResources();
+    boolean registerContextDependencies(String id, ContextAPIConfig contextAPIConfig);
 
-    Set<EntityResource> getEntitiesOfType(String type);
+    ContextAPIConfig getRegisteredContextDependencies(String id);
 
-    Set<RelationResource> getRelationsOfType(String type);
-
-    Set<EntityResource> getEntities();
-
-    Set<RelationResource> getRelations();
+    boolean unregisterContextDependencies(String id);
 }

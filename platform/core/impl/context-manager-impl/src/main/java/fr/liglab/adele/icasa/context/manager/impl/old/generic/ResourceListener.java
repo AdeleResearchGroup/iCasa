@@ -13,25 +13,20 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.temp.generic;
+package fr.liglab.adele.icasa.context.manager.impl.old.generic;
+
+import fr.liglab.adele.icasa.context.manager.api.old.generic.Resource;
 
 import java.util.Set;
-import java.util.UUID;
 
 /**
- * Interface of EntityResource Model
- * Modified by importers
- * Read by context manager components
+ * Interface to react to changes in the resource model
  */
-public interface ResourceRegistration {
+interface ResourceListener {
+    void notifyAddingResources(Set<Resource> resources);
 
-    Set<Resource> getImportedResources(String importerId);
+    void notifyRemovingResources(Set<Resource> resources);
 
-    boolean importResource(EntityResource resource);
-
-    boolean importResource(RelationResource relation);
-
-    boolean removeResource(UUID resourceId);
-
-    boolean removeAllResourcesFromImporter(String importerId);
+    /*TODO ADD THIS METHOD?*/
+//    void notifyModifyingResource(Resource resource);
 }

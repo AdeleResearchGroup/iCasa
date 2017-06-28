@@ -13,12 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.impl.temp.generic;
+package fr.liglab.adele.icasa.context.manager.impl.old.generic;
 
-import fr.liglab.adele.icasa.context.manager.api.temp.generic.EntityResource;
-import fr.liglab.adele.icasa.context.manager.api.temp.generic.RelationResource;
-import fr.liglab.adele.icasa.context.manager.api.temp.generic.Resource;
-import fr.liglab.adele.icasa.context.manager.api.temp.generic.ResourceRegistration;
+import fr.liglab.adele.icasa.context.manager.api.old.generic.EntityResource;
+import fr.liglab.adele.icasa.context.manager.api.old.generic.RelationResource;
+import fr.liglab.adele.icasa.context.manager.api.old.generic.Resource;
+import fr.liglab.adele.icasa.context.manager.api.old.generic.ResourceRegistration;
 
 import org.apache.felix.ipojo.annotations.*;
 

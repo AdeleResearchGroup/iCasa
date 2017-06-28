@@ -15,8 +15,8 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.models.LinkModelAccess;
-import fr.liglab.adele.icasa.context.manager.impl.models.api.LinkModelUpdate;
+import fr.liglab.adele.icasa.context.manager.api.models.TargetLinkModelAccess;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.TargetLinkModelUpdate;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -32,7 +32,7 @@ import java.util.Set;
 @Instantiate
 @Provides
 @SuppressWarnings("unused")
-public class LinkModel implements LinkModelAccess, LinkModelUpdate{
+public class TargetLinkModel implements TargetLinkModelAccess, TargetLinkModelUpdate {
 
     private boolean mediationTreesOk = false;
     private Map<String, DefaultMutableTreeNode> mediationTrees = new HashMap<>();

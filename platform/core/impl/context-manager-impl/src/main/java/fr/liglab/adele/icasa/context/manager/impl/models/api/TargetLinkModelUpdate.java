@@ -13,33 +13,19 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic.models.goals;
+package fr.liglab.adele.icasa.context.manager.impl.models.api;
 
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
-
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Interface to access and use information from goal model
- */
-public interface GoalModelAccess {
+public interface TargetLinkModelUpdate {
 
-    Set<String> getManagedApps();
+    void setMediationTreesOk(boolean mediationTreesOk);
 
-    Set<ContextAPIEnum> getGoals();
+    void setMediationTrees(Map<String, DefaultMutableTreeNode> mediationTrees);
 
-    Map<String, ContextAPIConfig> getGoalsByApp();
+    void setCreatorsToActivate(Set<String> creatorsToActivate);
 
-    Set<ContextAPIEnum> getGoalsForApp(String app);
-
-    Map<ContextAPIEnum, Boolean> getGoalsActivability();
-
-    boolean getGoalActivability(ContextAPIEnum goal);
-
-    Map<ContextAPIEnum, Boolean> getGoalsState();
-
-    Map<ContextAPIEnum, Boolean> getGoalsStateForApp(String app);
-
-    boolean getGoalState(ContextAPIEnum goal);
+    void setNonActivableServices(Set<String> nonActivableServices);
 }

@@ -13,19 +13,25 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic.models;
+package fr.liglab.adele.icasa.context.manager.api.old.generic;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
-public interface LinkModelAccess {
+/**
+ * Interface of EntityResource Model
+ * Modified by importers
+ * Read by context manager components
+ */
+public interface ResourceRegistration {
 
-    boolean isMediationTreesOk();
+    Set<Resource> getImportedResources(String importerId);
 
-    Map<String, DefaultMutableTreeNode> getMediationTrees();
+    boolean importResource(EntityResource resource);
 
-    Set<String> getCreatorsToActivate();
+    boolean importResource(RelationResource relation);
 
-    Set<String> getNonActivableServices();
+    boolean removeResource(UUID resourceId);
+
+    boolean removeAllResourcesFromImporter(String importerId);
 }

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic;
+package fr.liglab.adele.icasa.context.manager.api;
 
 
 import fr.liglab.adele.cream.model.introspection.EntityProvider;

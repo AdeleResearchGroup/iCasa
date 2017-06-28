@@ -13,13 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.context.manager.api.generic;
+package fr.liglab.adele.icasa.context.manager.api.config;
 
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextDependencyRegistration;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

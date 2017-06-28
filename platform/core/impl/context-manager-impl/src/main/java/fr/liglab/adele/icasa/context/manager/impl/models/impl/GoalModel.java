@@ -15,12 +15,12 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
-import fr.liglab.adele.icasa.context.manager.api.generic.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextAPIConfig;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.ContextDependencyRegistration;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.generic.models.goals.GoalModelListener;
-import fr.liglab.adele.icasa.context.manager.api.specific.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextAPIConfig;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelListener;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
