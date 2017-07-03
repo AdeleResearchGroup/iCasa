@@ -20,11 +20,11 @@ import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.Util;
 import fr.liglab.adele.icasa.context.manager.api.models.CapabilityModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.ExternalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.models.TargetLinkModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
-import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.TargetLinkModelUpdate;
 import org.slf4j.Logger;
@@ -50,8 +50,8 @@ final class LinkingLogic implements Runnable {
     private static CapabilityModelAccess capabilityModelAccess;
     private static TargetLinkModelAccess targetLinkModelAccess;
     private static TargetLinkModelUpdate targetLinkModelUpdate;
-    private static ExternalFilterModelAccess externalFilterModelAccess;
-    private static ExternalFilterModelUpdate externalFilterModelUpdate;
+    private static ExternalModelAccess externalModelAccess;
+    private static ExternalModelUpdate externalModelUpdate;
 
 
     /*Internal models*/ /*Check information consistency*/
@@ -65,15 +65,15 @@ final class LinkingLogic implements Runnable {
     protected LinkingLogic(GoalModelAccess goalModelAccess, GoalModelUpdate goalModelUpdate,
                            CapabilityModelAccess capabilityModelAccess,
                            TargetLinkModelAccess targetLinkModelAccess, TargetLinkModelUpdate targetLinkModelUpdate,
-                           ExternalFilterModelAccess externalFilterModelAccess, ExternalFilterModelUpdate externalFilterModelUpdate){
+                           ExternalModelAccess externalModelAccess, ExternalModelUpdate externalModelUpdate){
 
         LinkingLogic.goalModelAccess = goalModelAccess;
         LinkingLogic.goalModelUpdate = goalModelUpdate;
         LinkingLogic.capabilityModelAccess = capabilityModelAccess;
         LinkingLogic.targetLinkModelAccess = targetLinkModelAccess;
         LinkingLogic.targetLinkModelUpdate = targetLinkModelUpdate;
-        LinkingLogic.externalFilterModelAccess = externalFilterModelAccess;
-        LinkingLogic.externalFilterModelUpdate = externalFilterModelUpdate;
+        LinkingLogic.externalModelAccess = externalModelAccess;
+        LinkingLogic.externalModelUpdate = externalModelUpdate;
     }
 
     @Override
@@ -169,7 +169,7 @@ final class LinkingLogic implements Runnable {
         targetLinkModelUpdate.setNonActivableServices(nonActivableServices);
 
         /*External request adaptation*/
-        externalFilterModelUpdate.setLookupFilter(lookupFilter);
+        externalModelUpdate.setLookupFilter(lookupFilter);
 
         if(!mediationTreesOk){
             if(ContextManagerAdmin.getLogLevel()>=2) {

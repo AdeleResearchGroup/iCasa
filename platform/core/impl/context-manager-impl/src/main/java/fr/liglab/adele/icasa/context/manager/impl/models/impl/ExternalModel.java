@@ -15,8 +15,8 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
-import fr.liglab.adele.icasa.context.manager.api.models.ExternalFilterModelAccess;
-import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.api.models.ExternalModelAccess;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalModelUpdate;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -29,7 +29,7 @@ import java.util.Set;
 @Instantiate
 @Provides
 @SuppressWarnings("unused")
-public class ExternalFilterModel implements ExternalFilterModelAccess, ExternalFilterModelUpdate {
+public class ExternalModel implements ExternalModelAccess, ExternalModelUpdate {
 
     private Set<String> lookupFilter = new HashSet<>();
 
@@ -64,5 +64,20 @@ public class ExternalFilterModel implements ExternalFilterModelAccess, ExternalF
         } catch (NullPointerException ne){
             ne.printStackTrace();
         }
+    }
+
+    @Override
+    public void requestService(String service) {
+        /*ToDo*/
+        /*> Ask for potentially available services*/
+        /*Create service request*/
+        /*Keep track of service request state*/
+    }
+
+    @Override
+    public void activateAndImportService(String service) {
+        /*ToDo*/
+        /*> Ask for service activation and importation*/
+        /*Keep track of service request state*/
     }
 }

@@ -17,7 +17,7 @@ package fr.liglab.adele.icasa.context.manager.api.models;
 
 import java.util.Set;
 
-public interface ExternalFilterModelAccess {
+public interface ExternalModelAccess {
 
     Set<String> getLookupFilter();
 }

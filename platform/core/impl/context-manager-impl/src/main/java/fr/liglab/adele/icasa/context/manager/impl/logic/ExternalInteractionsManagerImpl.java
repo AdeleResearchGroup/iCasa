@@ -16,7 +16,7 @@
 package fr.liglab.adele.icasa.context.manager.impl.logic;
 
 import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
-import fr.liglab.adele.icasa.context.manager.api.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.ExternalModelAccess;
 import fr.liglab.adele.iop.device.api.IOPLookupService;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -38,7 +38,7 @@ public class ExternalInteractionsManagerImpl implements ExternalInteractionsMana
 
     @Requires
     @SuppressWarnings("unused")
-    private ExternalFilterModelAccess externalFilterModel;
+    private ExternalModelAccess externalFilterModel;
 
     /*Environment filter - Lookup IOP Controller*/
     @Requires(optional = true)

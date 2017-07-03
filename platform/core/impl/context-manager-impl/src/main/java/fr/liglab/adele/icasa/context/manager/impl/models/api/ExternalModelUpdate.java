@@ -17,11 +17,17 @@ package fr.liglab.adele.icasa.context.manager.impl.models.api;
 
 import java.util.Set;
 
-public interface ExternalFilterModelUpdate {
+public interface ExternalModelUpdate {
 
     void setLookupFilter(Set<String> filter);
 
     void addServiceToLookupFilter(String service);
 
     void removeServiceToLookupFilter(String service);
+
+    /*ToDo CHECK*/
+
+    void requestService(String service);
+
+    void activateAndImportService(String service);
 }

@@ -18,13 +18,13 @@ package fr.liglab.adele.icasa.context.manager.impl.logic;
 
 import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
 import fr.liglab.adele.icasa.context.manager.api.models.CapabilityModelAccess;
-import fr.liglab.adele.icasa.context.manager.api.models.ExternalFilterModelAccess;
+import fr.liglab.adele.icasa.context.manager.api.models.ExternalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.models.TargetLinkModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextDependencyRegistration;
 import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelAccess;
 import fr.liglab.adele.icasa.context.manager.api.models.goals.GoalModelListener;
 import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
-import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalFilterModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.GoalModelUpdate;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.TargetLinkModelUpdate;
 import org.apache.felix.ipojo.annotations.*;
@@ -67,12 +67,12 @@ public class SupervisorManager implements GoalModelListener {
     /*Lookup filter model - access*/
     @Requires
     @SuppressWarnings("unused")
-    private ExternalFilterModelAccess externalFilterModelAccess;
+    private ExternalModelAccess externalModelAccess;
 
     /*Lookup filter model - update*/
     @Requires
     @SuppressWarnings("unused")
-    private ExternalFilterModelUpdate externalFilterModelUpdate;
+    private ExternalModelUpdate externalModelUpdate;
 
 
     /*INTERNAL MODELS*/
@@ -124,7 +124,7 @@ public class SupervisorManager implements GoalModelListener {
         resolutionMachine = new LinkingLogic(goalModelAccess, goalModelUpdate,
                 capabilityModelAccess,
                 targetLinkModelAccess, targetLinkModelUpdate,
-                externalFilterModelAccess, externalFilterModelUpdate);
+                externalModelAccess, externalModelUpdate);
         /*Start scheduling*/
         switch (ContextManagerAdmin.INTERNAL_CONFIGURATION_MODE){
             case ContextManagerAdmin.MODE_SCHEDULED:
