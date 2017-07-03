@@ -1,6 +1,4 @@
-package fr.liglab.adele.icasa.app.test.am;
-
-import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay;
+package fr.liglab.adele.icasa.apps.demo.light.follow.me;
 
 public interface AppStateEventListener {
     /**

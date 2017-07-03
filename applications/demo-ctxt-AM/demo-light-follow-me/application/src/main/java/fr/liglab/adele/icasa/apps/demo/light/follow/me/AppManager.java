@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.app.test.am;
+package fr.liglab.adele.icasa.apps.demo.light.follow.me;
 
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
@@ -31,14 +31,14 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Component(name="AppTestAMApplication")
+@Component(name="DemoLightFollowMe")
 
 @Provides(properties= {
-        @StaticServiceProperty(name="icasa.application", type="String", value="App.Test.AM.Application", immutable=true)
+        @StaticServiceProperty(name="icasa.application", type="String", value="Demo.Light.Follow.Me.Application", immutable=true)
 })
 
 @Instantiate
-@CommandProvider(namespace = "app-test")
+@CommandProvider(namespace = "demo-app")
 @SuppressWarnings("unused")
 public class AppManager {
     private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);

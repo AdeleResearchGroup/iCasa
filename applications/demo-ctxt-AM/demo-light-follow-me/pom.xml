@@ -17,15 +17,15 @@
 	<!-- Project parent -->
 	<parent>
 		<groupId>fr.liglab.adele.icasa</groupId>
-		<artifactId>parent</artifactId>
-      <version>1.2.7-SNAPSHOT</version>
-      <relativePath>../../parent</relativePath>
+        <artifactId>parent</artifactId>
+        <version>1.2.7-SNAPSHOT</version>
+        <relativePath>../../../parent</relativePath>
 	</parent>
 
-	<!-- Project Descrkiption -->
+	<!-- Project Description -->
 	<modelVersion>4.0.0</modelVersion>
-   <groupId>fr.liglab.adele.icasa.apps</groupId>
-	<artifactId>app.test.am</artifactId>
+    <groupId>fr.liglab.adele.icasa.apps</groupId>
+	<artifactId>demo.ligth.follow.me</artifactId>
 	<packaging>pom</packaging>
 	<name>${productName} :: ${projectName}</name>
 

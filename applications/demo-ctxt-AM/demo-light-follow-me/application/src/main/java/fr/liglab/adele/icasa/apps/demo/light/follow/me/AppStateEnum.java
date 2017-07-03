@@ -1,4 +1,4 @@
-package fr.liglab.adele.icasa.app.test.am;
+package fr.liglab.adele.icasa.apps.demo.light.follow.me;
 
 import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;

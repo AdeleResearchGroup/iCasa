@@ -33,7 +33,7 @@
     <modules>
        <!-- <module>mail-service</module>-->
         <module>binary-light-follow-me</module>
-        <module>app-test-AM</module>
+        <module>demo-ctxt-AM</module>
         <module>orange-webcom-remote</module>
         <module>battery-monitoring</module>
       <!--   <module>light-follow-me-with-photometer</module>

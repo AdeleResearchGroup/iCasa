@@ -6,19 +6,19 @@
       <groupId>fr.liglab.adele.icasa</groupId>
       <artifactId>parent</artifactId>
       <version>1.2.7-SNAPSHOT</version>
-      <relativePath>../../../parent</relativePath>
+      <relativePath>../../../../parent</relativePath>
     </parent>
 
 	<!-- Project Description -->
    <groupId>fr.liglab.adele.icasa.apps</groupId>
-	<artifactId>app.test.am.application.dp</artifactId>
+	<artifactId>demo.ligth.follow.me.application.dp</artifactId>
 	<packaging>deployment-package</packaging>
 	<name>${productName} :: ${projectName}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>fr.liglab.adele.icasa.apps</groupId>
-			<artifactId>app.test.am.application</artifactId>
+			<artifactId>demo.ligth.follow.me.application</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
@@ -36,7 +36,7 @@
 						<headers>
 							<bundleHeader>
 								<name>ICasa-Application-Id</name>
-								<value>app.test.am</value>
+								<value>ligth.follow.me</value>
 							</bundleHeader>
 							<bundleHeader>
 								<name>ICasa-Application-Name</name>
