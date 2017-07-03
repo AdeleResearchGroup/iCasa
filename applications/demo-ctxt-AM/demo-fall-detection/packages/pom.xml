@@ -11,14 +11,14 @@
 
 	<!-- Project Description -->
    <groupId>fr.liglab.adele.icasa.apps</groupId>
-	<artifactId>demo.ligth.follow.me.application.dp</artifactId>
+	<artifactId>demo.fall.detection.application.dp</artifactId>
 	<packaging>deployment-package</packaging>
 	<name>${productName} :: ${projectName}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>fr.liglab.adele.icasa.apps</groupId>
-			<artifactId>demo.ligth.follow.me.application</artifactId>
+			<artifactId>demo.fall.detection.application</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
@@ -36,11 +36,11 @@
 						<headers>
 							<bundleHeader>
 								<name>ICasa-Application-Id</name>
-								<value>demo.ligth.follow.me</value>
+								<value>demo.fall.detection</value>
 							</bundleHeader>
 							<bundleHeader>
 								<name>ICasa-Application-Name</name>
-								<value>Demo app for testing AM - Light Follow Me</value>
+								<value>Demo app for testing AM - Fall Detection</value>
 							</bundleHeader>
 							<bundleHeader>
 								<name>ICasa-Application-Version</name>

@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 })
 
 @Instantiate
-@CommandProvider(namespace = "demo-app")
+@CommandProvider(namespace = "demo-light-follow-me")
 @SuppressWarnings("unused")
 public class AppManager {
     private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);

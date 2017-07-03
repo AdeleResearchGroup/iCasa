@@ -12,7 +12,7 @@
   <modelVersion>4.0.0</modelVersion>
   <packaging>bundle</packaging>
   <groupId>fr.liglab.adele.icasa.apps</groupId>
-  <artifactId>demo.ligth.follow.me.application</artifactId>
+  <artifactId>demo.fall.detection.application</artifactId>
   <name>${productName} :: ${projectName}</name>
 
   <dependencies>
@@ -55,7 +55,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>fr.liglab.adele.icasa.apps.demo.ligth.follow.me</Export-Package>
+            <Export-Package>fr.liglab.adele.icasa.apps.demo.fall.detection</Export-Package>
           </instructions>
         </configuration>
       </plugin>
