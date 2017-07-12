@@ -28,6 +28,12 @@ public enum ContextAPIEnum {
     MomentOfTheDay("fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay"),
     MultiwaySwitch("fr.liglab.adele.icasa.physical.abstraction.MultiwaySwitch"),
 
+    /*DEMO*/
+    /*Pet Care*/
+    PetInfo("fr.liglab.adele.icasa.apps.demo.pet.care.context.services.PetInfo"),
+    WateringRegulator("fr.liglab.adele.icasa.apps.demo.pet.care.context.services.regulators.WateringRegulator"),
+    FeedingRegulator("fr.liglab.adele.icasa.apps.demo.pet.care.context.services.regulators.FeedingRegulator"),
+
     IOPController("fr.liglab.adele.iop.device.api.IOPController");
 
     private String interfaceName;
