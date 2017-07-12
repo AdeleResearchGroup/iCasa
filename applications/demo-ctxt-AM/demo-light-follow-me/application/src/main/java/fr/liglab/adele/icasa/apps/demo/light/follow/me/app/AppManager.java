@@ -1,0 +1,354 @@
+/**
+ *
+ *   Copyright 2011-2012 Universite Joseph Fourier, LIG, ADELE team
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+package fr.liglab.adele.icasa.apps.demo.light.follow.me.app;
+
+import fr.liglab.adele.icasa.apps.demo.global.DemoApp;
+import fr.liglab.adele.icasa.command.handler.Command;
+import fr.liglab.adele.icasa.command.handler.CommandProvider;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextDependencyRegistration;
+import fr.liglab.adele.icasa.device.light.BinaryLight;
+import fr.liglab.adele.icasa.physical.abstraction.MultiwaySwitch;
+import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
+import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.Factory;
+import org.apache.felix.ipojo.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+@Component(name="DemoLightFollowMe")
+
+@Provides(properties= {
+        @StaticServiceProperty(name="icasa.application", type="String", value="Demo.Light.Follow.Me.Application", immutable=true)
+})
+
+@Instantiate
+@CommandProvider(namespace = "demo-light-follow-me")
+@SuppressWarnings("unused")
+public class AppManager implements DemoApp {
+    private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);
+    public static final String LOG_PREFIX = "LIGHT FOLLOW ME APP - ";
+
+    /*App state*/
+    /*ToDo*/
+    private final static String appName = "demo-light-follow-me";
+    private static AppStateEnum appState = AppStateEnum.INIT;
+    private static AppStateEnum previousAppState = AppStateEnum.INIT;
+    private boolean isReconfiguring = false;
+    private boolean needToBeReconfigured = true;
+
+    /*Interaction with context*/
+    private static boolean registered;
+
+    /*Contexte state*/
+    private static boolean userIsAtHome = false;
+
+    /*Timer*/
+    private static Timer userIsNotAtHomeTimer = new Timer();
+    private static final long timerDelay = TimeUnit.SECONDS.toMillis(20);
+
+    /*AppManager component life cycle methods*/
+    @Validate
+    @SuppressWarnings("unused")
+    public void start() {
+        registered = false;
+    }
+
+    @Invalidate
+    @SuppressWarnings("unused")
+    public void stop() {
+        if(registered){
+            toggleRegistration();
+        }
+    }
+
+    /*Factories for app internal reconfiguration*/
+    @Requires(optional = false, specification = Factory.class, filter = "(factory.name=demo-light-follow-me-switch)")
+    @SuppressWarnings("all")
+    private Factory factorySwitch;
+    private static ComponentInstance appLightMgmtSwitch = null;
+
+    @Requires(optional = false, specification = Factory.class, filter = "(factory.name=demo-light-follow-me-presence)")
+    @SuppressWarnings("all")
+    private Factory factoryPresence;
+    private static ComponentInstance appLightMgmtPresence = null;
+
+    /*Context state check and App state change*/
+    @Requires(id="manager", optional = false, specification = ContextDependencyRegistration.class)
+    @SuppressWarnings("unused")
+    private ContextDependencyRegistration contextDependencyRegistration;
+
+    //ToDo QoS REQUIREMENTS
+//    @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
+    @Requires(id="lights",optional = true,specification = BinaryLight.class,proxy = false)
+    @SuppressWarnings("all")
+    private List<BinaryLight> binaryLights;
+
+    @Requires(id="presence",optional = true,specification = PresenceService.class)
+    @SuppressWarnings("all")
+    private List<PresenceService> presenceServices;
+
+    @Requires(id="multiwaySwitch", optional = true, specification = MultiwaySwitch.class)
+    @SuppressWarnings("all")
+    private List<MultiwaySwitch> multiwaySwitches;
+
+    /*!ToDo ATTENTION AU SYNCHRONIZED*/
+    /*ToDo ok car pas beaucoup de lignes dans la methode registerGoals*/
+    @Bind(id="lights")
+    @SuppressWarnings("unused")
+    public synchronized void bindBinaryLight(){
+        appState = previousAppState.onEventLights(true);
+        appReconfiguration();
+    }
+
+
+    @Unbind(id = "lights")
+    @SuppressWarnings("unused")
+    public synchronized void unbindBinaryLight(BinaryLight binaryLight){
+        if(binaryLights.isEmpty() || (binaryLights.size()==1 && binaryLights.contains(binaryLight))){
+            appState = previousAppState.onEventLights(false);
+            appReconfiguration();
+        }
+    }
+
+
+    @Bind(id="multiwaySwitch")
+    @SuppressWarnings("unused")
+    public synchronized void bindMultiwaySwitch(){
+        appState = previousAppState.onEventSwitch(true);
+        appReconfiguration();
+    }
+
+    @Unbind(id = "multiwaySwitch")
+    @SuppressWarnings("unused")
+    public synchronized void unbindMultiwaySwitch(MultiwaySwitch multiwaySwitch){
+        if(multiwaySwitches.isEmpty() || (multiwaySwitches.size()==1 && multiwaySwitches.contains(multiwaySwitch))){
+            appState = previousAppState.onEventSwitch(false);
+            appReconfiguration();
+        }
+    }
+
+
+
+    @Bind(id="presence")
+    @SuppressWarnings("unused")
+    public synchronized void bindPresenceService(PresenceService presenceService){
+        appState = previousAppState.onEventPresenceAvailable(true);
+        appReconfiguration();
+        modifiedPresenceRoutine(presenceService.havePresenceInZone() == PresenceService.PresenceSensing.YES);
+    }
+
+    @Modified(id = "presence")
+    @SuppressWarnings("unused")
+    public synchronized void modifyPresenceService(PresenceService presenceService){
+        modifiedPresenceRoutine(presenceService.havePresenceInZone() == PresenceService.PresenceSensing.YES);
+    }
+
+    @Unbind(id = "presence")
+    @SuppressWarnings("unused")
+    public synchronized void unbindPresenceService(){
+        if(presenceServices.size()<=1){
+            /*ToDo Verify*/
+            appState = previousAppState.onEventPresenceAvailable(false);
+            appReconfiguration();
+        } else {
+            modifiedPresenceRoutine(false);
+        }
+    }
+
+    /*Methods to handle context property modification - presence*/
+    private synchronized void modifiedPresenceRoutine(boolean presenceOfSelectedSensor){
+        switch (appState) {
+            case AUTO_ACTIVATED:
+                if(checkPresence()){
+                    if(!userIsAtHome){
+                        LOG.info(LOG_PREFIX + "USER DID NOT LEAVE HOME");
+                        resetUserNotAtHomeTimer();
+                        appState = previousAppState.onEventPresence(true);
+                        appReconfiguration();
+                    }
+                } else {
+                    if(userIsAtHome){
+                        initUserNotAtHomeTimer();
+                    }
+                }
+                break;
+            case AUTO_ECO:
+                if(presenceOfSelectedSensor){
+                    LOG.info(LOG_PREFIX + "USER IS BACK HOME");
+                    appState = previousAppState.onEventPresence(true);
+                    appReconfiguration();
+                }
+                break;
+        }
+    }
+
+    private boolean checkPresence(){
+        boolean presenceInHome = false;
+        for(PresenceService p : presenceServices){
+            if(p.havePresenceInZone() == PresenceService.PresenceSensing.YES){
+                presenceInHome = true;
+                break;
+            }
+        }
+        return presenceInHome;
+    }
+
+    /*Set and start user presence timer*/
+    private synchronized void initUserNotAtHomeTimer(){
+        userIsAtHome = false;
+        userIsNotAtHomeTimer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                LOG.info(LOG_PREFIX + "USER LEFT HOME");
+                appState = previousAppState.onEventPresence(false);
+                appReconfiguration();
+            }
+        };
+        userIsNotAtHomeTimer.schedule(timerTask, timerDelay);
+        LOG.info(LOG_PREFIX + "DID USER LEAVE HOME?");
+    }
+
+    /*Reset user presence timer*/
+    private synchronized void resetUserNotAtHomeTimer(){
+        userIsAtHome = true;
+        userIsNotAtHomeTimer.cancel();
+        userIsNotAtHomeTimer.purge();
+    }
+
+    /*App state change with context reconfiguration*/
+    private void appReconfiguration(){
+        /*ToDo lock system doesn't work*/
+//        if(isReconfiguring){
+//            needToBeReconfigured = true;
+//            return;
+//        }
+//
+//        isReconfiguring = true;
+        if (appState != previousAppState){
+            previousAppState = appState;
+            appInternalReconfiguration();
+            LOG.info(LOG_PREFIX + "STATE: "+appState.toString());
+            contextAPIAppRegistration();
+        }
+//        isReconfiguring = false;
+//
+//        if(needToBeReconfigured){
+//            needToBeReconfigured = false;
+//            appReconfiguration();
+//        }
+    }
+
+    private void appRegistration(){
+        appState = AppStateEnum.INIT;
+        previousAppState = AppStateEnum.INIT;
+        appInternalReconfiguration();
+        contextAPIAppRegistration();
+    }
+
+    private void appUnregistration(){
+        contextDependencyRegistration.unregisterContextDependencies(appName);
+        appState = AppStateEnum.INIT;
+        appInternalReconfiguration();
+        previousAppState = null;
+        LOG.info(LOG_PREFIX + "STATE: "+appState.toString());
+    }
+
+    private void contextAPIAppRegistration(){
+        if(contextDependencyRegistration !=null&&registered){
+                contextDependencyRegistration.registerContextDependencies(appName, appState.getConfigContextAPI());
+                LOG.info(LOG_PREFIX + "RECONFIGURATION...");
+        }
+    }
+
+    private void appInternalReconfiguration(){
+        switch(appState){
+            case MANUAL:
+                resetUserNotAtHomeTimer();
+                disposeSubComponent(appLightMgmtPresence);
+                appLightMgmtSwitch=activateSubComponent(factorySwitch);
+                break;
+            case AUTO_ACTIVATED:
+                disposeSubComponent(appLightMgmtSwitch);
+                appLightMgmtPresence=activateSubComponent(factoryPresence);
+                if(checkPresence())
+                    resetUserNotAtHomeTimer();
+                else
+                    initUserNotAtHomeTimer();
+                break;
+            default:
+                resetUserNotAtHomeTimer();
+                disposeSubComponent(appLightMgmtSwitch);
+                disposeSubComponent(appLightMgmtPresence);
+                break;
+        }
+    }
+
+    private ComponentInstance activateSubComponent(Factory factory){
+        ComponentInstance component = null;
+        try {
+            component = factory.createComponentInstance(null);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return component;
+    }
+
+    private void disposeSubComponent(ComponentInstance component){
+        if(component != null){
+            component.dispose();
+        }
+    }
+
+    @Override
+    public String getAppName() {
+        return appName;
+    }
+
+    @Override
+    public boolean getRegistrationState() {
+        return registered;
+    }
+
+    /*App command interface*/
+    @Command
+    @SuppressWarnings("unused")
+    public boolean toggleRegistration() {
+        if(contextDependencyRegistration !=null){
+            if(!registered){
+                registered = true;
+                appRegistration();
+                LOG.info(LOG_PREFIX + "REGISTERED");
+            } else {
+                appUnregistration();
+                registered = false;
+                LOG.info(LOG_PREFIX + "UNREGISTERED");
+            }
+        }
+
+        return registered;
+    }
+
+    @Override
+    public String getState() {
+        return appState.name();
+    }
+}

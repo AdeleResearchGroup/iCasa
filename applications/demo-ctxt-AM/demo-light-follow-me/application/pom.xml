@@ -45,6 +45,12 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+        <groupId>fr.liglab.adele.icasa.apps</groupId>
+        <artifactId>demo.configurator.application</artifactId>
+        <version>${project.version}</version>
+    </dependency>
   </dependencies>
   
   <build>
