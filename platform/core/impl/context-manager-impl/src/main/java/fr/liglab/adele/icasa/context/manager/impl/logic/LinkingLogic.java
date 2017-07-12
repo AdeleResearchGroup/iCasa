@@ -141,7 +141,7 @@ final class LinkingLogic implements Runnable {
         for (ContextAPIEnum goal : goalModelAccess.getGoals()) {
             String goalName = goal.getInterfaceName();
             if(logLevel>=2) {
-                LOG.info(LOG_PREFIX + "GOAL : " + goal.getInterfaceName());
+                LOG.info(LOG_PREFIX + "GOAL : " + goalName);
             }
 
             DefaultMutableTreeNode goalNode = new DefaultMutableTreeNode(goalName);
