@@ -14,26 +14,24 @@
  limitations under the License.
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
 	<!-- Project parent -->
 	<parent>
 		<groupId>fr.liglab.adele.icasa</groupId>
-		<artifactId>parent</artifactId>
-      <version>1.2.7-SNAPSHOT</version>
-      <relativePath>../../parent</relativePath>
+        <artifactId>parent</artifactId>
+        <version>1.2.7-SNAPSHOT</version>
+        <relativePath>../../../parent</relativePath>
 	</parent>
 
 	<!-- Project Description -->
     <groupId>fr.liglab.adele.icasa.apps</groupId>
-	<artifactId>demo.ctxt.AM</artifactId>
+	<artifactId>demo.configurator</artifactId>
 	<packaging>pom</packaging>
 	<name>${productName} :: ${projectName}</name>
 
 	<modules>
-        <module>demo-configurator</module>
-        <module>demo-light-follow-me</module>
-        <module>demo-pet-care</module>
-        <module>demo-fall-detection</module>
-        <module>demo-fire-alarm</module>
+		<module>application</module>
+        <module>packages</module>		
 	</modules>
    <build>
       <plugins>
