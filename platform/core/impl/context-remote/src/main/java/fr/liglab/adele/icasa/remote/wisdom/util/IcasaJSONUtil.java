@@ -19,6 +19,7 @@ import fr.liglab.adele.icasa.clockservice.Clock;
 import fr.liglab.adele.icasa.clockservice.util.DateTextUtil;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.button.PushButton;
+import fr.liglab.adele.icasa.device.doorWindow.WindowShutter;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.light.Photometer;
@@ -125,6 +126,17 @@ public class IcasaJSONUtil {
         deviceJSON.putOnce(DeviceJSON.SERVICES,services);
         JSONArray propObject = new JSONArray();
         propObject.put(buildDeviceProperty("dimmerLight.powerLevel",dimmerLight.getPowerLevel(),NO_UNIT));
+        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
+        return deviceJSON;
+    }
+
+    public static JSONObject getWindowShutterJSON(WindowShutter windowShutter)throws JSONException{
+        JSONObject deviceJSON = buildDeviceJsonObject(windowShutter);
+        Set<String> services = new HashSet<>();
+        services.add(WindowShutter.class.getName());
+        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
+        JSONArray propObject = new JSONArray();
+        propObject.put(buildDeviceProperty("windowShutter.shutterLevel",windowShutter.getShutterLevel(),NO_UNIT));
         deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
         return deviceJSON;
     }
