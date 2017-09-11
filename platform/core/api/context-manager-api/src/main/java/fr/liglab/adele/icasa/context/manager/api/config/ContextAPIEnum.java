@@ -20,20 +20,29 @@ package fr.liglab.adele.icasa.context.manager.api.config;
  * Can be generated from the different existing context entities in the distribution
  */
 public enum ContextAPIEnum {
+    /*Light*/
     BinaryLight("fr.liglab.adele.icasa.device.light.BinaryLight"),
     ColorLight("fr.liglab.adele.icasa.device.light.ColorLight"),
     DimmerLight("fr.liglab.adele.icasa.device.light.DimmerLight"),
     Photometer("fr.liglab.adele.icasa.device.light.Photometer"),
+    /*Temperature*/
+    Cooler("fr.liglab.adele.icasa.device.temperature.Cooler"),
+    Heater("fr.liglab.adele.icasa.device.temperature.Heater"),
+    Thermometer("fr.liglab.adele.icasa.device.temperature.Thermometer"),
+    /*Abstractions*/
     PresenceService("fr.liglab.adele.icasa.physical.abstraction.PresenceService"),
     MomentOfTheDay("fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay"),
     MultiwaySwitch("fr.liglab.adele.icasa.physical.abstraction.MultiwaySwitch"),
 
-    /*DEMO*/
-    /*Pet Care*/
+    /*TODO !!!!*/
+    /*SHUTTERS*/
+
+    /*Pet Care DEMO*/
     PetInfo("fr.liglab.adele.icasa.apps.demo.pet.care.context.services.PetInfo"),
     WateringRegulator("fr.liglab.adele.icasa.apps.demo.pet.care.context.services.regulators.WateringRegulator"),
     FeedingRegulator("fr.liglab.adele.icasa.apps.demo.pet.care.context.services.regulators.FeedingRegulator"),
 
+    /*IOP*/
     IOPController("fr.liglab.adele.iop.device.api.IOPController");
 
     private String interfaceName;

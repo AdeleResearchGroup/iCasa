@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class LightMgmtPresence {
     /*Light management with presence service*/
-
     @Validate
     @SuppressWarnings("unused")
     public void start() {
