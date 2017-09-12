@@ -43,7 +43,7 @@ public class SimulatedTemperatureModel implements TemperatureModel {
 
     @Override
     public double getCurrentTemperature() {
-        return 0;
+        return currentTemperature;
     }
 
     /**
@@ -94,7 +94,7 @@ public class SimulatedTemperatureModel implements TemperatureModel {
 
     private double lastTemperature = DEFAULT_TEMP_VALUE;
 
-    @ContextEntity.State.Pull(service = TemperatureModel.class,state = TemperatureModel.CURRENT_TEMPERATURE)
+    @ContextEntity.State.Pull(service = TemperatureModel.class,state = TemperatureModel.CURRENT_TEMPERATURE, period = 1)
     Supplier<Double> pullCurrentTemp = () -> {
 
         double computeTemperature;
