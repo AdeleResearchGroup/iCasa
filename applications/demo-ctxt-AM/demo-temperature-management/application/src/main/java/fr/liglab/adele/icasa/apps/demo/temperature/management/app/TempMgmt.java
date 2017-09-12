@@ -15,11 +15,15 @@ import javax.measure.quantity.Temperature;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @Component(name = "demo-temperature-management")
 @SuppressWarnings("unused")
 public class TempMgmt {
+    /*TEMPERATURE LIMITS*/
     private static double TEMP_MIN = 15;
     private static double TEMP_MAX = 30;
 
@@ -30,29 +34,35 @@ public class TempMgmt {
     private static double POWER_LEVEL_SMALL_DELTA = 0.3d;
     private static double POWER_LEVEL_BIG_DELTA = 1.0d;
 
-    /*Timer*/
-    private static Timer checkTemp = new Timer();
-    private static final long taskPeriod = TimeUnit.SECONDS.toMillis(20);
+    /*TARGET TEMPERATURE IN CELSIUS*/
+    private Quantity<Temperature> targetTemperature = Quantities.getQuantity(25, Units.CELSIUS);
+
+    /*SCHEDULING*/
+    /*Only scheduled mode - Thread management*/
+    private static ScheduledExecutorService scheduledExecutorService = null;
+    private static ScheduledFuture scheduledFuture = null;
+    private static long period = 20;
+    private static TimeUnit periodUnit = TimeUnit.SECONDS;
+
 
     /*Temperature management*/
     @Validate
     @SuppressWarnings("unused")
     public void start() {
-        checkTemp = new Timer();
-        TimerTask manageTemp = new TimerTask() {
-            @Override
-            public void run() {
-                manageTemp();
-            }
-        };
-        checkTemp.scheduleAtFixedRate(manageTemp, 0, taskPeriod);
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(this::manageTemp,
+                0, period, periodUnit);
     }
 
     @Invalidate
     @SuppressWarnings("unused")
     public void stop() {
-        checkTemp.cancel();
-        checkTemp.purge();
+        scheduledFuture.cancel(true);
+        scheduledExecutorService.shutdown();
+
+//        checkTemp.cancel();
+//        checkTemp.purge();
+
         /*ToDo !! pbm if task not ended*/
         for(Heater heater : heaters)
             heater.setPowerLevel(NO_POWER);
@@ -72,8 +82,7 @@ public class TempMgmt {
     @SuppressWarnings("all")
     private List<Cooler> coolers;
 
-    /*TARGET TEMPERATURE IN CELSIUS*/
-    private Quantity<Temperature> targetTemperature = Quantities.getQuantity(25, Units.CELSIUS);
+
 
     public double setTargetTemperature(double target){
         if (target < TEMP_MIN) targetTemperature = Quantities.getQuantity(TEMP_MIN, Units.CELSIUS);
@@ -120,9 +129,9 @@ public class TempMgmt {
         int n = 0;
         for(Thermometer thermometer : thermometers){
             n++;
-            sumTemp.add(thermometer.getTemperature());
+            sumTemp = sumTemp.add(thermometer.getTemperature());
         }
 
-        return sumTemp.divide(n);
+        return (n==0) ? sumTemp : sumTemp.divide(n);
     }
 }
