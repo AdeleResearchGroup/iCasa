@@ -32,6 +32,7 @@ package fr.liglab.adele.icasa.simulator.device.temperature.impl;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextUpdate;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.battery.BatteryObservable;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
@@ -98,9 +99,10 @@ public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,
         pushTemperature(model.getCurrentTemperature());
     }
 
-    @Modified(id = "TemperatureModelDependency")
-    public void modifiedTemperature(TemperatureModel model){
-        pushTemperature(model.getCurrentTemperature());
+    @ContextUpdate(specification = TemperatureModel.class, stateId = TemperatureModel.CURRENT_TEMPERATURE)
+    public void modifiedTemperature(TemperatureModel model, Object newValue, Object oldValue){
+        if (newValue instanceof Double)
+            pushTemperature((Double) newValue);
     }
 
     @Unbind(id = "TemperatureModelDependency")
