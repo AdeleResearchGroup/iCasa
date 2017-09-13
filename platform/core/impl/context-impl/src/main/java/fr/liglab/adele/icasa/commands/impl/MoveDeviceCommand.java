@@ -35,6 +35,7 @@ import fr.liglab.adele.icasa.commands.ScriptLanguage;
 import fr.liglab.adele.icasa.commands.Signature;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.button.PushButton;
+import fr.liglab.adele.icasa.device.doorWindow.WindowShutter;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.light.Photometer;
@@ -96,6 +97,9 @@ public class MoveDeviceCommand extends AbstractCommand {
     @Requires(specification = Heater.class,optional = true,proxy = false)
     List<Heater> heaters;
 
+    @Requires(specification = WindowShutter.class,optional = true,proxy = false)
+    List<WindowShutter> shutters;
+
     private static Signature MOVE = new Signature(new String[]{ScriptLanguage.DEVICE_ID, ScriptLanguage.LEFT_X, ScriptLanguage.TOP_Y} );
     private static Signature MOVE_WZ = new Signature(new String[]{ScriptLanguage.DEVICE_ID, ScriptLanguage.LEFT_X, ScriptLanguage.TOP_Y, ScriptLanguage.BOTTOM_Z } );
 
@@ -147,6 +151,9 @@ public class MoveDeviceCommand extends AbstractCommand {
         }
         for (Photometer photometer : photometers){
             if (photometer instanceof LocatedObject && deviceSerialNumber.equals(photometer.getSerialNumber()))return (LocatedObject)photometer;
+        }
+        for (WindowShutter shutter : shutters){
+            if (shutter instanceof LocatedObject && deviceSerialNumber.equals(shutter.getSerialNumber()))return (LocatedObject)shutter;
         }
         return null;
     }
