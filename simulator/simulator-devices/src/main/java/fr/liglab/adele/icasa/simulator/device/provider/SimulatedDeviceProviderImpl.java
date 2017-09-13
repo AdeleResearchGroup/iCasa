@@ -54,7 +54,7 @@ import fr.liglab.adele.icasa.simulator.device.SimulatedDeviceProvider;
 import fr.liglab.adele.icasa.simulator.device.button.impl.SimulatedPushButtonImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedBinaryLightImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedDimmerLightImpl;
-import fr.liglab.adele.icasa.simulator.device.doorWindow.SimulatedWindowShutterImpl;
+import fr.liglab.adele.icasa.simulator.device.doorWindow.impl.SimulatedWindowShutterImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedPhotometerImpl;
 import fr.liglab.adele.icasa.simulator.device.presence.impl.SimulatedPresenceSensorImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedCoolerImpl;
