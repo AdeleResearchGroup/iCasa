@@ -83,6 +83,7 @@
 					<instructions>
 						<Private-Package>
 							fr.liglab.adele.icasa.simulator.device.button.impl,
+							fr.liglab.adele.icasa.simulator.device.doorWindow.impl,
 							fr.liglab.adele.icasa.simulator.device.light.impl,
 							fr.liglab.adele.icasa.simulator.device.presence.impl,
 							fr.liglab.adele.icasa.simulator.device.provider,
