@@ -25,7 +25,7 @@
 
 	<!-- Project Description -->
     <groupId>fr.liglab.adele.icasa.apps</groupId>
-	<artifactId>demo.luminosity.management</artifactId>
+	<artifactId>demo.interop.comfort.management</artifactId>
 	<packaging>pom</packaging>
 	<name>${productName} :: ${projectName}</name>
 

@@ -12,7 +12,7 @@
   <!-- Project description -->
   <packaging>bundle</packaging>
   <groupId>fr.liglab.adele.icasa.apps</groupId>
-  <artifactId>demo.luminosity.management.application</artifactId>
+  <artifactId>demo.interop.comfort.management.application</artifactId>
   <name>${productName} :: ${projectName}</name>
 
   <dependencies>
@@ -61,8 +61,8 @@
         <configuration>
           <instructions>
             <Export-Package>
-              fr.liglab.adele.icasa.apps.demo.luminosity.management,
-              fr.liglab.adele.icasa.apps.demo.luminosity.management.*
+              fr.liglab.adele.icasa.apps.demo.interop.comfort.management,
+              fr.liglab.adele.icasa.apps.demo.interop.comfort.management.*
             </Export-Package>
           </instructions>
         </configuration>

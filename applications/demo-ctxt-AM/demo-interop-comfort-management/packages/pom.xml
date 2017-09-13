@@ -11,14 +11,14 @@
 
 	<!-- Project Description -->
    <groupId>fr.liglab.adele.icasa.apps</groupId>
-	<artifactId>demo.luminosity.management.application.dp</artifactId>
+	<artifactId>demo.interop.comfort.management.application.dp</artifactId>
 	<packaging>deployment-package</packaging>
 	<name>${productName} :: ${projectName}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>fr.liglab.adele.icasa.apps</groupId>
-			<artifactId>demo.luminosity.management.application</artifactId>
+			<artifactId>demo.interop.comfort.management.application</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
@@ -36,11 +36,11 @@
 						<headers>
 							<bundleHeader>
 								<name>ICasa-Application-Id</name>
-								<value>demo.luminosity.management</value>
+								<value>demo.interop.comfort.management</value>
 							</bundleHeader>
 							<bundleHeader>
 								<name>ICasa-Application-Name</name>
-								<value>Demo app for testing AM - Luminosity Management</value>
+								<value>Demo app for testing AM - Interop Comfort Management</value>
 							</bundleHeader>
 							<bundleHeader>
 								<name>ICasa-Application-Version</name>

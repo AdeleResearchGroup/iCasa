@@ -32,7 +32,7 @@
         <module>demo-configurator</module>
         <module>demo-light-follow-me</module>
         <module>demo-pet-care</module>
-        <module>demo-luminosity-management</module>
+        <module>demo-interop-comfort-management</module>
         <module>demo-temperature-management</module>
         <module>demo-fall-detection</module>
         <module>demo-fire-alarm</module>

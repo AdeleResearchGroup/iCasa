@@ -1,4 +1,4 @@
-package fr.liglab.adele.icasa.apps.demo.luminosity.management.app;
+package fr.liglab.adele.icasa.apps.demo.interop.comfort.management.app;
 
 public interface AppStateEventListener {
     /**

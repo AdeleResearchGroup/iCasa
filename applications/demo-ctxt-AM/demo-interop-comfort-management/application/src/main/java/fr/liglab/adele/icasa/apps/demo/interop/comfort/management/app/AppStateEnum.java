@@ -1,4 +1,4 @@
-package fr.liglab.adele.icasa.apps.demo.luminosity.management.app;
+package fr.liglab.adele.icasa.apps.demo.interop.comfort.management.app;
 
 import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
 import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextAPIConfig;
