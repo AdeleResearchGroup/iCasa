@@ -21,7 +21,6 @@ package fr.liglab.adele.icasa.remote.wisdom.impl;
 import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextRequirement;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.button.PushButton;
-import fr.liglab.adele.icasa.device.doorWindow.WindowShutter;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.light.Photometer;
@@ -73,10 +72,6 @@ public class DeviceREST extends DefaultController {
     @Requires(specification = DimmerLight.class,optional = true,proxy = false)
     @ContextRequirement(spec = {LocatedObject.class})
     List<DimmerLight> dimmerLights;
-
-    @Requires(specification = WindowShutter.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<WindowShutter> windowShutters;
 
     @Requires(specification = PresenceSensor.class,optional = true,proxy = false)
     @ContextRequirement(spec = {LocatedObject.class})
@@ -176,14 +171,6 @@ public class DeviceREST extends DefaultController {
                 }
             }
 
-            if (foundDevice instanceof WindowShutter){
-                try {
-                    deviceJSON = IcasaJSONUtil.getWindowShutterJSON((WindowShutter) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
             if (foundDevice instanceof PresenceSensor){
                 try {
                     deviceJSON = IcasaJSONUtil.getPresenceSensorJSON((PresenceSensor) foundDevice);
@@ -259,9 +246,6 @@ public class DeviceREST extends DefaultController {
         for (DimmerLight light:dimmerLights){
             if (deviceSerialNumber.equals(light.getSerialNumber()))return light;
         }
-        for (WindowShutter shutter:windowShutters){
-            if (deviceSerialNumber.equals(shutter.getSerialNumber()))return shutter;
-        }
         for (Cooler cooler:coolers){
             if (deviceSerialNumber.equals(cooler.getSerialNumber()))return cooler;
         }
@@ -299,10 +283,6 @@ public class DeviceREST extends DefaultController {
         }
         for (DimmerLight light:dimmerLights){
             JSONObject deviceJSON =  IcasaJSONUtil.getDimmerLightJSON(light);
-            currentDevices.put(deviceJSON);
-        }
-        for (WindowShutter shutter:windowShutters){
-            JSONObject deviceJSON =  IcasaJSONUtil.getWindowShutterJSON(shutter);
             currentDevices.put(deviceJSON);
         }
         for (Cooler cooler:coolers){

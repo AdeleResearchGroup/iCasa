@@ -23,7 +23,6 @@ import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.light.Photometer;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
-import fr.liglab.adele.icasa.device.doorWindow.WindowShutter;
 import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
 import fr.liglab.adele.icasa.location.Zone;
@@ -271,42 +270,6 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 		JSONObject json = new JSONObject();
 		try {
 			json.put("deviceId", dimmerLight.getSerialNumber());
-			sendEvent("device-removed", json);
-		} catch (JSONException e) {
-			logger.error("Building message error" + json, e);
-		}
-	}
-
-	@Bind(id="windowShutters",specification = WindowShutter.class,optional = true,aggregate = true)
-	public synchronized void bindWindowShutter(WindowShutter windowShutter){
-		JSONObject json = new JSONObject();
-		try {
-			json.put("deviceId", windowShutter.getSerialNumber());
-			json.put("device", IcasaJSONUtil.getWindowShutterJSON(windowShutter));
-			sendEvent("device-added", json);
-		} catch (JSONException e) {
-			logger.error("Building message error" + json, e);
-		}
-	}
-
-	@Modified(id="windowShutters")
-	public synchronized void modifiedWindowShutter(WindowShutter windowShutter){
-		JSONObject json = new JSONObject();
-		try {
-			json.put("deviceId", windowShutter.getSerialNumber());
-			json.put("device", IcasaJSONUtil.getWindowShutterJSON(windowShutter));
-			sendEvent("device-position-update", json);
-			sendEvent("device-property-updated",json);
-		} catch (JSONException e) {
-			logger.error("Building message error" + json, e);
-		}
-	}
-
-	@Unbind(id="windowShutters")
-	public synchronized void unbindWindowShutter(WindowShutter windowShutter){
-		JSONObject json = new JSONObject();
-		try {
-			json.put("deviceId", windowShutter.getSerialNumber());
 			sendEvent("device-removed", json);
 		} catch (JSONException e) {
 			logger.error("Building message error" + json, e);

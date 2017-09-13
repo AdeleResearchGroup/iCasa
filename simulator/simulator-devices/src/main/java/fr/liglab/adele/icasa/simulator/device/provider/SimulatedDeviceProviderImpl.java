@@ -58,7 +58,6 @@ import fr.liglab.adele.icasa.simulator.device.presence.impl.SimulatedPresenceSen
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedCoolerImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedHeaterImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedThermometerImpl;
-
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,10 +78,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
 
     @Creator.Field Creator.Entity<SimulatedDimmerLightImpl> simulatedDimmerLightCreator;
 
-
-    @Creator.Field(origin = OriginEnum.local) Creator.Entity<SimulatedWindowShutterImpl> simulatedWindowShutterCreator;
-
-    @Creator.Entity<SimulatedPhotometerImpl> simulatedPhotometerCreator;
+    @Creator.Field Creator.Entity<SimulatedPhotometerImpl> simulatedPhotometerCreator;
 
     @Creator.Field Creator.Entity<SimulatedCoolerImpl> simulatedCoolerCreator;
 
@@ -91,8 +87,6 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
     @Creator.Field Creator.Entity<SimulatedThermometerImpl> simulatedThermometerCreator;
 
     @Creator.Field Creator.Entity<SimulatedPresenceSensorImpl> simulatedPresenceSensorCreator;
-
-
 
     @Validate
     public void start(){
@@ -149,8 +143,6 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         returnSet.add(SimulatedHeaterImpl.SIMULATED_HEATER);
         returnSet.add(SimulatedThermometerImpl.SIMULATED_THERMOMETER);
         returnSet.add(SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR);
-        returnSet.add(SimulatedPushButtonImpl.SIMULATED_PUSH_BUTTON);
-        returnSet.add(SimulatedWindowShutterImpl.SIMULATED_WINDOW_SHUTTER);
         return returnSet;
     }
 
@@ -163,8 +155,6 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         simulatedHeaterCreator.deleteAll();
         simulatedThermometerCreator.deleteAll();
         simulatedPresenceSensorCreator.deleteAll();
-        simulatedPushButtonCreator.deleteAll();
-        simulatedWindowShutterCreator.deleteAll();
     }
 
     private Creator.Entity getCreator(String deviceType){
@@ -183,10 +173,6 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
                 return simulatedThermometerCreator;
             case SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR:
                 return simulatedPresenceSensorCreator;
-            case SimulatedPushButtonImpl.SIMULATED_PUSH_BUTTON:
-                return simulatedPushButtonCreator;
-            case SimulatedWindowShutterImpl.SIMULATED_WINDOW_SHUTTER:
-                return simulatedWindowShutterCreator;
             default:return null;
         }
     }

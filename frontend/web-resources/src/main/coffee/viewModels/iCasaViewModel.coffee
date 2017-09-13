@@ -854,16 +854,6 @@ define(['jquery',
                     @imgSrc(@getImage("dimmerLight_low"));
                   else
                     @imgSrc(@.getImage());
-             if ((@type() == "iCasa.WindowShutter") || @hasService("fr.liglab.adele.icasa.device.doorWindow.WindowShutter"))
-               shutterLevel = @.getPropertyValue("windowShutter.shutterLevel");
-               if (shutterLevel == null)
-                 @imgSrc(@.getImage());
-               else if (shutterLevel >= 0.75)
-                 @imgSrc(@getImage("ShutterOpen"));
-               else if (shutterLevel > 0.0)
-                 @imgSrc(@getImage("ShutterRolling"));
-               else
-                 @imgSrc(@.getImage());
                 if ((@type() == "iCasa.BinaryLight") || @hasService("fr.liglab.adele.icasa.device.light.BinaryLight"))
                   powerLevel = @.getPropertyValue("binaryLight.powerStatus");
                   if (powerLevel)
@@ -1037,8 +1027,6 @@ define(['jquery',
               imgName = "binaryLight_off";
             if ((@type() == "iCasa.DimmerLight") || @hasService("fr.liglab.adele.icasa.device.light.DimmerLight"))
               imgName = "dimmerLight_off";
-            if ((@type() == "iCasa.WindowShutter") || @hasService("fr.liglab.adele.icasa.device.doorWindow.WindowShutter"))
-              imgName = "ShutterClose";
             if ((@type() == "iCasa.Thermometer") || @hasService("fr.liglab.adele.icasa.device.temperature.Thermometer"))
               imgName = "thermometer";
             if ((@type() == "iCasa.MedicalThermometer") || @hasService("fr.liglab.adele.icasa.device.bathroomscale.MedicalThermometer"))
