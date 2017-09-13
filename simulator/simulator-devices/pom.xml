@@ -67,11 +67,6 @@
 			<groupId>fr.liglab.adele.cream</groupId>
 			<artifactId>cream.core</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>fr.liglab.adele.cream</groupId>
-			<artifactId>cream.runtime.facilities</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>
