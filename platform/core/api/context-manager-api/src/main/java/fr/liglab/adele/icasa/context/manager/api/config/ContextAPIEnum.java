@@ -29,13 +29,12 @@ public enum ContextAPIEnum {
     Cooler("fr.liglab.adele.icasa.device.temperature.Cooler"),
     Heater("fr.liglab.adele.icasa.device.temperature.Heater"),
     Thermometer("fr.liglab.adele.icasa.device.temperature.Thermometer"),
+    /*Shutter*/
+    Shutter("fr.liglab.adele.icasa.device.doorWindow.WindowShutter"),
     /*Abstractions*/
     PresenceService("fr.liglab.adele.icasa.physical.abstraction.PresenceService"),
     MomentOfTheDay("fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay"),
     MultiwaySwitch("fr.liglab.adele.icasa.physical.abstraction.MultiwaySwitch"),
-
-    /*TODO !!!!*/
-    /*SHUTTERS*/
 
     /*Pet Care DEMO*/
     PetInfo("fr.liglab.adele.icasa.apps.demo.pet.care.context.services.PetInfo"),

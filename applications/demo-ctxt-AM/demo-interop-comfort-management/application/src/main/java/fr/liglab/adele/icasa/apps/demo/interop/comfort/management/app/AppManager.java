@@ -3,6 +3,8 @@ package fr.liglab.adele.icasa.apps.demo.interop.comfort.management.app;
 import fr.liglab.adele.icasa.apps.demo.global.DemoApp;
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
+import fr.liglab.adele.icasa.context.manager.api.config.ContextAPIEnum;
+import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextAPIConfig;
 import fr.liglab.adele.icasa.context.manager.api.models.goals.ContextDependencyRegistration;
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.Factory;
@@ -10,29 +12,34 @@ import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 @Component(name="DemoLuminosityManagement")
 
 @Provides(properties= {
-        @StaticServiceProperty(name="icasa.application", type="String", value="Demo.Luminosity.Management.Application", immutable=true)
+        @StaticServiceProperty(name="icasa.application", type="String", value="Demo.Interop.Comfort.Management.Application", immutable=true)
 })
 
 @Instantiate
-@CommandProvider(namespace = "demo-luminosity-management")
+@CommandProvider(namespace = "demo-interop-comfort-management")
 @SuppressWarnings("unused")
 public class AppManager implements DemoApp {
-    private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);
-    public static final String LOG_PREFIX = "LUMINOSITY MANAGEMENT APP - ";
 
-    /*App state*/
-    /*ToDo*/
-    private final static String appName = "demo-luminosity-management";
-    private static AppStateEnum appState = AppStateEnum.INIT;
-    private static AppStateEnum previousAppState = AppStateEnum.INIT;
-    private boolean isReconfiguring = false;
-    private boolean needToBeReconfigured = true;
+    /*APP INFO*/
+    private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);
+    private static final String LOG_PREFIX = "INTEROP COMFORT MANAGEMENT APP - ";
+    private static final String appName = "demo-interop-comfort-management";
+    private static String appState = "DEACTIVATED";
 
     /*Interaction with context*/
     private static boolean registered;
+    private static ContextAPIConfig goals = new ContextAPIConfig(new HashSet<>(Arrays.asList(
+        ContextAPIEnum.Photometer,
+        ContextAPIEnum.Shutter,
+        ContextAPIEnum.Thermometer,
+        ContextAPIEnum.Cooler
+    )));
 
     /*AppManager component life cycle methods*/
     @Validate
@@ -50,61 +57,37 @@ public class AppManager implements DemoApp {
     }
 
     /*Factories for app internal reconfiguration*/
-    //
+    @Requires(optional = false, specification = Factory.class, filter = "(factory.name=demo-interop-comfort-management)")
+    @SuppressWarnings("all")
+    private Factory factoryComfortMgmt;
+    private static ComponentInstance appComfortMgmt = null;
+
 
     /*Context state check and App state change*/
     @Requires(id="manager", optional = false, specification = ContextDependencyRegistration.class)
     @SuppressWarnings("unused")
     private ContextDependencyRegistration contextDependencyRegistration;
 
-    /*App state change with context reconfiguration*/
-    private void appReconfiguration(){
-        /*ToDo lock system doesn't work*/
-//        if(isReconfiguring){
-//            needToBeReconfigured = true;
-//            return;
-//        }
-//
-//        isReconfiguring = true;
-        if (appState != previousAppState){
-            previousAppState = appState;
-            appInternalReconfiguration();
-            LOG.info(LOG_PREFIX + "STATE: "+appState.toString());
-            contextAPIAppRegistration();
-        }
-//        isReconfiguring = false;
-//
-//        if(needToBeReconfigured){
-//            needToBeReconfigured = false;
-//            appReconfiguration();
-//        }
-    }
-
     private void appRegistration(){
-        appState = AppStateEnum.INIT;
-        previousAppState = AppStateEnum.INIT;
-        appInternalReconfiguration();
         contextAPIAppRegistration();
+        appComfortMgmt = activateSubComponent(factoryComfortMgmt);
     }
 
     private void appUnregistration(){
+        disposeSubComponent(appComfortMgmt);
         contextDependencyRegistration.unregisterContextDependencies(appName);
-        appState = AppStateEnum.INIT;
-        appInternalReconfiguration();
-        previousAppState = null;
-        LOG.info(LOG_PREFIX + "STATE: "+appState.toString());
+        appState = "DEACTIVATED";
+        LOG.info(LOG_PREFIX + "STATE: "+ appState);
     }
 
     private void contextAPIAppRegistration(){
         if(contextDependencyRegistration !=null&&registered){
-            contextDependencyRegistration.registerContextDependencies(appName, appState.getConfigContextAPI());
-            LOG.info(LOG_PREFIX + "RECONFIGURATION...");
+            contextDependencyRegistration.registerContextDependencies(appName, goals);
+            appState = "ACTIVATED";
+            LOG.info(LOG_PREFIX + "STATE: "+ appState);
         }
     }
 
-    private void appInternalReconfiguration(){
-        //
-    }
 
     private ComponentInstance activateSubComponent(Factory factory){
         ComponentInstance component = null;
@@ -153,6 +136,6 @@ public class AppManager implements DemoApp {
 
     @Override
     public String getState() {
-        return appState.name();
+        return appState;
     }
 }

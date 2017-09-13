@@ -13,8 +13,6 @@ import tec.units.ri.unit.Units;
 import javax.measure.Quantity;
 import javax.measure.quantity.Temperature;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -124,12 +122,14 @@ public class TempMgmt {
     }
 
     private Quantity<Temperature> meanTemp(){
-        /*RQ: Thermometers are in Kelvin*/
         Quantity<Temperature> sumTemp = Quantities.getQuantity(0, Units.KELVIN);
         int n = 0;
         for(Thermometer thermometer : thermometers){
-            n++;
-            sumTemp = sumTemp.add(thermometer.getTemperature());
+            Quantity<Temperature> temperature = thermometer.getTemperature();
+            if (temperature != null) {
+                n++;
+                sumTemp = sumTemp.add(temperature);
+            }
         }
 
         return (n==0) ? sumTemp : sumTemp.divide(n);
