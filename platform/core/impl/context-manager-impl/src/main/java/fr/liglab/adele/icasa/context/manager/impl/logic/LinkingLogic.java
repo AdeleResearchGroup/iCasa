@@ -169,7 +169,10 @@ final class LinkingLogic implements Runnable {
         targetLinkModelUpdate.setNonActivableServices(nonActivableServices);
 
         /*External request adaptation*/
-        externalModelUpdate.setLookupFilter(lookupFilter);
+        /*************************/
+        /*ToDo Change strategy for lookup filter?*/
+        //externalModelUpdate.setLookupFilter(lookupFilter);
+        /*************************/
 
         if(!mediationTreesOk){
             if(ContextManagerAdmin.getLogLevel()>=2) {
@@ -192,7 +195,7 @@ final class LinkingLogic implements Runnable {
             if(logLevel>=3) {
                 LOG.info(LOG_PREFIX + "REQUIRED SERVICE: "+requiredService);
             }
-
+            
             /*ToDo Change strategy for lookup filter?*/
             /*Add all services of the tree*/
             lookupFilter.add(requiredService);
@@ -284,6 +287,11 @@ final class LinkingLogic implements Runnable {
             }
             goalModelUpdate.setContextGoalsActivability(goalsActivability);
         }
+
+        /*************************/
+        /*ToDo Change strategy for lookup filter?*/
+        externalModelUpdate.setLookupFilter(nonActivableServices);
+        /*************************/
 
         targetLinkModelUpdate.setCreatorsToActivate(creatorsToActivate);
     }
