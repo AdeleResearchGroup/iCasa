@@ -8,6 +8,8 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
 
@@ -25,17 +27,20 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 public class ComfortMgmt {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ComfortMgmt.class);
+    private static final String LOG_PREFIX = "INTEROP COMFORT MANAGEMENT APP - ";
+
     /*ILLUMINANCE*/
     private static final Unit<Illuminance> LUM_UNIT = Units.LUX;
-    private static final double MAX_OUTSIDE_LUM = 800.0d;
-    private static final double MAX_OUTSIDE_LUM_BEFORE_INFLUENCING_TEMP = 600.0d;
+    private static final double MAX_OUTSIDE_LUM = 1200.0d;
+    private static final double MAX_OUTSIDE_LUM_BEFORE_INFLUENCING_TEMP = 900.0d;
     private static final double LUM_TOLERANCE = 25.0d;
 
     /*TEMPERATURE*/
     private static final Unit<Temperature> TEMP_UNIT = Units.CELSIUS;
     /*rq: MAX_OUTSIDE_TEMP = MAX_OUTSIDE_TEMP_SHUTTER = MAX_OUTSIDE_TEMP_COOLER_WITHOUT_SHUTTER*/
-    private static final double MAX_OUTSIDE_TEMP = 27.0d;
-    private static final double MAX_OUTSIDE_TEMP_COOLER_WITH_SHUTTER = 32.0d;
+    private static final double MAX_OUTSIDE_TEMP = 26.0d;
+    private static final double MAX_OUTSIDE_TEMP_COOLER_WITH_SHUTTER = 30.0d;
     private static final double TEMP_TOLERANCE = 0.5d;
 
     /*SHUTTER POSITION*/
@@ -51,7 +56,7 @@ public class ComfortMgmt {
     /*SCHEDULING*/
     /*Only scheduled mode - Thread management*/
     private static final TimeUnit periodUnit = TimeUnit.SECONDS;
-    private static final long period = 20;
+    private static final long period = 2L;
     private static ScheduledExecutorService scheduledExecutorService = null;
     private static ScheduledFuture scheduledFuture = null;
 
@@ -161,20 +166,20 @@ public class ComfortMgmt {
 
         /*Hysteresis - stabilising decisions*/
         isOverMaxOutsideLum = isOverMaxOutsideLum ?
-                meanLum > MAX_OUTSIDE_LUM + LUM_TOLERANCE
-                : meanLum > MAX_OUTSIDE_LUM - LUM_TOLERANCE;
+                meanLum > MAX_OUTSIDE_LUM - LUM_TOLERANCE
+                : meanLum > MAX_OUTSIDE_LUM + LUM_TOLERANCE;
 
         isOverMaxOutsideLumBeforeInfluencingTemp = isOverMaxOutsideLumBeforeInfluencingTemp ?
-                meanLum > MAX_OUTSIDE_LUM_BEFORE_INFLUENCING_TEMP + LUM_TOLERANCE
-                : meanLum > MAX_OUTSIDE_LUM_BEFORE_INFLUENCING_TEMP - LUM_TOLERANCE;
+                meanLum > MAX_OUTSIDE_LUM_BEFORE_INFLUENCING_TEMP - LUM_TOLERANCE
+                : meanLum > MAX_OUTSIDE_LUM_BEFORE_INFLUENCING_TEMP + LUM_TOLERANCE;
 
         isOverMaxOutsideTemp = isOverMaxOutsideTemp ?
-                meanTemp > MAX_OUTSIDE_TEMP + TEMP_TOLERANCE
-                : meanTemp > MAX_OUTSIDE_TEMP - TEMP_TOLERANCE;
+                meanTemp > MAX_OUTSIDE_TEMP - TEMP_TOLERANCE
+                : meanTemp > MAX_OUTSIDE_TEMP + TEMP_TOLERANCE;
 
         isOverMaxOutsideTempCoolerWithShutter = isOverMaxOutsideTempCoolerWithShutter ?
-                meanTemp > MAX_OUTSIDE_TEMP_COOLER_WITH_SHUTTER + TEMP_TOLERANCE
-                : meanTemp > MAX_OUTSIDE_TEMP_COOLER_WITH_SHUTTER - TEMP_TOLERANCE;
+                meanTemp > MAX_OUTSIDE_TEMP_COOLER_WITH_SHUTTER - TEMP_TOLERANCE
+                : meanTemp > MAX_OUTSIDE_TEMP_COOLER_WITH_SHUTTER + TEMP_TOLERANCE;
 
         /*Management logic*/
         boolean closingShutters;
@@ -186,6 +191,9 @@ public class ComfortMgmt {
         /*Actuation*/
         double shutterPosition = closingShutters ? SHUTTER_CLOSED : SHUTTER_OPENED;
         double coolerPowerLevel = activatingCoolers ? COOLING_POWER : NO_POWER;
+
+        LOG.info(LOG_PREFIX + "CLOSING SHUTTER: "+ closingShutters);
+        LOG.info(LOG_PREFIX + "ACTIVATING COOLERS: "+ activatingCoolers);
 
         for(WindowShutter shutter : shutters){
             shutter.setShutterLevel(shutterPosition);
