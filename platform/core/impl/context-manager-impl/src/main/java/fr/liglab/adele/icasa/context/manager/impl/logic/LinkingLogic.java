@@ -313,20 +313,32 @@ final class LinkingLogic implements Runnable {
                             EntityProvider entityProvider = eProviderByCreatorName.get(creator);
                             creatorsToActivate.add(creator);
 
-                            if(logLevel>=3) {
-                                LOG.info(LOG_PREFIX + "CREATOR TO ACTIVATE: "+creator);
-                            }
+                            /*************************/
+                            /*TODO: FOR INTEROP DEMO*/
+                            /*TODO: REMOVE*/
+                            if(!"fr.liglab.adele.icasa.simulator.model.temperature.SimulatedTemperatureProvider".equals(entityProvider.getName())){
+                            /*************************/
+                                if(logLevel>=3) {
+                                    LOG.info(LOG_PREFIX + "CREATOR TO ACTIVATE: "+creator);
+                                }
 
-                            if(entityProvider.getInstances(entityName, true).isEmpty()){
-                                if(logLevel>=3) {
-                                    LOG.info(LOG_PREFIX + "KO CREATOR: "+creator);
+                                if(entityProvider.getInstances(entityName, true).isEmpty()){
+                                    if(logLevel>=3) {
+                                        LOG.info(LOG_PREFIX + "KO CREATOR: "+creator);
+                                    }
+                                } else {
+                                    providableService = true;
+                                    if(logLevel>=3) {
+                                        LOG.info(LOG_PREFIX + "OK CREATOR: "+creator);
+                                    }
                                 }
-                            } else {
-                                providableService = true;
-                                if(logLevel>=3) {
-                                    LOG.info(LOG_PREFIX + "OK CREATOR: "+creator);
-                                }
+
+                                /*************************/
+                            /*TODO: FOR INTEROP DEMO*/
+                            /*TODO: REMOVE*/
                             }
+                            /*************************/
+
                         } catch (NullPointerException ne){
                             if(logLevel>=3) {
                                 LOG.info(LOG_PREFIX + "ERROR IN PROCESSING CREATOR: " +nextChild.toString());
@@ -386,18 +398,34 @@ final class LinkingLogic implements Runnable {
         /*Deactivate others*/
         for(EntityProvider entityProvider : entityProviders){
             for(String providedEntity : entityProvider.getProvidedEntities()){
-                String creatorName = Util.creatorName(entityProvider, providedEntity);
-                if(creatorsToActivate.contains(creatorName)) {
-                    entityProvider.enable(providedEntity);
-                    if(logLevel>=3) {
-                        LOG.info(LOG_PREFIX + "PROVIDER " + entityProvider.getName() + " ENABLE ENTITY " + providedEntity);
+                /*************************/
+                /*TODO: FOR INTEROP DEMO*/
+                /*TODO: REMOVE*/
+                if(!"fr.liglab.adele.icasa.simulator.model.temperature.SimulatedTemperatureProvider".equals(entityProvider.getName())) {
+                    /*************************/
+                    String creatorName = Util.creatorName(entityProvider, providedEntity);
+                    if (creatorsToActivate.contains(creatorName)) {
+                        entityProvider.enable(providedEntity);
+                        if (logLevel >= 3) {
+                            LOG.info(LOG_PREFIX + "PROVIDER " + entityProvider.getName() + " ENABLE ENTITY " + providedEntity);
+                        }
+                    } else {
+                        entityProvider.disable(providedEntity);
+                        if (logLevel >= 3) {
+                            LOG.info(LOG_PREFIX + "PROVIDER " + entityProvider.getName() + " DISABLE ENTITY " + providedEntity);
+                        }
                     }
+                    /*************************/
+                /*TODO: FOR INTEROP DEMO*/
+                /*TODO: REMOVE*/
                 } else {
+                    String creatorName = Util.creatorName(entityProvider, providedEntity);
                     entityProvider.disable(providedEntity);
-                    if(logLevel>=3) {
+                    if (logLevel >= 3) {
                         LOG.info(LOG_PREFIX + "PROVIDER " + entityProvider.getName() + " DISABLE ENTITY " + providedEntity);
                     }
                 }
+                /*************************/
             }
         }
     }
