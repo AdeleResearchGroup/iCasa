@@ -17,6 +17,7 @@ package fr.liglab.adele.icasa.context.manager.impl.models.impl;
 
 import fr.liglab.adele.icasa.context.manager.api.models.ExternalModelAccess;
 import fr.liglab.adele.icasa.context.manager.impl.models.api.ExternalModelUpdate;
+import fr.liglab.adele.icasa.context.manager.impl.models.data.ExternalInteractionAuthorization;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -42,7 +43,10 @@ public class ExternalModel implements ExternalModelAccess, ExternalModelUpdate {
     public void setLookupFilter(Set<String> filter) {
         try{
             lookupFilter.clear();
-            lookupFilter.addAll(filter);
+            for(String service : filter){
+//                lookupFilter.addAll(filter);
+                addServiceToLookupFilter(service);
+            }
         } catch (NullPointerException ne){
             ne.printStackTrace();
         }
@@ -51,7 +55,8 @@ public class ExternalModel implements ExternalModelAccess, ExternalModelUpdate {
     @Override
     public void addServiceToLookupFilter(String service) {
         try{
-            lookupFilter.add(service);
+            if(ExternalInteractionAuthorization.SERVICES_AUTHORIZED_FOR_IMPORTATION.contains(service))
+                lookupFilter.add(service);
         } catch (NullPointerException ne){
             ne.printStackTrace();
         }
