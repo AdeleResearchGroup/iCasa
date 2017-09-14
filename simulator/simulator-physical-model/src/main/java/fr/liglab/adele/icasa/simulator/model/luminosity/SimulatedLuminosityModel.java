@@ -54,7 +54,7 @@ public class SimulatedLuminosityModel implements LuminosityModel{
     public static final double LUMENS_CONSTANT_VALUE = 683.0d;
 
     // There is no need of full illuminance in the morning
-    public static final double  MORNING_EXTERNAL_SOURCE_POWER = 800 ;
+    public static final double  MORNING_EXTERNAL_SOURCE_POWER = 1000 ;
     // In the afternoon the illuminance can be largely limited
     public static final double  AFTERNOON_EXTERNAL_SOURCE_POWER = 1600;
     // In the evening, the illuminance should be the best
@@ -111,7 +111,7 @@ public class SimulatedLuminosityModel implements LuminosityModel{
      * Illuminance [cd/m² or lux]=(power[W]*680.0[lumens])/surface[m²]
      *
      */
-    @ContextEntity.State.Pull(service = LuminosityModel.class,state = LuminosityModel.CURRENT_LUMINOSITY)
+    @ContextEntity.State.Pull(service = LuminosityModel.class,state = LuminosityModel.CURRENT_LUMINOSITY, period = 1)
     Supplier<Double> pullLuminosity = () -> {
         double returnedIlluminance = getLightFactor();
         double powerLevelTotal = 0.0;

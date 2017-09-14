@@ -40,7 +40,7 @@ public class MomentOfTheDaySimulatedImpl implements MomentOfTheDay {
     @Requires
     Clock clock;
 
-    @ContextEntity.State.Pull(service = MomentOfTheDay.class,state = MomentOfTheDay.CURRENT_MOMENT_OF_THE_DAY)
+    @ContextEntity.State.Pull(service = MomentOfTheDay.class,state = MomentOfTheDay.CURRENT_MOMENT_OF_THE_DAY, period = 1)
     Supplier<PartOfTheDay> pullMomentOfTheDay = () ->{
         DateTime dateTimeEli =new DateTime(clock.currentTimeMillis());
         int hour = dateTimeEli.getHourOfDay();
