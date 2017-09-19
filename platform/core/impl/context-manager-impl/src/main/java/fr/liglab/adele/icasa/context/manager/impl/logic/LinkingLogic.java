@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.context.manager.impl.logic;
 
+import fr.liglab.adele.cream.annotations.provider.OriginEnum;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
 import fr.liglab.adele.cream.model.introspection.RelationProvider;
 import fr.liglab.adele.icasa.context.manager.api.config.ContextManagerAdmin;
@@ -195,7 +196,7 @@ final class LinkingLogic implements Runnable {
             if(logLevel>=3) {
                 LOG.info(LOG_PREFIX + "REQUIRED SERVICE: "+requiredService);
             }
-            
+
             /*ToDo Change strategy for lookup filter?*/
             /*Add all services of the tree*/
             lookupFilter.add(requiredService);
@@ -240,7 +241,8 @@ final class LinkingLogic implements Runnable {
 
         /*To activate by goal*/
         Set<String> creatorsToActivate = new HashSet<>();
-        Set<String> nonActivableServices = targetLinkModelAccess.getNonActivableServices();
+        Set<String> nonActivableServices = targetLinkModelAccess.getNonActivableServices(); //non activable because of the tree construction
+        Set<String> servicesToLookup = new HashSet<>();
 
         if(targetLinkModelAccess.isMediationTreesOk()){
             Map<ContextAPIEnum, Boolean> goalsActivability = new HashMap<>();
@@ -259,7 +261,7 @@ final class LinkingLogic implements Runnable {
                 /*To activate for this goal*/
                 Set<String> creatorsToActivateSubSet = new HashSet<>();
 
-                boolean activable = mediationCalculationByGoal(goalNode, creatorsToActivateSubSet, nonActivableServices);
+                boolean activable = mediationCalculationByGoal(goalNode, creatorsToActivateSubSet, nonActivableServices, servicesToLookup);
                 if(activable){
                     if(logLevel>=2) {
                         LOG.info(LOG_PREFIX + "ACTIVATION POSSIBLE FOR GOAL: " + goalName);
@@ -290,13 +292,13 @@ final class LinkingLogic implements Runnable {
 
         /*************************/
         /*ToDo Change strategy for lookup filter?*/
-        externalModelUpdate.setLookupFilter(nonActivableServices);
+        externalModelUpdate.setLookupFilter(servicesToLookup);
         /*************************/
 
         targetLinkModelUpdate.setCreatorsToActivate(creatorsToActivate);
     }
 
-    private boolean mediationCalculationByGoal(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices){
+    private boolean mediationCalculationByGoal(DefaultMutableTreeNode goal, Set<String> creatorsToActivate, Set<String> nonActivableServices, Set<String> servicesToLookup){
         /*Update LogLevel*/
         int logLevel = ContextManagerAdmin.getLogLevel();
 
@@ -313,6 +315,10 @@ final class LinkingLogic implements Runnable {
 
                     DefaultMutableTreeNode nextChild = (DefaultMutableTreeNode)service.getFirstChild();
                     boolean providableService = false;
+                    /*************************/
+                    /*TODO: FOR INTEROP DEMO*/
+                    boolean providedInternallyOrLocally = false;
+                    /*************************/
                     while(nextChild != null){
                         try{
                             /*Pour l'instant, activation que des creators où il y a des instances disponibles*/
@@ -336,6 +342,10 @@ final class LinkingLogic implements Runnable {
                                     }
                                 } else {
                                     providableService = true;
+                                    OriginEnum origin = entityProvider.getOrigin(entityName);
+                                    if(OriginEnum.internal.equals(origin) || OriginEnum.local.equals(origin)){
+                                        providedInternallyOrLocally = true;
+                                    }
                                     if(logLevel>=3) {
                                         LOG.info(LOG_PREFIX + "OK CREATOR: "+creator);
                                     }
@@ -353,6 +363,10 @@ final class LinkingLogic implements Runnable {
                             }
                         }
                         nextChild = nextChild.getNextSibling();
+                    }
+
+                    if(!providedInternallyOrLocally){
+                        servicesToLookup.add(service.toString());
                     }
 
                     if(!providableService){
