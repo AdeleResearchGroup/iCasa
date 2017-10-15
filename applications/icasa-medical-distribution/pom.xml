@@ -197,7 +197,7 @@
 								<configuration>
 									<serverId>icasa-deploy-cloudbees-snapshot</serverId>
 									<fromFile>${project.build.directory}/${project.artifactId}-${project.version}.zip</fromFile>
-									<url>https://repository-icasa.forge.cloudbees.com/snapshot</url>
+									<url>https://repository-icasa.forge.cloudbees.com/socm</url>
 									<toFile>fr/liglab/adele/icasa/${project.artifactId}/${project.version}/${project.artifactId}-${project.version}.zip</toFile>
 								</configuration>
 							</execution>

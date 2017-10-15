@@ -8,6 +8,7 @@
 
 	<packaging>bundle</packaging>
 
+	<name>iCasa :: zwave4j :: zwave4j for OSGi</name>
 	<description>OSGi version of zwave4j</description>
 
 	<dependencies>
@@ -35,7 +36,17 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
 		</plugins>
+
+		
 	</build>
-	<name>iCasa :: zwave4j :: zwave4j for OSGi</name>
+	
 </project>

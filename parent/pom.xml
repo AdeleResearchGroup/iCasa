@@ -451,12 +451,12 @@ See the License for the specific language governing permissions and
         <repository>
             <id>icasa-deploy-cloudbees-release</id>
             <name>Cloudbees Adele Repository</name>
-            <url>dav:https://repository-icasa.forge.cloudbees.com/release</url>
+            <url>dav:https://repository-icasa.forge.cloudbees.com/socm</url>
         </repository>
         <snapshotRepository>
             <id>icasa-deploy-cloudbees-snapshot</id>
             <name>iCasa Cloudbees Snapshot Private Repository</name>
-            <url>dav:https://repository-icasa.forge.cloudbees.com/snapshot</url>
+            <url>dav:https://repository-icasa.forge.cloudbees.com/socm</url>
         </snapshotRepository>
         <site>
             <id>tmp</id>
