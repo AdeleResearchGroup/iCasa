@@ -52,6 +52,7 @@ import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDeviceProvider;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedBinaryLightImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedDimmerLightImpl;
+import fr.liglab.adele.icasa.simulator.device.doorWindow.impl.SimulatedWindowShutterImpl;
 import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedPhotometerImpl;
 import fr.liglab.adele.icasa.simulator.device.presence.impl.SimulatedPresenceSensorImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedCoolerImpl;
@@ -76,6 +77,8 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
     @Creator.Field Creator.Entity<SimulatedBinaryLightImpl> simulatedBinaryLightCreator;
 
     @Creator.Field Creator.Entity<SimulatedDimmerLightImpl> simulatedDimmerLightCreator;
+
+    @Creator.Field Creator.Entity<SimulatedWindowShutterImpl> simulatedWindowShutterCreator;
 
     @Creator.Field Creator.Entity<SimulatedPhotometerImpl> simulatedPhotometerCreator;
 
@@ -142,6 +145,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         returnSet.add(SimulatedHeaterImpl.SIMULATED_HEATER);
         returnSet.add(SimulatedThermometerImpl.SIMULATED_THERMOMETER);
         returnSet.add(SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR);
+        returnSet.add(SimulatedWindowShutterImpl.SIMULATED_WINDOW_SHUTTER);
         return returnSet;
     }
 
@@ -154,6 +158,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         simulatedHeaterCreator.deleteAll();
         simulatedThermometerCreator.deleteAll();
         simulatedPresenceSensorCreator.deleteAll();
+        simulatedWindowShutterCreator.deleteAll();
     }
 
     private Creator.Entity getCreator(String deviceType){
@@ -172,6 +177,8 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
                 return simulatedThermometerCreator;
             case SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR:
                 return simulatedPresenceSensorCreator;
+            case SimulatedWindowShutterImpl.SIMULATED_WINDOW_SHUTTER:
+                return simulatedWindowShutterCreator;
             default:return null;
         }
     }
