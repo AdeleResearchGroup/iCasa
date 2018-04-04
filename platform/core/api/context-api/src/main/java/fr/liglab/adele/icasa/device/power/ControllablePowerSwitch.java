@@ -16,19 +16,9 @@
 package fr.liglab.adele.icasa.device.power;
 
 import fr.liglab.adele.cream.annotations.ContextService;
-import fr.liglab.adele.cream.annotations.State;
-import fr.liglab.adele.icasa.device.GenericDevice;
 
-/**
- * Created by aygalinc on 21/04/16.
- */
-public @ContextService interface SmartPlug extends GenericDevice {
+public @ContextService interface ControllablePowerSwitch extends PowerSwitch {
 
-    @State  String SMART_PLUG_STATUS = "status";
+	public void setStatus(boolean status);
 
-    @State  String SMART_PLUG_CONSUMPTION = "consumption";
-
-    public boolean isOn();
-
-    public float currentConsumption();
 }

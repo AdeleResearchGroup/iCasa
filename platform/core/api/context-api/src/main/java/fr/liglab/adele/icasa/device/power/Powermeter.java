@@ -15,6 +15,8 @@
  */
 package fr.liglab.adele.icasa.device.power;
 
+import fr.liglab.adele.cream.annotations.ContextService;
+import fr.liglab.adele.cream.annotations.State;
 import fr.liglab.adele.icasa.device.GenericDevice;
 
 
@@ -23,7 +25,7 @@ import fr.liglab.adele.icasa.device.GenericDevice;
  *
  *
  */
-public interface Powermeter extends GenericDevice {
+public  @ContextService interface Powermeter extends GenericDevice {
 
 	/**
 	 * Service property indicating the current Power Rating sensed by the Powermeter device, expressed in watt (W)
@@ -36,7 +38,7 @@ public interface Powermeter extends GenericDevice {
      * </ul>
 	 * @see #getCurrentPowerRating()
 	 */
-	String POWERMETER_CURRENT_RATING = "powermeter.currentRating";
+	@State String CURRENT_RATING = "currentRating";
 	
 	
 	/**
@@ -45,7 +47,7 @@ public interface Powermeter extends GenericDevice {
 	 * @return the current Power Rating sensed by the powermeter expressed in watt (W)
 	 * @see #POWERMETER_CURRENT_RATING
 	 */
-	double getCurrentPowerRating();
+	public double getCurrentPowerRating();
 	
 	
 }

@@ -36,7 +36,7 @@ public @ContextService interface PowerSwitch extends GenericDevice {
      * </ul>
 	 * @see #getStatus()
 	 */
-	@State String POWER_SWITCH_CURRENT_STATUS = "powerSwitch.currentStatus";
+	@State String CURRENT_STATUS = "currentStatus";
 	
 	/**
 	 * Return the current status of the powerswitch
@@ -46,6 +46,6 @@ public @ContextService interface PowerSwitch extends GenericDevice {
 	 * @return the current status of the powerswitch
 	 * @see #POWER_SWITCH_CURRENT_STATUS
 	 */
-	boolean getStatus();
+	public boolean getStatus();
 
 }
