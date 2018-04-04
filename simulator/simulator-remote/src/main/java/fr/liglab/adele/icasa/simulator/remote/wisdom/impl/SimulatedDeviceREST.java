@@ -54,24 +54,24 @@ public class SimulatedDeviceREST extends DefaultController {
 
     @Route(method = HttpMethod.POST, uri = "/device")
     public Result createDevice() {
-        String content = null;
         try {
-            BufferedReader reader = context().reader();
-            content = IcasaJSONUtil.getContent(reader);
-        } catch (IOException e) {
+        	String  content 		= IcasaJSONUtil.content(context());
+            DeviceJSON deviceJSON 	= DeviceJSON.from(content);
+
+            String deviceType = deviceJSON.getType();
+
+            if (deviceType != null) {
+
+                String deviceId = deviceJSON.getId();
+
+                mySimulatedDeviceManager.createDevice(deviceType, deviceId);
+            }
+
+            return ok();
+
+        } catch (JSONException | IOException e) {
             return internalServerError(e);
         }
-        DeviceJSON deviceJSON = DeviceJSON.fromString(content);
-
-        String deviceType = deviceJSON.getType();
-
-        if (deviceType != null) {
-
-            String deviceId = deviceJSON.getId();
-
-            mySimulatedDeviceManager.createDevice(deviceType, deviceId);
-        }
-        return ok();
     }
 
     @Route(method = HttpMethod.DELETE, uri = "/device/{deviceId}")

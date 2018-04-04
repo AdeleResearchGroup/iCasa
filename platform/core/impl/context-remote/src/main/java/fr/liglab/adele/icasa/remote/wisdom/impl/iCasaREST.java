@@ -19,17 +19,18 @@ package fr.liglab.adele.icasa.remote.wisdom.impl;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import org.osgi.framework.BundleContext;
+
 import org.wisdom.api.DefaultController;
-import org.wisdom.api.annotations.Controller;
-import org.wisdom.api.annotations.Path;
 import org.wisdom.api.annotations.Route;
+
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
-import org.wisdom.api.http.Status;
 
 
 /**
@@ -42,21 +43,19 @@ public class iCasaREST extends DefaultController {
 
     private BundleContext context;
 
-    public iCasaREST(BundleContext _context){
+    public iCasaREST(BundleContext _context) {
         this.context = _context;
     }
 
 
     @Route(method = HttpMethod.GET, uri = "/icasa/backend")
     public Result info() {
-        String info = null;
         try {
-            info = getInfo();
+        	return ok(getInfo()).as(MimeTypes.JSON);
         } catch (JSONException e) {
-            e.printStackTrace();
-            return status(Status.INTERNAL_SERVER_ERROR);
+        	return internalServerError(e);
         }
-        return ok(info).as(MimeTypes.JSON);
+        
     }
 
     /**
@@ -64,7 +63,7 @@ public class iCasaREST extends DefaultController {
      * @return the information of the backend in a JSON format String
      * @throws JSONException if there is an error with the json object.
      */
-    public String getInfo() throws JSONException {
+    private String getInfo() throws JSONException {
         JSONObject backendInfo = new JSONObject();
         backendInfo.put("version", getVersion());
         return backendInfo.toString();

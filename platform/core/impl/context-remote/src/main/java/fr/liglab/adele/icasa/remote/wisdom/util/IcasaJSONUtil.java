@@ -15,285 +15,242 @@
  */
 package fr.liglab.adele.icasa.remote.wisdom.util;
 
+
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import org.wisdom.api.http.Context;
+
+import fr.liglab.adele.icasa.device.GenericDevice;
+import fr.liglab.adele.icasa.location.LocatedObject;
+
+import fr.liglab.adele.icasa.location.Zone;
+
 import fr.liglab.adele.icasa.clockservice.Clock;
 import fr.liglab.adele.icasa.clockservice.util.DateTextUtil;
-import fr.liglab.adele.icasa.device.GenericDevice;
+
+import javax.measure.Quantity;
+import javax.measure.Unit;
+
+import tec.units.ri.unit.Units;
+
 import fr.liglab.adele.icasa.device.button.PushButton;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.device.doorWindow.WindowShutter;
 import fr.liglab.adele.icasa.device.light.DimmerLight;
 import fr.liglab.adele.icasa.device.light.Photometer;
 import fr.liglab.adele.icasa.device.motion.MotionSensor;
+import fr.liglab.adele.icasa.device.power.PowerSwitch;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
 import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
-import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.icasa.location.Zone;
+
 import fr.liglab.adele.icasa.remote.wisdom.impl.ClockREST;
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import tec.units.ri.unit.Units;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+
 
 public class IcasaJSONUtil {
 
-    private final static Logger LOG = LoggerFactory.getLogger(IcasaJSONUtil.class);
-
     private final static String NO_UNIT = "N/A";
 
-    public static  JSONObject getPushButtonJSON(PushButton pushButton) throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(pushButton);
-        Set<String> services = new HashSet<>();
-        services.add(PushButton.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty(PushButton.PUSH_AND_HOLD,pushButton.isPushed(),"Lux"));
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    public static JSONObject getPhotometerJSON(Photometer photometer)throws JSONException{
-
-        JSONObject deviceJSON = buildDeviceJsonObject(photometer);
-        Set<String> services = new HashSet<>();
-        services.add(Photometer.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        if (photometer.getIlluminance() != null){
-            propObject.put(buildDeviceProperty(Photometer.PHOTOMETER_CURRENT_ILLUMINANCE,photometer.getIlluminance().to(Units.LUX).getValue(),"Lux"));
-        }else {
-            propObject.put(buildDeviceProperty(Photometer.PHOTOMETER_CURRENT_ILLUMINANCE,"none","Lux"));
-        }
-
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    public static JSONObject getHeaterJSON(Heater heater) throws JSONException {
-        JSONObject deviceJSON = buildDeviceJsonObject(heater);
-        Set<String> services = new HashSet<>();
-        services.add(Heater.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("heater.powerLevel",heater.getPowerLevel(),NO_UNIT));
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-
-    }
-
-    public static JSONObject getCoolerJSON(Cooler cooler) throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(cooler);
-        Set<String> services = new HashSet<>();
-        services.add(Cooler.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("cooler.powerLevel",cooler.getPowerLevel(),NO_UNIT));
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    public static JSONObject getPresenceSensorJSON(PresenceSensor presenceSensor)throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(presenceSensor);
-        Set<String> services = new HashSet<>();
-        services.add(PresenceSensor.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("presenceSensor.sensedPresence",presenceSensor.getSensedPresence(),NO_UNIT));
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    public static JSONObject getMotionSensorJSON(MotionSensor motion)throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(motion);
-        Set<String> services = new HashSet<>();
-        services.add(MotionSensor.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        return deviceJSON;
-    }
-
-    public static JSONObject getDimmerLightJSON(DimmerLight dimmerLight)throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(dimmerLight);
-        Set<String> services = new HashSet<>();
-        services.add(DimmerLight.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("dimmerLight.powerLevel",dimmerLight.getPowerLevel(),NO_UNIT));
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    public static JSONObject getWindowShutterJSON(WindowShutter windowShutter)throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(windowShutter);
-        Set<String> services = new HashSet<>();
-        services.add(WindowShutter.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("windowShutter.shutterLevel",windowShutter.getShutterLevel(),NO_UNIT));
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    public static JSONObject getBinaryLightJSON(BinaryLight binaryLight) throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(binaryLight);
-        Set<String> services = new HashSet<>();
-        services.add(BinaryLight.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        propObject.put(buildDeviceProperty("binaryLight.powerStatus",binaryLight.getPowerStatus(),NO_UNIT));
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    public static JSONObject getThermometerJSON(Thermometer thermometer)throws JSONException{
-        JSONObject deviceJSON = buildDeviceJsonObject(thermometer);
-        Set<String> services = new HashSet<>();
-        services.add(Thermometer.class.getName());
-        deviceJSON.putOnce(DeviceJSON.SERVICES,services);
-        JSONArray propObject = new JSONArray();
-        if (thermometer.getTemperature() != null){
-            propObject.put(buildDeviceProperty(Thermometer.THERMOMETER_CURRENT_TEMPERATURE,thermometer.getTemperature().to(Units.KELVIN).getValue(),"Kelvin"));
-        }else {
-            propObject.put(buildDeviceProperty(Thermometer.THERMOMETER_CURRENT_TEMPERATURE,"none","Kelvin"));
-        }
-
-        deviceJSON.putOnce(DeviceJSON.PROPERTIES_PROP,propObject);
-        return deviceJSON;
-    }
-
-    private static JSONObject buildDeviceJsonObject(GenericDevice device)throws JSONException{
-        JSONObject deviceJSON = new JSONObject();;
-        addSerialNumber(deviceJSON,device);
-        addDevicePosition(deviceJSON,device);
-        return deviceJSON;
-    }
-
-    private static void addDevicePosition(JSONObject jsonObject,GenericDevice device) throws JSONException{
-        if (device instanceof LocatedObject){
-            LocatedObject object = (LocatedObject) device;
-            jsonObject.put(DeviceJSON.POSITION_X_PROP, object.getPosition().x);
-            jsonObject.put(DeviceJSON.POSITION_Y_PROP, object.getPosition().y);
-            jsonObject.put(DeviceJSON.LOCATION_PROP, NO_UNIT); //TODO change
-        }
-    }
-
-    private static void addSerialNumber(JSONObject jsonObject,GenericDevice device)throws JSONException{
-        jsonObject.putOnce(DeviceJSON.ID_PROP, device.getSerialNumber());
-        jsonObject.putOnce(DeviceJSON.NAME_PROP, device.getSerialNumber());
-    }
-
-    private static JSONObject buildDeviceProperty(String propertyName, Object value,String unit)throws JSONException{
-        JSONObject prop = new JSONObject();
-        prop.put("name", propertyName);
-        prop.put("value", getValidObject(value));
-        prop.put("unit", unit);
-        return prop;
-    }
-
-    public static JSONObject getPersonTypeJSON(String personTypeStr) {
-        JSONObject personTypeJSON = null;
+    public static String content(Context context) throws IOException {
+        
+    	StringBuilder content = new StringBuilder();
+        
         try {
-            personTypeJSON = new JSONObject();
-            personTypeJSON.putOnce("id", personTypeStr);
-            personTypeJSON.putOnce("name", personTypeStr);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            personTypeJSON = null;
-        }
-
-        return personTypeJSON;
-    }
-
-    public static JSONObject getZoneJSON(Zone zone) {
-        JSONObject zoneJSON = null;
-        try {
-            String zoneId = zone.getZoneName();
-
-            zoneJSON = new JSONObject();
-            zoneJSON.putOnce(ZoneJSON.ID_PROP, zoneId);
-            zoneJSON.putOnce(ZoneJSON.NAME_PROP, zoneId);
-            zoneJSON.put(ZoneJSON.POSITION_LEFTX_PROP, zone.getLeftTopAbsolutePosition().x);
-            zoneJSON.put(ZoneJSON.POSITION_TOPY_PROP, zone.getLeftTopAbsolutePosition().y);
-            zoneJSON.put(ZoneJSON.POSITION_RIGHTX_PROP, zone.getRightBottomAbsolutePosition().x);
-            zoneJSON.put(ZoneJSON.POSITION_BOTTOMY_PROP, zone.getRightBottomAbsolutePosition().y);
-            zoneJSON.put(ZoneJSON.IS_ROOM_PROP, true); // TODO change it when Zone API will be improved
-
-            JSONArray propObject = new JSONArray();
-            JSONObject xlenghtPoperty = new JSONObject();
-            xlenghtPoperty.put("name", Zone.X_LENGHT);
-            xlenghtPoperty.put("value", getValidObject(zone.getXLength()));
-            xlenghtPoperty.put("unit", "m");
-            propObject.put(xlenghtPoperty);
-            JSONObject ylenghtPoperty = new JSONObject();
-            ylenghtPoperty.put("name", Zone.Y_LENGHT);
-            ylenghtPoperty.put("value", getValidObject(zone.getYLength()));
-            ylenghtPoperty.put("unit", "m");
-            propObject.put(ylenghtPoperty);
-            JSONObject zlenghtPoperty = new JSONObject();
-            zlenghtPoperty.put("name", Zone.Z_LENGHT);
-            zlenghtPoperty.put("value", getValidObject(zone.getZLength()));
-            zlenghtPoperty.put("unit", "m");
-            propObject.put(zlenghtPoperty);
-            zoneJSON.put(ZoneJSON.VARIABLE_PROP, propObject);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            zoneJSON = null;
-        }
-
-        return zoneJSON;
-    }
-
-    private static Object getValidObject(Object variableValue) {
-        if(variableValue instanceof Float && (Float.isInfinite((Float)variableValue) || Float.isNaN((Float)variableValue))){
-            return String.valueOf(variableValue);
-        } else if(variableValue instanceof Double && (Double.isInfinite((Double)variableValue) || Double.isNaN((Double)variableValue))){
-            return String.valueOf(variableValue);
-        }
-        return variableValue;
-    }
-
-    public static JSONObject getClockJSON(Clock clock) {
-        JSONObject clockJSON = null;
-        try {
-            clockJSON = new JSONObject();
-            clockJSON.putOnce("id", ClockREST.DEFAULT_INSTANCE_NAME); //TODO should be changed to manage multiple clocks
-            clockJSON.putOnce("startDateStr", DateTextUtil.getTextDate(clock.getStartDate()));
-            clockJSON.putOnce("startDate", clock.getStartDate());
-            clockJSON.putOnce("currentDateStr", DateTextUtil.getTextDate((clock.currentTimeMillis())));
-            clockJSON.putOnce("currentTime", clock.currentTimeMillis());
-            clockJSON.putOnce("factor", clock.getFactor());
-            clockJSON.putOnce("pause", clock.isPaused());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return clockJSON;
-    }
-
-    public static String getContent(BufferedReader reader){
-        StringBuffer content = new StringBuffer();
-        String line = null;
-        try {
-            while((line = reader.readLine()) != null){
+        	
+        	BufferedReader reader = context.reader();
+        	String line = null;
+        	
+            while ( (line = reader.readLine()) != null) {
                 content.append(line);
             }
+            
         } catch (IOException e) {
-            e.printStackTrace();
-            return content.toString();
         }
+        
         return content.toString();
     }
+    
 
+    public static JSONObject serialize(GenericDevice device) throws JSONException{
 
+    	JSONObject result = new JSONObject();;
+    	
+    	result.putOnce(DeviceJSON.ID_PROP, device.getSerialNumber());
+    	result.putOnce(DeviceJSON.NAME_PROP, device.getSerialNumber());
+        
+    	serializer(LocatedObject.class,IcasaJSONUtil::serialize).serialize(result,device);
 
+    	serializer(PushButton.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(Photometer.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(Heater.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(Cooler.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(PresenceSensor.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(PowerSwitch.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(MotionSensor.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(DimmerLight.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(WindowShutter.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(BinaryLight.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	serializer(Thermometer.class,IcasaJSONUtil::serialize).serialize(result,device);
+    	
+        return result;
+    }
+
+    @FunctionalInterface
+    public interface Serializer<S> {
+    	
+    	public void serialize(JSONObject result, S device) throws JSONException;
+
+    }
+        
+    public static <T> Serializer<GenericDevice> serializer(Class<T> service, Serializer<T> builder) {
+    	return (JSONObject result, GenericDevice device) -> {
+        	if (service.isInstance(device)) {
+        		service(result,service);
+        		builder.serialize(result,service.cast(device));
+        	}
+    	};
+    }
+
+    private static void service(JSONObject result, Class<?> service) throws JSONException {
+        result.append(DeviceJSON.SERVICES,service.getName());
+    }
+
+    private static void  property(JSONObject result, String name, Object value) throws JSONException {
+    	property(result,name,value,null);
+    }
+
+    private static <Q extends Quantity<Q>> void  property(JSONObject result, String name, Quantity<Q> measure) throws JSONException {
+    	property(result,name, measure != null ? measure.getValue() : "none", measure != null ? measure.getUnit() : null);
+    }
+
+    private static <Q extends Quantity<Q>> void  property(JSONObject result, String name, Object value, Unit<Q> unit) throws JSONException {
+        property(result,DeviceJSON.PROPERTIES_PROP,name,value,unit);
+    }
+
+    private static <Q extends Quantity<Q>> void  property(JSONObject result, String container, String name, Object value, Unit<Q> unit) throws JSONException {
+        
+    	JSONObject property = new JSONObject();
+        
+    	property.put("name", name);
+    	property.put("value", representationOf(value));
+    	property.put("unit", unit != null ? unit.getSymbol() : NO_UNIT);
+        
+        result.append(container,property);
+    }
+
+    private static Object representationOf(Object value) {
+        
+    	if (value instanceof Float && (Float.isInfinite((Float)value) || Float.isNaN((Float)value))){
+            return String.valueOf(value);
+        }
+        
+        if (value instanceof Double && (Double.isInfinite((Double)value) || Double.isNaN((Double)value))){
+            return String.valueOf(value);
+        }
+        
+        return value;
+    }
+
+    private static void serialize(JSONObject result, LocatedObject device) throws JSONException {
+        LocatedObject object = (LocatedObject) device;
+        result.put(DeviceJSON.POSITION_X_PROP, object.getPosition().x);
+        result.put(DeviceJSON.POSITION_Y_PROP, object.getPosition().y);
+        result.put(DeviceJSON.LOCATION_PROP, NO_UNIT); //TODO change
+    }
+
+    public static void serialize(JSONObject result, PushButton pushButton) throws JSONException {
+    	property(result,PushButton.PUSH_AND_HOLD, pushButton.isPushed());
+    }
+
+    public static void serialize(JSONObject result, Photometer photometer)throws JSONException {
+        property(result, Photometer.PHOTOMETER_CURRENT_ILLUMINANCE, photometer.getIlluminance());
+    }
+
+    public static void serialize(JSONObject result, Heater heater) throws JSONException {
+        property(result,Heater.HEATER_POWER_LEVEL, heater.getPowerLevel(), Units.PERCENT);
+    }
+
+    public static void serialize(JSONObject result, Cooler cooler) throws JSONException {
+        property(result,Cooler.COOLER_POWER_LEVEL, cooler.getPowerLevel(), Units.PERCENT);
+    }
+
+    public static void serialize(JSONObject result, PresenceSensor presenceSensor)throws JSONException{
+        property(result,"presenceSensor."+PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE, presenceSensor.getSensedPresence());
+    }
+
+    public static void serialize(JSONObject result, PowerSwitch power) throws JSONException{
+        property(result,"powerSwitch."+PowerSwitch.CURRENT_STATUS, power.getStatus());
+    }
+
+    public static void serialize(JSONObject result, MotionSensor motion) throws JSONException {
+    }
+
+    public static void serialize(JSONObject result, DimmerLight dimmerLight) throws JSONException{
+        property(result,DimmerLight.DIMMER_LIGHT_POWER_LEVEL, dimmerLight.getPowerLevel(), Units.PERCENT);
+    }
+
+    public static void serialize(JSONObject result, WindowShutter windowShutter) throws JSONException{
+        property(result,WindowShutter.SHUTTER_LEVEL,windowShutter.getShutterLevel(), Units.PERCENT);
+    }
+
+    public static void serialize(JSONObject result, BinaryLight binaryLight) throws JSONException{
+        property(result,BinaryLight.BINARY_LIGHT_POWER_STATUS,binaryLight.getPowerStatus());
+    }
+
+    public static void serialize(JSONObject result, Thermometer thermometer) throws JSONException{
+        property(result,Thermometer.THERMOMETER_CURRENT_TEMPERATURE,thermometer.getTemperature());
+    }
+
+    public static JSONObject serialize(String person) throws JSONException {
+       	JSONObject result = new JSONObject();
+       	
+       	result.putOnce("id", person);
+       	result.putOnce("name", person);
+
+		return result;
+    }
+
+    public static JSONObject serialize(Zone zone) throws JSONException {
+
+        JSONObject result = new JSONObject();
+
+        String zoneId = zone.getZoneName();
+        result.putOnce(ZoneJSON.ID_PROP, zoneId);
+        result.putOnce(ZoneJSON.NAME_PROP, zoneId);
+        
+        result.put(ZoneJSON.POSITION_LEFTX_PROP, zone.getLeftTopAbsolutePosition().x);
+        result.put(ZoneJSON.POSITION_TOPY_PROP, zone.getLeftTopAbsolutePosition().y);
+        result.put(ZoneJSON.POSITION_RIGHTX_PROP, zone.getRightBottomAbsolutePosition().x);
+        result.put(ZoneJSON.POSITION_BOTTOMY_PROP, zone.getRightBottomAbsolutePosition().y);
+        result.put(ZoneJSON.IS_ROOM_PROP, true); // TODO change it when Zone API will be improved
+
+        property(result,ZoneJSON.VARIABLE_PROP,Zone.X_LENGHT,zone.getXLength(),Units.METRE);
+        property(result,ZoneJSON.VARIABLE_PROP,Zone.Y_LENGHT,zone.getYLength(),Units.METRE);
+        property(result,ZoneJSON.VARIABLE_PROP,Zone.Z_LENGHT,zone.getZLength(),Units.METRE);
+
+        return result;
+    }
+
+    public static JSONObject serialize(Clock clock) throws JSONException {
+    	
+    	JSONObject result = new JSONObject();
+    	
+    	result.putOnce("id", ClockREST.DEFAULT_INSTANCE_NAME); //TODO should be changed to manage multiple clocks
+    	result.putOnce("startDateStr", DateTextUtil.getTextDate(clock.getStartDate()));
+    	result.putOnce("startDate", clock.getStartDate());
+    	result.putOnce("currentDateStr", DateTextUtil.getTextDate((clock.currentTimeMillis())));
+    	result.putOnce("currentTime", clock.currentTimeMillis());
+    	result.putOnce("factor", clock.getFactor());
+    	result.putOnce("pause", clock.isPaused());
+    	
+    	return result;
+    }
 
 
 }

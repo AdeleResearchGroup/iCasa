@@ -45,36 +45,41 @@ public class DeviceJSON {
 	private Integer positionY;
 
 
-	public static DeviceJSON fromString(String jsonStr) {
-		DeviceJSON device = null;
-		JSONObject json = null;
-		try {
-			json = new JSONObject(jsonStr);
-			device = new DeviceJSON();
-			if (json.has(ID_PROP)) {
-				device.setId(json.getString(ID_PROP));
-			} else if (json.has(DEVICE_ID_PROP)) {
-				device.setId(json.getString(DEVICE_ID_PROP));
-			}
-			;
-			if (json.has(TYPE_PROP))
-				device.setType(json.getString(TYPE_PROP));
-			if (json.has(NAME_PROP))
-				device.setName(json.getString(NAME_PROP));
-			if (json.has(STATE_PROP))
-				device.setState(json.getString(STATE_PROP));
-			if (json.has(LOCATION_PROP))
-				device.setLocation(json.getString(LOCATION_PROP));
-			if (json.has(FAULT_PROP))
-				device.setFault(json.getString(FAULT_PROP));
-			if (json.has(POSITION_X_PROP))
-				device.setPositionX(json.getInt(POSITION_X_PROP));
-			if (json.has(POSITION_Y_PROP))
-				device.setPositionY(json.getInt(POSITION_Y_PROP));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public static DeviceJSON from(String serialization) throws JSONException {
+		
+		DeviceJSON device	= new DeviceJSON();
+		JSONObject json 	= new JSONObject(serialization);
 
+		device.setId(json.has(ID_PROP) ? json.getString(ID_PROP) : 	json.has(DEVICE_ID_PROP) ? json.getString(DEVICE_ID_PROP) :	"<UNKNOWN-ID>");
+		
+		if (json.has(TYPE_PROP)) {
+			device.setType(json.getString(TYPE_PROP));
+		}
+		
+		if (json.has(NAME_PROP)) {
+			device.setName(json.getString(NAME_PROP));
+		}
+		
+		if (json.has(STATE_PROP)) {
+			device.setState(json.getString(STATE_PROP));
+		}
+		
+		if (json.has(LOCATION_PROP)) {
+			device.setLocation(json.getString(LOCATION_PROP));
+		}
+		
+		if (json.has(FAULT_PROP)) {
+			device.setFault(json.getString(FAULT_PROP));
+		}
+		
+		if (json.has(POSITION_X_PROP)) {
+			device.setPositionX(json.getInt(POSITION_X_PROP));
+		}
+		
+		if (json.has(POSITION_Y_PROP)) {
+			device.setPositionY(json.getInt(POSITION_Y_PROP));
+		}
+		
 		return device;
 	}
 

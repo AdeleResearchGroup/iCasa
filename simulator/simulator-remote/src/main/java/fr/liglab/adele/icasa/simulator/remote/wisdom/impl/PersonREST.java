@@ -155,7 +155,7 @@ public class PersonREST extends DefaultController {
 
         String content = null;
         try {
-            content = IcasaJSONUtil.getContent(context().reader());
+            content = IcasaJSONUtil.content(context());
         } catch (IOException e) {
             e.printStackTrace();
             return internalServerError();
@@ -178,7 +178,7 @@ public class PersonREST extends DefaultController {
 
         String content = null;
         try {
-            content = IcasaJSONUtil.getContent(context().reader());
+            content = IcasaJSONUtil.content(context());
         } catch (IOException e) {
             e.printStackTrace();
             return internalServerError();

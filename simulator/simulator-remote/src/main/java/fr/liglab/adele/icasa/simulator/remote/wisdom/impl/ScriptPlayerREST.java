@@ -139,7 +139,7 @@ public class ScriptPlayerREST extends DefaultController {
     public Result updatesScriptPut(@Parameter("scriptId") String scriptId) {
         String content = null;
         try {
-            content = IcasaJSONUtil.getContent(context().reader());
+            content = IcasaJSONUtil.content(context());
         } catch (IOException e) {
             e.printStackTrace();
             return internalServerError();
@@ -196,7 +196,7 @@ public class ScriptPlayerREST extends DefaultController {
 
         String content = null;
         try {
-            content = IcasaJSONUtil.getContent(context().reader());
+            content = IcasaJSONUtil.content(context());
         } catch (IOException e) {
             e.printStackTrace();
             return internalServerError();

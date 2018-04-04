@@ -56,7 +56,7 @@ public class RemoteShell extends DefaultController {
     public Result executeCommand(@Parameter("name") String name) {
         String content = null;
         try {
-            content = IcasaJSONUtil.getContent(context().reader());
+            content = IcasaJSONUtil.content(context());
         } catch (IOException e) {
             e.printStackTrace();
             return internalServerError();

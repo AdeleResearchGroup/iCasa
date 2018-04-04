@@ -18,31 +18,27 @@
  */
 package fr.liglab.adele.icasa.remote.wisdom.impl;
 
-import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextRequirement;
+
 import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.button.PushButton;
-import fr.liglab.adele.icasa.device.doorWindow.WindowShutter;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
-import fr.liglab.adele.icasa.device.light.DimmerLight;
-import fr.liglab.adele.icasa.device.light.Photometer;
-import fr.liglab.adele.icasa.device.motion.MotionSensor;
+import fr.liglab.adele.icasa.device.power.ControllablePowerSwitch;
+import fr.liglab.adele.icasa.device.power.PowerSwitch;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
-import fr.liglab.adele.icasa.device.temperature.Cooler;
-import fr.liglab.adele.icasa.device.temperature.Heater;
-import fr.liglab.adele.icasa.device.temperature.Thermometer;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.location.Position;
+
 import fr.liglab.adele.icasa.remote.wisdom.util.DeviceJSON;
-import fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil;
+import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
+
+import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
 import org.wisdom.api.DefaultController;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
@@ -52,6 +48,7 @@ import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,53 +61,52 @@ import java.util.List;
 @Path("/icasa/devices")
 public class DeviceREST extends DefaultController {
 
-    private final static Logger LOG = LoggerFactory.getLogger(DeviceREST.class);
 
-    @Requires(specification = BinaryLight.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<BinaryLight> binaryLights;
+    private List<GenericDevice> devices = new ArrayList<>();
 
-    @Requires(specification = DimmerLight.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<DimmerLight> dimmerLights;
+    @Bind(id="located", optional=true, proxy=false, aggregate=true)
+    public void bound(LocatedObject object) {
+    	if (object instanceof GenericDevice) {
+    		devices.add((GenericDevice)object);
+    	}
+    }
 
-    @Requires(specification = WindowShutter.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<WindowShutter> windowShutters;
+    @Unbind(id="located")
+    public void unbound(LocatedObject object) {
+    	if (object instanceof GenericDevice) {
+    		devices.remove((GenericDevice)object);
+    	}
+    }
 
-    @Requires(specification = PresenceSensor.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<PresenceSensor> presenceSensors;
+    private synchronized GenericDevice device(String serialNumber) {
+		
+    	for (GenericDevice device : devices) {
+			if (serialNumber.equals(device.getSerialNumber()))
+				return device;
+		}
 
-    @Requires(specification = MotionSensor.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<MotionSensor> motionSensors;
+		return null;
+    }
 
-    @Requires(specification = PushButton.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<PushButton> pushButtons;
+    /**
+     * Returns a JSON array containing all devices.
+     *
+     */
+    private String devices() throws JSONException {
+    	
+        JSONArray result = new JSONArray();
+        
+        for (GenericDevice device : devices) {
+			result.put(serialize(device));
+        }
 
-    @Requires(specification = Photometer.class, optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<Photometer> photometers;
-
-    @Requires(specification = Thermometer.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<Thermometer> thermometers;
-
-    @Requires(specification = Cooler.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<Cooler> coolers;
-
-    @Requires(specification = Heater.class,optional = true,proxy = false)
-    @ContextRequirement(spec = {LocatedObject.class})
-    List<Heater> heaters;
+        return result.toString();
+    }
 
     @Route(method = HttpMethod.GET, uri = "/devices")
-    public Result devices() {
+    public Result getDevices() {
         try {
-            String deviceList = getDevices();
-            return ok(getDevices()).as(MimeTypes.JSON);
+            return ok(devices()).as(MimeTypes.JSON);
         }catch (JSONException e){
             return internalServerError(e);
         }
@@ -119,220 +115,130 @@ public class DeviceREST extends DefaultController {
     /**
      * Retrieve a device.
      *
-     * @param deviceId The ID of the device to retrieve
-     * @return The required device,
-     * return <code>null<code> if the device does not exist.
-     * @throws java.text.ParseException
      */
     @Route(method = HttpMethod.GET, uri = "/device/{deviceId}")
-    public synchronized Result device(@Parameter("deviceId") String deviceId) {
-        if (deviceId == null || deviceId.length()<1){
-            return devices();
+    public synchronized Result getDevice(@Parameter("deviceId") String deviceId) {
+        
+    	if (deviceId == null || deviceId.isEmpty()){
+            return getDevices();
         }
 
-        GenericDevice foundDevice = findDevice(deviceId);
+        GenericDevice device = device(deviceId);
 
-        if (foundDevice == null) {
+        if (device == null) {
             return notFound();
-        } else {
-            JSONObject deviceJSON = null;
-            if (foundDevice instanceof Heater){
-                try {
-                    deviceJSON = IcasaJSONUtil.getHeaterJSON((Heater) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
+        } 
 
-            if (foundDevice instanceof Cooler){
-                try {
-                    deviceJSON = IcasaJSONUtil.getCoolerJSON((Cooler) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof Thermometer){
-                try {
-                    deviceJSON = IcasaJSONUtil.getThermometerJSON((Thermometer) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof BinaryLight){
-                try {
-                    deviceJSON = IcasaJSONUtil.getBinaryLightJSON((BinaryLight) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof DimmerLight){
-                try {
-                    deviceJSON = IcasaJSONUtil.getDimmerLightJSON((DimmerLight) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof WindowShutter){
-                try {
-                    deviceJSON = IcasaJSONUtil.getWindowShutterJSON((WindowShutter) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof PresenceSensor){
-                try {
-                    deviceJSON = IcasaJSONUtil.getPresenceSensorJSON((PresenceSensor) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof MotionSensor){
-                try {
-                    deviceJSON = IcasaJSONUtil.getMotionSensorJSON((MotionSensor) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof Photometer){
-                try {
-                    deviceJSON = IcasaJSONUtil.getPhotometerJSON((Photometer) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-
-            if (foundDevice instanceof PushButton){
-                try {
-                    deviceJSON = IcasaJSONUtil.getPushButtonJSON((PushButton) foundDevice);
-                } catch (JSONException e) {
-                    return internalServerError(e);
-                }
-            }
-            return ok(deviceJSON.toString()).as(MimeTypes.JSON);
-        }
+		try {
+			return ok(serialize(device).toString()).as(MimeTypes.JSON);
+		} catch (JSONException e) {
+			return internalServerError(e);
+		}
     }
 
     @Route(method = HttpMethod.PUT, uri = "/device/{deviceId}")
     public synchronized Result updatesDevice(@Parameter("deviceId") String deviceId) {
-        if (deviceId == null || deviceId.length()<1){
+    	
+        if (deviceId == null || deviceId.isEmpty()) {
             return notFound();
         }
 
-        String content = null;
-        try {
-            content = IcasaJSONUtil.getContent(context().reader());
-        } catch (IOException e) {
-            LOG.error("",e);
-            return internalServerError();
-        }
-
-        GenericDevice device = findDevice(deviceId);
-        if (device == null){
-            return notFound();
-        }
+        GenericDevice device = device(deviceId);
+		if (device == null) {
+			return notFound();
+		}
+        
         if (! (device instanceof LocatedObject)){
             return forbidden();
         }
-        LocatedObject locatedObject = (LocatedObject) device;
-        DeviceJSON updatedDevice = DeviceJSON.fromString(content);
-        if (updatedDevice != null) {
-            if (updatedDevice.getPositionX() != null && updatedDevice.getPositionY() != null){
-                Position newPostion = new Position(updatedDevice.getPositionX(),updatedDevice.getPositionY());
-                locatedObject.setPosition(newPostion);
-            }
-        }
 
-        return ok();
-    }
+		try {
+	        LocatedObject located 	= (LocatedObject) device;
+	        DeviceJSON update		= DeviceJSON.from(content(context()));
+	        
+	        if (update.getPositionX() != null && update.getPositionY() != null) {
+	            Position newPostion = new Position(update.getPositionX(),update.getPositionY());
+	            located.setPosition(newPostion);
+	        }
 
-    private synchronized GenericDevice findDevice(String deviceSerialNumber){
-        for (Heater heater:heaters){
-            if (deviceSerialNumber.equals(heater.getSerialNumber()))return heater;
-        }
-        for (DimmerLight light:dimmerLights){
-            if (deviceSerialNumber.equals(light.getSerialNumber()))return light;
-        }
-        for (WindowShutter shutter:windowShutters){
-            if (deviceSerialNumber.equals(shutter.getSerialNumber()))return shutter;
-        }
-        for (Cooler cooler:coolers){
-            if (deviceSerialNumber.equals(cooler.getSerialNumber()))return cooler;
-        }
-        for (Thermometer thermometer:thermometers){
-            if (deviceSerialNumber.equals(thermometer.getSerialNumber()))return thermometer;
-        }
-        for (BinaryLight binaryLight:binaryLights){
-            if (deviceSerialNumber.equals(binaryLight.getSerialNumber()))return binaryLight;
-        }
-        for (PresenceSensor presenceSensor:presenceSensors){
-            if (deviceSerialNumber.equals(presenceSensor.getSerialNumber()))return presenceSensor;
-        }
-        for (MotionSensor motionSensor:motionSensors){
-            if (deviceSerialNumber.equals(motionSensor.getSerialNumber()))return motionSensor;
-        }
-        for (PushButton pushButton:pushButtons){
-            if (deviceSerialNumber.equals(pushButton.getSerialNumber()))return pushButton;
-        }
-        for (Photometer photometer : photometers){
-            if (deviceSerialNumber.equals(photometer.getSerialNumber()))return photometer;
-        }
-        return null;
+	        return ok();
+	        
+		} catch (JSONException | IOException e) {
+			return internalServerError(e);
+		}
+        
     }
 
     /**
-     * Returns a JSON array containing all devices.
+     * Retrieve a device property.
      *
-     * @return a JSON array containing all devices.
      */
-    private String getDevices() throws JSONException {
-        JSONArray currentDevices = new JSONArray();
-        for (Heater heater:heaters){
-            JSONObject deviceJSON =  IcasaJSONUtil.getHeaterJSON(heater);
-            currentDevices.put(deviceJSON);
+    @Route(method = HttpMethod.GET, uri = "/device/{deviceId}/{service}/{property}")
+    public synchronized Result getProperty(@Parameter("deviceId") String deviceId, @Parameter("service") String service, @Parameter("property") String property) {
+        
+    	if (deviceId == null || deviceId.isEmpty()){
+            return getDevices();
         }
-        for (DimmerLight light:dimmerLights){
-            JSONObject deviceJSON =  IcasaJSONUtil.getDimmerLightJSON(light);
-            currentDevices.put(deviceJSON);
+
+        GenericDevice device = device(deviceId);
+
+        if (device == null) {
+            return notFound();
+        } 
+
+        String value = null;
+
+    	if (service.equalsIgnoreCase("PowerSwitch") && property.equals(PowerSwitch.CURRENT_STATUS) && device instanceof PowerSwitch) {
+    		value = Boolean.toString(((PowerSwitch) device).getStatus());
         }
-        for (WindowShutter shutter:windowShutters){
-            JSONObject deviceJSON =  IcasaJSONUtil.getWindowShutterJSON(shutter);
-            currentDevices.put(deviceJSON);
+
+    	if (service.equalsIgnoreCase("PresenceSensor") && property.equals(PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE) && device instanceof PresenceSensor) {
+    		value = Boolean.toString(((PresenceSensor) device).getSensedPresence());
         }
-        for (Cooler cooler:coolers){
-            JSONObject deviceJSON =  IcasaJSONUtil.getCoolerJSON(cooler);
-            currentDevices.put(deviceJSON);
+
+
+    	if (service.equalsIgnoreCase("BinaryLight") && property.equals("PowerStatus") && device instanceof BinaryLight) {
+    		value = Boolean.toString(((BinaryLight) device).getPowerStatus());
         }
-        for (Thermometer thermometer:thermometers){
-            JSONObject deviceJSON =  IcasaJSONUtil.getThermometerJSON(thermometer);
-            currentDevices.put(deviceJSON);
-        }
-        for (BinaryLight binaryLight:binaryLights){
-            JSONObject deviceJSON =  IcasaJSONUtil.getBinaryLightJSON(binaryLight);
-            currentDevices.put(deviceJSON);
-        }
-        for (PresenceSensor presenceSensor:presenceSensors){
-            JSONObject deviceJSON =  IcasaJSONUtil.getPresenceSensorJSON(presenceSensor);
-            currentDevices.put(deviceJSON);
-        }
-        for (MotionSensor motionSensor:motionSensors){
-            JSONObject deviceJSON =  IcasaJSONUtil.getMotionSensorJSON(motionSensor);
-            currentDevices.put(deviceJSON);
-        }
-        for (PushButton pushButton:pushButtons){
-            JSONObject deviceJSON =  IcasaJSONUtil.getPushButtonJSON(pushButton);
-            currentDevices.put(deviceJSON);
-        }
-        for (Photometer photometer : photometers){
-            JSONObject deviceJSON =  IcasaJSONUtil.getPhotometerJSON(photometer);
-            currentDevices.put(deviceJSON);
-        }
-        return currentDevices.toString();
+
+        return value != null ? ok(value).as(MimeTypes.TEXT) : notFound();
     }
+
+    @Route(method = HttpMethod.PUT, uri = "/device/{deviceId}/{service}/{property}")
+    public synchronized Result setProperty(@Parameter("deviceId") String deviceId, @Parameter("service") String service, @Parameter("property") String property) {
+        
+    	if (deviceId == null || deviceId.isEmpty()) {
+            return getDevices();
+        }
+
+        GenericDevice device = device(deviceId);
+
+        if (device == null) {
+            return notFound();
+        }
+
+        try {
+
+        	String update = content(context());
+            
+        	if (service.equalsIgnoreCase("PowerSwitch") && property.equals(PowerSwitch.CURRENT_STATUS) && device instanceof ControllablePowerSwitch) {
+            	((ControllablePowerSwitch) device).setStatus(Boolean.valueOf(update));
+            	return ok();
+            }
+
+
+        	if (service.equalsIgnoreCase("BinaryLight") && property.equalsIgnoreCase("PowerStatus") && device instanceof BinaryLight) {
+            	((BinaryLight) device).setPowerStatus(Boolean.valueOf(update));
+            	return ok();
+            }
+
+            return notFound();
+
+        } catch (IOException e) {
+            return internalServerError();
+        }
+        
+    }
+
+
 }

@@ -16,18 +16,23 @@
 package fr.liglab.adele.icasa.remote.wisdom.impl;
 
 import fr.liglab.adele.icasa.clockservice.Clock;
-import fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil;
+
+import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
+
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import org.wisdom.api.DefaultController;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
 import org.wisdom.api.annotations.Route;
+
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
@@ -43,7 +48,7 @@ import java.io.IOException;
 @Provides
 @Instantiate
 @Path("/icasa/clocks")
-public class ClockREST  extends DefaultController{
+public class ClockREST  extends DefaultController {
 
     public static final String DEFAULT_INSTANCE_NAME = "default";
 
@@ -51,78 +56,96 @@ public class ClockREST  extends DefaultController{
 	private Clock clock;
 
 
-    @Route(method = HttpMethod.GET, uri = "/clocks")
-    public Result clocks() {
-        return ok(getClocks()).as(MimeTypes.JSON);
-    }
-
     /**
      * Returns a JSON array containing all clocks.
-     *
-     * @return a JSON array containing all clocks.
      */
-    private String getClocks() {
-        JSONArray currentClocks = new JSONArray();
+    private String clocks() throws JSONException {
+        
+    	JSONArray currentClocks = new JSONArray();
 
-        if (clock != null) {
-            JSONObject currentClock = IcasaJSONUtil.getClockJSON(clock);
-            if (currentClock != null)
-                currentClocks.put(currentClock);
-        }
+		if (clock != null) {
+			currentClocks.put(serialize(clock));
+		}
 
         return currentClocks.toString();
     }
 
-    @Route(method = HttpMethod.GET, uri = "/clock/{clockId}")
-	public Result clock(@Parameter("clockId") String clockId) {
-        if ((clock == null) || (clockId == null) || (! DEFAULT_INSTANCE_NAME.equals(clockId)))
-            return notFound();
+    @Route(method = HttpMethod.GET, uri = "/clocks")
+    public Result getClocks() {
+        try {
+			return ok(clocks()).as(MimeTypes.JSON);
+		} catch (JSONException e) {
+			return internalServerError(e);
+		}
+    }
 
-		return ok(IcasaJSONUtil.getClockJSON(clock).toString()).as(MimeTypes.JSON);
+    private Clock clock(String id) {
+        
+    	if ((clock == null) || (id == null) || (! DEFAULT_INSTANCE_NAME.equals(id))) {
+        	return null;
+        }
+        
+        return clock;
+    }
+    
+    @Route(method = HttpMethod.GET, uri = "/clock/{clockId}")
+	public Result getClock(@Parameter("clockId") String clockId) {
+    	
+    	Clock clock = clock(clockId);
+        if (clock == null) {
+            return notFound();
+        }
+
+		try {
+			return ok(serialize(clock).toString()).as(MimeTypes.JSON);
+		} catch (JSONException e) {
+			return internalServerError(e);
+		}
 	}
 
 
 
     @Route(method = HttpMethod.PUT, uri = "/clock/{clockId}")
 	public Result updateClock(@Parameter("clockId") String clockId) {
-        String content = null;
-        try {
-            content = IcasaJSONUtil.getContent(context().reader());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return internalServerError();
-        }
-        if ((clock == null) || (clockId == null) || (! "default".equals(clockId)))
+    	
+    	Clock clock = clock(clockId);
+        if (clock == null) {
             return notFound();
+        }
 
 		try {
-			JSONObject clockObject = new JSONObject(content);
-			int factor = clockObject.getInt("factor");
-			boolean pause = clockObject.getBoolean("pause");
-			long startDate = clockObject.getLong("startDate");
+			
+			JSONObject update	= new JSONObject(content(context()));
+			int factor 			= update.getInt("factor");
+			boolean pause		= update.getBoolean("pause");
+			long startDate		= update.getLong("startDate");
 			
 			synchronized (clock) {
-				if (clock.getStartDate() != startDate)
+				
+				if (clock.getStartDate() != startDate) {
 					clock.setStartDate(startDate);
+				}
 
-				if (clock.getFactor() != factor)
+				if (clock.getFactor() != factor) {
 					clock.setFactor(factor);
+					
+				}
 
-				if (pause) {
-					if (!clock.isPaused()) {
-						clock.pause();
-					}
-				} else {
-					if (clock.isPaused())
-						clock.resume();
+				if (pause && !clock.isPaused()) {
+					clock.pause();
+				} 
+				
+				if (!pause && clock.isPaused()) {
+					clock.resume();
 				}
 
 			}
 
-		} catch (JSONException e) {
-			e.printStackTrace();
+			return ok(serialize(clock).toString()).as(MimeTypes.JSON);
+
+		} catch (JSONException | IOException e) {
+			return internalServerError(e);
 		}
-		return ok(IcasaJSONUtil.getClockJSON(clock).toString()).as(MimeTypes.JSON);
 	}
 
 
