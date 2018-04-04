@@ -840,6 +840,12 @@ define(['jquery',
                     if (decorator.name() == "presence")
                       decorator.show(presence == true);
                   );
+                if ((@type() == "iCasa.Power") || @hasService("fr.liglab.adele.icasa.device.power.PowerSwitch"))
+                  power = @.getPropertyValue("powerSwitch.currentStatus");
+                  if (power == true)
+                    @imgSrc(@getImage("power_on"));
+                  else
+                    @imgSrc(@.getImage());
                 if ((@type() == "iCasa.DimmerLight") || @hasService("fr.liglab.adele.icasa.device.light.DimmerLight"))
                   powerLevel = @.getPropertyValue("dimmerLight.powerLevel");
                   if (powerLevel == null)
@@ -1055,7 +1061,7 @@ define(['jquery',
               imgName = "movementDetector";
             if ((@type() == "iCasa.Speaker") || @hasService("fr.liglab.adele.icasa.device.sound.Speaker"))
               imgName = "speaker";
-            if (@type() == "iCasa.Power")
+            if ((@type() == "iCasa.Power") || @hasService("fr.liglab.adele.icasa.device.power.PowerSwitch"))
               imgName = "power";
             if ((@type() == "iCasa.BathroomScale") || @hasService("fr.liglab.adele.icasa.device.bathroomscale.BathroomScale"))
               imgName = "bathroomScale";
@@ -1079,7 +1085,7 @@ define(['jquery',
               imgName = "rfidReader";
             if (@type() == "iCasa.Accelerometer")
               imgName = "accelerometer";
-            if ((@type() == "iCasa.ToggleSwitch") || @hasService("fr.liglab.adele.icasa.device.power.PowerSwitch"))
+            if (@type() == "iCasa.ToggleSwitch")
               imgName = "toggleSwitch";
             if (@type() == "iCasa.DoorDetector")
               imgName = "doorDetector";
