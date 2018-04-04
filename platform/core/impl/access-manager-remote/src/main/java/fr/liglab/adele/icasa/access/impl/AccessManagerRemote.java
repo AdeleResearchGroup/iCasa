@@ -92,7 +92,7 @@ public class AccessManagerRemote extends DefaultController {
     public Result setRightAccess() {
         String content = null;
         try {
-            content = IcasaJSONUtil.getContent(context().reader());
+            content = IcasaJSONUtil.content(context());
         } catch (IOException e) {
             e.printStackTrace();
             return internalServerError();
@@ -106,7 +106,7 @@ public class AccessManagerRemote extends DefaultController {
     public Result updateApplicationAccess(@Parameter("id")String policyId){
         String content = null;
         try {
-            content = IcasaJSONUtil.getContent(context().reader());
+            content = IcasaJSONUtil.content(context());
         } catch (IOException e) {
             e.printStackTrace();
             return internalServerError();
