@@ -20,6 +20,7 @@ import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtensio
 import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
 
 import fr.liglab.adele.icasa.device.GenericDevice;
+import fr.liglab.adele.icasa.device.power.ControllablePowerSwitch;
 import fr.liglab.adele.icasa.device.power.PowerSwitch;
 import fr.liglab.adele.icasa.device.power.Powermeter;
 
@@ -29,17 +30,22 @@ import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
 import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
 
+import java.util.function.Consumer;
+
 import org.apache.felix.ipojo.annotations.ServiceController;
 
 import org.zwave4j.Manager;
+import org.zwave4j.ValueGenre;
+import org.zwave4j.ValueId;
+import org.zwave4j.ValueType;
 
 
-@ContextEntity(coreServices = {PowerSwitch.class,Powermeter.class,Zwave4jDevice.class})
+@ContextEntity(coreServices = {ControllablePowerSwitch.class, PowerSwitch.class, Powermeter.class, Zwave4jDevice.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 @FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
 
-public class FibaroWallPlug extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice, PowerSwitch, Powermeter {
+public class AeonSmartEnergy extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice, ControllablePowerSwitch, PowerSwitch, Powermeter  {
 
 	/**
 	 * Injected Behavior
@@ -47,10 +53,12 @@ public class FibaroWallPlug extends AbstractZwave4jDevice implements  GenericDev
 	@InjectedFunctionalExtension(id="ZwaveBehavior")
 	private ZwaveDevice device;
 
+	private ValueId devicePowerLevel;
+	
 	/**
 	 * Device network status
 	 */
-	@ServiceController(value=true, specification=PowerSwitch.class)
+	@ServiceController(value=true, specification=ControllablePowerSwitch.class)
 	private boolean active;
 
 	/**
@@ -74,30 +82,54 @@ public class FibaroWallPlug extends AbstractZwave4jDevice implements  GenericDev
 		return status;
 	}
 
-	@ContextEntity.State.Push(service = PowerSwitch.class,state = PowerSwitch.CURRENT_STATUS)
-	public boolean statusChanged(boolean status) {
-		return status;
+	@Override
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
+
+	@ContextEntity.State.Push(service = PowerSwitch.class,state = PowerSwitch.CURRENT_STATUS)
+	public boolean statusChanged(byte level) {
+		return level > 0;
+	}
+
+	@ContextEntity.State.Apply(service = PowerSwitch.class,state = PowerSwitch.CURRENT_STATUS)
+	Consumer<Boolean> changeStatus = status -> {
+		
+		if (manager == null) {
+			return;
+		}
+		
+		if (status) {
+			manager.setValueAsByte(devicePowerLevel, (short) 255);
+		} 
+		else {
+			manager.setValueAsByte(devicePowerLevel, (short) 0);
+		}
+	};
 
 
 	@ContextEntity.State.Field(service = Powermeter.class,state = Powermeter.CURRENT_RATING,value = "0.0")
 	private double consumption;
+	
+	@ContextEntity.State.Push(service = Powermeter.class,state =Powermeter.CURRENT_RATING )
+	public double consumptionChanged(float newConso){
+		return newConso;
+	}
 
 	@Override
 	public double getCurrentPowerRating() {
 		return consumption;
 	}
 
-	@ContextEntity.State.Push(service = Powermeter.class,state =Powermeter.CURRENT_RATING )
-	public double consumptionChanged(float consumption) {
-		return consumption;
-	}
-
-
-
 	@Override
 	public void initialize(Manager manager) {
 		super.initialize(manager);
+		
+		devicePowerLevel = new ValueId( (long)device.getHomeId(), (short)device.getNodeId(), 
+									ValueGenre.SYSTEM, ZWaveCommandClass.SWITCH_MULTILEVEL.getKey(),
+									(short)1, (short)0,
+									ValueType.BYTE);
+
 		active = isActive();
 	}
 
@@ -116,9 +148,9 @@ public class FibaroWallPlug extends AbstractZwave4jDevice implements  GenericDev
 	}
 
 	@Override
-	protected void valueChanged(ZWaveCommandClass command, short instance, short index, boolean value) {
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, byte value) {
 		switch (command) {
-			case SWITCH_BINARY:
+			case SWITCH_MULTILEVEL:
 				statusChanged(value);
 				break;
 			default:

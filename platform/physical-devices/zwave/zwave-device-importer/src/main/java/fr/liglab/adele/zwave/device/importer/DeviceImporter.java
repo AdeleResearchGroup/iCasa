@@ -240,14 +240,15 @@ public class DeviceImporter extends AbstractImporterComponent  {
 
 	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroWallPlug> 			zwave4jWallPlugCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroMotionSensor> 			zwave4jFibaroMotionSensorCreator;
+	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroMotionSensor> 		zwave4jFibaroMotionSensorCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroSmokeSensor> 			zwave4jFibaroSmokeSensorCreator;
+	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.FibaroSmokeSensor> 		zwave4jFibaroSmokeSensorCreator;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonRepeaterSlave> 			zwave4jAeonRepeaterSlave;
+	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonRepeaterSlave> 		zwave4jAeonRepeaterSlave;
 
-	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonMultiSensor> 			zwave4jAeonMultiSensor;
-
+	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonMultiSensor> 		zwave4jAeonMultiSensor;
+	
+	@Creator.Field Creator.Entity<fr.liglab.adele.zwave.device.proxies.zwave4j.AeonSmartEnergy> 		zwave4jAeonSmartEnergy;
 
 	@ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
 	private String name;
@@ -271,7 +272,7 @@ public class DeviceImporter extends AbstractImporterComponent  {
 		zwave4jCreators.put(SupportedDeviceType.FibaroGFMS001,zwave4jFibaroMotionSensorCreator);
 		zwave4jCreators.put(SupportedDeviceType.FibaroGSS001,zwave4jFibaroSmokeSensorCreator);
 		zwave4jCreators.put(SupportedDeviceType.AeonDSD37,zwave4jAeonRepeaterSlave);
-		zwave4jCreators.put(SupportedDeviceType.AeonSMARTENERGYILLUMINATOR,zwave4jWallPlugCreator);
+		zwave4jCreators.put(SupportedDeviceType.AeonSMARTENERGYILLUMINATOR,zwave4jAeonSmartEnergy);
 		zwave4jCreators.put(SupportedDeviceType.AeonMULTISENSOR,zwave4jAeonMultiSensor);
 
 

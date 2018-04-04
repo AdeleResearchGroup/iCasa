@@ -15,38 +15,41 @@
  */
 package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zwave4j.Manager;
 import org.zwave4j.Notification;
 import org.zwave4j.ValueId;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+
 
 public abstract class AbstractZwave4jDevice implements Zwave4jDevice {
 
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractZwave4jDevice.class);
 
-	protected void valueChanged(Manager manager, ValueId valueId){
-
-	}
-
-	protected void nodeStatusChanged(Manager manager, short status){
-
-	}
-
-	protected void nodeEvent(Manager manager, short value){
-
-	}
+	protected Manager manager;
+	
+	@Override
+	public void initialize(Manager manager) {
+		this.manager = manager;
+	} 
 
 	@Override
 	public void notification(Manager manager, Notification notification) {
+		
 		switch (notification.getType()) {
-		case NOTIFICATION:
-			nodeStatusChanged(manager, notification.getByte());
-			break;
-		case VALUE_CHANGED:
-			valueChanged(manager, notification.getValueId());
-			break;
+			case NOTIFICATION:
+				nodeStatusChanged(notification.getByte());
+				break;
+			case VALUE_CHANGED:
+				valueChanged(notification.getValueId());
+				break;
 			case NODE_EVENT:
-				nodeEvent(manager,notification.getEvent());
+				nodeEvent(notification.getEvent());
 				break;
 		default:
 			break;
@@ -54,45 +57,102 @@ public abstract class AbstractZwave4jDevice implements Zwave4jDevice {
 
 	}
 
-	protected final Object getValue(Manager manager, ValueId valueId) {
-		switch (valueId.getType()) {
-		case BOOL:
-			AtomicReference<Boolean> b = new AtomicReference<>();
-			manager.getValueAsBool(valueId, b);
-			return b.get();
-		case BYTE:
-			AtomicReference<Short> bb = new AtomicReference<>();
-			manager.getValueAsByte(valueId, bb);
-			return bb.get();
-		case DECIMAL:
-			AtomicReference<Float> f = new AtomicReference<>();
-			manager.getValueAsFloat(valueId, f);
-			return f.get();
-		case INT:
-			AtomicReference<Integer> i = new AtomicReference<>();
-			manager.getValueAsInt(valueId, i);
-			return i.get();
-		case LIST:
-			return null;
-		case SCHEDULE:
-			return null;
-		case SHORT:
-			AtomicReference<Short> s = new AtomicReference<>();
-			manager.getValueAsShort(valueId, s);
-			return s.get();
-		case STRING:
-			AtomicReference<String> ss = new AtomicReference<>();
-			manager.getValueAsString(valueId, ss);
-			return ss.get();
-		case BUTTON:
-			return null;
-		case RAW:
-			AtomicReference<short[]> sss = new AtomicReference<>();
-			manager.getValueAsRaw(valueId, sss);
-			return sss.get();
-		default:
-			return null;
+	protected void nodeStatusChanged(short status) {}
+
+	protected void nodeEvent(short event) {}
+
+	private void valueChanged(ValueId value) {
+
+		ZWaveCommandClass command 	= ZWaveCommandClass.valueOf(value.getCommandClassId());
+		short instance				= value.getInstance();
+		short index					= value.getIndex();
+		
+		switch (value.getType()) {
+			case BOOL: {
+				AtomicReference<Boolean> reference = new AtomicReference<>();
+				manager.getValueAsBool(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference.get());
+				valueChanged(command,instance,index,reference.get());
+				break;
+			}
+			case INT: {
+				AtomicReference<Integer> reference = new AtomicReference<>();
+				manager.getValueAsInt(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference.get());
+				valueChanged(command,instance,index,reference.get());
+				break;
+			}
+			case BYTE: {
+				AtomicReference<Short> reference = new AtomicReference<>();
+				manager.getValueAsByte(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference.get());
+				valueChanged(command,instance,index,(byte) reference.get().shortValue());
+				break;
+			}
+			case SHORT: {
+				AtomicReference<Short> reference = new AtomicReference<>();
+				manager.getValueAsShort(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference.get());
+				valueChanged(command,instance,index,reference.get());
+				break;
+			}
+			case DECIMAL: {
+				AtomicReference<Float> reference = new AtomicReference<>();
+				manager.getValueAsFloat(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference.get());
+				valueChanged(command,instance,index,reference.get());
+				break;
+			}
+			case STRING: { 
+				AtomicReference<String> reference = new AtomicReference<>();
+				manager.getValueAsString(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference.get());
+				valueChanged(command,instance,index,reference.get());
+				break;
+			}
+			case LIST: {
+				List<String> reference = new ArrayList<>();
+				manager.getValueListItems(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference);
+				valueChanged(command,instance,index,reference);
+				break;
+			}
+			case SCHEDULE:
+			case BUTTON:
+			case RAW:
+			default: {
+				AtomicReference<short[]> reference = new AtomicReference<>();
+				manager.getValueAsRaw(value, reference);
+				LOG.debug("Value changed = "+command+" instance "+instance+" index "+index+" type "+value.getType() + " value "+reference.get());
+				valueChanged(command,instance,index,reference.get());
+				break;
+			}
 		}
 	}
+	
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, boolean value) {
+	}
 
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, int value) {
+	}
+
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, byte value) {
+	}
+
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, short value) {
+	}
+
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, float value) {
+	}
+
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, String value) {
+	}
+
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, List<String> value) {
+	}
+
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, short[] value) {
+	}
+
+	
 }

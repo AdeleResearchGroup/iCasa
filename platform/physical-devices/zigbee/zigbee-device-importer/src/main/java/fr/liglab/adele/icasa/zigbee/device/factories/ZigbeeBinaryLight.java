@@ -35,7 +35,7 @@ import org.apache.felix.ipojo.annotations.Requires;
 import java.util.function.Consumer;
 
 
-@ContextEntity(coreServices = {BinaryLight.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
+@ContextEntity(coreServices = {BinaryLight.class, ZigbeeDevice.class, ZigbeeDeviceTracker.class, BatteryObservable.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 public class ZigbeeBinaryLight implements BinaryLight, ZigbeeDevice,ZigbeeDeviceTracker,GenericDevice,BatteryObservable{
 

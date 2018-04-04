@@ -504,6 +504,8 @@ public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveD
 						currentMode = changeModeNotification(modeRequest);
 						inTransition.set(false);
 						break;
+					default:
+						break;
 				}
 				break;
 			default:

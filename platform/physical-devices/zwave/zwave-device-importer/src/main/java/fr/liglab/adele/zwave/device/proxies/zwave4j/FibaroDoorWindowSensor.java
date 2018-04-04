@@ -15,23 +15,25 @@
  */
 package fr.liglab.adele.zwave.device.proxies.zwave4j;
 
+import org.apache.felix.ipojo.annotations.ServiceController;
+
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
+
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.doorWindow.DoorWindowSensor;
+
 import fr.liglab.adele.icasa.device.testable.Testable;
 import fr.liglab.adele.icasa.helpers.device.provider.TestableDoorWindowSensor;
+
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
+
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
 import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
-import org.apache.felix.ipojo.annotations.ServiceController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.zwave4j.Manager;
-import org.zwave4j.Notification;
-import org.zwave4j.ValueId;
 
 
 @ContextEntity(coreServices = {DoorWindowSensor.class,Zwave4jDevice.class})
@@ -42,7 +44,6 @@ import org.zwave4j.ValueId;
 
 public class FibaroDoorWindowSensor extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice, DoorWindowSensor  {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FibaroWallPlug.class);
 
 	/**
 	 * Injected Behavior
@@ -59,38 +60,30 @@ public class FibaroDoorWindowSensor extends AbstractZwave4jDevice implements  Ge
 
 	@Override
 	public void initialize(Manager manager) {
-		active = isActive(manager);
+		super.initialize(manager);
+		active = isActive();
 	}
 
 
 	@Override
-	public void notification(Manager manager, Notification notification) {
-		super.notification(manager, notification);
+	protected void nodeStatusChanged(short status) {
+		active = isActive();
 	}
 
 	@Override
-	protected void nodeStatusChanged(Manager manager, short status) {
-		active = isActive(manager);
-	}
-
-	@Override
-	protected void valueChanged(Manager manager, ValueId valueId) {
-
-		ZWaveCommandClass command = ZWaveCommandClass.valueOf(valueId.getCommandClassId());
-		LOG.debug("Value changed = "+command+" instance "+valueId.getInstance()+" index "+valueId.getIndex()+" type "+valueId.getType());
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, boolean value) {
 
 		switch (command) {
 			case SENSOR_BINARY:
-				openingDetectionChanged((Boolean)getValue(manager,valueId));
-				break;
-			case BATTERY:
+				openingDetectionChanged(value);
 				break;
 			default:
 				break;
 		}
+
 	}
 
-	protected final boolean isActive(Manager manager) {
+	protected final boolean isActive() {
 
 		boolean listening = manager.isNodeListeningDevice(device.getHomeId(),(short) device.getNodeId());
 		boolean awake = manager.isNodeAwake(device.getHomeId(),(short) device.getNodeId());

@@ -18,17 +18,16 @@ package fr.liglab.adele.zwave.device.proxies.zwave4j;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
+
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
+
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
+
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
 import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.zwave4j.Manager;
-import org.zwave4j.Notification;
-import org.zwave4j.ValueId;
+
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
 
@@ -43,50 +42,33 @@ import javax.measure.quantity.Temperature;
 
 public class FibaroSmokeSensor extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice,Thermometer {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FibaroSmokeSensor.class);
-
 	/**
 	 * Injected Behavior
 	 */
 	@InjectedFunctionalExtension(id="ZwaveBehavior")
 	private ZwaveDevice device;
 
-	@Override
-	public void initialize(Manager manager) {
-
-	}
-
 
 	@Override
-	public void notification(Manager manager, Notification notification) {
-		super.notification(manager, notification);
-	}
-
-	@Override
-	protected void nodeStatusChanged(Manager manager, short status) {
-
-	}
-
-	@Override
-	protected void valueChanged(Manager manager, ValueId valueId) {
-
-		ZWaveCommandClass command = ZWaveCommandClass.valueOf(valueId.getCommandClassId());
-		LOG.debug("Value changed = "+command+" instance "+valueId.getInstance()+" index "+valueId.getIndex()+" type "+valueId.getType());
-
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, float value) {
+		
 		switch (command) {
-
+			
 			case SENSOR_MULTILEVEL:
-				if (valueId.getIndex() == 1){
-					temperatureValueChange((Float)getValue(manager,valueId));
+				
+				switch (index) {
+					case 1:
+						temperatureValueChange(value);
+						break;
 				}
+				
 				break;
-			case BATTERY:
-			case SENSOR_ALARM:
-				break;
+
 			default:
 				break;
 		}
 	}
+		
 
 	@ContextEntity.State.Field(service = Thermometer.class,state = Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
 	private Quantity<Temperature> temperature;

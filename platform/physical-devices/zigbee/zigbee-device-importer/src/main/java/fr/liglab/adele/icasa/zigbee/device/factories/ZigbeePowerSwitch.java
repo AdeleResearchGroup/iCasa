@@ -37,12 +37,13 @@ import org.apache.felix.ipojo.annotations.Requires;
  */
 @ContextEntity(coreServices = {PowerSwitch.class, ZigbeeDevice.class,ZigbeeDeviceTracker.class,BatteryObservable.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+
 public class ZigbeePowerSwitch implements PowerSwitch, ZigbeeDevice, ZigbeeDeviceTracker,GenericDevice,BatteryObservable {
 
     @Requires
     private ZigbeeDriver driver;
 
-    @ContextEntity.State.Field(service = PowerSwitch.class,state = PowerSwitch.POWER_SWITCH_CURRENT_STATUS,value = "false")
+    @ContextEntity.State.Field(service = PowerSwitch.class,state = PowerSwitch.CURRENT_STATUS,value = "false")
     private boolean status;
 
     @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
@@ -90,14 +91,13 @@ public class ZigbeePowerSwitch implements PowerSwitch, ZigbeeDevice, ZigbeeDevic
     @Override
     public void deviceDataChanged(String address, Data oldData, Data newData) {
         if(address.compareToIgnoreCase(this.moduleAddress) == 0){ //this device.
-            boolean status = newData.getData().equalsIgnoreCase("1")? true: false;
-            pushStatus(status);
+            pushStatus(newData);
         }
     }
 
-    @ContextEntity.State.Push(service = PowerSwitch.class,state = POWER_SWITCH_CURRENT_STATUS)
-    private boolean pushStatus(boolean status){
-        return status;
+    @ContextEntity.State.Push(service = PowerSwitch.class,state = PowerSwitch.CURRENT_STATUS)
+    private boolean pushStatus(Data data){
+        return data.getData().equalsIgnoreCase("1");
     }
     /**
      * Called when a device battery level has changed.

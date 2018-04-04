@@ -112,18 +112,18 @@ public enum ZWaveCommandClass {
     UNKNOWN(0xFF, "UNKNOWN");
 
 
-    private int key;
+    private short key;
     private String label;
 
     private ZWaveCommandClass(int key, String label) {
-        this.key = key;
-        this.label = label;
+        this.key 	= (short) key;
+        this.label 	= label;
     }
 
     /**
      * @return the key
      */
-    public int getKey() {
+    public short getKey() {
         return key;
     }
 
@@ -138,10 +138,10 @@ public enum ZWaveCommandClass {
      * A mapping between the integer code and its corresponding
      * Command class to facilitate lookup by code.
      */
-    private static Map<Integer, ZWaveCommandClass> codeToCommandClassMapping;
+    private static Map<Short, ZWaveCommandClass> codeToCommandClassMapping;
 
     private static void initMapping() {
-        codeToCommandClassMapping = new HashMap<Integer,ZWaveCommandClass>();
+        codeToCommandClassMapping = new HashMap<>();
         for (ZWaveCommandClass s : values()) {
             codeToCommandClassMapping.put(s.key, s);
         }
@@ -153,7 +153,7 @@ public enum ZWaveCommandClass {
      * @param i the code to lookup
      * @return enumeration value of the command class.
      */
-    public static ZWaveCommandClass valueOf(int i) {
+    public static ZWaveCommandClass valueOf(short i) {
         if (codeToCommandClassMapping == null) {
             initMapping();
         }

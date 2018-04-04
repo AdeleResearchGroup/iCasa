@@ -15,18 +15,25 @@
  */
 package fr.liglab.adele.zwave.device.proxies.openhab;
 
-import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
-import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
-import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.power.SmartPlug;
-import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
-import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.zwave.device.api.ZwaveDevice;
-import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
+
+
+import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
+
+import fr.liglab.adele.icasa.device.GenericDevice;
+import fr.liglab.adele.icasa.device.power.PowerSwitch;
+import fr.liglab.adele.icasa.device.power.Powermeter;
+
+import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+import fr.liglab.adele.icasa.location.LocatedObject;
+
+import fr.liglab.adele.zwave.device.api.ZwaveDevice;
+import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
+
 import org.openhab.binding.zwave.internal.protocol.ZWaveEventListener;
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveCommandClass;
 import org.openhab.binding.zwave.internal.protocol.commandclass.ZWaveMultiLevelSensorCommandClass;
@@ -35,10 +42,11 @@ import org.openhab.binding.zwave.internal.protocol.event.ZWaveEvent;
 
 import java.math.BigDecimal;
 
-@ContextEntity(coreServices = {SmartPlug.class})
+@ContextEntity(coreServices = {PowerSwitch.class,Powermeter.class})
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
 @FunctionalExtension(id="ZwaveBehavior",contextServices = ZwaveDevice.class,implementation = ZwaveDeviceBehaviorProvider.class)
-public class FibaroWallPlug implements  ZWaveEventListener, SmartPlug {
+
+public class FibaroWallPlug implements  ZWaveEventListener, PowerSwitch, Powermeter {
 
 
     @Requires(optional = false, proxy=false)
@@ -47,11 +55,11 @@ public class FibaroWallPlug implements  ZWaveEventListener, SmartPlug {
     /**
      * STATES
      */
-    @ContextEntity.State.Field(service = SmartPlug.class,state = SmartPlug.SMART_PLUG_STATUS,value = "false")
+    @ContextEntity.State.Field(service = PowerSwitch.class,state = PowerSwitch.CURRENT_STATUS,value = "false")
     private boolean status;
 
-    @ContextEntity.State.Field(service = SmartPlug.class,state = SmartPlug.SMART_PLUG_CONSUMPTION,value = "0.0")
-    private float consumption;
+    @ContextEntity.State.Field(service = Powermeter.class,state = Powermeter.CURRENT_RATING,value = "0.0")
+    private double consumption;
 
     @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
     private String serialNumber;
@@ -63,12 +71,12 @@ public class FibaroWallPlug implements  ZWaveEventListener, SmartPlug {
     ZwaveDevice device;
 
     @Override
-    public boolean isOn() {
-        return status;
+    public boolean getStatus() {
+    	return status;
     }
 
     @Override
-    public float currentConsumption() {
+    public double getCurrentPowerRating() {
         return consumption;
     }
 
@@ -93,7 +101,8 @@ public class FibaroWallPlug implements  ZWaveEventListener, SmartPlug {
     @Override
     public void ZWaveIncomingEvent(ZWaveEvent event) {
         if (event.getNodeId() == device.getNodeId()) {
-            if (event instanceof ZWaveCommandClassValueEvent) {
+    
+        	if (event instanceof ZWaveCommandClassValueEvent) {
                 ZWaveCommandClassValueEvent commandClass = (ZWaveCommandClassValueEvent) event;
                 if (commandClass.getCommandClass().getLabel().equals(ZWaveCommandClass.CommandClass.SWITCH_BINARY.getLabel())) {
                     pushStatus(commandClass.getValue().equals(255));
@@ -114,13 +123,14 @@ public class FibaroWallPlug implements  ZWaveEventListener, SmartPlug {
         }
     }
 
-    @ContextEntity.State.Push(service = SmartPlug.class,state =SmartPlug.SMART_PLUG_STATUS )
+    @ContextEntity.State.Push(service = PowerSwitch.class, state = PowerSwitch.CURRENT_STATUS )
     public boolean pushStatus(boolean newStatus){
         return newStatus;
     }
 
-    @ContextEntity.State.Push(service = SmartPlug.class,state =SmartPlug.SMART_PLUG_CONSUMPTION )
-    public float pushConsumption(float newConso){
+    @ContextEntity.State.Push(service = Powermeter.class, state = Powermeter.CURRENT_RATING )
+    public double pushConsumption(float newConso){
         return newConso;
     }
+    
 }

@@ -18,20 +18,22 @@ package fr.liglab.adele.zwave.device.proxies.zwave4j;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
 import fr.liglab.adele.cream.annotations.functional.extension.InjectedFunctionalExtension;
+
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.device.battery.BatteryObservable;
 import fr.liglab.adele.icasa.device.light.Photometer;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
+
 import fr.liglab.adele.icasa.device.testable.Testable;
 import fr.liglab.adele.icasa.helpers.device.provider.TestablePresenceSensor;
+
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
+
 import fr.liglab.adele.zwave.device.api.ZwaveDevice;
 import fr.liglab.adele.zwave.device.proxies.ZwaveDeviceBehaviorProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.zwave4j.*;
+
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
 
@@ -48,7 +50,6 @@ import javax.measure.quantity.Temperature;
 
 public class FibaroMotionSensor extends AbstractZwave4jDevice implements  GenericDevice, Zwave4jDevice, PresenceSensor,Thermometer,Photometer,BatteryObservable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FibaroMotionSensor.class);
 
 	/**
 	 * Injected Behavior
@@ -56,45 +57,65 @@ public class FibaroMotionSensor extends AbstractZwave4jDevice implements  Generi
 	@InjectedFunctionalExtension(id="ZwaveBehavior")
 	private ZwaveDevice device;
 
-	@Override
-	public void initialize(Manager manager) {
 
+	@Override
+	protected void nodeEvent(short event) {
+		presenceValueChange(event == 255);
 	}
 
 	@Override
-	protected void nodeEvent(Manager manager, short status) {
-		presenceValueChange(status == 255);
-	}
-
-	@Override
-	protected void valueChanged(Manager manager, ValueId valueId) {
-
-		ZWaveCommandClass command = ZWaveCommandClass.valueOf(valueId.getCommandClassId());
-		LOG.debug("Value changed = "+command+" instance "+valueId.getInstance()+" index "+valueId.getIndex()+" type "+valueId.getType());
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, boolean value) {
 
 		switch (command) {
 
 			case SENSOR_BINARY:
-				presenceValueChange((Boolean)getValue(manager,valueId));
+				presenceValueChange(value);
 				break;
-			case SENSOR_MULTILEVEL:
-				if (valueId.getIndex() == 1){
-					temperatureValueChange((Float)getValue(manager,valueId));
-				}else if (valueId.getIndex() == 3){
-					luminosityValueChange((Float)getValue(manager,valueId));
-				}
-				break;
-			case BATTERY:
-				System.out.println("Battery Level " +getValue(manager,valueId) );
-
-				if (valueId.getIndex() == 0){
-					pushBatteryLevel((Short)getValue(manager,valueId));
-				}
-				break;
+				
 			default:
 				break;
 		}
 	}
+
+	@Override
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, float value) {
+
+		switch (command) {
+
+			case SENSOR_MULTILEVEL:
+				switch (index) {
+					case 1:
+						temperatureValueChange(value);
+						break;
+					case 3:
+						luminosityValueChange(value);
+						break;
+				}
+				break;
+				
+			default:
+				break;
+		}
+	}
+
+	@Override
+	protected void valueChanged(ZWaveCommandClass command, short instance, short index, short value) {
+
+		switch (command) {
+
+			case BATTERY :
+				switch (index) {
+					case 0:
+						pushBatteryLevel(value);
+						break;
+				}
+				break;
+				
+			default:
+				break;
+		}
+	}
+
 
 	@ContextEntity.State.Field(service = PresenceSensor.class,state = PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE,value = "false")
 	private boolean status;
