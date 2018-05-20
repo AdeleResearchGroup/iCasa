@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright ADELE Research Group, LIG
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- Project parent -->
+	<parent>
+		<groupId>fr.liglab.adele.icasa.layering</groupId>
+		<artifactId>icasa-layering</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<!-- Project coordinates -->
+	<artifactId>layering-structure</artifactId>
+	<packaging>bundle</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>${productName} :: ${projectName} :: LAYERING Structure</name>
+
+
+	<!-- Project dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.ipojo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.ipojo.annotations</artifactId>
+		</dependency>
+		<!--dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>context.impl.helpers</artifactId>
+			<version>${icasa.version}</version>
+		</dependency-->
+		<dependency>
+			<groupId>fr.liglab.adele.cream</groupId>
+			<artifactId>cream.core</artifactId>
+		</dependency>
+
+
+
+
+		<dependency>
+			<groupId>fr.liglab.adele.cream</groupId>
+			<artifactId>cream.runtime.facilities</artifactId>
+		</dependency>
+
+		<!--iCasa dependencies-->
+
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>common.metrics</artifactId>
+			<version>${icasa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>command.handler</artifactId>
+			<version>${icasa.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>fr.liglab.adele.icasa</groupId>
+			<artifactId>device.light</artifactId>
+			<version>${icasa.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.liglab.adele.cream</groupId>
+			<artifactId>cream.administration.api</artifactId>
+			<version>${cream.version}</version>
+		</dependency>
+
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Export-Package>fr.liglab.adele.icasa.layering.services.*</Export-Package>
+						<Bundle-SymbolicName>
+							${project.artifactId}
+						</Bundle-SymbolicName>
+						<Include-Resource>{maven-resources},
+							META-INF/NOTICE = NOTICE
+						</Include-Resource>
+						<Import-Package>
+							*
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-ipojo-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>fr.liglab.adele.cream</groupId>
+						<artifactId>cream.ipojo.module</artifactId>
+						<version>${context.socm.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<goals>
+							<goal>ipojo-bundle</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<useReleaseProfile>false</useReleaseProfile>
+					<goals>install</goals>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

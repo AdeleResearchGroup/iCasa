@@ -26,7 +26,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class PresenceServiceProvider {
 
-    @Creator.Field Creator.Entity<PresenceServiceImpl> creator;
+  /*  @Creator.Field Creator.Entity<PresenceServiceImpl> creator;
 
     @Creator.Field(PresenceServiceImpl.RELATION_IS_ATTACHED) Creator.Relation<PresenceServiceImpl,Zone> attachedLumModelCreator;
 
@@ -42,7 +42,7 @@ public class PresenceServiceProvider {
         String name = generateEntityName(zone);
         creator.delete(name);
         attachedLumModelCreator.delete(name,zone);
-    }
+    }*/
 
     private String generateEntityName(Zone zone){
         return zone.getZoneName()+".presence.service";

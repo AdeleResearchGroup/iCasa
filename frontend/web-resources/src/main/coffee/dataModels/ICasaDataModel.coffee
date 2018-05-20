@@ -40,6 +40,7 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
                 super
                 @accessRights = new DataModel.Collections.AccessRights()
                 #Get access right for the created application model.
+                console.log @get('id');
                 if @get('id')? && @.get('id') != "NONE"
                     @accessRights.url = "#{serverUrl}/policies/application/" + @.get('id');
                     @accessRights.fetch();
@@ -55,6 +56,9 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
          class DataModel.Models.Frontend extends Backbone.Model
             urlRoot : "/dashboard/frontend"
 
+         class DataModel.Models.Layerapp extends Backbone.Model
+            urlRoot : "#server#/layerapps/layerapps".replace /#server#/, serverUrl
+
          class DataModel.Models.Device extends Backbone.Model
             urlRoot : "#server#/devices/device".replace /#server#/, serverUrl
 
@@ -69,6 +73,10 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
          class DataModel.Collections.Devices extends Backbone.Collection
             url: "#server#/devices/devices".replace /#server#/, serverUrl
             model: DataModel.Models.Device
+
+         class DataModel.Collections.LayerApps extends Backbone.Collection
+            url: "#server#/layerapps/layerapps".replace /#server#/, serverUrl
+            model: DataModel.Models.Layerapp
 
          class DataModel.Models.DeviceType extends Backbone.Model
             urlRoot : "#server#/devices/deviceType".replace /#server#/, serverUrl
@@ -119,6 +127,7 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
 
          # initial import of data model
          DataModel.models.clock = new DataModel.Models.Clock({id: "default"});
+         console.log DataModel.models.clock;
 
          DataModel.collections.scripts = new DataModel.Collections.Scripts();
 
@@ -129,6 +138,10 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
          DataModel.collections.personTypes = new DataModel.Collections.PersonTypes();
 
          DataModel.collections.devices = new DataModel.Collections.Devices();
+         console.log DataModel.collections.devices;
+
+         DataModel.collections.LayerApps = new DataModel.Collections.LayerApps();
+         console.log DataModel.Collections.LayerApps;
 
          DataModel.collections.deviceTypes = new DataModel.Collections.SimulatedDeviceTypes();
 
@@ -190,6 +203,7 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
              DataModel.collections.personTypes.fetch(connectionCallback);
              DataModel.collections.devices.fetch(connectionCallback);
              DataModel.collections.deviceTypes.fetch(connectionCallback);
+             DataModel.collections.LayerApps.fetch(connectionCallback);
              #Valid only for dashboard.
              updateApplications = {
                success : (data) =>

@@ -92,13 +92,19 @@ public class DeviceREST extends DefaultController {
      * Returns a JSON array containing all devices.
      *
      */
-    private String devices() throws JSONException {
+    public String devices() throws JSONException {
     	
         JSONArray result = new JSONArray();
         
         for (GenericDevice device : devices) {
+            System.out.println("dev");
+            System.out.println(device);
+            System.out.println("ser(dev)");
+            System.out.println(serialize(device));
 			result.put(serialize(device));
         }
+        System.out.println("all");
+        System.out.println(result.toString());
 
         return result.toString();
     }
@@ -106,6 +112,8 @@ public class DeviceREST extends DefaultController {
     @Route(method = HttpMethod.GET, uri = "/devices")
     public Result getDevices() {
         try {
+            System.out.println("dev");
+            System.out.println(devices());
             return ok(devices()).as(MimeTypes.JSON);
         }catch (JSONException e){
             return internalServerError(e);

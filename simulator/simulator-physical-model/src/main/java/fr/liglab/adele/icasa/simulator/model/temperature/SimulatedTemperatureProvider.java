@@ -26,7 +26,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class SimulatedTemperatureProvider {
 
-    @Creator.Field Creator.Entity<SimulatedTemperatureModel> creator;
+  /*  @Creator.Field Creator.Entity<SimulatedTemperatureModel> creator;
 
     @Creator.Field(SimulatedTemperatureModel.RELATION_IS_ATTACHED) Creator.Relation<SimulatedTemperatureModel,Zone> attachedTempModelCreator;
 
@@ -42,7 +42,7 @@ public class SimulatedTemperatureProvider {
         String name = generateEntityName(zone);
         creator.delete(name);
         attachedTempModelCreator.delete(name,zone);
-    }
+    }*/
 
     private String generateEntityName(Zone zone){
         return zone.getZoneName()+".temperature";

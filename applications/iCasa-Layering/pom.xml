@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>fr.liglab.adele.icasa</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.2.7-SNAPSHOT</version>
+	<relativePath />
+  </parent>
+  
+  <groupId>fr.liglab.adele.icasa.layering</groupId>
+  <artifactId>icasa-layering</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>${productName} :: ${projectName}</name>
+  
+  <scm>
+    <connection>scm:git:git@github.com:AdeleResearchGroup/XWare-iCasa.git</connection>
+    <developerConnection>scm:git:git@github.com:AdeleResearchGroup/XWare-iCasa.git</developerConnection>
+    <url>https://github.com/AdeleResearchGroup/XWare-iCasa.git</url>
+    <tag>HEAD</tag>
+  </scm>
+  <repositories>
+		<repository>
+			<id>icasa-socm-repository</id>
+			<name>iCasa SOCM Cloudbees Snapshot Private Repository</name>
+			<url>http://repository-icasa.forge.cloudbees.com/socm</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+
+		<repository>
+			<id>adele-central-snapshots</id>
+			<name>adele-central-snapshot</name>
+			<url>http://repository-icasa.forge.cloudbees.com/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	
+	<build>
+  	<plugins>
+		<plugin>
+		   <artifactId>maven-release-plugin</artifactId>
+		   <configuration>
+		     <useReleaseProfile>false</useReleaseProfile>
+		     <goals>install</goals>
+		   </configuration>
+		 </plugin>
+  	</plugins>
+  </build>
+  
+
+  
+  
+  <properties>
+        <icasa.version>1.2.7-SNAPSHOT</icasa.version>
+        <wisdom.version>0.9.0</wisdom.version>
+        <cream.version>0.1-SNAPSHOT</cream.version>
+    </properties>
+	
+	<modules>
+        <module>layering-webdisplay</module>
+		<module>layering-structure</module>
+		<module>layer-distr</module>
+		<module>layer-apps</module>
+		<!--  	<module>iop-device-importer</module>
+		<module>iop-interop-distribution</module>-->
+    </modules>
+
+</project>

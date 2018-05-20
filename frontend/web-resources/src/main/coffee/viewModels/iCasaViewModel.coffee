@@ -16,6 +16,7 @@ define(['jquery',
         'text!templates/zoneTable.html',
         'text!templates/applicationTable.html',
         'text!templates/scriptPlayer.html',
+        'text!templates/appLayerTable.html',
         'text!templates/tabs.html',
         'text!templates/deviceStatusWindow.html',
         'text!templates/personStatusWindow.html',
@@ -23,7 +24,7 @@ define(['jquery',
         'text!templates/applicationStatusWindow.html',
         'i18n!locales/nls/locale',
         'domReady'],
-  ($, ui, Backbone, ko, kb, HandleBars, jqueryTouch, DeviceWidgetContract, ICasaManager, ICasaShell, DataModel, devTabHtml, devAppTabHtml, personTabHtml, zoneTabHtml, appTabHtml, scriptPlayerHtml, tabsTemplateHtml, deviceStatusWindowTemplateHtml, personStatusWindowTemplateHtml, zoneStatusWindowTemplateHtml, applicationStatusWindowTemplateHtml, locale) ->
+  ($, ui, Backbone, ko, kb, HandleBars, jqueryTouch, DeviceWidgetContract, ICasaManager, ICasaShell, DataModel, devTabHtml, devAppTabHtml, personTabHtml, zoneTabHtml, appTabHtml, scriptPlayerHtml, layAppTabHtml, tabsTemplateHtml, deviceStatusWindowTemplateHtml, personStatusWindowTemplateHtml, zoneStatusWindowTemplateHtml, applicationStatusWindowTemplateHtml, locale) ->
 
     # HTML custom bindings
 
@@ -32,6 +33,7 @@ define(['jquery',
         init: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) ->
 
             # Next, whether or not the supplied model property is observable, get its current value
+            console.log "init stati template..."
             valueUnwrapped = ko.utils.unwrapObservable(valueAccessor());
             if valueUnwrapped.template == undefined
               return {controlsDescendantBindings: true};
@@ -63,6 +65,7 @@ define(['jquery',
     #for dashboard.
     ko.bindingHandlers.checkedAccessRight = {
         init: (element, valueAccessor, allBindingAccessor, viewModel, bindingContext) ->
+            console.log "init access rights (dashbrd)"
             valueUnwrapped = ko.utils.unwrapObservable(valueAccessor());
             root = ko.utils.unwrapObservable(valueUnwrapped.root);
             new AccessRightHandler(element, viewModel, root)
@@ -96,7 +99,7 @@ define(['jquery',
             if policy != "hidden"
                 device.hasAccessRight(true)
             else
-                device.hasAccessRight(false)
+                device.hasAccessRight(true)
 
     #Carousel binding to retrieve selected application.
     ko.bindingHandlers.carouselHandler = {
@@ -304,7 +307,7 @@ define(['jquery',
 
         init: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) ->
 
-            asc = $('<i></i>').addClass("icon-chevron-down pull-right");
+            asc = $('<i></i>').addClass("e pull-right");
             desc = $('<i></i>').addClass("icon-chevron-up pull-right").hide();
             asc.click(()->
                 desc.show()
@@ -409,6 +412,12 @@ define(['jquery',
         constructor: (model) ->
            super(model)
            @state = kb.observable(model, 'state');
+
+    class LayerAppsViewModel extends NamedViewModel
+        constructor: (model) ->
+           super(model)
+           @name = kb.observable(model,'name');
+           @id = kb.observable(model, 'id');
 
 
     class PositionedImageViewModel extends NamedViewModel
@@ -861,7 +870,8 @@ define(['jquery',
                   else
                     @imgSrc(@.getImage());
                 if ((@type() == "iCasa.WindowShutter") || @hasService("fr.liglab.adele.icasa.device.doorWindow.WindowShutter"))
-                  shutterLevel = @.getPropertyValue("windowShutter.shutterLevel");
+                  shutterLevel = @.getPropertyValue("WindowShutter.shutterLevel");
+                  console.log shutterLevel;
                   if (shutterLevel == null)
                    @imgSrc(@.getImage());
                   else if (shutterLevel >= 0.75)
@@ -1401,15 +1411,22 @@ define(['jquery',
                id: "script-player",
                name: @getLocaleMessage('Script.Player') ,
                template: scriptPlayerHtml});
+             appTab = new TabViewModel ({
+               id: "layapps",
+               name: @getLocaleMessage('Apptest'),
+               template: layAppTabHtml});
              tabsItems.push(deviceTab);
              tabsItems.push(zoneTab);
              tabsItems.push(personTab);
              tabsItems.push(scriptTab);
+             tabsItems.push(appTab);
+
 
 
            @tabs = ko.observableArray(tabsItems);
 
            @deviceWidgets = ko.observableArray();
+           console.log(@deviceWidgets)
 
 
            @imgSrc = ko.observable(model.imgSrc);
@@ -1437,6 +1454,8 @@ define(['jquery',
            @deviceTypes = kb.collectionObservable(DataModel.collections.deviceTypes, {view_model: DeviceTypeViewModel});
 
            @devices = kb.collectionObservable(DataModel.collections.devices, {view_model: DeviceViewModel} );
+           console.log("DEVICES: ")
+           console.log(@devices);
            @updateDeviceWidgets= (newValue) =>
              ko.utils.arrayForEach(@devices(), (device) =>
                if (device == undefined)
@@ -1460,6 +1479,8 @@ define(['jquery',
 
            @scripts = kb.collectionObservable(DataModel.collections.scripts, {view_model: ScriptViewModel});
 
+           @layerapps = kb.collectionObservable(DataModel.collections.LayerApps, {view_model: LayerAppsViewModel});
+
            @updateExecutingScript = (newValue) =>
              ko.utils.arrayForEach(@scripts(), (script) =>
                if (script == undefined)
@@ -1476,9 +1497,11 @@ define(['jquery',
              @selectedApplication = ko.observable("")
              @applications = kb.collectionObservable(DataModel.collections.applications, {view_model: ApplicationViewModel});
              @updateSelectedApplication = ()=>
-                console.log "calculating selected application rights"
+                console.log "calculating selected application rights..."
                 ko.utils.arrayForEach(@.devices(), (device) =>
+                    console.log "inside knockout Utils"
                     applicationModel = @selectedApplication().model()
+                    console.log applicationModel.get('id');
                     if (applicationModel.get('id') == "NONE")
                         device.hasAccessRight(true)
                     else
@@ -1551,6 +1574,7 @@ define(['jquery',
            @deviceFilter = ko.observable("");
            @zoneFilter = ko.observable("");
            @personFilter = ko.observable("");
+           @layerappFilter = ko.observable("");
            #Valid only for dashboard.
            @applicationFilter = ko.observable("");
            @showApplicationWindow = (application) =>
@@ -1574,6 +1598,9 @@ define(['jquery',
            @filteredList = (list) =>
               console.log "filtering " + list
               opt = @[list+"Filter"]().split("=");
+              console.log "listName: " + list+"Filter";
+              console.log @;
+              console.log @[list+"Filter"];
               if opt.length <= 1
                 attr = "name";
                 search = opt[0];
@@ -1613,6 +1640,10 @@ define(['jquery',
                 return @filteredList("device") #commented for dashboard.
            , @)
 
+           @filteredLayApps = ko.computed(() =>
+              return @filteredList("layerapp")
+           , @)
+
            @filteredZones = ko.computed(() =>
               return @filteredList("zone")
            , @)
@@ -1627,6 +1658,7 @@ define(['jquery',
                 for device in @devices()
                   if device.isSelected()
                     selected++
+                    console.log device
                 return @devices().length == selected
 
               write: (val) =>
@@ -1647,6 +1679,19 @@ define(['jquery',
                return false;
              , @)
            #End valid for dashboard.
+
+          # LayApps management
+          #@selectedLayApplication = ko.observable();
+
+          #@selectedLayApplicationState = ko.computed( () =>
+          #   if(@selectedLayApplication())
+          #       return @selectedLayApplication().state();
+          #   else
+          #       return 'undefined';
+          #)
+
+
+
 
            # person management
 

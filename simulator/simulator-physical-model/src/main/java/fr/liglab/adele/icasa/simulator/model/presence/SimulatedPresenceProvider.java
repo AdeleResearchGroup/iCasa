@@ -26,7 +26,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Instantiate
 public class SimulatedPresenceProvider {
 
-    @Creator.Field Creator.Entity<SimulatedPresenceModel> creator;
+   /* @Creator.Field Creator.Entity<SimulatedPresenceModel> creator;
 
     @Creator.Field(SimulatedPresenceModel.RELATION_IS_ATTACHED) Creator.Relation<SimulatedPresenceModel,Zone> attachedPresModelCreator;
 
@@ -42,7 +42,7 @@ public class SimulatedPresenceProvider {
         String name = generateEntityName(zone);
         creator.delete(name);
         attachedPresModelCreator.delete(name,zone.getZoneName());
-    }
+    }*/
 
     private String generateEntityName(Zone zone){
         return zone.getZoneName()+".presence";

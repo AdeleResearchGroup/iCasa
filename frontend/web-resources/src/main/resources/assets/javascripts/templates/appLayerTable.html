@@ -1,0 +1,61 @@
+<!--
+
+
+      Copyright 2011-2012 Universite Joseph Fourier, LIG, ADELE Research Group
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
+
+-->
+<style>
+    table { table-layout: auto; }
+    table th i { cursor: pointer}
+    table th, table td { overflow: hidden; }
+</style>
+
+<table class="table table-striped table-bordered" id="layappsTab">
+    <!--    <div class="input-append">
+            <select class="span2" data-bind="options: $root.deviceTypes(), value: $root.newDeviceType, optionsText: 'name'"></select>
+            <a class="btn" id="createDeviceButton" data-bind="text: $root.getLocaleMessage('Create'),click: $root.createDevice"></a>
+        </div>
+
+        <p><button id="removeSelectedDeviceButtonId" class="btn" data-bind="text: $root.getLocaleMessage('Remove.Selected.Devices'),click: $root.removeSelectedDevices">Remove Selected Devices</button></p>
+    -->
+    <div class="controls controls-row">
+        <label class="span1" data-bind="text: $root.getLocaleMessage('Filter')"></label>
+        <input type="text" class="span2" data-bind="value: $root.deviceFilter, valueUpdate:'afterkeydown'" />
+    </div>
+
+    <thead>
+        <tr>
+            <th>
+                <input id="checkAllDeviceCheckboxId"  type="checkbox" data-bind="checked: checkAllDevices" />
+            </th>
+            <th data-bind="sortable: {obj: 'layapp', column: 'name'}">
+                <span data-bind="text: $root.getLocaleMessage('Name')"></span>
+            </th>
+            <th data-bind="sortable: {obj: 'layapp', column: 'id'}">
+                <span data-bind="text: $root.getLocaleMessage('Id')"></span>
+            </th>
+            <th>
+                <span data-bind="text: $root.getLocaleMessage('Location')"></span>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="filteredLayAppsTable" data-bind="foreach: $root.filteredLayApps()">
+        <tr data-bind="css : { warning: isHighlighted }">
+            <td><input type="checkbox" checked /></td>
+            <td><img class="deviceIcon" data-bind="attr: { src: imgSrc }, click: $root.showDeviceWindow "></img></td>
+            <td><a data-bind="text: name, click: $root.showDeviceWindow"/></td>
+            <td data-bind="text: location"></td>
+        </tr>
+    </tbody>
+</table>

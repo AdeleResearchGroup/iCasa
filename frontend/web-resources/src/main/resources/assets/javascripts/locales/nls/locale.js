@@ -40,6 +40,7 @@ define({
         "Reset.State" : "Réinitialiser",
         "Execute": "Exécuter",
         "iCasa.command":"Commande iCasa :",
+        "Apptest":"Applications",
         "Help":"Aide",
         "Edit":"Modifier",
         "Name":"Nom",
