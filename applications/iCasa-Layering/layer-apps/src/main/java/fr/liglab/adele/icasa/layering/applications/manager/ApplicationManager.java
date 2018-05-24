@@ -108,6 +108,19 @@ public class ApplicationManager {
     	return found;
     }
 
+    public void enable() {
+
+    	for (EntityProvider provider: providers) {
+        	for (String provided : provider.getProvidedEntities()) {
+        		
+        		if  (isApplicationEntity(provider,provided)) {
+        			provider.enable(provided);
+        		}
+        		
+ 			}
+		}
+    }
+
     public boolean disable(String entity) {
 
     	boolean found = false;
@@ -124,6 +137,20 @@ public class ApplicationManager {
 		}
     	
     	return found;
+    	
+    }
+
+    public void disable() {
+
+    	for (EntityProvider provider: providers) {
+        	for (String provided : provider.getProvidedEntities()) {
+        		
+        		if  (isApplicationEntity(provider,provided)) {
+        			provider.disable(provided);
+        		}
+        		
+ 			}
+		}
     	
     }
 

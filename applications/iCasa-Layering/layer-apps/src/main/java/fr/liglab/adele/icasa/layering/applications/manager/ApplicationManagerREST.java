@@ -10,11 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import org.wisdom.api.DefaultController;
+import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
 import org.wisdom.api.annotations.Route;
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
+
+import fr.liglab.adele.cream.model.introspection.EntityProvider;
 
 @Component(immediate = true)
 @Provides
@@ -23,14 +26,14 @@ import org.wisdom.api.http.Result;
 public class ApplicationManagerREST extends DefaultController {
 
 	@Requires(id = "manager", specification = ApplicationManager.class, optional = false)
-	private ApplicationManager appManager;
+	private ApplicationManager manager;
 
 	@Route(method = HttpMethod.GET, uri = "/applications")
 	public Result applications() {
 		try {
 			
 			JSONArray result = new JSONArray();
-			for (ApplicationDescription application : appManager.getApplications()) {
+			for (ApplicationDescription application : manager.getApplications()) {
 				result.put(application.serialize());
 			}
 			
@@ -41,4 +44,27 @@ public class ApplicationManagerREST extends DefaultController {
 		}
 	}
  
+    @Route(method = HttpMethod.GET, uri = "/applications/enable/{appid}")
+    public synchronized Result enable(@Parameter("appid") String appid) {
+    	boolean found = manager.enable(appid);
+        return found ? ok("<h3>Enabling implementation ("+appid+")</h3>" ).as(MimeTypes.HTML) : notFound();
+    }
+
+	@Route(method = HttpMethod.GET, uri = "/applications/enable")
+	public synchronized Result enable() {
+		manager.enable();
+		return ok();
+	}
+
+    @Route(method = HttpMethod.GET, uri = "/applications/disable/{appid}")
+    public synchronized Result disableApplication(@Parameter("appid") String appid) {
+    	boolean found = manager.disable(appid);
+        return found ? ok("<h3>Disabling implementation ("+appid+")</h3>" ).as(MimeTypes.HTML) : notFound();
+    }
+
+	@Route(method = HttpMethod.GET, uri = "/applications/disable")
+	public synchronized Result disableAllApplications() {
+		manager.disable();
+		return ok();
+	}
 }
