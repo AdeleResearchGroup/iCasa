@@ -98,10 +98,10 @@ function runtime(){
                 }else if(findnemo(layers,"fr.liglab.adele.icasa.device.GenericDevice")){//if it's a device--GREEN
                     BubbleBig[bubbleIndex].color="rgb(190,212,144)";
                     addCircle=true;
-                }else if(findnemo(layers,"fr.liglab.adele.icasa.layering.services.global.ServiceLayer")){//services --ORANGE
+                }else if(findnemo(layers,"fr.liglab.adele.icasa.layering.services.api.ServiceLayer")){//services --ORANGE
                     BubbleBig[bubbleIndex].color="rgb(250,231,212)";
                     addCircle=true;
-                }else if(findnemo(layers,"fr.liglab.adele.icasa.layering.applications.global.ApplicationLayer")){//applications--BLUE
+                }else if(findnemo(layers,"fr.liglab.adele.icasa.layering.applications.api.ApplicationLayer")){//applications--BLUE
                     BubbleBig[bubbleIndex].color="rgb(169,208,217)";
                     addCircle=true;
                 }else if(findnemo(layers,"fr.liglab.adele.icasa.location.Zone")){//zone--BROWN

@@ -48,7 +48,7 @@ public class UnitTestControllers {
         // Use a mock to simulate the template.
         // You can do this for every service and template your controller is using.
         controller.ContextStatus = mock(Template.class);
-        Result result = controller.ContextStatus();
+        Result result = controller.contextStatus();
         assertThat(result.getStatusCode()).isEqualTo(Status.OK);
     }
 

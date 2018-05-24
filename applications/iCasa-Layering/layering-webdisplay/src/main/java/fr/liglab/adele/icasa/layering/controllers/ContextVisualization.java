@@ -14,6 +14,6 @@ public class ContextVisualization extends DefaultController{
     @View("ContextStatus")
     Template ContextStatus;
 
-    @Route(method=HttpMethod.GET, uri ="/layers/ContextStatus")
-    public Result ContextStatus() { return ok(render(ContextStatus));}
+    @Route(method=HttpMethod.GET, uri ="/layers/diagram/context")
+    public Result contextStatus() { return ok(render(ContextStatus));}
 }

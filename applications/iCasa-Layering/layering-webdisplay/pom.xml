@@ -97,7 +97,6 @@
         <dependency>
             <groupId>org.wisdom-framework</groupId>
             <artifactId>wisdom-monitor</artifactId>
-            <version>0.8.0</version>
         </dependency>
         <dependency>
             <groupId>org.wisdom-framework</groupId>
@@ -165,7 +164,6 @@
         <dependency>
             <groupId>fr.liglab.adele.cream</groupId>
             <artifactId>cream.core</artifactId>
-            <version>${cream.version}</version>
         </dependency>
 
         <dependency>
@@ -193,14 +191,12 @@
             <plugin>
                 <groupId>org.wisdom-framework</groupId>
                 <artifactId>wisdom-maven-plugin</artifactId>
-                <version>0.8.0</version>
                 <extensions>true</extensions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.18</version>
                 <executions>
                     <execution>
                         <goals>

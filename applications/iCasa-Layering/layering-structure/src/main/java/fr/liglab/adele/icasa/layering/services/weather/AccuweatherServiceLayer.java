@@ -1,7 +1,7 @@
 package fr.liglab.adele.icasa.layering.services.weather;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.icasa.layering.services.global.ServiceLayer;
+import fr.liglab.adele.icasa.layering.services.api.ServiceLayer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,25 +10,20 @@ import java.net.URL;
 
 
 
-@ContextEntity(coreServices = {AccuweatherService.class})
-@SuppressWarnings("unused")
-public class AccuweatherServiceLayer implements AccuweatherService,ServiceLayer {
+@ContextEntity(coreServices = {AccuweatherService.class, ServiceLayer.class})
 
-    private boolean state=false;
+public class AccuweatherServiceLayer implements AccuweatherService, ServiceLayer {
+
     private int weatherValue = 0;
     private double curCityTemperature=0;
     private String curWeatherTxt = "";
 
-
-    //states from ServiceLayer interface
-    @ContextEntity.State.Field(service = ServiceLayer.class,state = ServiceLayer.CURRENT_STATE,value="init")
-    public String status;
+    
     @ContextEntity.State.Field(service = ServiceLayer.class,state = ServiceLayer.SERVICE_QOS, directAccess = true, value="0")
     public int AppQos;
-    @ContextEntity.State.Field(service = ServiceLayer.class,state = ServiceLayer.ZONE_ATTACHED)
-    public String zoneName;
-    @ContextEntity.State.Field(service = ServiceLayer.class,state = ServiceLayer.LOCKED)
-    public String lockstatus;
+
+    @ContextEntity.State.Field(service=ServiceLayer.class,state = ServiceLayer.NAME,directAccess = true)
+    public String name;
 
     public String[] getHTML(String cityId, String apiKey){
         String url ="[{\"LocalObservationDateTime\":\"2018-02-22T16:45:00+01:00\",\"EpochTime\":1519314300,\"WeatherText\":\"Cloudy\",\"WeatherIcon\":7,\"IsDayTime\":true,\"Temperature\":{\"Metric\":{\"Value\":4.0,\"Unit\":\"C\",\"UnitType\":17},\"Imperial\":{\"Value\":39.0,\"Unit\":\"F\",\"UnitType\":18}},\"MobileLink\":\"http://m.accuweather.com/en/fr/grenoble/136555/current-weather/136555?lang=en-us\",\"Link\":\"http://www.accuweather.com/en/fr/grenoble/136555/current-weather/136555?lang=en-us\"}]";
@@ -92,26 +87,11 @@ public class AccuweatherServiceLayer implements AccuweatherService,ServiceLayer 
 
     @Override
     public String getServiceName() {
-        return "WEATHERSERVICE";
-    }
-
-    @Override
-    public boolean getRegistrationState() {
-        return false;
+        return name;
     }
 
     @Override
     public int getServiceQoS() {
         return 0;
-    }
-
-    @Override
-    public String getState() {
-        return "state";
-    }
-
-    @Override
-    public String setState(int illumination) {
-        return "stateSET";
     }
 }
