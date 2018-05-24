@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wisdom.api.DefaultController;
+import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
 import org.wisdom.api.annotations.Route;
 import org.wisdom.api.http.HttpMethod;
@@ -49,6 +50,51 @@ public class layerappREST extends DefaultController {
         }
         }
 
+    @Route(method = HttpMethod.GET, uri = "/layerapps/enable/{appid}")
+    public synchronized Result enableApplication(@Parameter("appid") String appid){
+        return ok(applicationStateChanger(appid,true)).as(MimeTypes.HTML);
+    }
+
+    @Route(method = HttpMethod.GET, uri = "/layerapps/disable/{appid}")
+    public synchronized Result disableApplication(@Parameter("appid") String appid){
+        return ok(applicationStateChanger(appid,false)).as(MimeTypes.HTML);
+    }
+
+    /**
+     *
+     * @param appId The Global name of the application extracted from the provided entities
+     * @param appState true toenablme application, false to disable it
+     * @return an html formated String with the
+     */
+    private String applicationStateChanger(String appId, boolean appState){
+        for (EntityProvider P:appManager.getAppsInfo()){
+            String GlobalAppName="";
+            if(!P.getProvidedEntities().isEmpty()){
+                GlobalAppName=extractAppName(P.getProvidedEntities().toArray()[0].toString());
+            }
+
+            for(String implementation:P.getProvidedEntities()){
+                for (String service:P.getPotentiallyProvidedEntityServices(implementation)) {
+                    if(service.equals("fr.liglab.adele.icasa.layering.applications.global.ApplicationLayer")){//get the application providers
+                        if(GlobalAppName.equals(appId)){//App name found
+                            if(appState==true){
+                                String a="<h3>Enabling implementation("+implementation+")...  Last result:"+P.enable(implementation)+"</h3>";
+                                return a;
+                            }else{
+                                String a="<h3>Disabling implementation("+implementation+")...  result:"+P.disable(implementation)+"</h3>";
+                                return a;
+                            }
+
+
+                        }
+                    }
+                }
+
+            }
+        }
+        return "<h3>Application not found</h3>";
+    }
+
 
     /**
      * Returns a JSON array with all the Layer Apps.
@@ -56,10 +102,10 @@ public class layerappREST extends DefaultController {
      * @return a JSON array with all the Layer Apps.
      */
 
-    private static JSONObject serialize(String Name, String Class, String Factory, String State)throws JSONException{
+    private static JSONObject serialize(String Name, String Implem, String Factory, String State)throws JSONException{
         JSONObject content = new JSONObject();
-        content.putOnce("name",Class);
-        content.putOnce("id",Name);
+        content.putOnce("name",Name);
+        content.putOnce("id",Implem);
         content.putOnce("version",Factory);
         content.putOnce("state",State);
         return content;
@@ -74,49 +120,40 @@ public class layerappREST extends DefaultController {
         JSONArray currentLayerapps = new JSONArray();
 
         for (EntityProvider P:appManager.getAppsInfo()){
-            for (String service:P.getPotentiallyProvidedEntityServices()){
-                if(service.equals("fr.liglab.adele.icasa.layering.applications.global.ApplicationLayer")){
-                    String temp =P.getProvidedEntities().toArray()[0].toString();
-                    String fct=P.getInstances((String) P.getProvidedEntities().toArray()[0],true).toString();
-                    String[] temp2=temp.split(Pattern.quote("."));
-                    String[] temp3=temp2[temp2.length-1].split(Pattern.quote("Impl"));
-                    System.out.println(temp+"+"+temp2+" l: "+temp2.length+"++"+temp3.length+temp3[0]);
-                    System.out.println(temp2[temp2.length-1]);
-                    currentLayerapps.put(serialize(temp3[0],temp,fct,"valid"));
+            for(String implementation:P.getProvidedEntities()){
+                for (String service:P.getPotentiallyProvidedEntityServices(implementation)) {
+                    if(service.equals("fr.liglab.adele.icasa.layering.applications.global.ApplicationLayer")){//get the application providers
+                        /*System.out.println("PRovider:"+P.getName());
+                        System.out.println("IMplem:"+implementation);
+                        System.out.println("SErvice:"+service);
+                        System.out.println("[Instances(true]"+P.getInstances(implementation,true));
+                        System.out.println("[Instances[false]"+P.getInstances(implementation,false));*/
+                        String GlobalAppName=extractAppName(P.getProvidedEntities().toArray()[0].toString());
+                        String instances = P.getInstances(implementation,true).toString();
+                        String State="unknown";
+                        if(instances.equals("[]")){
+                            State="Stranded";
+                        }else if(P.getInstances(implementation,false).isEmpty()){
+                            State="Stopped";
+                        }else {
+                            State="Started";
+                        }
+                        currentLayerapps.put(serialize(GlobalAppName,implementation,instances,State));
+                    }
                 }
+
             }
         }
 
 
 
-
-
-       /* System.out.println("apppppppps:");
-        System.out.println(appManager);*/
-
-       System.out.println(appManager.getValidApps());
-
-        System.out.println("forrrrrrrrrrrrrr:"+appManager.getValidApps().size());
-        //List<String>  apps =;
-
-       // currentLayerapps.put(attributes);
-
-
-      /* for(String curApp: appManager.getValidApps()){
-           attributes.putOnce("name",currentLayerapps.put(Collections.singleton(curApp)));
-           attributes.putOnce("factory",currentLayerapps.put("test"));
-           System.out.println("att:");
-           System.out.println(curApp);
-           System.out.println(attributes);
-           System.out.println("attttttt:");
-           currentLayerapps.put(attributes);
-        }*/
-        System.out.println("NOOOOOOOOOOforrrrrrrrrrrrrr:");
-        //currentLayerapps.put("you");
-       /* for (ApplicationLayer app : apps){
-            JSONObject appJSON = 3;
-        }*/
        return currentLayerapps.toString();
+    }
+
+    private String extractAppName(String implementation){
+        String[] temp=implementation.split(Pattern.quote("."));
+        String[] temp2=temp[temp.length-1].split(Pattern.quote("Impl"));
+        return temp2[0];
     }
 
 }

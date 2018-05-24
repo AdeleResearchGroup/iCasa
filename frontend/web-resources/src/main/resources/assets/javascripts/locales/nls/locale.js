@@ -74,6 +74,7 @@ define({
         "Denied":"Refusé",
         "Granted":"Autorisé",
         "Map":"Plan",
+        "Instances":"Instances",
         "Not.Connected":"Déconnecté"
     },
     "en" : true

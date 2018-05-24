@@ -40,7 +40,6 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
                 super
                 @accessRights = new DataModel.Collections.AccessRights()
                 #Get access right for the created application model.
-                console.log @get('id');
                 if @get('id')? && @.get('id') != "NONE"
                     @accessRights.url = "#{serverUrl}/policies/application/" + @.get('id');
                     @accessRights.fetch();
@@ -127,7 +126,6 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
 
          # initial import of data model
          DataModel.models.clock = new DataModel.Models.Clock({id: "default"});
-         console.log DataModel.models.clock;
 
          DataModel.collections.scripts = new DataModel.Collections.Scripts();
 
@@ -138,10 +136,8 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
          DataModel.collections.personTypes = new DataModel.Collections.PersonTypes();
 
          DataModel.collections.devices = new DataModel.Collections.Devices();
-         console.log DataModel.collections.devices;
 
          DataModel.collections.LayerApps = new DataModel.Collections.LayerApps();
-         console.log DataModel.Collections.LayerApps;
 
          DataModel.collections.deviceTypes = new DataModel.Collections.SimulatedDeviceTypes();
 
@@ -189,7 +185,6 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
                  if (!initialConnection)
                    initialConnection = true;
                    @setConnected(true);
-                 console.log(data);
 
                error : (err) =>
                  @setConnected(false);

@@ -1454,8 +1454,8 @@ define(['jquery',
            @deviceTypes = kb.collectionObservable(DataModel.collections.deviceTypes, {view_model: DeviceTypeViewModel});
 
            @devices = kb.collectionObservable(DataModel.collections.devices, {view_model: DeviceViewModel} );
-           console.log("DEVICES: ")
-           console.log(@devices);
+           #console.log("DEVICES: ")
+           #console.log(@devices);
            @updateDeviceWidgets= (newValue) =>
              ko.utils.arrayForEach(@devices(), (device) =>
                if (device == undefined)
@@ -1499,9 +1499,7 @@ define(['jquery',
              @updateSelectedApplication = ()=>
                 console.log "calculating selected application rights..."
                 ko.utils.arrayForEach(@.devices(), (device) =>
-                    console.log "inside knockout Utils"
                     applicationModel = @selectedApplication().model()
-                    console.log applicationModel.get('id');
                     if (applicationModel.get('id') == "NONE")
                         device.hasAccessRight(true)
                     else
@@ -1575,6 +1573,11 @@ define(['jquery',
            @zoneFilter = ko.observable("");
            @personFilter = ko.observable("");
            @layerappFilter = ko.observable("");
+
+           @showLayAppWindow = (layapp) =>
+              layapp.statusWindowVisible(false);
+              layapp.statusWindowVisible(true);
+
            #Valid only for dashboard.
            @applicationFilter = ko.observable("");
            @showApplicationWindow = (application) =>
@@ -1596,11 +1599,7 @@ define(['jquery',
              @[list+"Filter"](tps);
 
            @filteredList = (list) =>
-              console.log "filtering " + list
               opt = @[list+"Filter"]().split("=");
-              console.log "listName: " + list+"Filter";
-              console.log @;
-              console.log @[list+"Filter"];
               if opt.length <= 1
                 attr = "name";
                 search = opt[0];
@@ -1658,7 +1657,7 @@ define(['jquery',
                 for device in @devices()
                   if device.isSelected()
                     selected++
-                    console.log device
+                    #console.log device
                 return @devices().length == selected
 
               write: (val) =>
@@ -1681,14 +1680,28 @@ define(['jquery',
            #End valid for dashboard.
 
           # LayApps management
-          #@selectedLayApplication = ko.observable();
+           @selectedLayApplication =  ko.observable("");
 
-          #@selectedLayApplicationState = ko.computed( () =>
-          #   if(@selectedLayApplication())
-          #       return @selectedLayApplication().state();
-          #   else
-          #       return 'undefined';
-          #)
+           @selectedLayApplicationState = ko.computed( () =>
+              if(@selectedLayApplication())
+                  return @selectedLayApplication().state();
+              else
+                  return 'undefined';
+           )
+
+           #@checkAllLayApps = ko.computed({
+           #   read: =>
+           #     selected = 0
+           #     for layapp in @layerapps()
+           #       if layapp.isSelected()
+           #         selected++
+           #         console.log layapp
+           #     return @devices().length == selected
+
+           #   write: (val) =>
+           #     for layapp in @layerapps()
+           #       layapp.isSelected(val)
+           #}, @)
 
 
 

@@ -22,6 +22,7 @@ public class LightningAppProvider {
        // System.out.println("is accu there?: "+accu.getInstances().isEmpty());
 
         lightapp.create("LightApp");
+        lightapp.create("LightApp2");
        // shutterserv.create("shutterTest");
 
     /*    if(accu.getInstances().isEmpty()){
