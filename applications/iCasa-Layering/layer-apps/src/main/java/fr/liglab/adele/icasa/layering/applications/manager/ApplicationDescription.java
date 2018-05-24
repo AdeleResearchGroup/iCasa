@@ -1,33 +1,34 @@
 package fr.liglab.adele.icasa.layering.applications.manager;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ApplicationDescription {
 
-	public final String provider;
-	public final String implementation;
-	public final String instance;
-	public final boolean isValid;
+	public final String 	implementation;
+	public final String 	instances;
+	public final boolean 	enabled;
 	
-	public ApplicationDescription(String provider, String implementation, String instance, boolean isValid) {
-		this.provider 			= provider;
+	public ApplicationDescription(String implementation, String instances, boolean enabled) {
 		this.implementation		= implementation;
-		this.instance			= instance;
-		
-		this.isValid			= isValid;
+		this.instances			= instances;
+		this.enabled			= enabled;
 	}
 	
     public JSONObject serialize() throws JSONException {
     	
         JSONObject content = new JSONObject();
        
-        content.putOnce("provider",provider);
         content.putOnce("implementation",implementation);
-        content.putOnce("id",instance);
-        content.putOnce("state",isValid);
+        content.putOnce("instances",instances);
+        content.putOnce("enabled",status(instances,enabled));
         
         return content;
+    }
+    
+    private static String status(String instances, boolean enabled) {
+    	return instances.equals("[]") ? "Stranded" : enabled ? "Started" : "Stopped";
     }
 
 }

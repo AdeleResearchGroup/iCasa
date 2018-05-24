@@ -74,5 +74,6 @@ define({
     "Denied":"Denied",
     "Granted":"Granted",
     "Map":"Map",
+    "Instances":"Instances",
     "Not.Connected":"Not Connected"
 });

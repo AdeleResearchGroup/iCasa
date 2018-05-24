@@ -58,7 +58,8 @@ public class ApplicationManager {
 
     public Collection<ApplicationDescription> getApplications() {
     	
-    	Collection<ApplicationDescription> result = new ArrayList<>();
+    	Map<String,Set<String>> instancesByEntity 	= new HashMap<>();
+    	Map<String,Boolean> statusByEntity 			= new HashMap<>();
 
         for (EntityProvider provider: providers) {
         	for (String entity : provider.getProvidedEntities()) {
@@ -67,16 +68,63 @@ public class ApplicationManager {
         			continue;
         		}
         		
-        		for (String instance : provider.getInstances(entity, true)) {
-       				ApplicationDescription description = new ApplicationDescription(provider.getName(),entity,instance,true);
-					result.add(description);
+        		if (! instancesByEntity.containsKey(entity)) {
+        			instancesByEntity.put(entity,new HashSet<>());
         		}
+        		
+        		if (! statusByEntity.containsKey(entity)) {
+        			statusByEntity.put(entity,false);
+        		}
+
+        		instancesByEntity.get(entity).addAll(provider.getInstances(entity,true));
+        		statusByEntity.put(entity,statusByEntity.get(entity) || ! provider.getInstances(entity,false).isEmpty());
 			}
 		}
-        
+
+        List<ApplicationDescription> result = new ArrayList<>();
+        for (String entity : instancesByEntity.keySet()) {
+			ApplicationDescription description = new ApplicationDescription(entity,instancesByEntity.get(entity).toString(),statusByEntity.get(entity));
+			result.add(description);
+		}
+
 		return result;
     }
 
+    public boolean enable(String entity) {
 
+    	boolean found = false;
+    	
+    	for (EntityProvider provider: providers) {
+        	for (String provided : provider.getProvidedEntities()) {
+        		
+        		if  (isApplicationEntity(provider,provided) && entity.equals(provided)) {
+        			provider.enable(entity);
+        			found = true;
+        		}
+        		
+ 			}
+		}
+    	
+    	return found;
+    }
+
+    public boolean disable(String entity) {
+
+    	boolean found = false;
+    	
+    	for (EntityProvider provider: providers) {
+        	for (String provided : provider.getProvidedEntities()) {
+        		
+        		if  (isApplicationEntity(provider,provided) && entity.equals(provided)) {
+        			provider.disable(entity);
+        			found = true;
+        		}
+        		
+ 			}
+		}
+    	
+    	return found;
+    	
+    }
 
 }

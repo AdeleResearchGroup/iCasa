@@ -31,31 +31,27 @@
     -->
     <div class="controls controls-row">
         <label class="span1" data-bind="text: $root.getLocaleMessage('Filter')"></label>
-        <input type="text" class="span2" data-bind="value: $root.deviceFilter, valueUpdate:'afterkeydown'" />
+        <input type="text" class="span2" data-bind="value: $root.layerappFilter, valueUpdate:'afterkeydown'" />
     </div>
 
     <thead>
         <tr>
             <th>
-                <input id="checkAllDeviceCheckboxId"  type="checkbox" data-bind="checked: checkAllDevices" />
+
             </th>
             <th data-bind="sortable: {obj: 'layapp', column: 'name'}">
                 <span data-bind="text: $root.getLocaleMessage('Name')"></span>
             </th>
-            <th data-bind="sortable: {obj: 'layapp', column: 'id'}">
-                <span data-bind="text: $root.getLocaleMessage('Id')"></span>
+            <th data-bind="sortable: {obj: 'layapp', column: 'Instances'}">
+                <span data-bind="text: $root.getLocaleMessage('Instances')"></span>
             </th>
             <th>
-                <span data-bind="text: $root.getLocaleMessage('Location')"></span>
+                <span data-bind="text: $root.getLocaleMessage('Status')"></span>
             </th>
         </tr>
     </thead>
     <tbody id="filteredLayAppsTable" data-bind="foreach: $root.filteredLayApps()">
-        <tr data-bind="css : { warning: isHighlighted }">
-            <td><input type="checkbox" checked /></td>
-            <td><img class="deviceIcon" data-bind="attr: { src: imgSrc }, click: $root.showDeviceWindow "></img></td>
-            <td><a data-bind="text: name, click: $root.showDeviceWindow"/></td>
-            <td data-bind="text: location"></td>
-        </tr>
+
     </tbody>
 </table>
+<script src="/assets/javascripts/status/applications.js"> </script>
