@@ -55,9 +55,15 @@ public class layerappREST extends DefaultController {
         return ok(applicationStateChanger(appid,true)).as(MimeTypes.HTML);
     }
 
+
     @Route(method = HttpMethod.GET, uri = "/layerapps/disable/{appid}")
     public synchronized Result disableApplication(@Parameter("appid") String appid){
         return ok(applicationStateChanger(appid,false)).as(MimeTypes.HTML);
+    }
+
+    @Route(method = HttpMethod.GET, uri = "/layerapps/disableall")
+    public synchronized Result disableAllApplications(){
+        return ok(applicationStateChanger("ALL",false)).as(MimeTypes.HTML);
     }
 
     /**
@@ -76,7 +82,9 @@ public class layerappREST extends DefaultController {
             for(String implementation:P.getProvidedEntities()){
                 for (String service:P.getPotentiallyProvidedEntityServices(implementation)) {
                     if(service.equals("fr.liglab.adele.icasa.layering.applications.global.ApplicationLayer")){//get the application providers
-                        if(GlobalAppName.equals(appId)){//App name found
+                        if(appId.equals("ALL")){
+                            P.disable(implementation);
+                        }else if(GlobalAppName.equals(appId)){//App name found
                             if(appState==true){
                                 String a="<h3>Enabling implementation("+implementation+")...  Last result:"+P.enable(implementation)+"</h3>";
                                 return a;
@@ -84,15 +92,17 @@ public class layerappREST extends DefaultController {
                                 String a="<h3>Disabling implementation("+implementation+")...  result:"+P.disable(implementation)+"</h3>";
                                 return a;
                             }
-
-
                         }
                     }
                 }
 
             }
         }
-        return "<h3>Application not found</h3>";
+        if(appId.equals("ALL")){
+            return "<h3>all apps disabled</h3>";
+        }else{
+            return "<h3>Application not found</h3>";
+        }
     }
 
 
