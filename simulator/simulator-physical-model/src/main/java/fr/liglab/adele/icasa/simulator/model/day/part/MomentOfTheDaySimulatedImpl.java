@@ -18,16 +18,18 @@ package fr.liglab.adele.icasa.simulator.model.day.part;
 import fr.liglab.adele.icasa.clockservice.Clock;
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay;
+import fr.liglab.adele.icasa.service.scheduler.PeriodicRunnable;
+
 import org.apache.felix.ipojo.annotations.Requires;
 import org.joda.time.DateTime;
 
-import java.util.function.Supplier;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
  */
-@ContextEntity(coreServices = MomentOfTheDay.class)
-public class MomentOfTheDaySimulatedImpl implements MomentOfTheDay {
+@ContextEntity(coreServices = {MomentOfTheDay.class, PeriodicRunnable.class})
+public class MomentOfTheDaySimulatedImpl implements MomentOfTheDay, PeriodicRunnable {
 
     @ContextEntity.State.Field(service = MomentOfTheDay.class,state = MomentOfTheDay.CURRENT_MOMENT_OF_THE_DAY)
     private PartOfTheDay currentMomentOfTheDay;
@@ -40,10 +42,23 @@ public class MomentOfTheDaySimulatedImpl implements MomentOfTheDay {
     @Requires
     Clock clock;
 
-    @ContextEntity.State.Pull(service = MomentOfTheDay.class,state = MomentOfTheDay.CURRENT_MOMENT_OF_THE_DAY)
-    Supplier<PartOfTheDay> pullMomentOfTheDay = () ->{
-        DateTime dateTimeEli =new DateTime(clock.currentTimeMillis());
-        int hour = dateTimeEli.getHourOfDay();
-        return PartOfTheDay.getCorrespondingMoment(hour);
-    };
+    @ContextEntity.State.Push(service = MomentOfTheDay.class,state = MomentOfTheDay.CURRENT_MOMENT_OF_THE_DAY)
+    public PartOfTheDay pushChange(DateTime currentTime) {
+        return PartOfTheDay.getCorrespondingMoment(currentTime.getHourOfDay());
+    }
+
+	@Override
+	public void run() {
+		pushChange(new DateTime(clock.currentTimeMillis()));
+	}
+
+	@Override
+	public long getPeriod() {
+		return 1;
+	}
+
+	@Override
+	public TimeUnit getUnit() {
+		return TimeUnit.HOURS;
+	}
 }

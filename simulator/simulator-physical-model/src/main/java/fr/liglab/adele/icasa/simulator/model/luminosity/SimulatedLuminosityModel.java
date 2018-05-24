@@ -39,6 +39,7 @@ import fr.liglab.adele.icasa.location.Zone;
 import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay;
 import fr.liglab.adele.icasa.simulator.model.api.LuminosityModel;
 import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Modified;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
 
@@ -82,7 +83,7 @@ public class SimulatedLuminosityModel implements LuminosityModel{
         return currentLuminosity;
     }
 
-    @Requires(specification = MomentOfTheDay.class)
+    @Requires(id ="currentMoment", specification = MomentOfTheDay.class)
     MomentOfTheDay momentOfTheDay;
 
     @Requires(specification = BinaryLight.class,filter = "(locatedobject.object.zone=${luminositymodel.zone.attached})",optional = true)
@@ -106,14 +107,31 @@ public class SimulatedLuminosityModel implements LuminosityModel{
     }
 
     /**
+     * recalculates the luminosity on-demand or as time passses
+     *
+     */
+    @ContextEntity.State.Pull(service = LuminosityModel.class,state = LuminosityModel.CURRENT_LUMINOSITY)
+    Supplier<Double> pullLuminosity = this::estimatedIlluminance;
+
+    @Modified(id="currentMoment")
+    private void momentUpdated() {
+    	pushLuminosity();
+    }
+    
+    @ContextEntity.State.Push(service = LuminosityModel.class,state = LuminosityModel.CURRENT_LUMINOSITY)
+    private double pushLuminosity() {
+    	return estimatedIlluminance();
+    }
+
+    /**
      * Computes and updates the illuminance property value of specified zone .
      * The formula used to compute the illuminance is :
      * Illuminance [cd/m² or lux]=(power[W]*680.0[lumens])/surface[m²]
      *
      */
-    @ContextEntity.State.Pull(service = LuminosityModel.class,state = LuminosityModel.CURRENT_LUMINOSITY)
-    Supplier<Double> pullLuminosity = () -> {
-        double returnedIlluminance = getLightFactor();
+    private double estimatedIlluminance() {
+
+    	double returnedIlluminance = getLightFactor();
         double powerLevelTotal = 0.0;
 
         for (BinaryLight binaryLight : binaryLights){
@@ -135,9 +153,11 @@ public class SimulatedLuminosityModel implements LuminosityModel{
 
             }
         }
-        return        returnedIlluminance += ( (powerLevelTotal  * LUMENS_CONSTANT_VALUE) / zone.getXLength()*zone.getYLength());
-    };
-
+        
+        return returnedIlluminance += ( (powerLevelTotal  * LUMENS_CONSTANT_VALUE) / zone.getXLength()*zone.getYLength());
+    	
+    }
+    
     private double getLightFactor(){
         MomentOfTheDay.PartOfTheDay currentPartOfTheDay = momentOfTheDay.getCurrentPartOfTheDay();
         if (currentPartOfTheDay == null){
