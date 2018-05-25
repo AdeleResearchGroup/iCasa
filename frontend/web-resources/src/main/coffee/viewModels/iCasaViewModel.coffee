@@ -413,12 +413,29 @@ define(['jquery',
            super(model)
            @state = kb.observable(model, 'state');
 
-    class LayerAppsViewModel extends NamedViewModel
+    class LayerAppsViewModel extends kb.ViewModel
         constructor: (model) ->
            super(model)
-           @name = kb.observable(model,'name');
-           @id = kb.observable(model, 'id');
+           
+           @implementation	= kb.observable(model,'implementation')
+           @instances 		= kb.observable(model,'instances')
+           @enabled 		= kb.observable(model,'enabled')
+           
+           @updateEnabled = () =>
+              alert(@implementation()+" will be updated to "+@isSelected())
 
+           @isSelected = ko.observable(@enabled)
+           @isSelected.subscribe(@updateEnabled)
+
+           @name = ko.computed =>
+                @implementation()+" modified"
+
+           @status = ko.computed =>
+                if (@enabled())
+                	"Started" 
+                else 
+                	"Stopped";
+ 
 
     class PositionedImageViewModel extends NamedViewModel
         constructor: (model) ->
@@ -1678,33 +1695,6 @@ define(['jquery',
                return false;
              , @)
            #End valid for dashboard.
-
-          # LayApps management
-           @selectedLayApplication =  ko.observable("");
-
-           @selectedLayApplicationState = ko.computed( () =>
-              if(@selectedLayApplication())
-                  return @selectedLayApplication().state();
-              else
-                  return 'undefined';
-           )
-
-           #@checkAllLayApps = ko.computed({
-           #   read: =>
-           #     selected = 0
-           #     for layapp in @layerapps()
-           #       if layapp.isSelected()
-           #         selected++
-           #         console.log layapp
-           #     return @devices().length == selected
-
-           #   write: (val) =>
-           #     for layapp in @layerapps()
-           #       layapp.isSelected(val)
-           #}, @)
-
-
-
 
            # person management
 

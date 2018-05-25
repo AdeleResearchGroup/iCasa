@@ -17,12 +17,10 @@ import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
 
-import fr.liglab.adele.cream.model.introspection.EntityProvider;
-
 @Component(immediate = true)
 @Provides
 @Instantiate
-@Path("/icasa/layer")
+@Path("/icasa/layers")
 public class ApplicationManagerREST extends DefaultController {
 
 	@Requires(id = "manager", specification = ApplicationManager.class, optional = false)
@@ -53,7 +51,7 @@ public class ApplicationManagerREST extends DefaultController {
 	@Route(method = HttpMethod.GET, uri = "/applications/enable")
 	public synchronized Result enable() {
 		manager.enable();
-		return ok();
+		return ok("<h3>Enabling implementations</h3>");
 	}
 
     @Route(method = HttpMethod.GET, uri = "/applications/disable/{appid}")
@@ -65,6 +63,6 @@ public class ApplicationManagerREST extends DefaultController {
 	@Route(method = HttpMethod.GET, uri = "/applications/disable")
 	public synchronized Result disableAllApplications() {
 		manager.disable();
-		return ok();
+		return ok("<h3>Disabling implementations</h3>");
 	}
 }

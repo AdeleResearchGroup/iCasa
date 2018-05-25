@@ -56,7 +56,7 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
             urlRoot : "/dashboard/frontend"
 
          class DataModel.Models.Layerapp extends Backbone.Model
-            urlRoot : "#server#/layerapps/layerapps".replace /#server#/, serverUrl
+            urlRoot : "#server#/layers/applications".replace /#server#/, serverUrl
 
          class DataModel.Models.Device extends Backbone.Model
             urlRoot : "#server#/devices/device".replace /#server#/, serverUrl
@@ -74,7 +74,7 @@ define(['jquery', 'backbone', 'underscore', 'hubu', 'contracts/DataModelConnecti
             model: DataModel.Models.Device
 
          class DataModel.Collections.LayerApps extends Backbone.Collection
-            url: "#server#/layerapps/layerapps".replace /#server#/, serverUrl
+            url: "#server#/layers/applications".replace /#server#/, serverUrl
             model: DataModel.Models.Layerapp
 
          class DataModel.Models.DeviceType extends Backbone.Model

@@ -1,6 +1,6 @@
 function runtime(){
 	document.getElementById("runtime").innerHTML = "";
-    $.ajax({url: "http://localhost:9000/layers/context", type: "GET"}).done(function(resources){
+    $.ajax({url: "http://localhost:9000/icasa/layers/context", type: "GET"}).done(function(resources){
         //console.log(resources);//every context Entity
         var numberOfbubbles=resources.length;
 		var bubbleRadius=rSize(RaC(numberOfbubbles).length);

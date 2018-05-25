@@ -6,6 +6,7 @@ import fr.liglab.adele.cream.administration.api.ImmutableContextEntity;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.wisdom.api.DefaultController;
 import org.wisdom.api.annotations.Controller;
+import org.wisdom.api.annotations.Path;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Route;
 import org.wisdom.api.annotations.View;
@@ -15,7 +16,7 @@ import org.wisdom.api.http.Result;
 import org.wisdom.api.templates.Template;
 
 @Controller
-@SuppressWarnings("unused")
+@Path("/icasa/layers")
 public class ContextContent extends DefaultController {
 
     @Requires
@@ -26,7 +27,7 @@ public class ContextContent extends DefaultController {
     @SuppressWarnings("unused")
     private AdministrationService contextAdministrationService;
 
-    @Route(method = HttpMethod.GET, uri = "/layers/context")
+    @Route(method = HttpMethod.GET, uri = "/context")
     @SuppressWarnings("unused")
     public Result getContext(){
         ArrayNode result = json.newArray();
@@ -40,7 +41,7 @@ public class ContextContent extends DefaultController {
         return ok(result);
     }
 
-    @Route(method = HttpMethod.GET, uri = "/layers/context/{id}")
+    @Route(method = HttpMethod.GET, uri = "/context/{id}")
     @SuppressWarnings("unused")
     public Result getContextEntity(@Parameter("id") String id){
 

@@ -22,13 +22,9 @@ public class ApplicationDescription {
        
         content.putOnce("implementation",implementation);
         content.putOnce("instances",instances);
-        content.putOnce("enabled",status(instances,enabled));
+        content.putOnce("enabled",enabled);
         
         return content;
     }
     
-    private static String status(String instances, boolean enabled) {
-    	return instances.equals("[]") ? "Stranded" : enabled ? "Started" : "Stopped";
-    }
-
 }
