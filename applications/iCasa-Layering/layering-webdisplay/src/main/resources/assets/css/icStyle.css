@@ -282,3 +282,13 @@ svg {
 	padding:10px;
 	margin:0;
 }
+.explication {
+	border: none;
+	color: black;
+	padding: 1px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 1px 10px 1px 10px;
+	cursor: pointer;
+}

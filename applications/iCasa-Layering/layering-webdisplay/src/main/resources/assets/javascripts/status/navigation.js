@@ -18,20 +18,30 @@ function setActiveLink(fragmentId){
 					case "runtime":
 						svg1.style("display", "block");
 						svg2.style("display", "none");
-						svg3.style("display","none");
+                        svg3.style("display","none");
+                        svg4.style("display","none");
 					break;
 					
 					case "context":
 						svg1.style("display", "none");
 						svg2.style("display", "block");
 						svg3.style("display","none");
+                        svg4.style("display","none");
 					break;
 					
 					case "services":
 						svg1.style("display","none");
 						svg2.style("display","none");
 						svg3.style("display","block");
+                        svg4.style("display","none");
 					break;
+
+                  case "tests":
+                      svg1.style("display","none");
+                      svg2.style("display","none");
+                      svg3.style("display","none");
+                      svg4.style("display","block");
+                      break;
 					
 					default:
 					

@@ -49,6 +49,12 @@
 }
 
 
+    .bDevice{
+        background-color: #4CAF50;
+
+    }
+
+
     .btn-group .button {
     background-color: #4CAF50; /* Green */
         border: none;

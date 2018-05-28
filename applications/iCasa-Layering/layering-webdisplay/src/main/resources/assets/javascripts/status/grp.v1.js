@@ -57,34 +57,35 @@
 				valuesY=[];
 				valuesR=[];
 				valuesC=[];
+				Yoffset=6;
 				for(i=0;i<coor.length;i++){
 					//first small bubble
 					valuesX[longIndex]=coor[i][0]-radio;
-					valuesY[longIndex]=coor[i][1]+(coor[i][1]/100);
+					valuesY[longIndex]=coor[i][1]-(coor[i][1]/Yoffset)+(coor[i][1]/100);
 					valuesR[longIndex]=radio/3;
 					valuesC[longIndex]="rgb(190,137,74)";
 					longIndex+=1;
 					//second small bubble
 					valuesX[longIndex]=coor[i][0]-(0.7*radio);
-					valuesY[longIndex]=coor[i][1]-(0.7*radio);
+					valuesY[longIndex]=coor[i][1]-(coor[i][1]/Yoffset)-(0.7*radio);
 					valuesR[longIndex]=radio/3;
 					valuesC[longIndex]="rgb(255,128,0)";
 					longIndex+=1;
 					//third small bubble
 					valuesX[longIndex]=coor[i][0]+(coor[i][0]/100);
-					valuesY[longIndex]=coor[i][1]-radio;
+					valuesY[longIndex]=coor[i][1]-(coor[i][1]/Yoffset)-radio;
 					valuesR[longIndex]=radio/3;
 					valuesC[longIndex]="rgb(1,160,198)";
 					longIndex+=1;
 					//fourth small bubble
 					valuesX[longIndex]=coor[i][0]+(0.7*radio);
-					valuesY[longIndex]=coor[i][1]-(0.7*radio);
+					valuesY[longIndex]=coor[i][1]-(coor[i][1]/Yoffset)-(0.7*radio);
 					valuesR[longIndex]=radio/3;
 					valuesC[longIndex]="rgb(128,196,28)";
 					longIndex+=1;
 					//large bubble
 					valuesX[longIndex]=coor[i][0];
-					valuesY[longIndex]=coor[i][1];
+					valuesY[longIndex]=coor[i][1]-(coor[i][1]/Yoffset);
 					valuesR[longIndex]=radio;
 					valuesC[longIndex]="rgb(255,255,255)";
 					longIndex+=1;
