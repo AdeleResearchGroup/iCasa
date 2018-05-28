@@ -26,7 +26,10 @@
     <div class="controls controls-row">
         <label class="span1" data-bind="text: $root.getLocaleMessage('Filter')"></label>
         <input type="text" class="span2" data-bind="value: $root.layerappFilter, valueUpdate:'afterkeydown'" />
+        <button class="btn span" id="refreshapps" data-bind="click: $root.refreshApps"><i class="icon-refresh"></i>Refresh</button>
     </div>
+
+
 
     <thead>
         <tr>

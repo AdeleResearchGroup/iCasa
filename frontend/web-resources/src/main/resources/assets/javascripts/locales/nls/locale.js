@@ -75,7 +75,8 @@ define({
         "Granted":"Autorisé",
         "Map":"Plan",
         "Instances":"Instances",
-        "Not.Connected":"Déconnecté"
+        "Not.Connected":"Déconnecté",
+        "Refresh":"Actualiser"
     },
     "en" : true
 });

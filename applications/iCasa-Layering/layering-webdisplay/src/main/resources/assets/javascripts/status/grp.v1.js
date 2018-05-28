@@ -43,7 +43,7 @@
 						Multiplier=0;
 					}
 					px=offset*index*Math.cos(Multiplier*Alpha);
-					py=offset*index*Math.sin(Multiplier*Alpha);
+					py=offset*index*Math.sin(Multiplier*Alpha)+offset/2;
 					position[i]=[px, py];
 					Multiplier+=1;
 				}
@@ -94,7 +94,7 @@
 			function rSize(levels){//returns the maximum radio of a bubble for an specific number of levels.
 				var wid = window.innerWidth;
     			var hei = window.innerHeight;
-    			var nRadios=levels*8+2;
+    			var nRadios=levels*8+6;
     			if (hei<wid){//horizontal
     				return hei/nRadios;
     			}else{

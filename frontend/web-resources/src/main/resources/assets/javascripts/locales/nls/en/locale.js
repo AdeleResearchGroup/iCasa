@@ -75,5 +75,6 @@ define({
     "Granted":"Granted",
     "Map":"Map",
     "Instances":"Instances",
-    "Not.Connected":"Not Connected"
+    "Not.Connected":"Not Connected",
+    "Refresh":"Refresh"
 });

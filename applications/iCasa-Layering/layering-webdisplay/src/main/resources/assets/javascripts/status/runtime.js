@@ -29,18 +29,6 @@ function runtime(){
                 functionalExtRelations=[];
             }
 
-
-           // -------
-           /* BubbleBig[i]={
-                id:resources[i]["id"],
-                layers:[resources[i]["functional_core"].name.split("fr.liglab.adele.")[1].split(".")[0],resources[i]["functional_core"].name.split("fr.liglab.adele.")[1].split(".")[1],resources[i]["functional_core"].name.split("fr.liglab.adele.")[1].split(".")[2]],
-                status:resources[i]["status"],
-                functionalCore:resources[i]["functional_core"],
-                functionalExtensions:resources[i]["functional_extensions"],
-                con1:resources[i]["functional_core"].connections,
-                con2:A
-            };*/
-
            function matchImplementedSpecs(coreImplSpc,extensions){//mekes a list with ALL the implemented specifications
                var list=[];
                list=list.concat(coreImplSpc);
@@ -51,8 +39,6 @@ function runtime(){
             }
 
            if(resources[i]["state"]=="valid"){
-               console.log(resources[i]["id"]);
-               console.log(matchImplementedSpecs(resources[i]["core"].implementedSpecifications,resources[i]["extensions"]));
                BubbleBig[i]={
                    id:resources[i]["id"],
                    layers:matchImplementedSpecs(resources[i]["core"].implementedSpecifications,resources[i]["extensions"]),
@@ -68,7 +54,8 @@ function runtime(){
                    id:resources[i]["id"],
                    layers:matchImplementedSpecs(resources[i]["core"].implementedSpecifications,resources[i]["extensions"]),
                    status:resources[i]["state"],
-                   stroke:"white",
+                   stroke:"red",
+                   "strokewidth":5,
                    functionalCore:resources[i]["core"],
                    functionalExtensions:resources[i]["extensions"],
                    con1:resources[i]["core"].relations,
@@ -91,6 +78,7 @@ function runtime(){
                     addCircle=true;
                 } else if(findnemo(layers,"fr.liglab.adele.iop.device.api.IOPService")&&findnemo(layers,"fr.liglab.adele.icasa.device.GenericDevice")){//if it's a remote device--PURPLE
                     BubbleBig[bubbleIndex].color="rgb(209,197,235)";
+
                     addCircle=true;
                 }else if(findnemo(layers,"fr.liglab.adele.iop.device.api.IOPService")){//if it's a remote service--TURKEY
                     BubbleBig[bubbleIndex].color="rgb(70,240,210)";

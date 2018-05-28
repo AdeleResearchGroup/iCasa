@@ -420,11 +420,31 @@ define(['jquery',
            @implementation	= kb.observable(model,'implementation')
            @instances 		= kb.observable(model,'instances')
            @enabled 		= kb.observable(model,'enabled')
+
+
+
+
            
            @updateEnabled = () =>
-              alert(@implementation()+" will be updated to "+@isSelected())
 
-           @isSelected = ko.observable(@enabled)
+              if @isSelected() == true
+                #alert(@implementation()+" will be updated to "+@isSelected())
+                $.ajax(
+                  url: 'http://localhost:9000/icasa/layers/applications/enable/'+@implementation()
+                  type: 'GET').done (resources) ->
+                  console.log resources
+                  DataModel.collections.LayerApps.fetch();
+                  return
+              else
+                #alert(@implementation()+" will be updated to "+@isSelected())
+                $.ajax(
+                  url: 'http://localhost:9000/icasa/layers/applications/disable/'+@implementation()
+                  type: 'GET').done (resources) ->
+                  console.log resources
+                  DataModel.collections.LayerApps.fetch();
+                  return
+
+           @isSelected = ko.observable(@enabled())
            @isSelected.subscribe(@updateEnabled)
 
            @name = ko.computed =>
@@ -1802,6 +1822,11 @@ define(['jquery',
               'undefined'
            ]);
 
+           @refreshApps = () =>
+             console.log("refreshing Datamodel..")
+             DataModel.collections.LayerApps.fetch();
+
+             #refreshApps();
            @startScript = () =>
               if (@selectedScript())
                 startDate =  @selectedScript().startDate()
@@ -1899,6 +1924,8 @@ define(['jquery',
               else
                 return 0
            );
+
+
 
            @startClockTimer = ()=>
               timer = ()=>
