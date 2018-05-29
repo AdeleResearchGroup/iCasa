@@ -73,30 +73,33 @@ function runtime(){
 
             if(((i+1)%5==0)  ){//multiples of 5 (big bubble)
                 //verifies the level
-                if(findnemo(layers,"fr.liglab.adele.icasa.layering.services.global.icasaLayer")){
-                    BubbleBig[bubbleIndex].color="rgb(50,50,50)";
+                if(findnemo(layers,"fr.liglab.adele.icasa.layering.services.api.RootService")){
+                    BubbleBig[bubbleIndex].color=colors['icasa'].rbg;
                     addCircle=true;
                 } else if(findnemo(layers,"fr.liglab.adele.iop.device.api.IOPService")&&findnemo(layers,"fr.liglab.adele.icasa.device.GenericDevice")){//if it's a remote device--PURPLE
-                    BubbleBig[bubbleIndex].color="rgb(209,197,235)";
+                    BubbleBig[bubbleIndex].color=colors['remDevice'].rbg;
 
                     addCircle=true;
-                }else if(findnemo(layers,"fr.liglab.adele.iop.device.api.IOPService")){//if it's a remote service--TURKEY
-                    BubbleBig[bubbleIndex].color="rgb(70,240,210)";
+                }else if(findnemo(layers,"fr.liglab.adele.iop.device.api.IOPService")){//if it's a remote service--PURPLE
+                    BubbleBig[bubbleIndex].color=colors['remService'].rbg;
                     addCircle=true;
                 }else if(findnemo(layers,"fr.liglab.adele.icasa.device.GenericDevice")){//if it's a device--GREEN
-                    BubbleBig[bubbleIndex].color="rgb(190,212,144)";
+                    BubbleBig[bubbleIndex].color=colors['device'].rbg;
                     addCircle=true;
                 }else if(findnemo(layers,"fr.liglab.adele.icasa.layering.services.api.ServiceLayer")){//services --ORANGE
-                    BubbleBig[bubbleIndex].color="rgb(250,231,212)";
+                    BubbleBig[bubbleIndex].color=colors['service'].rbg;
                     addCircle=true;
                 }else if(findnemo(layers,"fr.liglab.adele.icasa.layering.applications.api.ApplicationLayer")){//applications--BLUE
-                    BubbleBig[bubbleIndex].color="rgb(169,208,217)";
+                    BubbleBig[bubbleIndex].color=colors['application'].rbg;
                     addCircle=true;
                 }else if(findnemo(layers,"fr.liglab.adele.icasa.location.Zone")){//zone--BROWN
-                    BubbleBig[bubbleIndex].color="rgb(212,200,144)";
+                    BubbleBig[bubbleIndex].color=colors['zone'].rbg;
+                    addCircle=true;
+                }else if(findnemo(layers,"fr.liglab.adele.icasa.simulator.person.Person")){//person--WHITE
+                    BubbleBig[bubbleIndex].color=colors['person'].rbg;
                     addCircle=true;
                 }else{
-                    BubbleBig[bubbleIndex].color="rgb(81,81,81)";
+                    BubbleBig[bubbleIndex].color=colors['unknown'].rbg;
                     //console.log("no bubble");
 
                 }
@@ -197,6 +200,7 @@ function runtime(){
             }
         }
 
+        //DRAWING
 		svg1
 		.attr("class","contextMap")
 		.style('position','absolute');
@@ -352,5 +356,24 @@ function runtime(){
 
 var infoBox = document.getElementById('infop');
 var infoBoxClose = document.getElementById('infop');
+
+
+var bDev = document.getElementById('bDevice');
+var bServ = document.getElementById('bService');
+var bApp = document.getElementById('bApplication');
+var bRoot = document.getElementById('bRoot');
+var bEServ = document.getElementById('bExtService');
+var bEDev = document.getElementById('bExtDevice');
+var bZone = document.getElementById('bZone');
+var bOther = document.getElementById('bOther');
+bDev.style.backgroundColor=colors['device'].code;
+bServ.style.backgroundColor=colors['service'].code;
+bApp.style.backgroundColor=colors['application'].code;
+bRoot.style.backgroundColor=colors['icasa'].code;
+bRoot.style.color="white";
+bEServ.style.backgroundColor=colors['remService'].code;
+bEDev.style.backgroundColor=colors['remDevice'].code;
+bZone.style.backgroundColor=colors['zone'].code;
+bOther.style.backgroundColor=colors['unknown'].code;
 	
 runtime();

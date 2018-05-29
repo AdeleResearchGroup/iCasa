@@ -448,7 +448,7 @@ define(['jquery',
            @isSelected.subscribe(@updateEnabled)
 
            @name = ko.computed =>
-                @implementation()+" modified"
+                @implementation().split('layering.applications.', 2)[1]
 
            @status = ko.computed =>
                 if (@enabled())
