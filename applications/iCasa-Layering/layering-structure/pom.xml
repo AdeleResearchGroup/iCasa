@@ -27,7 +27,7 @@
 	<!-- Project coordinates -->
 	<artifactId>layering-structure</artifactId>
 	<packaging>bundle</packaging>
-	<version>1.0-SNAPSHOT</version>
+
 	<name>${productName} :: ${projectName} :: LAYERING Structure</name>
 
 

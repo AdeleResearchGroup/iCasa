@@ -13,8 +13,7 @@ import fr.liglab.adele.icasa.layering.services.api.ServiceLayer;
 import fr.liglab.adele.icasa.layering.services.api.ZoneService;
 import fr.liglab.adele.icasa.layering.services.impl.ZoneServiceFunctionalExtension;
 import fr.liglab.adele.icasa.location.LocatedObject;
-
-import fr.liglab.adele.icasa.device.light.Photometer;
+import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 
 
@@ -41,11 +40,27 @@ public class LightningServiceImpl implements LightningService, ServiceLayer {
     @ContextRequirement(spec = {LocatedObject.class})
     private List<BinaryLight> binaryLights;
 
-    @Requires(optional = true, filter = "(locatedobject.object.zone=${zoneservice.zone.attached})", proxy = false, specification = Photometer.class)
-    @SuppressWarnings("all")
-    private List<Photometer> photometers;
+    @Requires(id = "MoD", optional=false)
+    MomentOfTheDay momentOfTheDay;
 
-    
+    @Modified(id = "MoD")
+    protected void momentOfDayUpdated() {
+    	
+    	System.out.println("Lightning service trigered "+momentOfTheDay.getCurrentPartOfTheDay());
+    	
+    	if (momentOfTheDay.getCurrentPartOfTheDay() == MomentOfTheDay.PartOfTheDay.EVENING) {
+    		for (BinaryLight binaryLight : binaryLights) {
+        		binaryLight.turnOn();
+    		}
+    	}
+    	else {
+    		for (BinaryLight binaryLight : binaryLights) {
+        		binaryLight.turnOff();
+    		}
+    	}
+    }
+
+   
     @ContextEntity.State.Field(service = ServiceLayer.class,state = ServiceLayer.SERVICE_QOS)
     private int AppQoS;
 
@@ -63,10 +78,6 @@ public class LightningServiceImpl implements LightningService, ServiceLayer {
         	currentQoS+=35;
         }
 
-    	if(photometers.size()>0) {
-    		currentQoS+=31;
-        }
-    	
     	return currentQoS;
     };
     

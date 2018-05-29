@@ -24,14 +24,17 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>fr.liglab.adele.icasa.layering</groupId>
     <artifactId>layer-apps</artifactId>
     <packaging>bundle</packaging>
-    <version>1.0-SNAPSHOT</version>
+
     <name>${productName} :: ${projectName} :: LAYERING Structure</name>
 
+	<properties>
+		<iop.version>0.2.1-SNAPSHOT</iop.version>
+	</properties>
     <!-- Project dependencies -->
     <dependencies>
+
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
@@ -44,22 +47,26 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo.annotations</artifactId>
         </dependency>
-        <!--dependency>
-            <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>context.impl.helpers</artifactId>
-            <version>${icasa.version}</version>
-        </dependency-->
+
+        <dependency>
+            <groupId>org.wisdom-framework</groupId>
+            <artifactId>wisdom-api</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>fr.liglab.adele.cream</groupId>
             <artifactId>cream.core</artifactId>
         </dependency>
 
-
-
-
         <dependency>
             <groupId>fr.liglab.adele.cream</groupId>
             <artifactId>cream.runtime.facilities</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.liglab.adele.cream</groupId>
+            <artifactId>cream.administration.api</artifactId>
+            <version>${cream.version}</version>
         </dependency>
 
         <!--iCasa dependencies-->
@@ -69,17 +76,6 @@
             <artifactId>common.metrics</artifactId>
             <version>${icasa.version}</version>
         </dependency>
-        <dependency>
-            <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>common.metrics</artifactId>
-            <version>${icasa.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.liglab.adele.icasa.layering</groupId>
-            <artifactId>layering-structure</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
 
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
@@ -88,40 +84,35 @@
         </dependency>
 
         <dependency>
-            <groupId>fr.liglab.adele.cream</groupId>
-            <artifactId>cream.administration.api</artifactId>
-            <version>${cream.version}</version>
+            <groupId>fr.liglab.adele.icasa.layering</groupId>
+            <artifactId>layering-structure</artifactId>
+            <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.wisdom-framework</groupId>
-            <artifactId>wisdom-api</artifactId>
-        </dependency>
+
+
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
             <artifactId>context.remote</artifactId>
-            <version>1.2.7-SNAPSHOT</version>
+            <version>${icasa.version}</version>
         </dependency>
+ 
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
             <artifactId>command.handler</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
+            <version>${icasa.version}</version>
         </dependency>
+
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>command.handler</artifactId>
-            <version>1.2.7-SNAPSHOT</version>
+            <artifactId>technical.services.api
+ 			</artifactId>
+            <version>${icasa.version}</version>
         </dependency>
-        <dependency>
-            <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>iop-device-importer</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+ 
         <dependency>
             <groupId>fr.liglab.adele.icasa</groupId>
             <artifactId>iop-device-importer</artifactId>
-            <version>0.2.1-SNAPSHOT</version>
+            <version>${iop.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
