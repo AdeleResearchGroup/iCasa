@@ -13,6 +13,7 @@ import org.apache.felix.ipojo.annotations.BindingPolicy;
 import org.apache.felix.ipojo.annotations.Modified;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 
@@ -36,7 +37,13 @@ import fr.liglab.adele.icasa.device.light.Photometer;
 
 public class Controller implements ApplicationLayer, PeriodicRunnable {
 
-    @Requires(id="photometer" , optional = true, filter = "(locatedobject.object.zone=${zoneservice.zone.attached})", proxy = false, policy = BindingPolicy.DYNAMIC_PRIORITY, comparator = Controller.Ranking.class)
+	private static final String isRemoteService = "(objectClass=fr.liglab.adele.iop.device.api.IOPService)";
+
+	@Requires(id="photometer",
+    				optional = true, proxy = false, 
+    				policy = BindingPolicy.DYNAMIC_PRIORITY, comparator = Controller.Ranking.class,
+    				filter = "(| (locatedobject.object.zone=${zoneservice.zone.attached}) "+isRemoteService+")" )
+    
     @ContextRequirement(spec = {LocatedObject.class})
     private Photometer photometer;
  
@@ -68,7 +75,7 @@ public class Controller implements ApplicationLayer, PeriodicRunnable {
     @Modified(id="photometer")
     public void modified() {
     	if (photometer != null) {
-    		double shutterLevel = photometer.getIlluminance().to(Units.LUX).getValue().doubleValue() >= 800 ? 0d : 1d;
+    		double shutterLevel = photometer.getIlluminance().to(Units.LUX).getValue().doubleValue() >= 1600 ? 0d : 1d;
     		
     		for (WindowShutter	shutter : shutters) {
 				shutter.setShutterLevel(shutterLevel);
@@ -84,6 +91,9 @@ public class Controller implements ApplicationLayer, PeriodicRunnable {
 			hasRequestedLookup = true;
 		}
 		
+		if (hasPhotometer && photometer instanceof IOPService) {
+			System.out.println(photometer.getSerialNumber()+" "+photometer.getIlluminance()); 
+		}
 	}
 
 	@Override
@@ -96,6 +106,17 @@ public class Controller implements ApplicationLayer, PeriodicRunnable {
 		return TimeUnit.MINUTES;
 	}
 	
+	private static final boolean isRemote(ServiceReference<Photometer> reference) {
+		String[] services = (String[]) reference.getProperty(Constants.OBJECTCLASS);
+		for (String service : services) {
+			if (service.contains(IOPService.class.getCanonicalName())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
     public static class Ranking implements Comparator<ServiceReference<Photometer>> {
 
 		@Override
@@ -110,16 +131,6 @@ public class Controller implements ApplicationLayer, PeriodicRunnable {
 			
 		}
     	
-		private static boolean isRemote(ServiceReference<Photometer> reference) {
-			String[] services = (String[]) reference.getProperty(Constants.OBJECTCLASS);
-			for (String service : services) {
-				if (service.contains(IOPService.class.getCanonicalName())) {
-					return true;
-				}
-			}
-			
-			return false;
-		}
     }
 
 }
