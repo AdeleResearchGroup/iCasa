@@ -14,6 +14,8 @@ public @ContextService interface ZoneService {
     
     public static final String RELATION_ATTACHED_TO ="attached.to";
 
+	public static final String objectInSameZone = "(locatedobject.object.zone=${zoneservice.zone.attached})";
+	
     /**
      * A provider that is able instantiate/destroy a zone service instance
      *

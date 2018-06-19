@@ -14,6 +14,7 @@ import fr.liglab.adele.icasa.layering.services.api.ZoneService;
 import fr.liglab.adele.icasa.layering.services.impl.ZoneServiceFunctionalExtension;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay;
+import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay.PartOfTheDay;
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 
 
@@ -23,20 +24,18 @@ import fr.liglab.adele.icasa.device.light.BinaryLight;
 @FunctionalExtension(id="ZoneService",contextServices = ZoneService.class, implementation = ZoneServiceFunctionalExtension.class)
 
 public class LightningServiceImpl implements LightningService, ServiceLayer {
+
+
+	private PartOfTheDay scheduledPeriod = null;
 	
+	@Override
+	public void setSchedule(PartOfTheDay period) {
+		this.scheduledPeriod = period;
+	}
+
 	
-    private static final Integer MIN_QOS = 34;
-
-    @ContextEntity.State.Field(service = ServiceLayer.class, state = ServiceLayer.NAME)
-    public String name;
-
-    @Override
-    public String getServiceName() {
-        return name;
-    }
-
     //requirements
-    @Requires(optional = true, filter = "(locatedobject.object.zone=${zoneservice.zone.attached})",proxy = false, specification = BinaryLight.class)
+    @Requires(optional = false, filter = "(locatedobject.object.zone=${zoneservice.zone.attached})",proxy = false, specification = BinaryLight.class)
     @ContextRequirement(spec = {LocatedObject.class})
     private List<BinaryLight> binaryLights;
 
@@ -46,9 +45,10 @@ public class LightningServiceImpl implements LightningService, ServiceLayer {
     @Modified(id = "MoD")
     protected void momentOfDayUpdated() {
     	
-    	System.out.println("Lightning service trigered "+momentOfTheDay.getCurrentPartOfTheDay());
-    	
-    	if (momentOfTheDay.getCurrentPartOfTheDay() == MomentOfTheDay.PartOfTheDay.EVENING) {
+    	if (momentOfTheDay.getCurrentPartOfTheDay() == scheduledPeriod) {
+    		
+    		System.out.println("activating lightning schedule "+scheduledPeriod);
+    		
     		for (BinaryLight binaryLight : binaryLights) {
         		binaryLight.turnOn();
     		}
@@ -60,7 +60,18 @@ public class LightningServiceImpl implements LightningService, ServiceLayer {
     	}
     }
 
-   
+
+    private static final Integer MIN_QOS = 34;
+
+    @ContextEntity.State.Field(service = ServiceLayer.class, state = ServiceLayer.NAME)
+    public String name;
+
+    @Override
+    public String getServiceName() {
+        return name;
+    }
+
+
     @ContextEntity.State.Field(service = ServiceLayer.class,state = ServiceLayer.SERVICE_QOS)
     private int AppQoS;
 

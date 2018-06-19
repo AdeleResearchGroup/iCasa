@@ -1,11 +1,13 @@
 package fr.liglab.adele.icasa.layering.services.impl;
 
 import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Modified;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtender;
+
 import fr.liglab.adele.icasa.layering.services.api.ZoneService;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.location.Zone;
@@ -27,7 +29,7 @@ public class ZoneServiceFunctionalExtension implements ZoneService {
 	}
 	
     @ContextEntity.Relation.Field(owner=ZoneService.class,value=ZoneService.RELATION_ATTACHED_TO)
-	@Requires(id="relatedZone", optional=true, proxy = false)
+	@Requires(id="relatedZone", optional=false, proxy = false)
     private Zone relatedZone;
 
 	@Bind(id="relatedZone")
@@ -36,8 +38,13 @@ public class ZoneServiceFunctionalExtension implements ZoneService {
 	}
 	
 	@Unbind(id="relatedZone")
-	protected void unbindRelatedZone() {
+	protected void unbindRelatedZone(Zone zone) {
 		updatedZone(null);
 	}
-	
+
+	@Modified(id="relatedZone")
+	protected void modifieddRelatedZone(Zone zone) {
+		updatedZone(zone);
+	}
+
 }

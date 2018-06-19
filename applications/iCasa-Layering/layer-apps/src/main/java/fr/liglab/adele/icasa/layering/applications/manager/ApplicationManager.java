@@ -77,7 +77,7 @@ public class ApplicationManager {
         		}
 
         		instancesByEntity.get(entity).addAll(provider.getInstances(entity,true));
-        		statusByEntity.put(entity,statusByEntity.get(entity) || ! provider.getInstances(entity,false).isEmpty());
+        		statusByEntity.put(entity,statusByEntity.get(entity) || provider.isEnabled(entity));
 			}
 		}
 
@@ -97,7 +97,7 @@ public class ApplicationManager {
     	for (EntityProvider provider: providers) {
         	for (String provided : provider.getProvidedEntities()) {
         		
-        		if  (isApplicationEntity(provider,provided) && entity.equals(provided)) {
+        		if  (entity.equals(provided) && isApplicationEntity(provider,provided)) {
         			provider.enable(entity);
         			found = true;
         		}
@@ -128,7 +128,7 @@ public class ApplicationManager {
     	for (EntityProvider provider: providers) {
         	for (String provided : provider.getProvidedEntities()) {
         		
-        		if  (isApplicationEntity(provider,provided) && entity.equals(provided)) {
+        		if  (entity.equals(provided) && isApplicationEntity(provider,provided)) {
         			provider.disable(entity);
         			found = true;
         		}
