@@ -24,6 +24,7 @@ function reDraw(){
 	PageHeight = window.innerHeight;
 	servs();
 	runtime();
+    runtime2();
 };
 
 window.onresize = function (event) {

@@ -19,6 +19,9 @@ a:hover {
 h1, h2, h3 {
 	margin:.8em 0 .2em 0;
 	padding:0;
+	font-size: 2em;
+	line-height: 110%;
+	font-weight: bold;
 }
 p {
 	margin:.4em 0 .8em 0;
@@ -27,7 +30,9 @@ p {
 svg { 
 	position:fixed; 
 	height:100%; 
-	width:100% }
+	width:100%;
+	overflow: scroll;}
+
 /*circle:hover{
 	stroke:blue;
 	stroke-width:4;
@@ -46,13 +51,7 @@ svg {
 	background:#FFFFFF;
 }
 
-#header p,
-#header h1,
-#header h2 {
-	font-family: 'Poiret One', cursive;
-	padding:.4em 15px 0 15px;
-	margin:0;
-}
+
 #header div #mainNav{
 	clear:left;
 	float:left;

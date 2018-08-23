@@ -41,6 +41,20 @@ public class ContextContent extends DefaultController {
         return ok(result);
     }
 
+    @Route(method = HttpMethod.GET, uri = "/context.json")
+    @SuppressWarnings("unused")
+    public Result getContextJSON(){
+        ArrayNode result = json.newArray();
+
+        if(contextAdministrationService != null){
+            for(ImmutableContextEntity entity : contextAdministrationService.getContextEntities()){
+                result.add(json.toJson(entity));
+            }
+        }
+
+        return ok(result);
+    }
+
     @Route(method = HttpMethod.GET, uri = "/context/{id}")
     @SuppressWarnings("unused")
     public Result getContextEntity(@Parameter("id") String id){

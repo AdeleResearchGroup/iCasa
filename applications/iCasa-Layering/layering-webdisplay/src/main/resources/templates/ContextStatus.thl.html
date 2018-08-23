@@ -12,16 +12,18 @@
     <script src="/assets/javascripts/status/d3.v4.min.js"></script>
     <script src="/assets/javascripts/status/d3.tip.v0.6.3.js"></script>
     <script src="/assets/javascripts/status/jquery-ui.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/assets/css/materialize.supermin.css"  media="screen,projection"/>
     <link rel="stylesheet" href="/assets/css/icStyle.css" media="screen"/>
 </head>
 <body>
 <div id="header">
     <h1>iCasa network visualization</h1>
     <div id="mainNav">
-        <a href="#runtime" class="active">Runtime</a>
+        <a href="#tests" class="active">Runtime</a>
+        <a href="#runtime">altRuntime</a>
         <a href="#context">Context</a>
         <a href="#services">Services</a>
-        <a href="#tests">Tests</a>
     </div>
 
     <p id="menuoptions">-Button id:
@@ -57,7 +59,179 @@
     <div id="runtime">runtime...</div>
     <div id="context">context...</div>
     <div id="services">services...</div>
-    <div id="tests">tests...</div>
+    <div id="tests"><svg class="svg4" id="rntime"></svg></div>
+
+    <div id="structure" class="section scrollspy">
+        <ul id="slide-out" class="sidenav" style="transform: translateX(-120%);">
+            <li id="liheader">
+                <div class="user-view">
+                    <div class="background">
+                        <img src="../../../assets/images/backgrounds/wut.png"></img>
+                    </div>
+                    <img class="circle" src="../../../assets/images/devices/binaryLight_off.png"></img>
+                    <span class="white-text name"><b>Binary Light</b></span>
+                    <span class="white-text email">fr.liglab.adele.icasa.simulator.device.presence.impl.SimulatedPresenceSensorImpl</span>
+                </div>
+            </li>
+
+            <li>
+                <a class="subheader"><b>CORE</b></a>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Implementation</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a id="coreimplem">[Unfilled name]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Context States</a>
+                        <div class="collapsible-body">
+                            <ul id="coreContentState">
+                                <li><a>[Unfilled List]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Implementations Specifications</a>
+                        <div class="collapsible-body">
+                            <ul id="coreImpSpec">
+                                <li><a>[Unfilled List]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Relations</a>
+                        <div class="collapsible-body">
+                            <ul id="coreRelations">
+                                <li><a>[Unfilled List]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <div class="divider"></div>
+            </li>
+
+            <li>
+                <a class="subheader"><b>EXTENSIONS</b></a>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Id</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a id="extid">[Unfilled name]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">selected Implementation</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a id="extselimpl">[Unfilled name]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">State</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a id="extstate">[Unfilled name]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Alternative Configurations</a>
+                        <div class="collapsible-body">
+                            <ul id="extaltconfig">
+                                <li><a>[Unfilled List]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Context States</a>
+                        <div class="collapsible-body">
+                            <ul id="extctxtstates">
+                                <li><a>[Unfilled List]</a></li>
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">implemented Specifications</a>
+                        <div class="collapsible-body">
+                            <ul id="extimplspecs">
+                                <li><a>[Unfilled List]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Managed Specifications</a>
+                        <div class="collapsible-body">
+                            <ul id="extmngSpecs">
+                                <li><a>[Unfilled List]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header">Relations</a>
+                        <div class="collapsible-body">
+                            <ul id="extRelations">
+                                <li><a>[Unfilled List]</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div id="footer" class="btn-group">
@@ -78,6 +252,9 @@
             <script src="/assets/javascripts/status/services.js">//tree</script>
             <script src="/assets/javascripts/status/tests.js">//new functionalities</script>
             <script src="/assets/javascripts/status/navigation.js">//navigation</script>
+            <script src="/assets/javascripts/status/jquery-3.2.1.min.js"></script>
+            <script src="/assets/javascripts/status/materialize.min.js"></script>
+            <script src="/assets/javascripts/status/init.js"></script>
         </div>
     </div>
 </div>
