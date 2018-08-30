@@ -30,7 +30,7 @@
 
 	<modules>
 		<module>icasa-simulator-dp</module>
-		<module>icasa-medical-devices-dp</module>
+		<!--module>icasa-medical-devices-dp</module-->
 	</modules>
    
    <build>

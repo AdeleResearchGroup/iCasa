@@ -48,7 +48,6 @@ See the License for the specific language governing permissions and
         <netty.version>4.0.27.Final</netty.version>
         <wisdom.version>0.9.0</wisdom.version>
         <jackson.version>2.4.4</jackson.version>
-
         <context.socm.version>0.1-SNAPSHOT</context.socm.version>
     </properties>
 
@@ -156,14 +155,27 @@ See the License for the specific language governing permissions and
                 <enabled>false</enabled>
             </snapshots>
             <id>adele-central-release</id>
-            <name>adele-repos</name>
-            <url>http://repository-icasa.forge.cloudbees.com/release</url>
+            <name>adele-central-release</name>
+            <url>http://adele.imag.fr/repository/release</url>
         </repository>
         <repository>
             <snapshots />
             <id>adele-central-snapshots</id>
             <name>adele-central-snapshot</name>
-            <url>http://repository-icasa.forge.cloudbees.com/snapshot</url>
+            <url>http://adele.imag.fr/repository/snapshot</url>
+        </repository>
+
+		<repository>
+            <id>icasa-socm</id>
+			<releases>
+                <enabled>true</enabled>
+			</releases>
+            <snapshots>
+                <enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+            </snapshots>
+            <name>icasa-socm</name>
+            <url>http://adele.imag.fr/repository/icasa/socm</url>
         </repository>
 
         <repository>
@@ -177,15 +189,27 @@ See the License for the specific language governing permissions and
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>icasa-central</id>
-            <name>adele-repos</name>
-            <url>http://repository-icasa.forge.cloudbees.com/release</url>
+            <id>adele-central-release</id>
+            <name>dele-central-release</name>
+            <url>http://adele.imag.fr/repository/release</url>
         </pluginRepository>
         <pluginRepository>
             <snapshots />
-            <id>icasa-snapshots</id>
-            <name>adele-central-release</name>
-            <url>http://repository-icasa.forge.cloudbees.com/snapshot</url>
+            <id>adele-central-snapshots</id>
+            <name>adele-central-snapshots</name>
+            <url>http://adele.imag.fr/repository/snapshot</url>
+        </pluginRepository>
+		<pluginRepository>
+            <id>icasa-socm</id>
+			<releases>
+                <enabled>true</enabled>
+			</releases>
+            <snapshots>
+                <enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+            </snapshots>
+            <name>icasa-socm</name>
+            <url>http://adele.imag.fr/repository/icasa/socm</url>
         </pluginRepository>
         <pluginRepository>
             <id>oss-snapshot</id>
@@ -449,16 +473,12 @@ See the License for the specific language governing permissions and
 
     <distributionManagement>
         <repository>
-            <id>icasa-deploy-cloudbees-release</id>
+            <id>icasa-deploy-socm</id>
             <name>Cloudbees Adele Repository</name>
-            <url>dav:https://repository-icasa.forge.cloudbees.com/socm</url>
+            <url>scp://adele.imag.fr/repository/icasa/socm</url>
         </repository>
-        <snapshotRepository>
-            <id>icasa-deploy-cloudbees-snapshot</id>
-            <name>iCasa Cloudbees Snapshot Private Repository</name>
-            <url>dav:https://repository-icasa.forge.cloudbees.com/socm</url>
-        </snapshotRepository>
-        <site>
+        
+		<site>
             <id>tmp</id>
             <url>file:target/site-tmp</url>
         </site>

@@ -78,12 +78,6 @@
         </dependency>
 
         <dependency>
-            <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>device.light</artifactId>
-            <version>${icasa.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>fr.liglab.adele.icasa.layering</groupId>
             <artifactId>layering-structure</artifactId>
             <version>${project.version}</version>

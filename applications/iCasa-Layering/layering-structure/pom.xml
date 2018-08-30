@@ -45,23 +45,7 @@
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.ipojo.annotations</artifactId>
 		</dependency>
-		<!--dependency>
-			<groupId>fr.liglab.adele.icasa</groupId>
-			<artifactId>context.impl.helpers</artifactId>
-			<version>${icasa.version}</version>
-		</dependency-->
-		<dependency>
-			<groupId>fr.liglab.adele.cream</groupId>
-			<artifactId>cream.core</artifactId>
-		</dependency>
 
-
-
-
-		<dependency>
-			<groupId>fr.liglab.adele.cream</groupId>
-			<artifactId>cream.runtime.facilities</artifactId>
-		</dependency>
 
 		<!--iCasa dependencies-->
 
@@ -77,12 +61,20 @@
 			<scope>provided</scope>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>fr.liglab.adele.icasa</groupId>
-			<artifactId>device.light</artifactId>
+			<artifactId>context.api</artifactId>
 			<version>${icasa.version}</version>
+		</dependency>
+
+				<dependency>
+			<groupId>fr.liglab.adele.cream</groupId>
+			<artifactId>cream.core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.liglab.adele.cream</groupId>
+			<artifactId>cream.runtime.facilities</artifactId>
 		</dependency>
 
 		<dependency>
