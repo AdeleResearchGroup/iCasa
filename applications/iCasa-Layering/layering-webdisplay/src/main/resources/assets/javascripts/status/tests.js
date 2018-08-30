@@ -84,7 +84,14 @@ function runtime2(){
 // .force("collide",d3.forceCollide( radius*3).iterations(16) )
 
 
+    var state = function(status){
+        if (status == "valid" ){
+            return "black";
+        }else{
+            return "red";
+        }
 
+    }
 
     var color = function (layers) {
 
@@ -146,7 +153,9 @@ function runtime2(){
             .attr("data-target","slide-out")
             .attr("class","sidenav-trigger btn")
             .attr('r', radius)
-            .attr('stroke',"black")
+            .attr('stroke',function(d){
+                return state(d.state);
+            })
             .attr('fill', function (d) {
                 return color(d.core.implementedSpecifications);
             });
