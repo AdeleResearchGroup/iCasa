@@ -4,11 +4,11 @@ import java.util.*;
 
 
 import org.apache.felix.ipojo.annotations.*;
-import org.json.JSONException;
 
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 import fr.liglab.adele.cream.model.introspection.EntityProvider;
+
 import fr.liglab.adele.icasa.layering.applications.api.ApplicationLayer;
 
 @CommandProvider(namespace = "application-layer")
@@ -46,13 +46,11 @@ public class ApplicationManager {
     @Command
     public void applications() {
         
-    	try {
-            for (ApplicationDescription description: getApplications()) {
-            	System.out.println(description.serialize().toString());
-            }
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+        for (ApplicationDescription description: getApplications()) {
+			System.out.println(" Application "+description.implementation);
+			System.out.println(" 	instances	"+description.instances);
+			System.out.println(" 	status		"+description.enabled);
+        }
         
     }
 

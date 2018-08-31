@@ -18,8 +18,11 @@
     </parent>
 
     <!-- Project coordinates -->
+
+	<groupId>fr.liglab.adele.icasa.layering</groupId>
     <artifactId>icasa.layering.distribution</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
+
     <packaging>osgi-distribution</packaging>
 
     <name>${productName} :: ${projectName}</name>
@@ -101,81 +104,25 @@
             <type>bundle</type>
         </dependency>
 
-        <!--Fuschia Dep -->
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
-            <version>${fuchsia.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-            <artifactId>org.ow2.chameleon.fuchsia.discovery.filebased</artifactId>
-            <version>${fuchsia.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
-            <artifactId>fuchsia-gogo-shell</artifactId>
-            <version>${fuchsia.version}</version>
-        </dependency>
-
-        <!--Interop -->
-
-        <dependency>
-            <groupId>fr.liglab.adele.icasa</groupId>
-            <artifactId>iop-device-importer</artifactId>
-            <version>${project.version}</version>
-            <type>bundle</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.1</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
-            <version>1.1.6</version>
-            <scope>runtime</scope>
-        </dependency>
-
-
 
         <!--Applications -->
 
 
         <dependency>
             <groupId>fr.liglab.adele.icasa.layering</groupId>
-            <artifactId>layering-webdisplay</artifactId>
+            <artifactId>icasa.layering.webdisplay</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        
 		<dependency>
             <groupId>fr.liglab.adele.icasa.layering</groupId>
-            <artifactId>layering-structure</artifactId>
+            <artifactId>icasa.layering.structure</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>fr.liglab.adele.icasa.layering</groupId>
-            <artifactId>layer-apps</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+
     </dependencies>
 
     <build>
-
-        <resources>
-            <resource>
-                <directory>${project.build.directory}/xware</directory>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-
 
         <plugins>
 
@@ -194,35 +141,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.5.1</version>
-                <executions>
-                    <execution>
-                        <id>unpack-xware-configuration</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>fr.liglab.adele.icasa</groupId>
-                                    <artifactId>iop-device-importer</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>bundle</type>
-                                    <includes>load/import/xware.txt</includes>
-                                    <outputDirectory>${project.build.directory}/xware</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-
-                </executions>
-            </plugin>
-
-
+  
         </plugins>
     </build>
 

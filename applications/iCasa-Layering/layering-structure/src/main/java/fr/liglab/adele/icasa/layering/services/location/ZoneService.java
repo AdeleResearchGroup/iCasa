@@ -1,10 +1,7 @@
-package fr.liglab.adele.icasa.layering.services.api;
-
-import java.util.Map;
+package fr.liglab.adele.icasa.layering.services.location;
 
 import fr.liglab.adele.cream.annotations.ContextService;
 import fr.liglab.adele.cream.annotations.State;
-import fr.liglab.adele.icasa.location.Zone;
 
 public @ContextService interface ZoneService {
 
@@ -16,18 +13,4 @@ public @ContextService interface ZoneService {
 
 	public static final String objectInSameZone = "(locatedobject.object.zone=${zoneservice.zone.attached})";
 	
-    /**
-     * A provider that is able instantiate/destroy a zone service instance
-     *
-     */
-    public interface Provider {
-    	
-    	public String getEntityName(Zone zone);
-
-		public void create(String instance, Map<String,Object> properties);
-
-		public void delete(String instance);
-		
-    }
-
 }

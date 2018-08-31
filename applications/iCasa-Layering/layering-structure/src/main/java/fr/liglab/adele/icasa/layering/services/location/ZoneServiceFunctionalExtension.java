@@ -1,4 +1,4 @@
-package fr.liglab.adele.icasa.layering.services.impl;
+package fr.liglab.adele.icasa.layering.services.location;
 
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Modified;
@@ -7,8 +7,6 @@ import org.apache.felix.ipojo.annotations.Unbind;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtender;
-
-import fr.liglab.adele.icasa.layering.services.api.ZoneService;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.location.Zone;
 

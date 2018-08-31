@@ -1,4 +1,4 @@
-package fr.liglab.adele.icasa.layering.applications.manager;
+package fr.liglab.adele.icasa.layering.applications.manager.rest;
 
 
 //import fr.liglab.adele.icasa.remote.wisdom.impl.DeviceREST;
@@ -8,7 +8,7 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import org.json.JSONObject;
 import org.wisdom.api.DefaultController;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
@@ -17,11 +17,14 @@ import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
 
+import fr.liglab.adele.icasa.layering.applications.manager.ApplicationDescription;
+import fr.liglab.adele.icasa.layering.applications.manager.ApplicationManager;
+
 @Component(immediate = true)
 @Provides
 @Instantiate
 @Path("/icasa/layers")
-public class ApplicationManagerREST extends DefaultController {
+public class ApplicationManagerController extends DefaultController {
 
 	@Requires(id = "manager", specification = ApplicationManager.class, optional = false)
 	private ApplicationManager manager;
@@ -32,7 +35,7 @@ public class ApplicationManagerREST extends DefaultController {
 			
 			JSONArray result = new JSONArray();
 			for (ApplicationDescription application : manager.getApplications()) {
-				result.put(application.serialize());
+				result.put(serialize(application));
 			}
 			
 			return ok(result.toString()).as(MimeTypes.JSON);
@@ -65,4 +68,16 @@ public class ApplicationManagerREST extends DefaultController {
 		manager.disable();
 		return ok("<h3>Disabling implementations</h3>");
 	}
+	
+    public static JSONObject serialize(ApplicationDescription application) throws JSONException {
+    	
+        JSONObject content = new JSONObject();
+       
+        content.putOnce("implementation",application.implementation);
+        content.putOnce("instances",application.instances);
+        content.putOnce("enabled",application.enabled);
+        
+        return content;
+    }
+
 }

@@ -11,9 +11,10 @@
 	</parent>
 
 	<groupId>fr.liglab.adele.icasa.layering</groupId>
-	<artifactId>icasa-layering</artifactId>
+	<artifactId>reactor</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
+	
 	<name>${productName} :: ${projectName}</name>
 
 	<properties>
@@ -26,7 +27,6 @@
 		<module>layering-webdisplay</module>
 		<module>layering-structure</module>
 		<module>layer-distr</module>
-		<module>layer-apps</module>
 	</modules>
 
 	<scm>

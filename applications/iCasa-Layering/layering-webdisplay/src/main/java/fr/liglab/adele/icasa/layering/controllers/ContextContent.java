@@ -9,41 +9,22 @@ import org.wisdom.api.annotations.Controller;
 import org.wisdom.api.annotations.Path;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Route;
-import org.wisdom.api.annotations.View;
 import org.wisdom.api.content.Json;
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.Result;
-import org.wisdom.api.templates.Template;
 
 @Controller
 @Path("/icasa/layers")
 public class ContextContent extends DefaultController {
 
     @Requires
-    @SuppressWarnings("unused")
     private Json json;
 
     @Requires(optional = true)
-    @SuppressWarnings("unused")
     private AdministrationService contextAdministrationService;
 
-    @Route(method = HttpMethod.GET, uri = "/context")
-    @SuppressWarnings("unused")
-    public Result getContext(){
-        ArrayNode result = json.newArray();
-
-        if(contextAdministrationService != null){
-            for(ImmutableContextEntity entity : contextAdministrationService.getContextEntities()){
-                result.add(json.toJson(entity));
-            }
-        }
-
-        return ok(result);
-    }
-
     @Route(method = HttpMethod.GET, uri = "/context.json")
-    @SuppressWarnings("unused")
-    public Result getContextJSON(){
+    public Result getContextJSON() {
         ArrayNode result = json.newArray();
 
         if(contextAdministrationService != null){
@@ -56,8 +37,7 @@ public class ContextContent extends DefaultController {
     }
 
     @Route(method = HttpMethod.GET, uri = "/context/{id}")
-    @SuppressWarnings("unused")
-    public Result getContextEntity(@Parameter("id") String id){
+    public Result getContextEntity(@Parameter("id") String id) {
 
         ImmutableContextEntity immutableContextEntity = null;
 

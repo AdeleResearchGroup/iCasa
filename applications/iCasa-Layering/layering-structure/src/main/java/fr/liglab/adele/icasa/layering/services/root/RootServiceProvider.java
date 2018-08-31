@@ -1,4 +1,4 @@
-package fr.liglab.adele.icasa.layering.services.impl;
+package fr.liglab.adele.icasa.layering.services.root;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
 import fr.liglab.adele.icasa.layering.services.api.RootService;

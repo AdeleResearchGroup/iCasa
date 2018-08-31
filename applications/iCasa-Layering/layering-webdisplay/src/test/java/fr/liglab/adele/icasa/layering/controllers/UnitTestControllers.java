@@ -19,14 +19,18 @@
  */
 package fr.liglab.adele.icasa.layering.controllers;
 
-import fr.liglab.adele.icasa.layering.controllers.ContextVisualization;
+
 import org.junit.Test;
+
 import org.wisdom.api.http.Result;
 import org.wisdom.api.http.Status;
 import org.wisdom.api.templates.Template;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import fr.liglab.adele.icasa.layering.controllers.ContextVisualization;
+
 import static org.mockito.Mockito.mock;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * A couple of unit tests.

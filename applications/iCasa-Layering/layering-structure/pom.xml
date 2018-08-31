@@ -20,23 +20,25 @@
 	<!-- Project parent -->
 	<parent>
 		<groupId>fr.liglab.adele.icasa.layering</groupId>
-		<artifactId>icasa-layering</artifactId>
+		<artifactId>reactor</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<!-- Project coordinates -->
-	<artifactId>layering-structure</artifactId>
+	<artifactId>icasa.layering.structure</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>${productName} :: ${projectName} :: LAYERING Structure</name>
+	<name>${productName} :: ${projectName}</name>
 
 
 	<!-- Project dependencies -->
 	<dependencies>
+	
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 		</dependency>
+	
 		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.ipojo</artifactId>
@@ -49,11 +51,7 @@
 
 		<!--iCasa dependencies-->
 
-		<dependency>
-			<groupId>fr.liglab.adele.icasa</groupId>
-			<artifactId>common.metrics</artifactId>
-			<version>${icasa.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>fr.liglab.adele.icasa</groupId>
 			<artifactId>command.handler</artifactId>
@@ -61,52 +59,41 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>fr.liglab.adele.icasa</groupId>
-			<artifactId>context.api</artifactId>
-			<version>${icasa.version}</version>
-		</dependency>
-
-				<dependency>
-			<groupId>fr.liglab.adele.cream</groupId>
-			<artifactId>cream.core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.liglab.adele.cream</groupId>
-			<artifactId>cream.runtime.facilities</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.liglab.adele.cream</groupId>
-			<artifactId>cream.administration.api</artifactId>
-			<version>${cream.version}</version>
-		</dependency>
-
+       <dependency>
+            <groupId>fr.liglab.adele.icasa</groupId>
+            <artifactId>context.api</artifactId>
+            <version>${icasa.version}</version>
+        </dependency>
 
 	</dependencies>
 
 	<build>
 		<plugins>
+			
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>fr.liglab.adele.icasa.layering.services.*</Export-Package>
+						<Export-Package>fr.liglab.adele.icasa.layering.*</Export-Package>
 						<Bundle-SymbolicName>
 							${project.artifactId}
 						</Bundle-SymbolicName>
 						<Include-Resource>{maven-resources},
 							META-INF/NOTICE = NOTICE
 						</Include-Resource>
-						<Import-Package>
-							*
-						</Import-Package>
+						<Export-Package>
+                            fr.liglab.adele.icasa.layering.applications.api,
+                            fr.liglab.adele.icasa.layering.applications.manager,
+                            fr.liglab.adele.icasa.layering.services.api,
+                            fr.liglab.adele.icasa.layering.services.location,
+                            fr.liglab.adele.icasa.layering.tasks
+                        </Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-ipojo-plugin</artifactId>
