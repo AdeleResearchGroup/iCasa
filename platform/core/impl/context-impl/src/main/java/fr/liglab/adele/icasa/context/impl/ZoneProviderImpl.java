@@ -15,20 +15,20 @@
  */
 package fr.liglab.adele.icasa.context.impl;
 
-import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.cream.annotations.provider.Creator;
-import fr.liglab.adele.icasa.ZoneProvider;
-//import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.icasa.location.Zone;
-import fr.liglab.adele.icasa.location.impl.ZoneImpl;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.provider.Creator;
+
+import fr.liglab.adele.icasa.ZoneProvider;
+import fr.liglab.adele.icasa.location.Zone;
+import fr.liglab.adele.icasa.location.impl.ZoneImpl;
 
 @Component(immediate = true,publicFactory=false)
 @Provides
@@ -39,7 +39,9 @@ public class ZoneProviderImpl implements ZoneProvider {
 
 	@Override
 	public void createZone(String id, int leftX, int topY, int bottomZ, int width, int height, int depth) {
-		Map propertiesInit = new HashMap<>();
+		
+		Map<String,Object> propertiesInit = new HashMap<>();
+		
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.NAME),id);
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.X),leftX);
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.Y),topY);
@@ -47,6 +49,7 @@ public class ZoneProviderImpl implements ZoneProvider {
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.X_LENGHT),width);
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.Y_LENGHT),height);
 		propertiesInit.put(ContextEntity.State.id(Zone.class,Zone.Z_LENGHT),depth);
+		
 		creator.create(id,propertiesInit);
 	}
 
@@ -70,13 +73,14 @@ public class ZoneProviderImpl implements ZoneProvider {
 
 	@Override
 	public void removeAllZones() {
-		creator.deleteAll();
+		for (String id : creator.identifiers()) {
+			creator.delete(id);
+		}
 	}
 
 	@Override
 	public Set<String> getZoneIds() {
-		Set<String> ids = new HashSet<>(creator.getInstances());
-		return ids;
+		return creator.identifiers();
 	}
 
 

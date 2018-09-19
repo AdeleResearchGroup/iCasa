@@ -584,18 +584,16 @@ public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveD
             /**
              * Relation Management
              */
-            for (ZWaveNode node : controller.getNodes()){
+            for (ZWaveNode node : controller.getNodes()) {
 
             	/*
-            	 * remove dangling relations when source node is nop longer managed
+            	 * remove dangling relations when source node is no longer managed
             	 */
-                if (!isManaged(node)){
-                    List<Relation> relations = neighborsRelationCreator.getInstancesRelatedTo("ZwaveDevice#"+node.getNodeId());
-                    for(Relation relation:relations) {
-                        neighborsRelationCreator.delete(relation.getSource(),relation.getTarget());
-                        neighborsRelationCreator.delete(relation.getTarget(),relation.getSource());
-                    }
-                    
+                if (!isManaged(node)) {
+                	
+                	neighborsRelationCreator.unlinkOutgoing("ZwaveDevice#"+node.getNodeId());
+                	neighborsRelationCreator.unlinkIncoming("ZwaveDevice#"+node.getNodeId());
+                	
                     continue;
                 }
 
@@ -614,7 +612,7 @@ public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveD
                         continue;
                     }
                     if (!isRelationManaged("ZwaveDevice#"+neighbor+"ZwaveDevice#"+node.getNodeId())) {
-                        neighborsRelationCreator.create("ZwaveDevice#" + neighbor, "ZwaveDevice#" + node.getNodeId());
+                        neighborsRelationCreator.link("ZwaveDevice#" + neighbor, "ZwaveDevice#" + node.getNodeId());
                         relationProxies.add("ZwaveDevice#" + neighbor + "ZwaveDevice#" + node.getNodeId());
                     }
                 }

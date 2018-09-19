@@ -54,7 +54,7 @@ public class PersonProviderImpl implements PersonProvider {
     @Override
     public Set<String> getPersonTypes() {
         Set<String> personTypes = new HashSet<>();
-        for (String pId : personCreator.getInstances()){
+        for (String pId : personCreator.identifiers()){
             personTypes.add(personCreator.getInstance(pId).getPersonType().getName());
         }
         return personTypes;

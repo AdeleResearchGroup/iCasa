@@ -30,18 +30,18 @@ public class PresenceServiceProvider {
 
     @Creator.Field(PresenceServiceImpl.RELATION_IS_ATTACHED) Creator.Relation<PresenceServiceImpl,Zone> attachedLumModelCreator;
 
-    @Bind(id = "zones",specification = Zone.class,aggregate = true,optional = true)
+    @Bind(id = "zones",specification = Zone.class, aggregate = true, optional = true)
     public void bindZone(Zone zone){
         String name = generateEntityName(zone);
-        creator.create(name);
-        attachedLumModelCreator.create(name,zone);
+        creator.create(name,null);
+        attachedLumModelCreator.link(name,zone);
     }
 
     @Unbind(id = "zones")
     public void unbindZone(Zone zone){
         String name = generateEntityName(zone);
         creator.delete(name);
-        attachedLumModelCreator.delete(name,zone);
+        attachedLumModelCreator.unlink(name,zone);
     }
 
     private String generateEntityName(Zone zone){

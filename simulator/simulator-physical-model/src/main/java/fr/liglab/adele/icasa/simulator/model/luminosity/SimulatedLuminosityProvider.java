@@ -34,14 +34,14 @@ public class SimulatedLuminosityProvider {
     public void bindZone(Zone zone){
         String name = generateEntityName(zone);
         creator.create(name);
-        attachedLumModelCreator.create(name,zone);
+        attachedLumModelCreator.link(name,zone);
     }
 
     @Unbind(id = "zones")
     public void unbindZone(Zone zone){
         String name = generateEntityName(zone);
         creator.delete(name);
-        attachedLumModelCreator.delete(name,zone);
+        attachedLumModelCreator.unlink(name,zone);
     }
 
     private String generateEntityName(Zone zone){

@@ -26,7 +26,7 @@ public class ApplicationManager {
 	}
     
     private boolean isApplicationEntity(EntityProvider provider, String entity) {
-		return provider.getPotentiallyProvidedEntityServices(entity).contains(ApplicationLayer.class.getCanonicalName());
+		return provider.getProvidedServices(entity).contains(ApplicationLayer.class.getCanonicalName());
     }
     
     @Command
@@ -36,8 +36,8 @@ public class ApplicationManager {
         	System.out.println("Provider : "+provider.getName());
         	for (String entity : provider.getProvidedEntities()) {
 				System.out.println(" provided entity "+entity);
-				System.out.println(" 	services "+provider.getPotentiallyProvidedEntityServices(entity));
-				System.out.println(" 	instances "+provider.getInstances(entity,true));
+				System.out.println(" 	services "+provider.getProvidedServices(entity));
+				System.out.println(" 	instances "+provider.getInstances(entity));
 			}
         }
         
@@ -74,7 +74,7 @@ public class ApplicationManager {
         			statusByEntity.put(entity,false);
         		}
 
-        		instancesByEntity.get(entity).addAll(provider.getInstances(entity,true));
+        		instancesByEntity.get(entity).addAll(provider.getInstances(entity));
         		statusByEntity.put(entity,statusByEntity.get(entity) || provider.isEnabled(entity));
 			}
 		}

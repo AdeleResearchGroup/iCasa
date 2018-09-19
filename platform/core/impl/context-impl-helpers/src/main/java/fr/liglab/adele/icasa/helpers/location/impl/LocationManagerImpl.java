@@ -15,104 +15,139 @@
  */
 package fr.liglab.adele.icasa.helpers.location.impl;
 
+import java.util.List;
+
+import org.apache.felix.ipojo.annotations.*;
 
 import fr.liglab.adele.cream.annotations.provider.Creator;
-import fr.liglab.adele.cream.model.Relation;
+
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
 import fr.liglab.adele.icasa.location.Zone;
-import org.apache.felix.ipojo.annotations.*;
+
 import fr.liglab.adele.icasa.location.impl.ZoneImpl;
 
-import java.util.List;
 
 @Component(immediate = true,publicFactory=false)
 @Instantiate(name = "LocationManagerImpl-0")
 public class LocationManagerImpl{
 
-    @Requires(id = "zones",specification = Zone.class,optional = true)
+    @Requires(id = "zones",specification = Zone.class, optional = true, proxy = false)
     List<Zone> zones;
 
-    @Requires(id = "locatedObjects",specification = LocatedObject.class,optional = true,proxy = false)
+    @Requires(id = "locatedObjects",specification = LocatedObject.class,optional = true, proxy = false)
     List<LocatedObject> locatedObjects;
 
-    @Creator.Field(ZoneImpl.RELATION_CONTAINS) 	Creator.Relation<Zone,LocatedObject> containsCreator;
+    @Creator.Field(ZoneImpl.RELATION_CONTAINS) 	Creator.Relation<Zone,LocatedObject> relationContains;
 
-    @Creator.Field(LocatedObjectBehaviorProvider.IS_IN_RELATION) 	Creator.Relation<LocatedObject,Zone> isContainsCreator;
+    @Creator.Field(LocatedObjectBehaviorProvider.IS_IN_RELATION) 	Creator.Relation<LocatedObject,Zone> relationIsIn;
 
-    @Bind(id = "zones")
-    public synchronized void bindZone(Zone zone){
-        for (LocatedObject object:locatedObjects){
-            if (! zone.canContains(object.getPosition())) {
-                continue;
-            }
-            containsCreator.create(zone,object);
-            isContainsCreator.create(object,zone);
+    private void attach(LocatedObject object, Zone zone) {
+    	try {
+    		
+    		if (!relationContains.isLinked(zone,object)) {
+    			relationContains.link(zone,object);
+    		}
+    		
+    		if (!relationIsIn.isLinked(object,zone)) {
+    			relationIsIn.link(object,zone);
+    		}
 
-        }
+    	}
+    	catch (Exception unexpected) {
+    		unexpected.printStackTrace();
+    	}
     }
+    
+    private void detach(LocatedObject object, Zone zone) {
+    	try {
+    		if (relationContains.isLinked(zone,object)) {
+    			relationContains.unlink(zone,object);
+    		}
+    		
+    		if (relationIsIn.isLinked(object,zone)) {
+    			relationIsIn.unlink(object,zone);
+    		}
+    	}
+    	catch (Exception unexpected) {
+    		unexpected.printStackTrace();
+    	}
+    	
+    }
+    
+    @Bind(id = "zones")
+    public synchronized void bindZone(Zone zone) {
 
-    @Modified(id = "zones")
-    public synchronized void modifiedZone(Zone zone){
-        for (LocatedObject object:locatedObjects){
-            if (zone.canContains(object.getPosition())) {
-                try{
-                    containsCreator.create(zone,object);
-                    isContainsCreator.create(object,zone);
-                }catch (IllegalArgumentException e){
-
-                }
-            }else {
-                containsCreator.delete(zone,object);
-                isContainsCreator.delete(object,zone);
+    	for (LocatedObject object: locatedObjects) {
+    		if (zone.canContains(object.getPosition())) {
+    			attach(object,zone);
             }
-        }
+    	}
     }
 
     @Unbind(id = "zones")
-    public synchronized void unbindZone(Zone zone){
-        List<Relation> relations = containsCreator.getInstancesRelatedTo(zone);
-        for (Relation relation:relations){
-            String source = relation.getSource();
-            String end = relation.getTarget();
-            containsCreator.delete(source,end);
-            isContainsCreator.delete(end,zone);
-        }
-
+    public synchronized void unbindZone(Zone zone) {
+    	
+    	for (LocatedObject object: locatedObjects) {
+   			detach(object,zone);
+    	}
     }
 
+    @Modified(id = "zones")
+    public synchronized void modifiedZone(Zone zone) {
+    	
+        for (LocatedObject object: locatedObjects) {
+        	
+        	boolean wasInZone = relationIsIn.isLinked(object,zone);
+        	boolean isInZone  = zone.canContains(object.getPosition());
+
+        	if (wasInZone && !isInZone) {
+        		detach(object,zone);
+        	}
+        	
+        	if (!wasInZone && isInZone) {
+        		attach(object,zone);
+        	}
+        }
+    }
+
+ 
 
     @Bind(id = "locatedObjects")
-    public synchronized void bindLocatedObject(LocatedObject object){
-        for (Zone zone : zones) {
-            if (! zone.canContains(object.getPosition())) {
-                continue;
-            }
-            containsCreator.create(zone,object);
-            isContainsCreator.create(object,zone);
-        }
-    }
+    public synchronized void bindLocatedObject(LocatedObject object) {
 
-    @Modified(id = "locatedObjects")
-    public synchronized void modifiedLocatedObject(LocatedObject object){
-        for (Zone zone : zones) {
-            if (zone.canContains(object.getPosition())) {
-                try{
-                    containsCreator.create(zone,object);
-                    isContainsCreator.create(object,zone);
-                }catch (IllegalArgumentException e){
-
-                }
-            }else {
-                containsCreator.delete(zone,object);
-                isContainsCreator.delete(object,zone);
+    	for (Zone zone : zones) {
+    		if (zone.canContains(object.getPosition())) {
+    			attach(object,zone);
             }
         }
     }
 
     @Unbind(id = "locatedObjects")
-    public synchronized void unbindLocatedObject(LocatedObject object){
-        containsCreator.delete(object.getZone(),object);
-        isContainsCreator.delete(object,object.getZone());
+    public synchronized void unbindLocatedObject(LocatedObject object) {
+    	
+    	for (Zone zone : zones) {
+    		detach(object,zone);
+        }
     }
+
+    @Modified(id = "locatedObjects")
+    public synchronized void modifiedLocatedObject(LocatedObject object) {
+        
+    	for (Zone zone : zones) {
+
+        	boolean wasInZone = relationIsIn.isLinked(object,zone);
+        	boolean isInZone  = zone.canContains(object.getPosition());
+
+        	if (wasInZone && !isInZone) {
+        		detach(object,zone);
+        	}
+        	
+        	if (!wasInZone && isInZone) {
+        		attach(object,zone);
+        	}
+
+    	}
+    }
+
 }

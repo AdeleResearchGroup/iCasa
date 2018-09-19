@@ -34,14 +34,14 @@ public class SimulatedPresenceProvider {
     public void bindZone(Zone zone){
         String name = generateEntityName(zone);
         creator.create(name);
-        attachedPresModelCreator.create(name,zone.getZoneName());
+        attachedPresModelCreator.link(name,zone.getZoneName());
     }
 
     @Unbind(id = "zones")
     public void unbindZone(Zone zone){
         String name = generateEntityName(zone);
         creator.delete(name);
-        attachedPresModelCreator.delete(name,zone.getZoneName());
+        attachedPresModelCreator.unlink(name,zone.getZoneName());
     }
 
     private String generateEntityName(Zone zone){

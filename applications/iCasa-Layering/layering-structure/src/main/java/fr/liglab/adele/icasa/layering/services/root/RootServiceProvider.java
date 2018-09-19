@@ -16,10 +16,7 @@ public class RootServiceProvider {
 
     @Validate
     public void start(){
-        if(creator.getInstances().isEmpty()){
-            creator.create("iCasa_root");
-        }
-
+    	creator.create("iCasa_root");
     }
     @Invalidate
     public void stop(){
@@ -28,11 +25,11 @@ public class RootServiceProvider {
 
     @Bind(id="zones",specification = Zone.class, aggregate = true, optional = true, proxy = false)
     public void bindZone(Zone zone){
-    	zoneAttachmentCreator.create("iCasa_root",zone);
+    	zoneAttachmentCreator.link("iCasa_root",zone);
     }
 
     @Unbind(id="zones")
     public void unbindZone(Zone zone){
-    	zoneAttachmentCreator.delete("iCasa_root",zone);
+    	zoneAttachmentCreator.unlink("iCasa_root",zone);
     }
 }

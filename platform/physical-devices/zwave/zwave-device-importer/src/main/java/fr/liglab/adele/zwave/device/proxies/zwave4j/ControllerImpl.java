@@ -643,15 +643,6 @@ public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveD
 
 		String nodeContextId = nodeId == zwaveNodeId ? contextId : "ZwaveDevice#"+nodeId;
     	
-    	/*
-    	 * Calculate the contextIds for the current list of neighbors
-    	 */
-		Set<String> currentNeighborContextIds	= new HashSet<>();
-		List<Relation> relations				= neighborsRelationCreator.getInstancesRelatedTo(nodeContextId);
-
-		for(Relation relation:relations) {
-			currentNeighborContextIds.add(relation.getTarget());
-		}
         
     	/*
     	 * Calculate the  contextIds for the updated new list of neighbors
@@ -669,34 +660,20 @@ public class ControllerImpl extends AbstractDiscoveryComponent implements ZwaveD
 			updatedNeighborContextIds.add(neighborContextId);
 		}
     	
-    	/*
-    	 * add new neighbors
-    	 */
+		neighborsRelationCreator.unlinkOutgoing(nodeContextId);
+
 		for (String neighborContextId : updatedNeighborContextIds) {
-			if (! currentNeighborContextIds.contains(neighborContextId)) {
-				neighborsRelationCreator.create(nodeContextId,neighborContextId);
-			}
+			neighborsRelationCreator.link(nodeContextId,neighborContextId);
 		}
 
-    	/*
-    	 * remove nodes that are no longer neighbors
-    	 */
-		for (String neighborContextId : currentNeighborContextIds) {
-			if (! updatedNeighborContextIds.contains(neighborContextId)) {
-				neighborsRelationCreator.delete(nodeContextId,neighborContextId);
-			}
-		}
 	}
 
 	private final void removeNodeNeighbors(int homeId, short nodeId) {
 
 		String removedContextId 	= nodeId == zwaveNodeId ? contextId : "ZwaveDevice#"+nodeId;
-		List<Relation> relations	= neighborsRelationCreator.getInstancesRelatedTo(removedContextId);
-
-		for(Relation relation:relations) {
-			neighborsRelationCreator.delete(relation.getSource(),relation.getTarget());
-			neighborsRelationCreator.delete(relation.getTarget(),relation.getSource());
-		}
+		
+		neighborsRelationCreator.unlinkOutgoing(removedContextId);
+		neighborsRelationCreator.unlinkIncoming(removedContextId);
 	}
 
 	private static class NodeReference {
