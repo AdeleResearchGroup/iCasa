@@ -17,7 +17,10 @@ package fr.liglab.adele.icasa.binary.light.follow.me;
 
 import fr.liglab.adele.icasa.device.light.BinaryLight;
 import fr.liglab.adele.icasa.location.LocatedObject;
+import fr.liglab.adele.cream.facilities.ipojo.annotation.ContextRequirement;
+
 import fr.liglab.adele.icasa.physical.abstraction.PresenceService;
+
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +54,7 @@ public class LightFollowMeApplication {
     }
 
     @Requires(id="lights",optional = true,specification = BinaryLight.class,filter = "(!(locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+"))",proxy = false)
+    @ContextRequirement(spec = {LocatedObject.class})
     private List<BinaryLight> binaryLights;
 
     @Requires(id="presence",optional = false,specification = PresenceService.class)

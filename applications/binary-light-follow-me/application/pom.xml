@@ -33,7 +33,13 @@
       <groupId>fr.liglab.adele.icasa</groupId>
       <artifactId>device.dependency.annotations</artifactId>     
       <version>${project.version}</version>
-    </dependency>      
+    </dependency>
+	<dependency>
+		<groupId>fr.liglab.adele.cream</groupId>
+		<artifactId>cream.runtime.facilities</artifactId>
+	</dependency>
+
+         
   </dependencies>
   
   <build>
