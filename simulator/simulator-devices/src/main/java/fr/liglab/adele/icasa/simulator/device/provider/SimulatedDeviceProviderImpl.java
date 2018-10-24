@@ -57,6 +57,7 @@ import fr.liglab.adele.icasa.simulator.device.light.impl.SimulatedPhotometerImpl
 import fr.liglab.adele.icasa.simulator.device.presence.impl.SimulatedPresenceSensorImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedCoolerImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedHeaterImpl;
+import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedThermometerExtImpl;
 import fr.liglab.adele.icasa.simulator.device.temperature.impl.SimulatedThermometerImpl;
 import org.apache.felix.ipojo.annotations.*;
 import org.slf4j.Logger;
@@ -87,6 +88,8 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
     @Creator.Field Creator.Entity<SimulatedHeaterImpl> simulatedHeaterCreator;
 
     @Creator.Field Creator.Entity<SimulatedThermometerImpl> simulatedThermometerCreator;
+
+    @Creator.Field Creator.Entity<SimulatedThermometerExtImpl> simulatedThermometerExtCreator;
 
     @Creator.Field Creator.Entity<SimulatedPresenceSensorImpl> simulatedPresenceSensorCreator;
 
@@ -144,6 +147,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         returnSet.add(SimulatedCoolerImpl.SIMULATED_COOLER);
         returnSet.add(SimulatedHeaterImpl.SIMULATED_HEATER);
         returnSet.add(SimulatedThermometerImpl.SIMULATED_THERMOMETER);
+        returnSet.add(SimulatedThermometerExtImpl.SIMULATED_THERMOMETEREXT);
         returnSet.add(SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR);
         returnSet.add(SimulatedWindowShutterImpl.SIMULATED_WINDOW_SHUTTER);
         return returnSet;
@@ -157,6 +161,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         simulatedCoolerCreator.deleteAll();
         simulatedHeaterCreator.deleteAll();
         simulatedThermometerCreator.deleteAll();
+        simulatedThermometerExtCreator.deleteAll();
         simulatedPresenceSensorCreator.deleteAll();
         simulatedWindowShutterCreator.deleteAll();
     }
@@ -175,6 +180,8 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
                 return simulatedCoolerCreator;
             case SimulatedThermometerImpl.SIMULATED_THERMOMETER:
                 return simulatedThermometerCreator;
+            case SimulatedThermometerExtImpl.SIMULATED_THERMOMETEREXT:
+                return simulatedThermometerExtCreator;
             case SimulatedPresenceSensorImpl.SIMULATED_PRESENCE_SENSOR:
                 return simulatedPresenceSensorCreator;
             case SimulatedWindowShutterImpl.SIMULATED_WINDOW_SHUTTER:
