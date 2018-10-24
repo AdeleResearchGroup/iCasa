@@ -43,7 +43,7 @@ public class SimulatedTemperatureModel implements TemperatureModel {
 
     @Override
     public double getCurrentTemperature() {
-        return 0;
+        return currentTemperature;
     }
 
     /**

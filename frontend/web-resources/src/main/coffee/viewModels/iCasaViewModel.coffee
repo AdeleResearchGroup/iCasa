@@ -1095,6 +1095,8 @@ define(['jquery',
               imgName = "dimmerLight_off";
             if ((@type() == "iCasa.Thermometer") || @hasService("fr.liglab.adele.icasa.device.temperature.Thermometer"))
               imgName = "thermometer";
+            if ((@type() == "iCasa.ThermometerExt") || @hasService("fr.liglab.adele.icasa.device.temperature.ThermometerExt"))
+              imgName = "thermometerExt";
             if ((@type() == "iCasa.MedicalThermometer") || @hasService("fr.liglab.adele.icasa.device.bathroomscale.MedicalThermometer"))
               imgName = "medicalThermometer";
             if ((@type() == "iCasa.Heater") || @hasService("fr.liglab.adele.icasa.device.temperature.Heater"))

@@ -19,6 +19,7 @@ package fr.liglab.adele.icasa.remote.wisdom.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import fr.liglab.adele.icasa.device.temperature.ThermometerExt;
 import org.wisdom.api.http.Context;
 
 import fr.liglab.adele.icasa.device.GenericDevice;
@@ -96,7 +97,8 @@ public class IcasaJSONUtil {
     	serializer(DimmerLight.class,IcasaJSONUtil::serialize).serialize(result,device);
     	serializer(WindowShutter.class,IcasaJSONUtil::serialize).serialize(result,device);
     	serializer(BinaryLight.class,IcasaJSONUtil::serialize).serialize(result,device);
-    	serializer(Thermometer.class,IcasaJSONUtil::serialize).serialize(result,device);
+        serializer(Thermometer.class,IcasaJSONUtil::serialize).serialize(result,device);
+        serializer(ThermometerExt.class,IcasaJSONUtil::serialize).serialize(result,device);
     	
         return result;
     }
@@ -205,6 +207,10 @@ public class IcasaJSONUtil {
 
     public static void serialize(JSONObject result, Thermometer thermometer) throws JSONException{
         property(result,Thermometer.THERMOMETER_CURRENT_TEMPERATURE,thermometer.getTemperature());
+    }
+
+    public static void serialize(JSONObject result, ThermometerExt thermometer) throws JSONException{
+        property(result,ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE,thermometer.getTemperature());
     }
 
     public static JSONObject serialize(String person) throws JSONException {
