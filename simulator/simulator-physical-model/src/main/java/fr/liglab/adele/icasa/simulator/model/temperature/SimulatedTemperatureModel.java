@@ -24,6 +24,7 @@ import fr.liglab.adele.icasa.location.Zone;
 import fr.liglab.adele.icasa.simulator.model.api.TemperatureModel;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Modified;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
 
@@ -58,23 +59,17 @@ public class SimulatedTemperatureModel implements TemperatureModel {
     public static final double DEFAULT_MAX_POWER = 1000;
 
     @Validate
-    public void validate(){
-        lastUpdate = clock.currentTimeMillis();
+    public void validate() {
+    	lastUpdateTime = clock.currentTimeMillis();
     }
 
     @Invalidate
-    public void invalidate(){
+    public void invalidate() {
 
     }
 
-    @Requires
+    @Requires(optional=false)
     private Clock clock;
-
-    @Requires(specification = Cooler.class,filter = "(locatedobject.object.zone=${temperaturemodel.zone.attached})",optional = true)
-    List<Cooler> coolersInZone;
-
-    @Requires(specification = Heater.class,filter = "(locatedobject.object.zone=${temperaturemodel.zone.attached})",optional = true)
-    List<Heater> heatersInZone;
 
     @ContextEntity.Relation.Field(RELATION_IS_ATTACHED)
     @Requires(id="zone",specification=Zone.class,optional=false)
@@ -90,57 +85,49 @@ public class SimulatedTemperatureModel implements TemperatureModel {
         return zoneName;
     }
 
-    private long lastUpdate;
+    private double getThermalCapacity() {
+        
+    	double zoneVolume =  zone.getYLength()*zone.getXLength()*zone.getZLength();
 
-    private double lastTemperature = DEFAULT_TEMP_VALUE;
-
-    @ContextEntity.State.Pull(service = TemperatureModel.class,state = TemperatureModel.CURRENT_TEMPERATURE)
-    Supplier<Double> pullCurrentTemp = () -> {
-
-        double computeTemperature;
-
-        long timeDiff = clock.currentTimeMillis() - lastUpdate;
-        if (timeDiff < 0){
-            timeDiff = 0;
+        /* use a default volume for zones without dimensions to avoid divide by zero */
+        if (zoneVolume == 0.0d) {
+            zoneVolume =  2.5d;
         }
-        double newTemperature = DEFAULT_TEMP_VALUE; // 20 degrees by default
+        return AIR_MASS * AIR_MASS_CAPACITY * zoneVolume;
 
-        double powerLevelTotal = getPowerInZone();
-        double timeDiffInSeconds = timeDiff / 1000.0d;
+    }
 
-        if (powerLevelTotal == 0){
-            if ( lastTemperature > (DEFAULT_TEMP_VALUE + 0.5) ) {
-                powerLevelTotal = -50.0;
-            } else if ( lastTemperature < (DEFAULT_TEMP_VALUE - 0.5) ){
-                powerLevelTotal = 50.0;
-            }else {
-                return lastTemperature;
-            }
-        }
-        if ( (powerLevelTotal > 0) && (lastTemperature < DEFAULT_TEMP_VALUE) ) {
-            powerLevelTotal += getPowerInZone();
-        } else if( (powerLevelTotal) < 0 && (lastTemperature > DEFAULT_TEMP_VALUE) ) {
-            powerLevelTotal += getPowerInZone();
-        }
+    @Requires(id="coolers", specification = Cooler.class, filter = "(locatedobject.object.zone=${temperaturemodel.zone.attached})", optional = true)
+    List<Cooler> coolersInZone;
 
-        double delta = (powerLevelTotal  * timeDiffInSeconds) / getThermalCapacity();
+    @Requires(id = "heaters", specification = Heater.class, filter = "(locatedobject.object.zone=${temperaturemodel.zone.attached})", optional = true)
+    List<Heater> heatersInZone;
 
-        newTemperature = lastTemperature  + delta;
+    /**
+     * recalculates the temperature on-demand or when the heater/chillers are acted on
+     * 
+     *  TODO: push value as time passes
+     *
+     */
+    @ContextEntity.State.Pull(service = TemperatureModel.class, state = TemperatureModel.CURRENT_TEMPERATURE)
+    Supplier<Double> pullCurrentTemp = this::estimateTemperature;
+    
+    @ContextEntity.State.Push(service = TemperatureModel.class, state =  TemperatureModel.CURRENT_TEMPERATURE)
+    private double pushTemperature() {
+    	return estimateTemperature();
+    }
+    
+    @Modified(id="coolers")
+    private void coolerModified() {
+    	pushTemperature();
+    }
 
-        /**
-         * Clipping function to saturate the temperature at a certain level
-         */
-        if (newTemperature > HIGHEST_TEMP)
-            newTemperature = HIGHEST_TEMP;
-        else if (newTemperature < LOWER_TEMP)
-            newTemperature = LOWER_TEMP;
+    @Modified(id="heaters")
+    private void haeterModified() {
+    	pushTemperature();
+    }
 
-        lastTemperature = newTemperature;
-
-        return newTemperature ;
-    };
-
-    private double getPowerInZone(){
+    private double getPowerInZone() {
         double powerInZone = 0;
         for (Heater heater : heatersInZone){
             if (heater instanceof PowerObservable){
@@ -159,13 +146,54 @@ public class SimulatedTemperatureModel implements TemperatureModel {
         return powerInZone;
     }
 
-    private double getThermalCapacity() {
-        double newVolume = 2.5d; // use this value as default to avoid divide by zero
-        double zoneVolume =  (zone.getYLength()*zone.getXLength()*zone.getZLength());
-        if (zoneVolume > 0.0d){
-            newVolume =  zoneVolume;
-        }
-        return AIR_MASS * AIR_MASS_CAPACITY * newVolume;
+    private long lastUpdateTime;
 
-    }
+    private double lastTemperature = DEFAULT_TEMP_VALUE;
+
+    private double estimateTemperature() {
+    	
+    	long currentTime		= clock.currentTimeMillis();
+        long elapsedTime		= currentTime - lastUpdateTime;
+        
+        double elapsedSeconds 	= elapsedTime <= 0 ? 0.0d : (elapsedTime / 1000.0d);
+
+        double powerLevelTotal = getPowerInZone();
+
+        /*
+         * When there are no heat/chill sources, oscillate around the default temperature
+         */
+        if (powerLevelTotal == 0){
+            if ( lastTemperature > (DEFAULT_TEMP_VALUE + 0.5) ) {
+                powerLevelTotal = -50.0;
+            } else if ( lastTemperature < (DEFAULT_TEMP_VALUE - 0.5) ){
+                powerLevelTotal = 50.0;
+            }else {
+                return lastTemperature;
+            }
+        }
+        
+        if ( (powerLevelTotal > 0) && (lastTemperature < DEFAULT_TEMP_VALUE) ) {
+            powerLevelTotal += 50.0d;
+        } else if( (powerLevelTotal) < 0 && (lastTemperature > DEFAULT_TEMP_VALUE) ) {
+            powerLevelTotal -= 50.0d;
+        }
+
+
+        double estimatedTemperature = lastTemperature  + ((powerLevelTotal  * elapsedSeconds) / getThermalCapacity());
+
+        /**
+         * Clipping function to saturate the temperature at a certain level
+         */
+        if (estimatedTemperature > HIGHEST_TEMP)
+        	estimatedTemperature = HIGHEST_TEMP;
+        else if (estimatedTemperature < LOWER_TEMP)
+        	estimatedTemperature = LOWER_TEMP;
+
+        lastTemperature = estimatedTemperature;
+        lastUpdateTime	= currentTime;
+        
+        return lastTemperature ;
+    };
+
+
 }
