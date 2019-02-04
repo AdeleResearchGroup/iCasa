@@ -23,15 +23,16 @@ import fr.liglab.adele.cream.annotations.State;
 
 
 /**
- * Created by aygalinc on 10/02/16.
+ * The weather conditions at the current moment of the simulation.
+ * 
+ * @author vega
+ *
  */
-public @ContextService interface TemperatureModel {
+public @ContextService interface WeatherModel {
 
     public static final @State
     String CURRENT_TEMPERATURE = "current.temperature";
 
-    public static final @State String ZONE_ATTACHED = "zone.attached";
-
-    public Quantity<Temperature> getCurrentTemperature();
+    public Quantity<Temperature> getTemperature();
 
 }

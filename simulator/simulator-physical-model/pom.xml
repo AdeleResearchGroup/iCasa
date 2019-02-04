@@ -82,6 +82,7 @@
                     <instructions>
                         <Export-Package>fr.liglab.adele.icasa.simulator.model.api</Export-Package>
                         <Private-Package>
+                            fr.liglab.adele.icasa.simulator.model.weather,
                             fr.liglab.adele.icasa.simulator.model.temperature,
                             fr.liglab.adele.icasa.simulator.model.luminosity,
                             fr.liglab.adele.icasa.simulator.model.day.part,

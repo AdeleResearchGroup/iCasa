@@ -32,110 +32,77 @@ package fr.liglab.adele.icasa.simulator.device.temperature.impl;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Modified;
+
 import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.battery.BatteryObservable;
-import fr.liglab.adele.icasa.device.temperature.Thermometer;
+
 import fr.liglab.adele.icasa.device.temperature.ThermometerExt;
 import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
 import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.icasa.physical.abstraction.MomentOfTheDay;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
-import fr.liglab.adele.icasa.simulator.model.api.TemperatureModel;
-import org.apache.felix.ipojo.annotations.*;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import fr.liglab.adele.icasa.simulator.model.api.WeatherModel;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Temperature;
 
 
+
 /**
- * Implementation of a simulated thermometer device.
+ * Implementation of a simulated thermometer device tracking the weather temperature.
  *
  */
-@ContextEntity(coreServices = {ThermometerExt.class, SimulatedDevice.class,BatteryObservable.class})
+@ContextEntity(coreServices = {ThermometerExt.class, SimulatedDevice.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
-public class SimulatedThermometerExtImpl implements ThermometerExt, SimulatedDevice,GenericDevice,BatteryObservable {
+public class SimulatedThermometerExtImpl implements ThermometerExt, SimulatedDevice, GenericDevice {
 
     public final static String SIMULATED_THERMOMETEREXT = "iCasa.ThermometerExt";
 
-    @ContextEntity.State.Field(service = ThermometerExt.class,state=ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE)
-    private Quantity<Temperature> currentSensedTemperature;
 
-    @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_THERMOMETEREXT)
+    @ContextEntity.State.Field(service = SimulatedDevice.class, state = SIMULATED_DEVICE_TYPE, value = SIMULATED_THERMOMETEREXT)
     private String deviceType;
-
-    @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
-    private String serialNumber;
-
-    @ContextEntity.State.Field(service = BatteryObservable.class,state = BatteryObservable.BATTERY_LEVEL,directAccess = true,value = "48")
-    private double batteryLevel;
-
-    @Requires(id="MoD",specification = MomentOfTheDay.class,optional = false)
-    private MomentOfTheDay MoD;
-
-    @Validate
-    public void validate(){
-        currentSensedTemperature=Quantities.getQuantity(291,Units.KELVIN);
-    }
 
     @Override
     public String getDeviceType() {
         return deviceType;
     }
 
-    @Override
-    public Quantity<Temperature> getTemperature() {
-        return currentSensedTemperature;
-    }
+    @ContextEntity.State.Field(service = GenericDevice.class, state = GenericDevice.DEVICE_SERIAL_NUMBER)
+    private String serialNumber;
 
     @Override
     public String getSerialNumber() {
         return serialNumber;
     }
 
-    @Bind(id ="TemperatureModelDependency" ,filter = "(& (locatedobject.object.zone="+LocatedObject.LOCATION_UNKNOWN+") (!(objectClass=fr.liglab.adele.iop.device.api.IOPService)) )",optional = true,aggregate = true)
-    public void bindTemperature(TemperatureModel model){
-        pushTemperature();
-    }
+    @ContextEntity.State.Field(service = ThermometerExt.class,state=ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE)
+    private Quantity<Temperature> currentSensedTemperature;
 
-
-
-    @Modified(id="MoD")
-    public void modMoD(){
-        pushTemperature();
-    }
-
-    @Modified(id = "TemperatureModelDependency")
-    public void modifiedTemperature(TemperatureModel model){
-        pushTemperature();
-    }
-
-    @Unbind(id = "TemperatureModelDependency")
-    public void unbindTemperature(TemperatureModel model){
-        pushTemperature();
+    @Override
+    public Quantity<Temperature> getTemperature() {
+        return currentSensedTemperature;
     }
 
     @ContextEntity.State.Push(service = ThermometerExt.class,state = ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE)
-    public Quantity<Temperature> pushTemperature(){
-        double temp =-2;
-        if(MoD.getCurrentPartOfTheDay().toString().equals("MORNING")){
-            temp=270d;
-        }else if(MoD.getCurrentPartOfTheDay().toString().equals("AFTERNOON")){
-            temp=291d;
-        }else if(MoD.getCurrentPartOfTheDay().toString().equals("EVENING")){
-            temp=280d;
-        }else if(MoD.getCurrentPartOfTheDay().toString().equals("NIGHT")){
-            temp=275d;
-        }else{
-            temp=291d;
-        }
-        return Quantities.getQuantity(temp, Units.KELVIN);
+    public Quantity<Temperature> pushTemperature() {
+    	return model.getTemperature();
     }
 
-    @Override
-    public double getBatteryPercentage() {
-        return batteryLevel;
+    @Requires(id="Model", optional=false, proxy=false)
+    private WeatherModel model;
+
+    @Bind(id="Model")
+    public void modelBound() {
+        pushTemperature();
     }
+
+    @Modified(id="Model")
+    public void modelUpdated() {
+        pushTemperature();
+    }
+
+ 
 }

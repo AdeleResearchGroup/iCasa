@@ -21,81 +21,144 @@ import fr.liglab.adele.icasa.device.PowerObservable;
 import fr.liglab.adele.icasa.device.temperature.Cooler;
 import fr.liglab.adele.icasa.device.temperature.Heater;
 import fr.liglab.adele.icasa.location.Zone;
+import fr.liglab.adele.icasa.service.scheduler.PeriodicRunnable;
 import fr.liglab.adele.icasa.simulator.model.api.TemperatureModel;
-import org.apache.felix.ipojo.annotations.Bind;
-import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Modified;
-import org.apache.felix.ipojo.annotations.Requires;
+import fr.liglab.adele.icasa.simulator.model.api.WeatherModel;
+import tec.units.ri.quantity.Quantities;
+import tec.units.ri.unit.Units;
+
 import org.apache.felix.ipojo.annotations.Validate;
 
-import java.util.List;
-import java.util.function.Supplier;
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Modified;
 
-@ContextEntity(coreServices = TemperatureModel.class)
-public class SimulatedTemperatureModel implements TemperatureModel {
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.measure.Quantity;
+import javax.measure.quantity.Power;
+import javax.measure.quantity.Temperature;
+import javax.measure.quantity.Time;
+import javax.measure.quantity.Volume;
+
+@ContextEntity(coreServices = {TemperatureModel.class, PeriodicRunnable.class})
+
+public class SimulatedTemperatureModel implements TemperatureModel, PeriodicRunnable {
 
     public static final String RELATION_IS_ATTACHED="model.attached.to";
-
-    @ContextEntity.State.Field(service = TemperatureModel.class,state = TemperatureModel.CURRENT_TEMPERATURE,value = "293.15")
-    public double currentTemperature;
-
-    @ContextEntity.State.Field(service = TemperatureModel.class,state = TemperatureModel.ZONE_ATTACHED)
-    public String zoneName;
-
-    @Override
-    public double getCurrentTemperature() {
-        return currentTemperature;
-    }
-
-    /**
-     * Define constants to compute the value of the thermal capacity
-     */
-    public static final double AIR_MASS_CAPACITY = 1000; // mass capacity of the air in J/(Kg.K)
-    public static final double AIR_MASS = 1.2; // mass of the air in Kg/m^3
-    public static final double HIGHEST_TEMP = 303.16;
-    public static final double LOWER_TEMP = 283.16;
-    public static final double DEFAULT_TEMP_VALUE = 293.15; // 20 celsius degrees in kelvin
-
-    public static final double DEFAULT_MAX_POWER = 1000;
-
-    @Validate
-    public void validate() {
-    	lastUpdateTime = clock.currentTimeMillis();
-    }
-
-    @Invalidate
-    public void invalidate() {
-
-    }
-
-    @Requires(optional=false)
-    private Clock clock;
 
     @ContextEntity.Relation.Field(RELATION_IS_ATTACHED)
     @Requires(id="zone",specification=Zone.class,optional=false)
     Zone zone;
 
-    @Bind(id = "zone")
-    public void bindZone(Zone zone){
-        pushZone(zone.getZoneName());
-    }
+    @ContextEntity.State.Field(service = TemperatureModel.class,state = TemperatureModel.ZONE_ATTACHED)
+    public String zoneName;
 
     @ContextEntity.State.Push(service = TemperatureModel.class,state = TemperatureModel.ZONE_ATTACHED)
     public String pushZone(String zoneName) {
         return zoneName;
     }
 
-    private double getThermalCapacity() {
-        
-    	double zoneVolume =  zone.getYLength()*zone.getXLength()*zone.getZLength();
-
-        /* use a default volume for zones without dimensions to avoid divide by zero */
-        if (zoneVolume == 0.0d) {
-            zoneVolume =  2.5d;
-        }
-        return AIR_MASS * AIR_MASS_CAPACITY * zoneVolume;
-
+    @Bind(id = "zone")
+    public void bindZone(Zone zone){
+        pushZone(zone.getZoneName());
     }
+
+    @ContextEntity.State.Field(service = TemperatureModel.class,state = TemperatureModel.CURRENT_TEMPERATURE)
+    public Quantity<Temperature> currentTemperature;
+
+    @ContextEntity.State.Push(service = TemperatureModel.class, state =  TemperatureModel.CURRENT_TEMPERATURE)
+    private Quantity<Temperature> pushTemperature() {
+    	return estimateTemperature();
+    }
+
+    @Requires(optional=false)
+    private Clock clock;
+
+	@Override
+	public long getPeriod() {
+		return 1;
+	}
+
+	@Override
+	public TimeUnit getUnit() {
+		return TimeUnit.HOURS;
+	}
+
+	@Override
+	public void run() {
+		pushTemperature();
+	}
+
+    @Override
+    public Quantity<Temperature> getCurrentTemperature() {
+        return currentTemperature;
+    }
+
+    @Validate
+    public void validate() {
+    	lastUpdateTime = clock.currentTimeMillis();
+    }
+
+    /**
+     * Calculate the power lost from heat transfer from the exterior, a very basic simulation with a constant W/K factor
+     * 
+     */
+    private final static Quantity<?> Q = Quantities.getQuantity(5.0d, Units.WATT.divide(Units.KELVIN));
+
+    @Requires(id="weather", optional=false)
+    private WeatherModel weather;
+
+    @Modified(id="weather"	)
+    public void estimateWeatherInfluence() {
+    	
+    	Quantity<Temperature> gap 	= lastTemperature.subtract(weather.getTemperature());
+    	Quantity<Power> power 		= Q.multiply(gap).asType(Power.class);
+    	
+    	synchronized (this) {
+    		weatherPower = power;
+		}
+    }
+
+    /**
+     * Calculate the temperature based on the loads in the room and the lost power
+     * 
+     */
+
+    private long					lastUpdateTime;
+
+    private Quantity<Temperature> 	lastTemperature = Quantities.getQuantity(20, Units.CELSIUS).to(Units.KELVIN);
+    private Quantity<Power> 		powerToApply	= Quantities.getQuantity(0.0d, Units.WATT);
+    private Quantity<Power> 		weatherPower	= Quantities.getQuantity(0.0d, Units.WATT);
+
+    private synchronized Quantity<Temperature> estimateTemperature() {
+    	
+    	long currentTime		= clock.currentTimeMillis();
+        long elapsedTime		= currentTime - lastUpdateTime;
+        
+  
+        Quantity<Time> deltaTime = Quantities.getQuantity(elapsedTime <= 0 ? 0.0d : (elapsedTime / 1000.0d), Units.SECOND);
+        
+        /*
+         * Calculate the increase/decrease of temperature due the applied power
+         */
+        Quantity<Temperature> deltaTemperature	= powerToApply.subtract(weatherPower).multiply(deltaTime).divide(getThermalCapacity()).asType(Temperature.class);
+
+        lastTemperature = lastTemperature.add(deltaTemperature);
+        
+        if (lastTemperature.getValue().doubleValue() < 0.0d) {
+        	lastTemperature =  Quantities.getQuantity(0.0d, Units.KELVIN);
+        }
+        
+        lastUpdateTime	= currentTime;
+        
+        return lastTemperature;
+    };
+
+    /**
+     * The current applied power in the zone (units: J/s = Watts) 
+     */
 
     @Requires(id="coolers", specification = Cooler.class, filter = "(locatedobject.object.zone=${temperaturemodel.zone.attached})", optional = true)
     List<Cooler> coolersInZone;
@@ -103,97 +166,102 @@ public class SimulatedTemperatureModel implements TemperatureModel {
     @Requires(id = "heaters", specification = Heater.class, filter = "(locatedobject.object.zone=${temperaturemodel.zone.attached})", optional = true)
     List<Heater> heatersInZone;
 
-    /**
-     * recalculates the temperature on-demand or when the heater/chillers are acted on
-     * 
-     *  TODO: push value as time passes
-     *
-     */
-    @ContextEntity.State.Pull(service = TemperatureModel.class, state = TemperatureModel.CURRENT_TEMPERATURE)
-    Supplier<Double> pullCurrentTemp = this::estimateTemperature;
-    
-    @ContextEntity.State.Push(service = TemperatureModel.class, state =  TemperatureModel.CURRENT_TEMPERATURE)
-    private double pushTemperature() {
-    	return estimateTemperature();
-    }
     
     @Modified(id="coolers")
     private void coolerModified() {
-    	pushTemperature();
+    	pushPower();
     }
 
     @Modified(id="heaters")
     private void haeterModified() {
-    	pushTemperature();
+    	pushPower();
     }
 
-    private double getPowerInZone() {
-        double powerInZone = 0;
-        for (Heater heater : heatersInZone){
-            if (heater instanceof PowerObservable){
-                powerInZone +=((PowerObservable) heater).getCurrentConsumption();
-            }else {
-                powerInZone += heater.getPowerLevel() * DEFAULT_MAX_POWER;
-            }
+    private void pushPower() {
+    	
+    	Quantity<Power> updatedPowerToApply = getPowerInZone();
+
+    	synchronized (this) {
+			if (this.powerToApply.equals(updatedPowerToApply)) {
+				return;
+			}
+		}
+    	
+    	pushTemperature();
+    	
+    	synchronized (this) {
+        	powerToApply = updatedPowerToApply;
+		}
+    	
+    }
+    
+    private Quantity<Power> getPowerInZone() {
+    	
+    	Quantity<Power> powerInZone = Quantities.getQuantity(0.0d, Units.WATT);
+        
+    	for (Heater heater : heatersInZone) {
+    		powerInZone = powerInZone.add(power(heater));
         }
-        for (Cooler cooler : coolersInZone){
-            if (cooler instanceof PowerObservable){
-                powerInZone -= ((PowerObservable) cooler).getCurrentConsumption();
-            }else {
-                powerInZone -= cooler.getPowerLevel() * DEFAULT_MAX_POWER;
-            }
+    	
+        for (Cooler cooler : coolersInZone) {
+    		powerInZone = powerInZone.subtract(power(cooler));
         }
+        
         return powerInZone;
     }
 
-    private long lastUpdateTime;
+    /**
+     * Define constants to compute heating power in the zone for devices that do not get instant consumption
+     */
+    public static final Quantity<Power> DEFAULT_MAX_POWER = Quantities.getQuantity(1000.0d, Units.WATT);
 
-    private double lastTemperature = DEFAULT_TEMP_VALUE;
-
-    private double estimateTemperature() {
+    private final static Quantity<Power> power(Heater heater) {
     	
-    	long currentTime		= clock.currentTimeMillis();
-        long elapsedTime		= currentTime - lastUpdateTime;
-        
-        double elapsedSeconds 	= elapsedTime <= 0 ? 0.0d : (elapsedTime / 1000.0d);
+    	if (heater instanceof PowerObservable) {
+    		double value = ((PowerObservable) heater).getCurrentConsumption();
+            return Quantities.getQuantity(value, Units.WATT);
+        }
+    	 
+    	return DEFAULT_MAX_POWER.multiply(heater.getPowerLevel());
+    }
 
-        double powerLevelTotal = getPowerInZone();
+    private final static Quantity<Power> power(Cooler cooler) {
+
+    	if (cooler instanceof PowerObservable) {
+    		double value = ((PowerObservable) cooler).getCurrentConsumption();
+            return Quantities.getQuantity(value, Units.WATT);
+        }
+    	 
+    	return DEFAULT_MAX_POWER.multiply(cooler.getPowerLevel());
+    }
+
+    
+
+    /**
+     * Define constants to compute the value of the thermal capacity of the room
+     */
+    public static final Quantity<?> AIR_MASS_CAPACITY 				= Quantities.getQuantity(1000.0d, Units.JOULE.divide(Units.KILOGRAM.multiply(Units.KELVIN)));
+    public static final Quantity<?> AIR_DENSITY 					= Quantities.getQuantity(1.2d, Units.KILOGRAM.divide(Units.CUBIC_METRE)); 
+
+    /**
+     * The thermal capacity of the zone (units J/°K)
+     * 
+     */
+    private Quantity<?> getThermalCapacity() {
+        
+    	Quantity<Volume> zoneVolume =  Quantities.getQuantity(zone.getYLength() * zone.getXLength() * zone.getZLength(), Units.CUBIC_METRE);
 
         /*
-         * When there are no heat/chill sources, oscillate around the default temperature
+         * TODO currently the simulator DO NOT handle physical measures of zones (the calculated volume is then wrong as it is just some pixel
+         * value used by the front-end), by now just use a constant volume for all the zones
          */
-        if (powerLevelTotal == 0){
-            if ( lastTemperature > (DEFAULT_TEMP_VALUE + 0.5) ) {
-                powerLevelTotal = -50.0;
-            } else if ( lastTemperature < (DEFAULT_TEMP_VALUE - 0.5) ){
-                powerLevelTotal = 50.0;
-            }else {
-                return lastTemperature;
-            }
+    	
+        if (true) {
+            zoneVolume =  Quantities.getQuantity(100.0d, Units.CUBIC_METRE);
         }
         
-        if ( (powerLevelTotal > 0) && (lastTemperature < DEFAULT_TEMP_VALUE) ) {
-            powerLevelTotal += 50.0d;
-        } else if( (powerLevelTotal) < 0 && (lastTemperature > DEFAULT_TEMP_VALUE) ) {
-            powerLevelTotal -= 50.0d;
-        }
+        return AIR_MASS_CAPACITY.multiply(AIR_DENSITY.multiply(zoneVolume));
 
-
-        double estimatedTemperature = lastTemperature  + ((powerLevelTotal  * elapsedSeconds) / getThermalCapacity());
-
-        /**
-         * Clipping function to saturate the temperature at a certain level
-         */
-        if (estimatedTemperature > HIGHEST_TEMP)
-        	estimatedTemperature = HIGHEST_TEMP;
-        else if (estimatedTemperature < LOWER_TEMP)
-        	estimatedTemperature = LOWER_TEMP;
-
-        lastTemperature = estimatedTemperature;
-        lastUpdateTime	= currentTime;
-        
-        return lastTemperature ;
-    };
-
+    }
 
 }

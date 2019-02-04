@@ -95,22 +95,22 @@ public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,
 
     @Bind(id ="TemperatureModelDependency" ,filter = "(temperaturemodel.zone.attached=${locatedobject.object.zone})",optional = true,aggregate = true)
     public void bindTemperature(TemperatureModel model){
-        pushTemperature(model.getCurrentTemperature());
+        pushTemperature(model);
     }
 
     @Modified(id = "TemperatureModelDependency")
     public void modifiedTemperature(TemperatureModel model){
-        pushTemperature(model.getCurrentTemperature());
+        pushTemperature(model);
     }
 
     @Unbind(id = "TemperatureModelDependency")
     public void unbindTemperature(TemperatureModel model){
-        pushTemperature(FAULT_VALUE);
+        pushTemperature(null);
     }
 
     @ContextEntity.State.Push(service = Thermometer.class,state = Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
-    public Quantity<Temperature> pushTemperature(double temperature){
-        return Quantities.getQuantity(temperature, Units.KELVIN);
+    public Quantity<Temperature> pushTemperature(TemperatureModel model){
+        return model != null ? model.getCurrentTemperature() : Quantities.getQuantity(Thermometer.FAULT_VALUE, Units.KELVIN);
     }
 
     @Override
