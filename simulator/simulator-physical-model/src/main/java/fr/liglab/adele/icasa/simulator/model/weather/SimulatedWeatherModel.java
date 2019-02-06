@@ -104,6 +104,13 @@ public class SimulatedWeatherModel implements WeatherModel, PeriodicRunnable {
 		@Override
 		public double valueAt(DateTime now) {
 			
+			/*
+			 * Handle leap years by using the values of the 28th February
+			 */
+			if (now.getMonthOfYear() == 2 && now.getDayOfMonth() == 29) {
+				now = now.minusDays(1);
+			}
+			
 			DateTime yesterday 		= now.minusDays(1);
 			DateTime tomorrow 		= now.plusDays(1);
 			
