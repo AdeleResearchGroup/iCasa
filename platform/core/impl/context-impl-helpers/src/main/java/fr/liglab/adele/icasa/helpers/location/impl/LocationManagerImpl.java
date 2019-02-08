@@ -76,7 +76,7 @@ public class LocationManagerImpl{
     }
     
     @Bind(id = "zones")
-    public synchronized void bindZone(Zone zone) {
+    public void bindZone(Zone zone) {
 
     	for (LocatedObject object: locatedObjects) {
     		if (zone.canContains(object.getPosition())) {
@@ -86,7 +86,7 @@ public class LocationManagerImpl{
     }
 
     @Unbind(id = "zones")
-    public synchronized void unbindZone(Zone zone) {
+    public void unbindZone(Zone zone) {
     	
     	for (LocatedObject object: locatedObjects) {
    			detach(object,zone);
@@ -94,7 +94,7 @@ public class LocationManagerImpl{
     }
 
     @Modified(id = "zones")
-    public synchronized void modifiedZone(Zone zone) {
+    public void modifiedZone(Zone zone) {
     	
         for (LocatedObject object: locatedObjects) {
         	
@@ -114,7 +114,7 @@ public class LocationManagerImpl{
  
 
     @Bind(id = "locatedObjects")
-    public synchronized void bindLocatedObject(LocatedObject object) {
+    public void bindLocatedObject(LocatedObject object) {
 
     	for (Zone zone : zones) {
     		if (zone.canContains(object.getPosition())) {
@@ -124,7 +124,7 @@ public class LocationManagerImpl{
     }
 
     @Unbind(id = "locatedObjects")
-    public synchronized void unbindLocatedObject(LocatedObject object) {
+    public void unbindLocatedObject(LocatedObject object) {
     	
     	for (Zone zone : zones) {
     		detach(object,zone);
@@ -132,7 +132,7 @@ public class LocationManagerImpl{
     }
 
     @Modified(id = "locatedObjects")
-    public synchronized void modifiedLocatedObject(LocatedObject object) {
+    public void modifiedLocatedObject(LocatedObject object) {
         
     	for (Zone zone : zones) {
 
