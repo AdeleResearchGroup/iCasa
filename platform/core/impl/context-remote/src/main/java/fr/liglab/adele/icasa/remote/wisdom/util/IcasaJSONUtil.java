@@ -248,12 +248,17 @@ public class IcasaJSONUtil {
     	JSONObject result = new JSONObject();
     	
     	result.putOnce("id", ClockREST.DEFAULT_INSTANCE_NAME); //TODO should be changed to manage multiple clocks
-    	result.putOnce("startDateStr", DateTextUtil.getTextDate(clock.getStartDate()));
-    	result.putOnce("startDate", clock.getStartDate());
-    	result.putOnce("currentDateStr", DateTextUtil.getTextDate((clock.currentTimeMillis())));
-    	result.putOnce("currentTime", clock.currentTimeMillis());
     	result.putOnce("factor", clock.getFactor());
     	result.putOnce("pause", clock.isPaused());
+    	
+    	long start	= clock.getStartDate();
+    	long now	= clock.currentTimeMillis();
+    	
+    	result.putOnce("startDateStr", DateTextUtil.getTextDate(start));
+    	result.putOnce("startDate", start);
+    	
+    	result.putOnce("currentDateStr", DateTextUtil.getTextDate(now));
+    	result.putOnce("currentTime", now);
     	
     	return result;
     }
