@@ -182,7 +182,7 @@ public class VirtualClock implements Clock {
     }
 
 
-    private void changeEra(long epoch, boolean notify) {
+    private void changeEra(long epoch, boolean notify, boolean resume) {
 
     	long previuosEpoch = this.lastMeasure != null ? this.lastMeasure.getEpoch() : 0L;
     	
@@ -205,7 +205,9 @@ public class VirtualClock implements Clock {
     	/*
     	 * Resume the clock without notifying listeners, this is implied by the startDateModified event
     	 */
-        resume(false);
+        if (resume) {
+        	resume(false);
+        }
         
         if (notify) {
             notify(ClockListener::startDateModified, previuosEpoch);
@@ -219,7 +221,7 @@ public class VirtualClock implements Clock {
         factor	= 1;
         pause	= true;
 
-        changeEra(System.currentTimeMillis(), false);
+        changeEra(System.currentTimeMillis(), false, false);
     }
 
     @Invalidate
@@ -234,7 +236,7 @@ public class VirtualClock implements Clock {
 
     @Override
 	public void setStartDate(long epoch) {
-    	changeEra(epoch,true);
+    	changeEra(epoch,true, true);
     }
 
 
