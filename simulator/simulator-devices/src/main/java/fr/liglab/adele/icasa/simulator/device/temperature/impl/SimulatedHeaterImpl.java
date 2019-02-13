@@ -33,14 +33,25 @@ public class SimulatedHeaterImpl implements Heater,SimulatedDevice,GenericDevice
 
     public final static String SIMULATED_HEATER= "iCasa.Heater";
 
-    @ContextEntity.State.Field(service = Heater.class,state = HEATER_POWER_LEVEL,directAccess = true,value ="0.0")
-    private double powerLevel;
 
     @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_HEATER)
     private String deviceType;
 
     @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
     private String serialNumber;
+
+    @Override
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    @Override
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    @ContextEntity.State.Field(service=Heater.class, state=HEATER_POWER_LEVEL, directAccess=true, value ="0.0")
+    private double powerLevel;
 
     @Override
     public double getPowerLevel() {
@@ -55,13 +66,4 @@ public class SimulatedHeaterImpl implements Heater,SimulatedDevice,GenericDevice
         powerLevel = level;
     }
 
-    @Override
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    @Override
-    public String getSerialNumber() {
-        return serialNumber;
-    }
 }

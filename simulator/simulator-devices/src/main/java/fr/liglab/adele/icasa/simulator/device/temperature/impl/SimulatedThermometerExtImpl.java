@@ -65,30 +65,30 @@ public class SimulatedThermometerExtImpl implements ThermometerExt, SimulatedDev
     @ContextEntity.State.Field(service = SimulatedDevice.class, state = SIMULATED_DEVICE_TYPE, value = SIMULATED_THERMOMETEREXT)
     private String deviceType;
 
+    @ContextEntity.State.Field(service = GenericDevice.class, state = GenericDevice.DEVICE_SERIAL_NUMBER)
+    private String serialNumber;
+
     @Override
     public String getDeviceType() {
         return deviceType;
     }
-
-    @ContextEntity.State.Field(service = GenericDevice.class, state = GenericDevice.DEVICE_SERIAL_NUMBER)
-    private String serialNumber;
 
     @Override
     public String getSerialNumber() {
         return serialNumber;
     }
 
-    @ContextEntity.State.Field(service = ThermometerExt.class,state=ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE)
+    @ContextEntity.State.Field(service=ThermometerExt.class, state=ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE)
     private Quantity<Temperature> currentSensedTemperature;
+
+    @ContextEntity.State.Push(service = ThermometerExt.class,state = ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE)
+    public Quantity<Temperature> push(Quantity<Temperature> quantity) {
+    	return quantity;
+    }
 
     @Override
     public Quantity<Temperature> getTemperature() {
         return currentSensedTemperature;
-    }
-
-    @ContextEntity.State.Push(service = ThermometerExt.class,state = ThermometerExt.THERMOMETER_CURRENT_TEMPERATURE)
-    public Quantity<Temperature> pushTemperature() {
-    	return model.getTemperature();
     }
 
     @Requires(id="Model", optional=false, proxy=false)
@@ -96,13 +96,12 @@ public class SimulatedThermometerExtImpl implements ThermometerExt, SimulatedDev
 
     @Bind(id="Model")
     public void modelBound() {
-        pushTemperature();
+        push(model.getTemperature());
     }
 
     @Modified(id="Model")
     public void modelUpdated() {
-        pushTemperature();
+        push(model.getTemperature());
     }
 
- 
 }

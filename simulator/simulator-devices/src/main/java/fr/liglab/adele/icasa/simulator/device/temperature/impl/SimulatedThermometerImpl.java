@@ -30,24 +30,36 @@
 // */
 package fr.liglab.adele.icasa.simulator.device.temperature.impl;
 
-import fr.liglab.adele.cream.annotations.entity.ContextEntity;
-import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
-import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.device.battery.BatteryObservable;
-import fr.liglab.adele.icasa.device.temperature.Thermometer;
-import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
-import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
-import fr.liglab.adele.icasa.simulator.model.api.TemperatureModel;
-import org.apache.felix.ipojo.annotations.Bind;
-import org.apache.felix.ipojo.annotations.Modified;
-import org.apache.felix.ipojo.annotations.Unbind;
-import org.apache.felix.ipojo.annotations.Validate;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Temperature;
+
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Modified;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
+import org.apache.felix.ipojo.annotations.Validate;
+
+import fr.liglab.adele.cream.annotations.entity.ContextEntity;
+import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
+
+import fr.liglab.adele.icasa.device.GenericDevice;
+
+import fr.liglab.adele.icasa.location.LocatedObject;
+import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProvider;
+
+import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
+
+import fr.liglab.adele.icasa.device.temperature.Thermometer;
+import fr.liglab.adele.icasa.simulator.model.api.TemperatureModel;
+import tec.units.ri.quantity.Quantities;
+import tec.units.ri.unit.Units;
+import fr.liglab.adele.icasa.device.battery.BatteryObservable;
+
+
 
 
 /**
@@ -57,12 +69,10 @@ import javax.measure.quantity.Temperature;
 @ContextEntity(coreServices = {Thermometer.class, SimulatedDevice.class,BatteryObservable.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
-public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,GenericDevice,BatteryObservable {
+public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice, GenericDevice, BatteryObservable {
 
     public final static String SIMULATED_THERMOMETER = "iCasa.Thermometer";
 
-    @ContextEntity.State.Field(service = Thermometer.class,state=Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
-    private Quantity<Temperature> currentSensedTemperature;
 
     @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_THERMOMETER)
     private String deviceType;
@@ -70,22 +80,9 @@ public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,
     @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
     private String serialNumber;
 
-    @ContextEntity.State.Field(service = BatteryObservable.class,state = BatteryObservable.BATTERY_LEVEL,directAccess = true,value = "48")
-    private double batteryLevel;
-
-    @Validate
-    public void validate(){
-
-    }
-
     @Override
     public String getDeviceType() {
         return deviceType;
-    }
-
-    @Override
-    public Quantity<Temperature> getTemperature() {
-        return currentSensedTemperature;
     }
 
     @Override
@@ -93,28 +90,61 @@ public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,
         return serialNumber;
     }
 
-    @Bind(id ="TemperatureModelDependency" ,filter = "(temperaturemodel.zone.attached=${locatedobject.object.zone})",optional = true,aggregate = true)
-    public void bindTemperature(TemperatureModel model){
-        pushTemperature(model);
-    }
-
-    @Modified(id = "TemperatureModelDependency")
-    public void modifiedTemperature(TemperatureModel model){
-        pushTemperature(model);
-    }
-
-    @Unbind(id = "TemperatureModelDependency")
-    public void unbindTemperature(TemperatureModel model){
-        pushTemperature(null);
-    }
-
-    @ContextEntity.State.Push(service = Thermometer.class,state = Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
-    public Quantity<Temperature> pushTemperature(TemperatureModel model){
-        return model != null ? model.getCurrentTemperature() : Quantities.getQuantity(Thermometer.FAULT_VALUE, Units.KELVIN);
-    }
+    @ContextEntity.State.Field(service=BatteryObservable.class, state=BatteryObservable.BATTERY_LEVEL, directAccess=true, value="48")
+    private double batteryLevel;
 
     @Override
     public double getBatteryPercentage() {
         return batteryLevel;
     }
+
+    @ContextEntity.State.Field(service=Thermometer.class, state=Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
+    private Quantity<Temperature> currentSensedTemperature;
+
+    @ContextEntity.State.Pull(service=Thermometer.class, state=Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
+    Supplier<Quantity<Temperature> > pull = this::pull;
+    
+    private Quantity<Temperature> pull() {
+    	return model != null ? model.getTemperature() : UNDEFINED;
+    }
+    
+    @ContextEntity.State.Push(service=Thermometer.class, state=Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
+    public Quantity<Temperature> push(Quantity<Temperature> quantity) {
+    	return quantity;
+    }
+
+    @Override
+    public Quantity<Temperature> getTemperature() {
+        return currentSensedTemperature;
+    }
+
+    @Validate
+    public void validate(){
+    }
+
+
+    /**
+     * IMPORTANT NOTE : this requirement is marked optional as the device is not always necessarily attached to a zone. 
+     * The measured value when the device is outside the zone is undefined.
+     * 
+     */
+    @Requires(id ="model" ,filter="(temperaturemodel.zone.attached=${locatedobject.object.zone})", optional=true, proxy=false, nullable=false)
+    TemperatureModel model;
+
+    @Bind(id = "model")
+    public void modelBound() {
+    	push(model.getTemperature());
+    }
+
+    @Modified(id = "model")
+    public void modelUpdated() {
+    	push(model.getTemperature());
+    }
+
+    @Unbind(id = "model")
+    public void modelUnbound() {
+    	push(UNDEFINED);
+    }
+
+    private final static Quantity<Temperature> UNDEFINED = Quantities.getQuantity(Thermometer.FAULT_VALUE,Units.KELVIN);
 }

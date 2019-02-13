@@ -13,25 +13,28 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.simulator.model.api;
+package fr.liglab.adele.icasa.simulator.model.measure;
+
+import java.util.function.Function;
 
 import javax.measure.Quantity;
-import javax.measure.quantity.Temperature;
 
-import fr.liglab.adele.cream.annotations.ContextService;
-import fr.liglab.adele.cream.annotations.State;
-
+import fr.liglab.adele.icasa.clockservice.Clock;
 
 /**
- * Created by aygalinc on 10/02/16.
+ * A representation of a varying time signal overt the logical clock 
  */
-public @ContextService interface TemperatureModel {
-
-    public static final @State
-    String CURRENT_TEMPERATURE = "current.temperature";
-
-    public static final @State String ZONE_ATTACHED = "zone.attached";
-
-    public Quantity<Temperature> getTemperature();
-
+@FunctionalInterface
+public interface Signal<Q extends Quantity<Q>> extends Function<Clock,Sample<Q>> {
+	
+	/**
+	 * Perform a measurement of the underlying signal
+	 */
+	public Sample<Q> sample(Clock clock);
+	
+	@Override
+	default Sample<Q> apply(Clock clock) {
+		return sample(clock);
+	}
+	
 }

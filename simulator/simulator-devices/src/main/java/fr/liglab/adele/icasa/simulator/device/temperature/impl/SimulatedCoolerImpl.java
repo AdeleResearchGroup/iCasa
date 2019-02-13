@@ -34,14 +34,24 @@ public class SimulatedCoolerImpl implements Cooler, SimulatedDevice,GenericDevic
 
     public final static String SIMULATED_COOLER = "iCasa.Cooler";
 
-    @ContextEntity.State.Field(service = Cooler.class,state = COOLER_POWER_LEVEL,directAccess = true,value ="0")
-    private double powerLevel;
-
-    @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_COOLER)
+    @ContextEntity.State.Field(service=SimulatedDevice.class, state=SIMULATED_DEVICE_TYPE, value=SIMULATED_COOLER)
     private String deviceType;
 
-    @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
+    @ContextEntity.State.Field(service=GenericDevice.class, state=GenericDevice.DEVICE_SERIAL_NUMBER)
     private String serialNumber;
+
+    @Override
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    @Override
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    @ContextEntity.State.Field(service=Cooler.class, state=COOLER_POWER_LEVEL, directAccess=true, value ="0")
+    private double powerLevel;
 
     @Override
     public double getPowerLevel() {
@@ -56,14 +66,5 @@ public class SimulatedCoolerImpl implements Cooler, SimulatedDevice,GenericDevic
         powerLevel = level;
     }
 
-    @Override
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    @Override
-    public String getSerialNumber() {
-        return serialNumber;
-    }
 
 }
