@@ -68,7 +68,7 @@ import java.util.*;
 @Component(immediate = true,publicFactory=false)
 @Provides(specifications = SimulatedDeviceProvider.class)
 @Instantiate
-public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
+public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider {
 
     public final static Logger LOG = LoggerFactory.getLogger(SimulatedDeviceProviderImpl.class);
 
@@ -113,7 +113,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
             return;
         }
         Map<String,Object> entityParam = new HashMap<>();
-        Creator.Entity creator = this.getCreator(deviceType);
+        Creator.Entity<?> creator = this.getCreator(deviceType);
         if (creator == null){
             return;
         }
@@ -129,7 +129,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         }
         for (SimulatedDevice device : simulatedDevices){
             if (device.getSerialNumber() != null && device.getSerialNumber().equals(deviceId)){
-                Creator.Entity creator = getCreator(device.getDeviceType());
+                Creator.Entity<?> creator = getCreator(device.getDeviceType());
                 if (creator == null){
                     return;
                 }
@@ -166,7 +166,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         simulatedWindowShutterCreator.deleteAll();
     }
 
-    private Creator.Entity getCreator(String deviceType){
+    private Creator.Entity<?> getCreator(String deviceType) {
         switch (deviceType) {
             case SimulatedBinaryLightImpl.SIMULATED_BINARY_LIGHT:
                 return simulatedBinaryLightCreator;
@@ -190,7 +190,7 @@ public class SimulatedDeviceProviderImpl implements SimulatedDeviceProvider{
         }
     }
 
-    private boolean checkIfSimulatedDeviceAlreadyExist(String deviceId){
+    private boolean checkIfSimulatedDeviceAlreadyExist(String deviceId) {
         if (deviceId == null){
             return true;
         }

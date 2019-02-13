@@ -25,6 +25,7 @@ import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
 import fr.liglab.adele.icasa.simulator.model.api.LuminosityModel;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Modified;
+import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
@@ -42,13 +43,11 @@ public class SimulatedPhotometerImpl implements Photometer, SimulatedDevice,Gene
 
     public final static String SIMULATED_PHOTOMETER = "iCasa.Photometer";
 
-    @ContextEntity.State.Field(service = Photometer.class,state=PHOTOMETER_CURRENT_ILLUMINANCE)
-    private Quantity<Illuminance> currentSensedIlluminance;
 
-    @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_PHOTOMETER)
+    @ContextEntity.State.Field(service=SimulatedDevice.class, state=SIMULATED_DEVICE_TYPE, value=SIMULATED_PHOTOMETER)
     private String deviceType;
 
-    @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
+    @ContextEntity.State.Field(service=GenericDevice.class, state = GenericDevice.DEVICE_SERIAL_NUMBER)
     private String serialNumber;
 
     @Override
@@ -57,33 +56,45 @@ public class SimulatedPhotometerImpl implements Photometer, SimulatedDevice,Gene
     }
 
     @Override
-    public Quantity<Illuminance> getIlluminance() {
-        return currentSensedIlluminance;
-    }
-
-    @Override
     public String getSerialNumber() {
         return serialNumber;
     }
 
-    @Bind(id ="IlluminanceModelDependency" ,filter = "(luminositymodel.zone.attached=${locatedobject.object.zone})",optional = true,aggregate = true)
-    public void bindIllu(LuminosityModel model){
-        pushIlluminance(model.getCurrentLuminosity());
-    }
+    @ContextEntity.State.Field(service=Photometer.class, state=PHOTOMETER_CURRENT_ILLUMINANCE)
+    private Quantity<Illuminance> currentSensedIlluminance;
 
-    @Modified(id = "IlluminanceModelDependency")
-    public void modifiedIllu(LuminosityModel model){
-        pushIlluminance(model.getCurrentLuminosity());
-    }
-
-    @Unbind(id = "IlluminanceModelDependency")
-    public void unbindIllu(LuminosityModel model){
-        pushIlluminance(FAULT_VALUE);
-    }
-
-    @ContextEntity.State.Push(service = Photometer.class,state = Photometer.PHOTOMETER_CURRENT_ILLUMINANCE)
-    public Quantity<Illuminance> pushIlluminance(double illuminance){
+    @ContextEntity.State.Push(service=Photometer.class, state=Photometer.PHOTOMETER_CURRENT_ILLUMINANCE)
+    public Quantity<Illuminance> push(double illuminance) {
         return Quantities.getQuantity(illuminance, Units.LUX);
     }
+
+    @Override
+    public Quantity<Illuminance> getIlluminance() {
+        return currentSensedIlluminance;
+    }
+
+    /**
+     * IMPORTANT NOTE : this requirement is marked optional as the device is not always necessarily attached to a zone. 
+     * The measured value when the device is outside the zone is undefined.
+     * 
+     */
+    @Requires(id ="Model", filter="(luminositymodel.zone.attached=${locatedobject.object.zone})", optional=true)
+    LuminosityModel model;
+    
+    @Bind(id ="Model")
+    public void modelBound() {
+    	push(model.getCurrentLuminosity());
+    }
+
+    @Modified(id = "Model")
+    public void modelUpdated() {
+    	push(model.getCurrentLuminosity());
+    }
+
+    @Unbind(id = "Model")
+    public void modelUnbound() {
+    	push(FAULT_VALUE);
+    }
+
 
 }
