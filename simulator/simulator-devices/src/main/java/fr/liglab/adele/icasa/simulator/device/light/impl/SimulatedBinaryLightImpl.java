@@ -33,9 +33,6 @@ public class SimulatedBinaryLightImpl implements BinaryLight, SimulatedDevice,Ge
 
     public final static String SIMULATED_BINARY_LIGHT = "iCasa.BinaryLight";
 
-    @ContextEntity.State.Field(service = BinaryLight.class,state = BinaryLight.BINARY_LIGHT_POWER_STATUS,directAccess = true,value = "false")
-    private boolean powerStatus;
-
     @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_BINARY_LIGHT)
     private String deviceType;
 
@@ -52,6 +49,10 @@ public class SimulatedBinaryLightImpl implements BinaryLight, SimulatedDevice,Ge
     public String getSerialNumber() {
         return serialNumber;
     }
+
+    @ContextEntity.State.Field(service=BinaryLight.class, state=BinaryLight.BINARY_LIGHT_POWER_STATUS, directAccess=true, value="false")
+    private boolean powerStatus;
+
 
     @Override
     public boolean getPowerStatus() {

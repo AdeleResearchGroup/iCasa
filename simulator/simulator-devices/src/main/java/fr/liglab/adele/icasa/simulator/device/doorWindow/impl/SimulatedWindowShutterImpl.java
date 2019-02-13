@@ -33,15 +33,12 @@ public class SimulatedWindowShutterImpl implements WindowShutter,SimulatedDevice
 
     public final static String SIMULATED_WINDOW_SHUTTER = "iCasa.WindowShutter";
 
-    @ContextEntity.State.Field(service = WindowShutter.class,state = SHUTTER_LEVEL,directAccess = true,value ="0")
-    private double windowLevel;
 
     @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_WINDOW_SHUTTER)
     private String deviceType;
 
     @ContextEntity.State.Field(service = GenericDevice.class,state = GenericDevice.DEVICE_SERIAL_NUMBER)
     private String serialNumber;
-
 
     @Override
     public String getDeviceType() {
@@ -53,6 +50,8 @@ public class SimulatedWindowShutterImpl implements WindowShutter,SimulatedDevice
         return serialNumber;
     }
 
+    @ContextEntity.State.Field(service = WindowShutter.class, state=SHUTTER_LEVEL, directAccess=true, value ="0.0")
+    private double windowLevel;
 
     @Override
     public double getShutterLevel() {
@@ -62,6 +61,5 @@ public class SimulatedWindowShutterImpl implements WindowShutter,SimulatedDevice
     @Override
     public void setShutterLevel(double level) {
         windowLevel = level;
-
     }
 }

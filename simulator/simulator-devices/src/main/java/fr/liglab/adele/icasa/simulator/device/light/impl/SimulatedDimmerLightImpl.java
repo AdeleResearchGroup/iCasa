@@ -33,9 +33,6 @@ public class SimulatedDimmerLightImpl implements DimmerLight, SimulatedDevice,Ge
 
     public final static String SIMULATED_DIMMER_LIGHT = "iCasa.DimmerLight";
 
-    @ContextEntity.State.Field(service = DimmerLight.class,state = DIMMER_LIGHT_POWER_LEVEL,value = "0.0")
-    private double powerLevel;
-
     @ContextEntity.State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_DIMMER_LIGHT)
     private String deviceType;
 
@@ -51,6 +48,10 @@ public class SimulatedDimmerLightImpl implements DimmerLight, SimulatedDevice,Ge
     public String getSerialNumber() {
         return serialNumber;
     }
+
+    @ContextEntity.State.Field(service=DimmerLight.class, state=DIMMER_LIGHT_POWER_LEVEL, directAccess=true, value="0.0")
+    private double powerLevel;
+
 
     @Override
     public synchronized double getPowerLevel() {

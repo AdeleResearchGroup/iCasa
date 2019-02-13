@@ -39,8 +39,6 @@ public class SimulatedPresenceSensorImpl implements PresenceSensor,SimulatedDevi
 
     public final static String SIMULATED_PRESENCE_SENSOR = "iCasa.PresenceSensor";
 
-    @State.Field(service = PresenceSensor.class,state = PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE,value = "false")
-    private boolean currentSensedPresence;
 
     @State.Field(service = SimulatedDevice.class,state = SIMULATED_DEVICE_TYPE,value = SIMULATED_PRESENCE_SENSOR)
     private String deviceType;
@@ -58,34 +56,40 @@ public class SimulatedPresenceSensorImpl implements PresenceSensor,SimulatedDevi
         return serialNumber;
     }
 
+    @State.Field(service=PresenceSensor.class, state=PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE, value="false")
+    private boolean currentSensedPresence;
+
+    @State.Push(service=PresenceSensor.class, state=PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE)
+    public boolean push(boolean presence) {
+        return presence;
+    }
+
     @Override
     public boolean getSensedPresence() {
         return currentSensedPresence;
     }
 
     /**
-     * Presence
+     * IMPORTANT NOTE : this requirement is marked optional as the device is not always necessarily attached to a zone. 
+     * The measured value when the device is outside the zone is undefined.
+     * 
      */
-    @Requires(id="presence.model",specification=PresenceModel.class,optional=true,filter = "(presencemodel.zone.attached=${locatedobject.object.zone})")
-    private PresenceModel presenceModel;
+    @Requires(id="model", filter="(presencemodel.zone.attached=${locatedobject.object.zone})", optional=true)
+    private PresenceModel model;
 
-    @Bind(id ="presence.model")
-    public void bindPresenceModel(PresenceModel model){
-        pushPresence(model.getCurrentPresence());
+    @Bind(id ="model")
+    public void modelBound() {
+    	push(model.getCurrentPresence());
     }
 
-    @Modified(id = "presence.model")
-    public void modifiedPresenceModel(PresenceModel model){
-        pushPresence(model.getCurrentPresence());
+    @Modified(id = "model")
+    public void modelUpdated() {
+    	push(model.getCurrentPresence());
     }
 
-    @Unbind(id = "presence.model")
-    public void unbindPresenceModel(PresenceModel model){
-        pushPresence(false);
+    @Unbind(id = "model")
+    public void modelUnbound() {
+    	push(false);
     }
 
-    @State.Push(service = PresenceSensor.class,state = PresenceSensor.PRESENCE_SENSOR_SENSED_PRESENCE)
-    public boolean pushPresence(boolean presence){
-        return presence;
-    }
 }
