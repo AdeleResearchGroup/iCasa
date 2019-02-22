@@ -90,12 +90,12 @@ public class VirtualClock implements Clock {
 		private final long epoch;
 		
 		/**
-		 * The elapsed time from the beginning of the era in milliseconds
+		 * The elapsed time from the beginning of the era in nanoseconds
 		 */
 		private final long elapsed;
 		
 		/**
-		 * the real time when the instant was measured (in milliseconds since the Unix epoch). Notice that it is meaningless
+		 * the real time when the instant was measured (in nanoseconds since some unspecified origin {@link System#nanoTime()}). Notice that it is meaningless
 		 * to compare measure times of two instants as the virtual clock may have been paused/resumed 
 		 */
 		private final long measureTime;
@@ -115,8 +115,7 @@ public class VirtualClock implements Clock {
 		 * An instant that represents the beginning of an epoch for the specified clock 
 		 */
 		public static Instant epoch(VirtualClock clock, long epoch) {
-			long now = System.currentTimeMillis();
-			return new Instant(clock, clock.era.get(), epoch, 0, now);
+			return new Instant(clock, clock.era.get(), epoch, 0, System.nanoTime());
 		}
 
 		
@@ -124,8 +123,7 @@ public class VirtualClock implements Clock {
 		 * Creates a new measure that represents the beginning of the era associated to this instant
 		 */
 		protected Instant rewind() {
-			long now = System.currentTimeMillis();
-			return new Instant(this.clock, this.era, this.epoch, 0, now);
+			return new Instant(this.clock, this.era, this.epoch, 0, System.nanoTime());
 		}
 
 		/**
@@ -133,8 +131,7 @@ public class VirtualClock implements Clock {
 		 * is useful to make a measure after the resume of the clock
 		 */
 		protected Instant refresh() {
-			long now = System.currentTimeMillis();
-			return new Instant(this.clock, this.era, this.epoch, this.elapsed, now);
+			return new Instant(this.clock, this.era, this.epoch, this.elapsed, System.nanoTime());
 		}
 
 		/**
@@ -142,8 +139,11 @@ public class VirtualClock implements Clock {
 		 * its creation until now
 		 */
 		protected Instant forward() {
-			long now = System.currentTimeMillis();
-			return new Instant(this.clock, this.era, this.epoch, this.elapsed + ((now - this.measureTime)  * this.clock.factor), now);
+			
+			long measureTime 		= System.nanoTime();
+			long elpasedRealTime 	= measureTime - this.measureTime;
+			
+			return new Instant(this.clock, this.era, this.epoch, this.elapsed + (elpasedRealTime  * this.clock.factor), measureTime	);
 		}
 
 		/**
@@ -157,16 +157,25 @@ public class VirtualClock implements Clock {
 		 * The elapsed time since the epoch
 		 */
 		public long getElapsed(TimeUnit unit) {
-			return unit.convert(elapsed,TimeUnit.MILLISECONDS);
+			return unit.convert(elapsed,TimeUnit.NANOSECONDS);
 		}
 		
 		/**
 		 * The absolute date and time represented by this instant
 		 */
 		public Date toDate() {
-			return new Date(epoch + elapsed);
+			return new Date(epoch + TimeUnit.NANOSECONDS.toMillis(elapsed));
 		}
-		
+
+		/**
+		 * The absolute date and time represented by this instant in the specified units
+		 * since the unix epoch
+		 */
+		public long toDate(TimeUnit unit) {
+			long date = TimeUnit.MILLISECONDS.toNanos(epoch) + elapsed; 
+			return unit.convert(date, TimeUnit.NANOSECONDS);
+		}
+
 		/**
 		 * Verifies in this instant is in the present era of the clock
 		 */
@@ -275,10 +284,20 @@ public class VirtualClock implements Clock {
     }
 
     @Override
+    public long getElapsedTime(TimeUnit unit) {
+        return now().getElapsed(unit);
+    }
+
+    @Override
     public long currentTimeMillis() {
     	return now().toDate().getTime();
     }
 
+    @Override
+	public long currentTime(TimeUnit unit) {
+		return now().toDate(unit);
+	}
+    
     @Override
     public boolean isPaused() {
         return pause;
@@ -396,5 +415,7 @@ public class VirtualClock implements Clock {
 			
 		}
     }
+
+
 
 }

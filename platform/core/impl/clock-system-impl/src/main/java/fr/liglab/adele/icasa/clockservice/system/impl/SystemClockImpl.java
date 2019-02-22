@@ -15,6 +15,8 @@
  */
 package fr.liglab.adele.icasa.clockservice.system.impl;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
@@ -46,6 +48,11 @@ public class SystemClockImpl implements Clock {
    public long currentTimeMillis() {     
       return System.currentTimeMillis(); 
    }
+
+	@Override
+	public long currentTime(TimeUnit unit) {
+		return unit.convert(currentTimeMillis(), TimeUnit.MILLISECONDS);
+	}
 
    /* (non-Javadoc)
     * @see fr.liglab.adele.icasa.clock.api.SimulatedClock#getFactor()
@@ -111,6 +118,11 @@ public class SystemClockImpl implements Clock {
 	   return currentTimeMillis() - initDate;
    }
 
+	@Override
+   public long getElapsedTime(TimeUnit unit) {
+	   return unit.convert(getElapsedTime(),TimeUnit.MILLISECONDS);
+   }
+
     public long getStartDate() {
    	 return initDate;
     }
@@ -130,5 +142,6 @@ public class SystemClockImpl implements Clock {
 	public void removeListener(ClockListener listener) {
 	   
 	}
+
 
 }

@@ -15,6 +15,7 @@
  */
 package fr.liglab.adele.icasa.clockservice;
 
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class represents the platform clock. It's provided as an OSGi service. 
@@ -31,11 +32,18 @@ public interface Clock {
     public String getId();
 
 	/**
-	 * Returns the current time in (virtual) milliseconds.
+	 * Returns the current virtual time in milliseconds (since the unix epoch)
 	 * 
 	 * @return current time. 
 	 */
 	public long currentTimeMillis();
+
+	/**
+	 * Returns the current virtual time in the specified unit (since the unix epoch)
+	 * 
+	 * @return current time. 
+	 */
+	public long currentTime(TimeUnit unit);
 
 	/**
 	 * Sets the start date of the clock.
@@ -57,6 +65,13 @@ public interface Clock {
 	 * @return the elapsed time.
 	 */
 	public long getElapsedTime();
+
+	/**
+	 * gets the elapsed time in the specified unit from the start date.
+	 * 
+	 * @return the elapsed time.
+	 */
+	public long getElapsedTime(TimeUnit unit);
 
 	/**
 	 * Pauses the (virtual) time flowing.
@@ -93,7 +108,7 @@ public interface Clock {
 	public int getFactor();
 
 	/**
-	 * Returns the clock start date.
+	 * Returns the clock start date (in milliseconds since the unix epoch).
 	 * 
 	 * @return the start date.
 	 */
