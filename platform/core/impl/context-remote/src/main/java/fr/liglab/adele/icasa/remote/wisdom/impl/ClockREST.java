@@ -121,7 +121,11 @@ public class ClockREST  extends DefaultController {
 			long startDate		= update.getLong("startDate");
 			
 			synchronized (clock) {
-				
+
+				if (pause && !clock.isPaused()) {
+					clock.pause();
+				} 
+
 				if (clock.getStartDate() != startDate) {
 					clock.setStartDate(startDate);
 				}
@@ -130,10 +134,6 @@ public class ClockREST  extends DefaultController {
 					clock.setFactor(factor);
 					
 				}
-
-				if (pause && !clock.isPaused()) {
-					clock.pause();
-				} 
 				
 				if (!pause && clock.isPaused()) {
 					clock.resume();
