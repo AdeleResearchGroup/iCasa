@@ -12,9 +12,7 @@ public @ContextService interface ServiceLayer {
     
 	public final static  @State String SERVICE_QOS = "service.qos";
 
-    public int getMinQos();
-
-    public int getServiceQoS();
+    public int getQoS();
 
     public final static @State String NAME = "service.name";
 
