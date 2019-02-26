@@ -31,7 +31,6 @@
 package fr.liglab.adele.icasa.simulator.device.temperature.impl;
 
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.measure.Quantity;
@@ -66,9 +65,10 @@ import fr.liglab.adele.icasa.device.battery.BatteryObservable;
  * Implementation of a simulated thermometer device.
  *
  */
-@ContextEntity(coreServices = {Thermometer.class, SimulatedDevice.class,BatteryObservable.class})
+@ContextEntity(coreServices = {Thermometer.class, SimulatedDevice.class, GenericDevice.class, BatteryObservable.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+
 public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice, GenericDevice, BatteryObservable {
 
     public final static String SIMULATED_THERMOMETER = "iCasa.Thermometer";

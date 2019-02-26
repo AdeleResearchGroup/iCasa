@@ -54,9 +54,10 @@ import javax.measure.quantity.Temperature;
  * Implementation of a simulated thermometer device tracking the weather temperature.
  *
  */
-@ContextEntity(coreServices = {ThermometerExt.class, SimulatedDevice.class})
+@ContextEntity(coreServices = {ThermometerExt.class, SimulatedDevice.class, GenericDevice.class})
 
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+
 public class SimulatedThermometerExtImpl implements ThermometerExt, SimulatedDevice, GenericDevice {
 
     public final static String SIMULATED_THERMOMETEREXT = "iCasa.ThermometerExt";

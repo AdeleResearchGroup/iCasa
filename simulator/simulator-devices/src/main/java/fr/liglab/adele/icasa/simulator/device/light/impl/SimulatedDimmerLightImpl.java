@@ -27,9 +27,11 @@ import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
  * Implementation of a simulated dimmer light device.
  *
  */
-@ContextEntity(coreServices = {DimmerLight.class,SimulatedDevice.class})
+@ContextEntity(coreServices = {DimmerLight.class, SimulatedDevice.class, GenericDevice.class})
+
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
-public class SimulatedDimmerLightImpl implements DimmerLight, SimulatedDevice,GenericDevice{
+
+public class SimulatedDimmerLightImpl implements DimmerLight, SimulatedDevice, GenericDevice{
 
     public final static String SIMULATED_DIMMER_LIGHT = "iCasa.DimmerLight";
 

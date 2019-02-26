@@ -33,8 +33,10 @@ import org.apache.felix.ipojo.annotations.Unbind;
  * Implementation of a simulated binary light device.
  *
  */
-@ContextEntity(coreServices = {PresenceSensor.class,SimulatedDevice.class})
+@ContextEntity(coreServices = {PresenceSensor.class, SimulatedDevice.class, GenericDevice.class})
+
 @FunctionalExtension(id="LocatedBehavior",contextServices = LocatedObject.class,implementation = LocatedObjectBehaviorProvider.class)
+
 public class SimulatedPresenceSensorImpl implements PresenceSensor,SimulatedDevice,GenericDevice{
 
     public final static String SIMULATED_PRESENCE_SENSOR = "iCasa.PresenceSensor";
