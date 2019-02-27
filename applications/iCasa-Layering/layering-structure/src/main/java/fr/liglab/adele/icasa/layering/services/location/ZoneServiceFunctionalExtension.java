@@ -27,7 +27,7 @@ public class ZoneServiceFunctionalExtension implements ZoneService {
 	}
 	
     @ContextEntity.Relation.Field(owner=ZoneService.class,value=ZoneService.RELATION_ATTACHED_TO)
-	@Requires(id="relatedZone", optional=false, proxy = false)
+	@Requires(id="relatedZone", optional=true, proxy = false)
     private Zone relatedZone;
 
 	@Bind(id="relatedZone")
