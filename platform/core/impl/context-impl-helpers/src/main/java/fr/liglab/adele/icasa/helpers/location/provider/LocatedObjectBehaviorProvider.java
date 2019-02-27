@@ -58,7 +58,7 @@ public class LocatedObjectBehaviorProvider implements LocatedObject {
      * Zone
      */
     @ContextEntity.Relation.Field(value = IS_IN_RELATION,owner = LocatedObject.class)
-    @Requires(id="zone",specification=Zone.class,optional=true)
+    @Requires(id="zone",specification=Zone.class, optional=true)
     private Zone zoneAttached;
 
     @Bind(id = "zone")

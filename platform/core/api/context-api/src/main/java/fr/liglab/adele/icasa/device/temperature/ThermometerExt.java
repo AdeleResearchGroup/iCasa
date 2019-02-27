@@ -43,8 +43,6 @@ public @ContextService interface ThermometerExt extends GenericDevice {
      */
     @State String THERMOMETER_CURRENT_TEMPERATURE = "thermometer.currentTemperature";
 
-    double FAULT_VALUE=-1;
-
     /**
      * Return the current temperature sensed by this thermometer, expressed in
      * Kelvins (K).

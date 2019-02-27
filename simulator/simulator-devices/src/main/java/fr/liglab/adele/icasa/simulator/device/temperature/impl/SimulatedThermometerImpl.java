@@ -36,11 +36,13 @@ import java.util.function.Supplier;
 import javax.measure.Quantity;
 import javax.measure.quantity.Temperature;
 
+import tec.units.ri.quantity.Quantities;
+import tec.units.ri.unit.Units;
+
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Modified;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
-import org.apache.felix.ipojo.annotations.Validate;
 
 import fr.liglab.adele.cream.annotations.entity.ContextEntity;
 import fr.liglab.adele.cream.annotations.functional.extension.FunctionalExtension;
@@ -53,10 +55,9 @@ import fr.liglab.adele.icasa.helpers.location.provider.LocatedObjectBehaviorProv
 import fr.liglab.adele.icasa.simulator.device.SimulatedDevice;
 
 import fr.liglab.adele.icasa.device.temperature.Thermometer;
-import fr.liglab.adele.icasa.simulator.model.api.TemperatureModel;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
 import fr.liglab.adele.icasa.device.battery.BatteryObservable;
+
+import fr.liglab.adele.icasa.simulator.model.api.TemperatureModel;
 
 
 
@@ -98,18 +99,47 @@ public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,
         return batteryLevel;
     }
 
+    /**
+     * IMPORTANT NOTE : this requirement is marked optional as the device is not always necessarily attached to a zone. 
+     * The measured value when the device is outside the zone is undefined.
+     * 
+     */
+    @Requires(id ="model" ,filter="(temperaturemodel.zone.attached=${locatedobject.object.zone})", optional=true, nullable=false, proxy=false)
+    private TemperatureModel model;
+
+    private final static Quantity<Temperature> UNDEFINED =  Quantities.getQuantity(Double.NaN,Units.KELVIN);
+
+    private static Quantity<Temperature> sensed(TemperatureModel model) {
+    	return model != null ?  model.getTemperature() : UNDEFINED;
+    }
+
+    @Bind(id = "model")
+    private void modelBound() {
+    	push(sensed(model));
+    }
+
+    @Modified(id = "model")
+    private void modelUpdated() {
+    	push(sensed(model));
+    }
+
+    @Unbind(id = "model")
+    private void modelUnbound() {
+    	push(sensed(null));
+    }
+
     @ContextEntity.State.Field(service=Thermometer.class, state=Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
     private Quantity<Temperature> currentSensedTemperature;
 
     @ContextEntity.State.Pull(service=Thermometer.class, state=Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
-    Supplier<Quantity<Temperature> > pull = this::pull;
+    private Supplier<Quantity<Temperature> > pull = this::pull;
     
     private Quantity<Temperature> pull() {
-    	return model != null ? model.getTemperature() : UNDEFINED;
+    	return sensed(model);
     }
     
     @ContextEntity.State.Push(service=Thermometer.class, state=Thermometer.THERMOMETER_CURRENT_TEMPERATURE)
-    public Quantity<Temperature> push(Quantity<Temperature> quantity) {
+    private Quantity<Temperature> push(Quantity<Temperature> quantity) {
     	return quantity;
     }
 
@@ -118,33 +148,5 @@ public class SimulatedThermometerImpl   implements Thermometer, SimulatedDevice,
         return currentSensedTemperature;
     }
 
-    @Validate
-    public void validate(){
-    }
-
-
-    /**
-     * IMPORTANT NOTE : this requirement is marked optional as the device is not always necessarily attached to a zone. 
-     * The measured value when the device is outside the zone is undefined.
-     * 
-     */
-    @Requires(id ="model" ,filter="(temperaturemodel.zone.attached=${locatedobject.object.zone})", optional=true, proxy=false, nullable=false)
-    TemperatureModel model;
-
-    @Bind(id = "model")
-    public void modelBound() {
-    	push(model.getTemperature());
-    }
-
-    @Modified(id = "model")
-    public void modelUpdated() {
-    	push(model.getTemperature());
-    }
-
-    @Unbind(id = "model")
-    public void modelUnbound() {
-    	push(UNDEFINED);
-    }
-
-    private final static Quantity<Temperature> UNDEFINED = Quantities.getQuantity(Thermometer.FAULT_VALUE,Units.KELVIN);
+    
 }

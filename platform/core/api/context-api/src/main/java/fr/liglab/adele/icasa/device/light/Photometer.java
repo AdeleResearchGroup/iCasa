@@ -43,7 +43,7 @@ public @ContextService interface Photometer extends GenericDevice {
      */
     @State String PHOTOMETER_CURRENT_ILLUMINANCE = "photometer.currentIlluminance";
 
-    double FAULT_VALUE=-1;
+    
     /**
      * Return the current illuminance sensed by this photometer, expressed in
      * lux (lx).
