@@ -105,10 +105,10 @@ public class SimulatedWeatherModel implements WeatherModel, PeriodicRunnable {
 		public double valueAt(DateTime now) {
 			
 			/*
-			 * Handle leap years by using the values of the 28th February
+			 * Handle leap years by mirroring the values of the previous year
 			 */
-			if (now.getMonthOfYear() == 2 && now.getDayOfMonth() == 29) {
-				now = now.minusDays(1);
+			if (now.year().isLeap()) {
+				now = now.minusYears(1);
 			}
 			
 			DateTime yesterday 		= now.minusDays(1);
