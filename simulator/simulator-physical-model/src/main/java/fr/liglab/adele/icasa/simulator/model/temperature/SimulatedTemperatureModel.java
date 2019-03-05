@@ -277,7 +277,7 @@ public class SimulatedTemperatureModel implements TemperatureModel {
          */
     	
         if (true) {
-            zoneVolume =  Quantities.getQuantity(100.0d, Units.CUBIC_METRE);
+            zoneVolume =  Quantities.getQuantity(200.0d, Units.CUBIC_METRE);
         }
         
         return AIR_MASS_CAPACITY.multiply(AIR_DENSITY.multiply(zoneVolume));
