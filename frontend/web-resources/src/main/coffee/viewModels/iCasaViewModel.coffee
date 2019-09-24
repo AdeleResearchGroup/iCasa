@@ -840,7 +840,7 @@ define(['jquery',
 
            # init
            @updateProperties= (newValue) =>
-                newProperties =  @model().get('properties');
+                newProperties =  @model().get('properties') || {};
                 ko.utils.arrayForEach(newProperties, (property)=>
                     storedProperty = @.propertiesModel.get(property.name);
                     #This is done cause when modifying model, extend function is not well handled by kb :(
