@@ -13,15 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.remote.wisdom.impl;
+package fr.liglab.adele.icasa.remote.context.impl;
 
 import fr.liglab.adele.icasa.ZoneProvider;
 
 import fr.liglab.adele.icasa.location.Zone;
-import fr.liglab.adele.icasa.location.Position;
-
-import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
-import fr.liglab.adele.icasa.remote.wisdom.util.ZoneJSON;
+import fr.liglab.adele.icasa.remote.context.serialization.SerializedZone;
 
 import org.apache.felix.ipojo.annotations.*;
 
@@ -38,6 +35,8 @@ import org.wisdom.api.annotations.Route;
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
+
+import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -82,7 +81,7 @@ public class ZoneREST extends DefaultController implements Controller {
 
 		for (Zone zone : zones) {
 			try {
-				result.put(serialize(zone));
+				result.put(new SerializedZone(zone).toJson());
 			} catch (JSONException ignored) {
 			}
 		}
@@ -112,7 +111,7 @@ public class ZoneREST extends DefaultController implements Controller {
 		} 
 
 		try {
-			return ok(serialize(zone).toString()).as(MimeTypes.JSON);
+			return ok(new SerializedZone(zone).toJson().toString()).as(MimeTypes.JSON);
 		} 
 		catch (JSONException e) {
 			return internalServerError(e);
@@ -137,23 +136,12 @@ public class ZoneREST extends DefaultController implements Controller {
 
 		try {
 			
-			ZoneJSON update = ZoneJSON.fromString(content(context()));
-			
-			Position position	= new Position(update.getLeftX(), update.getTopY());
-			int width			= update.getRigthX() - update.getLeftX();
-			int height 			= update.getBottomY() - update.getTopY();
-
-			if (!zone.getLeftTopAbsolutePosition().equals(position)) {
-				zone.setLeftTopAbsolutePosition(position);
-			}
-			
-			if ((zone.getXLength() != width) || (zone.getYLength() != height)) {
-				zone.resize(width, height, 4);
-			}
+			SerializedZone update = new SerializedZone(content(context()));
+			update.updateZone(zone);
 			
 			return ok();
 
-		} catch (IOException e) {
+		} catch (IOException | JSONException e) {
 			return internalServerError(e);
 		}
 
@@ -163,18 +151,13 @@ public class ZoneREST extends DefaultController implements Controller {
 	public Result createZone() {
 		try {
 
-			ZoneJSON create = ZoneJSON.fromString(content(context()));
+			SerializedZone serialization = new SerializedZone(content(context()));
 			
-			int width	= create.getRigthX() - create.getLeftX();
-			int height	= create.getBottomY() - create.getTopY();
-			int depth	= create.getTopZ() - create.getBottomZ();
-
-			m_locationManager.createZone(create.getId(), create.getLeftX(), create.getTopY(), create.getBottomZ(), width, height, depth);
-
+			serialization.createZone(m_locationManager);
 			return ok();
 
 
-		} catch (IOException e) {
+		} catch (IOException | JSONException e) {
 			return internalServerError(e);
 		}
 

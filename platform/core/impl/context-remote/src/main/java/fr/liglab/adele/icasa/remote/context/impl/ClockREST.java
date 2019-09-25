@@ -13,11 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.remote.wisdom.impl;
+package fr.liglab.adele.icasa.remote.context.impl;
 
 import fr.liglab.adele.icasa.clockservice.Clock;
-
-import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
 
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -36,6 +34,8 @@ import org.wisdom.api.annotations.Route;
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
+
+import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
 
 import java.io.IOException;
 

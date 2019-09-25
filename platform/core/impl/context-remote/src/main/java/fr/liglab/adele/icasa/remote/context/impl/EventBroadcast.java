@@ -13,21 +13,20 @@
 *   See the License for the specific language governing permissions and
 *   limitations under the License.
 */
-package fr.liglab.adele.icasa.remote.wisdom.impl;
+package fr.liglab.adele.icasa.remote.context.impl;
 
 import fr.liglab.adele.icasa.Constants;
 
 import fr.liglab.adele.icasa.location.Zone;
-
+import fr.liglab.adele.icasa.remote.context.Serializer;
+import fr.liglab.adele.icasa.remote.context.serialization.SerializedDevice;
+import fr.liglab.adele.icasa.remote.context.serialization.SerializedZone;
+import fr.liglab.adele.icasa.remote.wisdom.RemoteEventBroadcast;
 import fr.liglab.adele.icasa.clockservice.Clock;
 import fr.liglab.adele.icasa.clockservice.ClockListener;
 
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.location.LocatedObject;
-
-import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
-
-import fr.liglab.adele.icasa.remote.wisdom.RemoteEventBroadcast;
 
 import org.apache.felix.ipojo.annotations.*;
 
@@ -44,6 +43,7 @@ import org.wisdom.api.http.websockets.Publisher;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil;
 
 import java.util.Date;
 import java.util.UUID;
@@ -163,7 +163,7 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 	private void sendClockModifiedEvent() {
 		JSONObject event = new JSONObject();
 		try {
-			event.put("clock", serialize(_clock));
+			event.put("clock", IcasaJSONUtil.serialize(_clock));
 			sendEvent("clock-modified", event);
 		} catch (JSONException e) {
             logger.error("Building message error" + event, e);
@@ -177,7 +177,7 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 		JSONObject event = new JSONObject();
 		try {
 			event.put("zoneId", zone.getZoneName());
-			event.put("zone", serialize(zone));
+			event.put("zone", new SerializedZone(zone).toJson());
 			sendEvent("zone-added", event);
 		} catch (JSONException e) {
 			logger.error("Building message error" + event, e);
@@ -189,7 +189,7 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 		JSONObject event = new JSONObject();
 		try {
 			event.put("zoneId", zone.getZoneName());
-			event.put("zone", serialize(zone));
+			event.put("zone", new SerializedZone(zone).toJson());
 			sendEvent("zone-moved", event);
 			sendEvent("zone-resized", event);
 		} catch (JSONException e) {
@@ -206,6 +206,18 @@ public class EventBroadcast extends DefaultController implements RemoteEventBroa
 		} catch (JSONException e) {
 			logger.error("Building message error" + event, e);
 		}
+	}
+
+	@Requires(optional=true, proxy=false, policy=BindingPolicy.DYNAMIC)
+	Serializer[] serializers;
+	
+	private JSONObject serialize(GenericDevice device) throws JSONException {
+		SerializedDevice result = new SerializedDevice(device);
+		for (Serializer serializer : serializers) {
+			serializer.serialize(result, device);
+		}
+		
+		return result.toJson();
 	}
 
 	@Bind(id="locatedDevices",specification = LocatedObject.class, optional = true, aggregate = true)

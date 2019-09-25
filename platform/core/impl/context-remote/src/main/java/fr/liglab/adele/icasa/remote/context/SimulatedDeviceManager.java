@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package fr.liglab.adele.icasa.remote.wisdom;
+package fr.liglab.adele.icasa.remote.context;
 
 import java.util.Map;
 import java.util.Set;

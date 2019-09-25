@@ -16,7 +16,7 @@
 /**
  *
  */
-package fr.liglab.adele.icasa.remote.wisdom.impl;
+package fr.liglab.adele.icasa.remote.context.impl;
 
 
 import fr.liglab.adele.icasa.device.GenericDevice;
@@ -25,20 +25,19 @@ import fr.liglab.adele.icasa.device.power.ControllablePowerSwitch;
 import fr.liglab.adele.icasa.device.power.PowerSwitch;
 import fr.liglab.adele.icasa.device.presence.PresenceSensor;
 import fr.liglab.adele.icasa.location.LocatedObject;
-import fr.liglab.adele.icasa.location.Position;
-
-import fr.liglab.adele.icasa.remote.wisdom.util.DeviceJSON;
-import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
+import fr.liglab.adele.icasa.remote.context.Serializer;
+import fr.liglab.adele.icasa.remote.context.serialization.SerializedDevice;
 
 import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.BindingPolicy;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.json.JSONArray;
 import org.json.JSONException;
-
-
+import org.json.JSONObject;
 import org.wisdom.api.DefaultController;
 import org.wisdom.api.annotations.Parameter;
 import org.wisdom.api.annotations.Path;
@@ -46,6 +45,8 @@ import org.wisdom.api.annotations.Route;
 import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
+
+import static fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +62,18 @@ import java.util.List;
 @Path("/icasa/devices")
 public class DeviceREST extends DefaultController {
 
-
+	@Requires(optional=true, proxy=false, policy=BindingPolicy.DYNAMIC)
+	Serializer[] serializers;
+	
+	private JSONObject serialize(GenericDevice device) throws JSONException {
+		SerializedDevice result = new SerializedDevice(device);
+		for (Serializer serializer : serializers) {
+			serializer.serialize(result, device);
+		}
+		
+		return result.toJson();
+	}
+	
     private List<GenericDevice> devices = new ArrayList<>();
 
     @Bind(id="located", optional=true, proxy=false, aggregate=true)
@@ -153,13 +165,9 @@ public class DeviceREST extends DefaultController {
         }
 
 		try {
-	        LocatedObject located 	= (LocatedObject) device;
-	        DeviceJSON update		= DeviceJSON.from(content(context()));
-	        
-	        if (update.getPositionX() != null && update.getPositionY() != null) {
-	            Position newPostion = new Position(update.getPositionX(),update.getPositionY());
-	            located.setPosition(newPostion);
-	        }
+
+			SerializedDevice serialized	= new SerializedDevice(content(context()));
+	        serialized.updateDevice(device);
 
 	        return ok();
 	        

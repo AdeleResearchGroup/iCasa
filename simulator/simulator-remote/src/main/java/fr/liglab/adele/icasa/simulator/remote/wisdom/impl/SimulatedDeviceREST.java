@@ -18,7 +18,7 @@
  */
 package fr.liglab.adele.icasa.simulator.remote.wisdom.impl;
 
-import fr.liglab.adele.icasa.remote.wisdom.util.DeviceJSON;
+import fr.liglab.adele.icasa.remote.context.serialization.SerializedDevice;
 import fr.liglab.adele.icasa.remote.wisdom.util.IcasaJSONUtil;
 import fr.liglab.adele.icasa.simulator.device.SimulatedDeviceProvider;
 import org.apache.felix.ipojo.annotations.Component;
@@ -37,7 +37,6 @@ import org.wisdom.api.http.HttpMethod;
 import org.wisdom.api.http.MimeTypes;
 import org.wisdom.api.http.Result;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
@@ -55,8 +54,7 @@ public class SimulatedDeviceREST extends DefaultController {
     @Route(method = HttpMethod.POST, uri = "/device")
     public Result createDevice() {
         try {
-        	String  content 		= IcasaJSONUtil.content(context());
-            DeviceJSON deviceJSON 	= DeviceJSON.from(content);
+            SerializedDevice deviceJSON 	= new SerializedDevice(IcasaJSONUtil.content(context()));
 
             String deviceType = deviceJSON.getType();
 

@@ -66,8 +66,8 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Private-Package>fr.liglab.adele.icasa.remote.wisdom.impl</Private-Package>
-            <Export-Package>fr.liglab.adele.icasa.remote.wisdom,fr.liglab.adele.icasa.remote.wisdom.util</Export-Package>
+            <Private-Package>fr.liglab.adele.icasa.remote.context.impl</Private-Package>
+            <Export-Package>fr.liglab.adele.icasa.remote.context,fr.liglab.adele.icasa.remote.context.serialization,fr.liglab.adele.icasa.remote.wisdom,fr.liglab.adele.icasa.remote.wisdom.util</Export-Package>
           </instructions>
         </configuration>
       </plugin>
