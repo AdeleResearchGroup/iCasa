@@ -907,6 +907,36 @@ define(['jquery',
                     @imgSrc(@getImage("dimmerLight_low"));
                   else
                     @imgSrc(@.getImage());
+# my work begin
+                if ((@type() == "iCasa.Chiller") || @hasService("fr.liglab.adele.icasa.device.hvac.Chiller"))
+                  powerLevel = @.getPropertyValue("partial.load.ratio");
+                  if (powerLevel == null)
+                    @imgSrc(@.getImage());
+                  else if (powerLevel == 0)
+                    @imgSrc(@getImage("chiller_COP_00"));
+                  else if (powerLevel > 0 && powerLevel <= 10)
+                    @imgSrc(@getImage("chiller_COP_10"));
+                  else if (powerLevel > 10 && powerLevel <= 20)
+                    @imgSrc(@getImage("chiller_COP_20"));
+                  else if (powerLevel > 20 && powerLevel <= 30)
+                    @imgSrc(@getImage("chiller_COP_30"));
+                  else if (powerLevel > 30 && powerLevel <= 40)
+                    @imgSrc(@getImage("chiller_COP_40"));
+                  else if (powerLevel > 40 && powerLevel <= 50)
+                    @imgSrc(@getImage("chiller_COP_50"));
+                  else if (powerLevel > 50 && powerLevel <= 60)
+                    @imgSrc(@getImage("chiller_COP_60"));
+                  else if (powerLevel > 60 && powerLevel <= 70)
+                    @imgSrc(@getImage("chiller_COP_70"));
+                  else if (powerLevel > 70 && powerLevel <= 80)
+                    @imgSrc(@getImage("chiller_COP_80"));
+                  else if (powerLevel > 80 && powerLevel <= 90)
+                    @imgSrc(@getImage("chiller_COP_90"));
+                  else if (powerLevel > 90 && powerLevel <= 100)
+                    @imgSrc(@getImage("chiller_COP_100"));
+                  else
+                    @imgSrc(@.getImage());
+# my work end
                 if ((@type() == "iCasa.WindowShutter") || @hasService("fr.liglab.adele.icasa.device.doorWindow.WindowShutter"))
                   shutterLevel = @.getPropertyValue("WindowShutter.shutterLevel");
                   console.log shutterLevel;
@@ -1083,6 +1113,10 @@ define(['jquery',
             #  return @deviceWidget().getBaseIconURL();
             if ((@type() == "iCasa.Cooler") || @hasService("fr.liglab.adele.icasa.device.temperature.Cooler"))
               imgName = "cooler-off";
+#my work begin
+            if ((@type() == "iCasa.Chiller") || @hasService("fr.liglab.adele.icasa.device.hvac.Chiller"))
+              imgName = "chiller_COP_00";
+#my work end 
             if ((@type() == "iCasa.AudioSource") || @hasService("fr.liglab.adele.icasa.device.sound.AudioSource"))
               imgName = "musicPlayer";
             if ((@type() == "iCasa.Sprinkler") || @hasService("fr.liglab.adele.icasa.device.sprinkler.Sprinkler"))
