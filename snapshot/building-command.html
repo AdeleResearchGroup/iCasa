@@ -13,12 +13,12 @@
 		<meta name="description" content="" />
 		<meta http-equiv="content-language" content="en" />
 
-		<link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.2/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="https://netdna.bootstrapcdn.com/bootswatch/2.3.2/cerulean/bootstrap.min.css" rel="stylesheet" />
+		<link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet" />
 		<link href="./css/bootswatch.css" rel="stylesheet" />
 		<link href="./css/reflow-skin.css" rel="stylesheet" />
 
-		<link href="http://yandex.st/highlightjs/7.5/styles/github.min.css" rel="stylesheet" />
+		<link href="https://yandex.st/highlightjs/7.5/styles/github.min.css" rel="stylesheet" />
 		
 		<link href="./css/lightbox.css" rel="stylesheet" />
 		
@@ -27,7 +27,7 @@
 		
 		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
-			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 
 
@@ -142,13 +142,13 @@
 <p><a name="Requirements"></a></p> 
 <h2 id="1_tutorial_requirements">1. Tutorial Requirements</h2> 
 <ul> 
- <li>OSGi &amp; iPOJO : iCasa is built on top of <a href="http://www.osgi.org">OSGi</a> platform and <a href="http://felix.apache.org/site/apache-felix-ipojo.html">iPOJO</a> component model. This tutorial is made using <a href="http://felix.apache.org/site/how-to-use-ipojo-annotations.html">iPOJO annotations</a>.</li> 
- <li>Maven (Optional) : <a href="http://maven.apache.org/">Maven</a> tool can be used to build new iCasa commands.</li> 
- <li>JSON: The <a href="http://www.json.org/">JSON</a> format is used to passed parameters to iCasa commands</li> 
+ <li>OSGi &amp; iPOJO : iCasa is built on top of <a href="https://www.osgi.org">OSGi</a> platform and <a href="https://felix.apache.org/site/apache-felix-ipojo.html">iPOJO</a> component model. This tutorial is made using <a href="https://felix.apache.org/site/how-to-use-ipojo-annotations.html">iPOJO annotations</a>.</li> 
+ <li>Maven (Optional) : <a href="https://maven.apache.org/">Maven</a> tool can be used to build new iCasa commands.</li> 
+ <li>JSON: The <a href="https://www.json.org/">JSON</a> format is used to passed parameters to iCasa commands</li> 
 </ul> 
 <p><a name="Model"></a></p> 
 <h2 id="2_icasa_command_model">2. iCasa Command Model</h2> 
-<p>iCasa platform provides a command architecture allowing extension by third party developers. This architecture is based on the <a href="http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf">OSGi whiteboard pattern</a>. In this tutorial we will show how to add new commands to the iCasa platform.</p> 
+<p>iCasa platform provides a command architecture allowing extension by third party developers. This architecture is based on the <a href="https://www.osgi.org/wiki/uploads/Links/whiteboard.pdf">OSGi whiteboard pattern</a>. In this tutorial we will show how to add new commands to the iCasa platform.</p> 
 <p>iCasa Commands could be used two different ways:</p> 
 <ul> 
  <li>Using the gogo shell. Interacting with the shell it is possible to call <a href="./gogo-commands.html">iCasa commands</a>.</li> 
@@ -198,7 +198,7 @@ public class CommandComponent {
 }
 </code></pre> 
 <h3 id="33_project_packaging">3.3. Project packaging</h3> 
-<p>You can use <a href="http://felix.apache.org/site/apache-felix-ipojo.html">maven</a> tool to build a command project. Two iCasa maven artifacts are necessary to build your project, the first one context.api defines the interfaces used in the Command model, the command.handler provides the CommandProvider handler and the Command annotation.</p> 
+<p>You can use <a href="https://felix.apache.org/site/apache-felix-ipojo.html">maven</a> tool to build a command project. Two iCasa maven artifacts are necessary to build your project, the first one context.api defines the interfaces used in the Command model, the command.handler provides the CommandProvider handler and the Command annotation.</p> 
 <p>Artifacs :</p> 
 <p><strong><em>Context API - iCasa Command interfaces</em></strong></p> 
 <pre><code>&lt;groupId&gt;fr.liglab.adele.icasa&lt;/groupId&gt;
@@ -396,7 +396,7 @@ public interface ICasaCommand {
 </code></pre> 
 <p><a name="Packaging"></a></p> 
 <h3 id="43_project_packaging">4.3. Project Packaging</h3> 
-<p>You can use <a href="http://felix.apache.org/site/apache-felix-ipojo.html">maven</a> tool to build a command project. Two iCasa maven artifacts are necessary to build your project, the first one context.api defines the interfaces used in the Command model, the context.impl provides the AbstractCommand class.</p> 
+<p>You can use <a href="https://felix.apache.org/site/apache-felix-ipojo.html">maven</a> tool to build a command project. Two iCasa maven artifacts are necessary to build your project, the first one context.api defines the interfaces used in the Command model, the context.impl provides the AbstractCommand class.</p> 
 <p>Artifacs :</p> 
 <p><strong><em>Context API - iCasa Command interfaces</em></strong></p> 
 <pre><code>&lt;groupId&gt;fr.liglab.adele.icasa&lt;/groupId&gt;
@@ -703,8 +703,8 @@ g!
 		<div class="row">
 			<div class="span12">
 				<p class="pull-right"><a href="#">Back to top</a></p>
-				<p class="copyright">Copyright &copy;2012-2015 <a href="http://www-adele.imag.fr/">ADELE Research Group</a>. All Rights Reserved.</p>
-				<p><a href="http://github.com/andriusvelykis/reflow-maven-skin" title="Reflow Maven skin">Reflow Maven skin</a> by <a href="http://andrius.velykis.lt" target="_blank" title="Andrius Velykis">Andrius Velykis</a>.</p>
+				<p class="copyright">Copyright &copy;2012-2015 <a href="https://www-adele.imag.fr/">ADELE Research Group</a>. All Rights Reserved.</p>
+				<p><a href="https://github.com/andriusvelykis/reflow-maven-skin" title="Reflow Maven skin">Reflow Maven skin</a> by <a href="https://andrius.velykis.lt" target="_blank" title="Andrius Velykis">Andrius Velykis</a>.</p>
 			</div>
 		</div>
 	</div>
@@ -712,14 +712,14 @@ g!
 	<!-- Le javascript
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	
-	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+	<script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 	<script src="./js/lightbox.js"></script>
 	<script src="./js/jquery.smooth-scroll.min.js"></script>
 	<!-- back button support for smooth scroll -->
 	<script src="./js/jquery.ba-bbq.min.js"></script>
-	<script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+	<script src="https://yandex.st/highlightjs/7.5/highlight.min.js"></script>
 
 	<script src="./js/reflow-skin.js"></script>
 	
